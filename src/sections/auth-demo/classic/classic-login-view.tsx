@@ -1,32 +1,33 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
+import { isAxiosError } from 'axios';
+import { useSnackbar } from 'notistack';
+import { useForm } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-import LoadingButton from '@mui/lab/LoadingButton';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
 import Stack from '@mui/material/Stack';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import LoadingButton from '@mui/lab/LoadingButton';
+import InputAdornment from '@mui/material/InputAdornment';
 
 import { useRouter } from 'src/routes/hooks';
 
+import useAuth from 'src/hooks/useAuth';
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { PATH_AFTER_LOGIN, PATH_DASHBOARD } from 'src/config-global';
-
-import FormProvider, { RHFTextField } from 'src/components/hook-form';
-import Iconify from 'src/components/iconify';
-import { useMutation } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
+import { PATH_DASHBOARD } from 'src/config-global';
 import authService from 'src/services/authService';
-import { useSnackbar } from 'notistack';
-import { C } from '@fullcalendar/core/internal-common';
+
+import Iconify from 'src/components/iconify';
+import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
 export default function ClassicLoginView() {
   const password = useBoolean();
   const router = useRouter();
+  const { setCredentialsAction } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
 
   const LoginSchema = Yup.object().shape({
@@ -49,11 +50,12 @@ export default function ClassicLoginView() {
     formState: { isSubmitting },
   } = methods;
 
-  //login api
+  // login api
   const { mutate, isLoading } = useMutation(authService.login, {
-    onSuccess: (data1) => {
-      enqueueSnackbar(data1?.message, { variant: 'success' });
-      localStorage.setItem('user', JSON.stringify(data1?.data));
+    onSuccess: (data) => {
+      console.log({ data });
+      setCredentialsAction(data?.data);
+      enqueueSnackbar(data?.message, { variant: 'success' });
       router.push(PATH_DASHBOARD);
     },
     onError: (error: any) => {
@@ -64,16 +66,17 @@ export default function ClassicLoginView() {
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log(data);
     try {
-      mutate(data);
-      // await new Promise((resolve) => setTimeout(resolve, 500));
-      // router.push(PATH_AFTER_LOGIN);
-      // console.info('DATA', data);
+      const res = await mutate(data);
+      console.log({ res });
+      // Continue with your success logic
     } catch (error) {
       console.error(error);
+      // Handle the error
     }
   });
+
+  type ValidationSchema = Yup.InferType<typeof LoginSchema>;
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 3 }}>

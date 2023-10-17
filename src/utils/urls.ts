@@ -1,7 +1,7 @@
-//AUTH
+// AUTH
 export const ADMIN_AUTH = '/auth/user/login';
 
-//Exchange
+// Exchange
 export const EXCHANGE_CREATE = '/exchange/create';
 export const EXCHANGE_LIST = '/exchange/get';
 export const EXCHANGE_UPDATE = '/exchange/update/';

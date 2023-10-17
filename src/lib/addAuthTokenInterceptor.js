@@ -4,10 +4,10 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-underscore-dangle */
 import axios from 'axios';
-import client from './client';
 
 import { resetState, setRefreshToken } from '../store/slices/auth';
 import { BASE_URL } from '../utils/environments';
+import client from './client';
 
 let isRefreshTokenUpdating = false;
 
@@ -21,9 +21,7 @@ export default function addAuthTokenInterceptor(store) {
   });
 
   client.interceptors.response.use(
-    (response) => {
-      return response;
-    },
+    (response) => response,
     async (error) => {
       const originalConfig = error?.config;
       const { refreshToken } = store.getState().auth;
