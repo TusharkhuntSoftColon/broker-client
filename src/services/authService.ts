@@ -16,9 +16,6 @@ const authService = {
         ID: LoginData?.id,
         password: LoginData?.password,
       });
-
-      console.log({response});
-      
       return response.data;
     } catch (error) {
       // You can log the error here for debugging purposes

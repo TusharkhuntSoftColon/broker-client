@@ -56,27 +56,27 @@ export type IOrderProductItem = {
 };
 
 export type IOrderItem = {
-  id: null | undefined;
+  id?: null | undefined;
   spread: number;
-  stopsLevel: number;
+  stopLevel: number | any;
   inrialMargin: number;
   maintenanceMargin: number;
-  minimumVolume: number;
+  mimVolume: number;
   maximumVolume: number;
   name: string;
-  calculation: string;
-  contractSize: any;
-  currency: any;
-  tickSize: any;
-  tickValue: any;
-  startTradeSessions: any;
-  endTradeSessions: any;
-  startingHour: any;
-  endingHour: any;
-  statusOfScripts: any;
-  stopLoss: any;
-  createdAt:any;
-  orderNumber:any;
-  customer:any;
-  status:any
+  calculation?: string;
+  contractSize: number | any;
+  currency: string | any;
+  tickSize: number | any;
+  tickValue: number | any;
+  startTradeSessions?: any;
+  endTradeSessions?: any;
+  startingHour?: any;
+  endingHour?: any;
+  statusOfScripts?: any;
+  stopLoss?: any;
+  createdAt?: any;
+  orderNumber?: any;
+  customer?: any;
+  status?: any;
 };
