@@ -8,12 +8,14 @@ import type { RootState } from "../index";
 interface AuthState {
   token: null | string;
   refreshToken: null | string;
+  role: string| null
 }
 
 // Define the initial state using that type
 const initialState: AuthState = {
   token: null,
   refreshToken: null,
+  role: null
 };
 
 const authSlice = createSlice({
@@ -22,11 +24,12 @@ const authSlice = createSlice({
   reducers: {
     resetState: () => initialState,
     setCredentials: (state, action) => {
-      const { accessToken, refreshToken } = action.payload;
+      const { accessToken, role,refreshToken } = action.payload;
       console.log(action.payload);
 
       state.token = accessToken;
       state.refreshToken = refreshToken;
+      state.role = role
     },
     setRefreshToken: (state, action) => {
       const { access_token, refresh_token } = action.payload;

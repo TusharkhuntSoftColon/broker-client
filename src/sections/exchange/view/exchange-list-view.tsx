@@ -1,46 +1,46 @@
 import isEqual from 'lodash/isEqual';
-import { useCallback, useState } from 'react';
+import { useState, useCallback } from 'react';
 
-import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
-import Container from '@mui/material/Container';
-import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableContainer from '@mui/material/TableContainer';
+import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
+import Container from '@mui/material/Container';
+import TableBody from '@mui/material/TableBody';
+import IconButton from '@mui/material/IconButton';
+import TableContainer from '@mui/material/TableContainer';
 
-import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { _productList, PRODUCT_STOCK_OPTIONS } from 'src/_mock';
 import { useGetProducts } from 'src/api/product';
+import { _productList, PRODUCT_STOCK_OPTIONS } from 'src/_mock';
 
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
+useTable,
 emptyRows,
+TableNoData,
 getComparator,
+TableSkeleton,
 TableEmptyRows,
 TableHeadCustom,
-TableNoData,
-TablePaginationCustom,
 TableSelectedAction,
-TableSkeleton,
-useTable,
+TablePaginationCustom,
 } from 'src/components/table';
 
-import { IProductItem, IProductTableFilters, IProductTableFilterValue } from 'src/types/exchange';
+import { IProductItem, IExchangeItem, IProductTableFilters, IProductTableFilterValue } from 'src/types/exchange';
 
-import ExchangeQuickEditForm from '../exchange-edit-form';
 import ExchangeTableRow from '../exchange-table-row';
-import ProductTableFiltersResult from '../product-table-filters-result';
+import ExchangeQuickEditForm from '../exchange-edit-form';
 import ProductTableToolbar from '../product-table-toolbar';
+import ProductTableFiltersResult from '../product-table-filters-result';
 
 // ----------------------------------------------------------------------
 
@@ -79,7 +79,7 @@ export default function ExchangeListView() {
 
   const settings = useSettingsContext();
 
-  const [tableData, setTableData] = useState<IProductItem[]>(_productList);
+  const [tableData, setTableData] = useState<IExchangeItem[]>(_productList);
 
   const [filters, setFilters] = useState(defaultFilters);
 

@@ -152,8 +152,22 @@ export default function ExchangeTableRow({
 
               confirm.onTrue();
             }}
+          />
+          <Iconify icon="solar:trash-bin-trash-bold" />
+
+          <IconButton
+            color={popover.open ? 'primary' : 'default'}
+            onClick={() => {
+              popover.onClose();
+
+              confirm.onTrue();
+            }}
+            sx={{ color: 'error.main' }}
           >
             <Iconify icon="solar:trash-bin-trash-bold" />
+          </IconButton>
+          <IconButton color={popover.open ? 'primary' : 'default'} onClick={quickEdit.onTrue}>
+            <Iconify icon="solar:pen-bold" />
           </IconButton>
         </TableCell>
       </TableRow>

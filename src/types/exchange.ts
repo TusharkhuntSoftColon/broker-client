@@ -37,6 +37,15 @@ export type IProductReview = {
   postedAt: Date;
 };
 
+export type IExchangeItem = {
+  name: string;
+  id: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  label: string
+}
+
 export type IProductItem = {
   id: string;
   sku: string;
@@ -78,7 +87,6 @@ export type IProductItem = {
     enabled: boolean;
     content: string;
   };
-  status:any;
 };
 
 export type IProductTableFilterValue = string | string[];
