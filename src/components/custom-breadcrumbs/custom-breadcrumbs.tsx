@@ -1,16 +1,17 @@
 import Box from '@mui/material/Box';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
-import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
 
-import LinkItem from './link-item';
-import { CustomBreadcrumbsProps } from './types';
-import { usePopover } from '../custom-popover';
-import Iconify from '../iconify';
-import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+
+import Iconify from '../iconify';
+import LinkItem from './link-item';
+import { usePopover } from '../custom-popover';
+import { CustomBreadcrumbsProps } from './types';
 
 // ----------------------------------------------------------------------
 
@@ -32,17 +33,17 @@ export default function CustomBreadcrumbs({
 
   return (
     <Box sx={{ ...sx }}>
-      <Stack direction="row" alignItems="center" justifyContent={'space-around'}>
+      <Stack direction="row" alignItems="center" justifyContent="space-around">
         <Box sx={{ flexGrow: 1 }}>
           {/* HEADING */}
-          <Box display={'flex'} alignItems={'center'}>
+          <Box display="flex" alignItems="center">
             {heading && (
               <Typography variant="h4" gutterBottom>
                 {heading}
               </Typography>
             )}
 
-            {!isView && <IconButton
+            {isView && <IconButton
               color={popover.open ? 'inherit' : 'default'}
               onClick={(e) => {
                 e.stopPropagation();
