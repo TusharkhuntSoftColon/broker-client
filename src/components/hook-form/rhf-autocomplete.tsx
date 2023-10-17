@@ -16,6 +16,7 @@ interface Props<
   placeholder?: string;
   helperText?: React.ReactNode;
 }
+``;
 
 export default function RHFAutocomplete<
   T,
@@ -46,6 +47,10 @@ export default function RHFAutocomplete<
               error={!!error}
               helperText={error ? error?.message : helperText}
               {...params}
+              inputProps={{
+                ...params.inputProps,
+                autoComplete: 'disabled'
+              }}
             />
           )}
           {...other}

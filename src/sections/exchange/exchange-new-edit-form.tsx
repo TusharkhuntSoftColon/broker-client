@@ -41,7 +41,7 @@ RHFAutocomplete,
 RHFMultiCheckbox,
 } from 'src/components/hook-form';
 
-import { IProductItem } from 'src/types/product';
+import { IProductItem } from 'src/types/exchange';
 
 // ----------------------------------------------------------------------
 

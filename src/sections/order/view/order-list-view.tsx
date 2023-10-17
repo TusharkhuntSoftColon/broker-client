@@ -25,14 +25,14 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
 import {
-emptyRows,
-getComparator,
-TableEmptyRows,
-TableHeadCustom,
-TableNoData,
-TablePaginationCustom,
-TableSelectedAction,
-useTable,
+  emptyRows,
+  getComparator,
+  TableEmptyRows,
+  TableHeadCustom,
+  TableNoData,
+  TablePaginationCustom,
+  TableSelectedAction,
+  useTable,
 } from 'src/components/table';
 
 import { IOrderItem, IOrderTableFilters, IOrderTableFilterValue } from 'src/types/order';
@@ -49,11 +49,13 @@ const TABLE_HEAD = [
   { id: 'name', label: 'Name' },
   { id: 'currency', label: 'Currency' },
   {
-    id: "contractSize", label: "Contract Size"
+    id: 'contractSize',
+    label: 'Contract Size',
   },
-  { id: "tickSize", label: "Tick Size" },
+  { id: 'tickSize', label: 'Tick Size' },
   {
-    id: "tickValue", label: "Tick Value"
+    id: 'tickValue',
+    label: 'Tick Value',
   },
 
   { id: '', width: 88 },
@@ -87,7 +89,7 @@ export default function OrderListView() {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: tableData,
+    inputData : tableData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
@@ -143,7 +145,15 @@ export default function OrderListView() {
 
   const handleViewRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.order.details(id));
+      router.push(paths.dashboard.symbol.details(id));
+    },
+    [router]
+  );
+
+  const handleEditRow = useCallback(
+    (id: string) => {
+      console.log({ id });
+      router.push(paths.dashboard.symbol.edit(id));
     },
     [router]
   );
@@ -167,19 +177,20 @@ export default function OrderListView() {
             },
             {
               name: 'Symbol',
-              href: paths.dashboard.order.root,
+              href: paths.dashboard.symbol.root,
             },
             { name: 'List' },
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.dashboard.exchange.new}
+              href={paths.dashboard.symbol.new}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
               New Symbol
-            </Button>}
+            </Button>
+          }
           sx={{
             mb: { xs: 3, md: 5 },
           }}
@@ -291,13 +302,14 @@ export default function OrderListView() {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row) => (
+                    .map((row:any) => (
                       <OrderTableRow
                         key={row.id}
                         row={row}
                         selected={table.selected.includes(row.id)}
                         onSelectRow={() => table.onSelectRow(row.id)}
                         onDeleteRow={() => handleDeleteRow(row.id)}
+                        onEditRow={() => handleEditRow(row.id)}
                         onViewRow={() => handleViewRow(row.id)}
                       />
                     ))}
@@ -360,26 +372,26 @@ function applyFilter({
   filters,
   dateError,
 }: {
-  inputData: IOrderItem[];
+  inputData: any;
   comparator: (a: any, b: any) => number;
   filters: IOrderTableFilters;
   dateError: boolean;
 }) {
   const { status, name, startDate, endDate } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index] as const);
+  const stabilizedThis = inputData.map((el:any, index:any) => [el, index] as const);
 
-  stabilizedThis.sort((a, b) => {
+  stabilizedThis.sort((a:any, b:any) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el:any) => el[0]);
 
   if (name) {
     inputData = inputData.filter(
-      (order) =>
+      (order:any) =>
         order.orderNumber.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         order.customer.name.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         order.customer.email.toLowerCase().indexOf(name.toLowerCase()) !== -1
@@ -387,13 +399,13 @@ function applyFilter({
   }
 
   if (status !== 'all') {
-    inputData = inputData.filter((order) => order.status === status);
+    inputData = inputData.filter((order:any) => order.status === status);
   }
 
   if (!dateError) {
     if (startDate && endDate) {
       inputData = inputData.filter(
-        (order) =>
+        (order:any) =>
           fTimestamp(order.createdAt) >= fTimestamp(startDate) &&
           fTimestamp(order.createdAt) <= fTimestamp(endDate)
       );

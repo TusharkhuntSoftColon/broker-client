@@ -24,14 +24,14 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
-useTable,
-emptyRows,
-TableNoData,
-getComparator,
-TableEmptyRows,
-TableHeadCustom,
-TableSelectedAction,
-TablePaginationCustom,
+  useTable,
+  emptyRows,
+  TableNoData,
+  getComparator,
+  TableEmptyRows,
+  TableHeadCustom,
+  TableSelectedAction,
+  TablePaginationCustom,
 } from 'src/components/table';
 
 import { IUserItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
@@ -42,15 +42,12 @@ import UserTableFiltersResult from '../user-table-filters-result';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [
-  { value: 'all', label: 'All' },
-  ...USER_STATUS_OPTIONS
-];
+const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Name' },
-  {id: "userId", label: "User Id"},
-  { id: 'domain', label: 'Domain'},
+  { id: 'userId', label: 'User Id' },
+  { id: 'domain', label: 'Domain' },
   // { id: 'phoneNumber', label: 'Phone Number' },
   // { id: 'company', label: 'Company' },
   // { id: 'role', label: 'Role', width: 180 },
@@ -77,8 +74,7 @@ export default function UserListView() {
 
   const [tableData, setTableData] = useState(_userList);
 
-  console.log({tableData});
-  
+  console.log({ tableData });
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -279,7 +275,7 @@ export default function UserListView() {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row) => (
+                    .map((row: any) => (
                       <UserTableRow
                         key={row.id}
                         row={row}
@@ -347,34 +343,34 @@ function applyFilter({
   comparator,
   filters,
 }: {
-  inputData: IUserItem[];
+  inputData: IUserItem[] | any;
   comparator: (a: any, b: any) => number;
   filters: IUserTableFilters;
 }) {
   const { name, status, role } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index] as const);
+  const stabilizedThis = inputData.map((el: any, index: any) => [el, index] as const);
 
-  stabilizedThis.sort((a, b) => {
+  stabilizedThis.sort((a: any, b: any) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el: any) => el[0]);
 
   if (name) {
     inputData = inputData.filter(
-      (user) => user.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+      (user: any) => user.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
   if (status !== 'all') {
-    inputData = inputData.filter((user) => user.status === status);
+    inputData = inputData.filter((user: any) => user.status === status);
   }
 
   if (role.length) {
-    inputData = inputData.filter((user) => role.includes(user.role));
+    inputData = inputData.filter((user: any) => role.includes(user.role));
   }
 
   return inputData;

@@ -5,6 +5,7 @@ import { AuthGuard } from 'src/auth/guard';
 import DashboardLayout from 'src/layouts/dashboard';
 
 import { LoadingScreen } from 'src/components/loading-screen';
+import OrderEditPage from 'src/pages/dashboard/order/edit';
 
 // ----------------------------------------------------------------------
 
@@ -23,6 +24,8 @@ const ExchangeEditPage = lazy(() => import('src/pages/dashboard/exchange/edit'))
 // ORDER
 const OrderListPage = lazy(() => import('src/pages/dashboard/order/list'));
 const OrderDetailsPage = lazy(() => import('src/pages/dashboard/order/details'));
+const OrderCreatePage = lazy(() => import('src/pages/dashboard/order/new'));
+
 // INVOICE
 const InvoiceListPage = lazy(() => import('src/pages/dashboard/invoice/list'));
 const InvoiceDetailsPage = lazy(() => import('src/pages/dashboard/invoice/details'));
@@ -106,11 +109,13 @@ export const dashboardRoutes = [
         ],
       },
       {
-        path: 'order',
+        path: 'symbol',
         children: [
           { element: <OrderListPage />, index: true },
           { path: 'list', element: <OrderListPage /> },
+          { path: 'new', element: <OrderCreatePage /> },
           { path: ':id', element: <OrderDetailsPage /> },
+          { path: ':id/edit', element: <OrderEditPage /> }
         ],
       },
       {

@@ -252,7 +252,7 @@ export default function ExchangeListView() {
                           table.page * table.rowsPerPage,
                           table.page * table.rowsPerPage + table.rowsPerPage
                         )
-                        .map((row) => (
+                        .map((row : any) => (
                           <ExchangeTableRow
                             key={row.id}
                             row={row}
@@ -323,34 +323,34 @@ function applyFilter({
   comparator,
   filters,
 }: {
-  inputData: IProductItem[];
+  inputData: IProductItem | any;
   comparator: (a: any, b: any) => number;
   filters: IProductTableFilters;
 }) {
   const { name, stock, publish } = filters;
 
-  const stabilizedThis = inputData.map((el, index) => [el, index] as const);
+  const stabilizedThis = inputData.map((el:any, index:any) => [el, index] as const);
 
-  stabilizedThis.sort((a, b) => {
+  stabilizedThis.sort((a:any, b:any) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el) => el[0]);
+  inputData = stabilizedThis.map((el:any) => el[0]);
 
   if (name) {
     inputData = inputData.filter(
-      (product) => product.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+      (product:any) => product.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
   if (stock.length) {
-    inputData = inputData.filter((product) => stock.includes(product.inventoryType));
+    inputData = inputData.filter((product:any) => stock.includes(product.inventoryType));
   }
 
   if (publish.length) {
-    inputData = inputData.filter((product) => publish.includes(product.publish));
+    inputData = inputData.filter((product:any) => publish.includes(product.publish));
   }
 
   return inputData;
