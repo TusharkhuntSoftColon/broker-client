@@ -149,11 +149,13 @@ export const paths = {
         edit: `${ROOTS.DASHBOARD}/post/${paramCase(MOCK_TITLE)}/edit`,
       },
     },
-    order: {
-      root: `${ROOTS.DASHBOARD}/order`,
-      details: (id: string) => `${ROOTS.DASHBOARD}/order/${id}`,
+    symbol: {
+      root: `${ROOTS.DASHBOARD}/symbol`,
+      new: `${ROOTS.DASHBOARD}/symbol/new`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/symbol/${id}`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/symbol/${id}/edit`,
       demo: {
-        details: `${ROOTS.DASHBOARD}/order/${MOCK_ID}`,
+        details: `${ROOTS.DASHBOARD}/symbol/${MOCK_ID}`,
       },
     },
     job: {

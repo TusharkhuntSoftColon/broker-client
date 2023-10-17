@@ -1,6 +1,5 @@
-
 import Button from '@mui/material/Button';
-import { IconButton } from '@mui/material';
+import { IconButton, Tooltip } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
@@ -22,7 +21,7 @@ type Props = {
   onViewRow: VoidFunction;
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
-
+  onEditRow: VoidFunction;
 };
 
 export default function OrderTableRow({
@@ -30,9 +29,10 @@ export default function OrderTableRow({
   selected,
   onViewRow,
   onSelectRow,
+  onEditRow,
   onDeleteRow,
 }: Props) {
-  const { items, status, orderNumber, createdAt, customer, totalQuantity, subTotal , name, contractSize, currency,tickSize, tickValue} = row;
+  const { name, contractSize, currency, tickSize, tickValue } = row;
 
   const confirm = useBoolean();
 
@@ -41,7 +41,7 @@ export default function OrderTableRow({
   const popover = usePopover();
 
   const renderPrimary = (
-    <TableRow hover selected={selected}>
+    <TableRow hover selected={selected} onClick={() => onViewRow()} sx={{ cursor: 'pointer' }}>
       <TableCell padding="checkbox">
         <Checkbox checked={selected} onClick={onSelectRow} />
       </TableCell>
@@ -87,14 +87,14 @@ export default function OrderTableRow({
         />
       </TableCell> */}
 
-    <TableCell sx={{ whiteSpace: 'nowrap' }}>{name}</TableCell>
-         <TableCell sx={{ whiteSpace: 'nowrap' }}>{contractSize}</TableCell>
-         <TableCell sx={{ whiteSpace: 'nowrap' }}>{currency}</TableCell>
-         <TableCell sx={{ whiteSpace: 'nowrap' }}>{tickSize}</TableCell>
-         <TableCell sx={{ whiteSpace: 'nowrap' }}>{tickValue}</TableCell>
+      <TableCell sx={{ whiteSpace: 'nowrap' }}>{name}</TableCell>
+      <TableCell sx={{ whiteSpace: 'nowrap' }}>{contractSize}</TableCell>
+      <TableCell sx={{ whiteSpace: 'nowrap' }}>{currency}</TableCell>
+      <TableCell sx={{ whiteSpace: 'nowrap' }}>{tickSize}</TableCell>
+      <TableCell sx={{ whiteSpace: 'nowrap' }}>{tickValue}</TableCell>
 
       {/* <TableCell> {fCurrency(subTotal)} </TableCell> */}
-{/* 
+      {/* 
       <TableCell>
         <Label
           variant="soft"
@@ -110,21 +110,33 @@ export default function OrderTableRow({
       </TableCell> */}
 
       <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-        <IconButton
-          color={collapse.value ? 'inherit' : 'default'}
-          onClick={collapse.onToggle}
-          sx={{
-            ...(collapse.value && {
-              bgcolor: 'action.hover',
-            }),
-          }}
-        >
-          {/* <Iconify icon="eva:arrow-ios-downward-fill" /> */}
-        </IconButton>
+        {/* <Iconify icon="eva:arrow-ios-downward-fill" /> */}
+        <Tooltip title="Edit" placement="top" arrow>
+          <IconButton
+            color={popover.open ? 'inherit' : 'default'}
+            onClick={(e) => {
+              e.stopPropagation();
+              onEditRow();
+              popover.onClose();
+            }}
+          >
+            <Iconify icon="solar:pen-bold" />
+          </IconButton>
+        </Tooltip>
 
-        <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-          <Iconify icon="eva:more-vertical-fill" />
-        </IconButton>
+        <Tooltip title="Delete" placement="top" arrow>
+          <IconButton
+            color={popover.open ? 'inherit' : 'default'}
+            onClick={(e) => {
+              e.stopPropagation();
+              confirm.onTrue();
+              popover.onClose();
+            }}
+            sx={{ color: 'error.main' }}
+          >
+            <Iconify icon="solar:trash-bin-trash-bold" />
+          </IconButton>
+        </Tooltip>
       </TableCell>
     </TableRow>
   );
@@ -181,51 +193,5 @@ export default function OrderTableRow({
   //   </TableRow>
   // );
 
-  return (
-    <>
-      {renderPrimary}
-
-      {/* {renderSecondary} */}
-
-      <CustomPopover
-        open={popover.open}
-        onClose={popover.onClose}
-        arrow="right-top"
-        sx={{ width: 140 }}
-      >
-        <MenuItem
-          onClick={() => {
-            confirm.onTrue();
-            popover.onClose();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="solar:trash-bin-trash-bold" />
-          Delete
-        </MenuItem>
-
-        <MenuItem
-          onClick={() => {
-            onViewRow();
-            popover.onClose();
-          }}
-        >
-          <Iconify icon="solar:eye-bold" />
-          View
-        </MenuItem>
-      </CustomPopover>
-
-      <ConfirmDialog
-        open={confirm.value}
-        onClose={confirm.onFalse}
-        title="Delete"
-        content="Are you sure want to delete?"
-        action={
-          <Button variant="contained" color="error" onClick={onDeleteRow}>
-            Delete
-          </Button>
-        }
-      />
-    </>
-  );
+  return <>{renderPrimary}</>;
 }

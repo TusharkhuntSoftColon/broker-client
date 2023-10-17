@@ -1,36 +1,59 @@
 import Box from '@mui/material/Box';
 import Breadcrumbs from '@mui/material/Breadcrumbs';
 import Link from '@mui/material/Link';
+import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import LinkItem from './link-item';
 import { CustomBreadcrumbsProps } from './types';
+import { usePopover } from '../custom-popover';
+import Iconify from '../iconify';
+import { useRouter } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
 
 // ----------------------------------------------------------------------
 
 export default function CustomBreadcrumbs({
+  id,
   links,
   action,
   heading,
   moreLink,
   activeLast,
   sx,
+  isView,
   ...other
 }: CustomBreadcrumbsProps) {
   const lastLink = links[links.length - 1].name;
 
+  const router = useRouter();
+  const popover = usePopover();
+
   return (
     <Box sx={{ ...sx }}>
-      <Stack direction="row" alignItems="center">
+      <Stack direction="row" alignItems="center" justifyContent={'space-around'}>
         <Box sx={{ flexGrow: 1 }}>
           {/* HEADING */}
-          {heading && (
-            <Typography variant="h4" gutterBottom>
-              {heading}
-            </Typography>
-          )}
+          <Box display={'flex'} alignItems={'center'}>
+            {heading && (
+              <Typography variant="h4" gutterBottom>
+                {heading}
+              </Typography>
+            )}
 
+            {!isView && <IconButton
+              color={popover.open ? 'inherit' : 'default'}
+              onClick={(e) => {
+                e.stopPropagation();
+                router.push(paths.dashboard.symbol.edit(id));
+                popover.onClose();
+              }}
+              sx={{ marginLeft: '31rem' }}
+            >
+              <Iconify icon="solar:pen-bold" />
+            </IconButton>}
+          </Box>
           {/* BREADCRUMBS */}
           {!!links.length && (
             <Breadcrumbs separator={<Separator />} {...other}>

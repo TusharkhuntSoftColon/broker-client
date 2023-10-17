@@ -9,6 +9,42 @@ export const ORDER_STATUS_OPTIONS = [
   { value: 'refunded', label: 'Refunded' },
 ];
 
+export const TRADE_SESSIONS_DAYS = [
+  { value: 'sunday', label: 'Sunday' },
+  { value: 'monday', label: 'Monday' },
+  { value: 'tuesday', label: 'Tuesday' },
+  { value: 'wednesday', label: 'Wednesday' },
+  { value: 'thursday', label: 'Thursday' },
+  { value: 'friday', label: 'Friday' },
+  { value: 'saturday', label: 'Saturday' },
+];
+
+export const TRADE_HOURS = [
+  { value: '01', label: '01' },
+  { value: '02', label: '02' },
+  { value: '03', label: '03' },
+  { value: '04', label: '04' },
+  { value: '05', label: '05' },
+  { value: '06', label: '06' },
+  { value: '07', label: '07' },
+  { value: '08', label: '08' },
+  { value: '09', label: '09' },
+  { value: '10', label: '10' },
+  { value: '11', label: '11' },
+  { value: '12', label: '12' },
+];
+
+export const STATUS_OF_SCRIPTS = [
+  { value: 'open', label: 'Open' },
+  { value: 'closeOnly', label: 'Close Only' },
+  { value: 'disabled', label: 'Disabled' },
+];
+
+export const STOP_LOSS = [
+  { value: 'on', label: 'On' },
+  { value: 'off', label: 'Off' },
+];
+
 const ITEMS = [...Array(3)].map((_, index) => ({
   id: _mock.id(index),
   sku: `16H9UR${index}`,
@@ -101,4 +137,28 @@ export const _ordersList = [...Array(20)].map((_, index) => ({
   tickSize: _mock.tickSize(index),
   tickValue: _mock.tickValue(index),
   id: _mock.id(index),
+}));
+
+export const _symbolList = [...Array(20)].map((_, index) => ({
+  id: _mock.id(index),
+  contractSize: '85807',
+  currency: 'rerer',
+  spread: 'erewr',
+  stopsLevel: '2332',
+  // email: _mock.email(index),
+  calculation: '908 Jack Locks',
+  name: _mock.fullName(index),
+  tickSize: _mock.boolean(index),
+  tickValue: _mock.companyName(index),
+  inrialMargin: '234',
+  minimumVolume: 'dasdsd',
+  maximumVolume: 'asdasd',
+  startTradeSessions: 'Sunday',
+  endTradeSessions: 'asdsad',
+  maintenanceMargin: 'sdfsdf',
+  // phoneNumber: _mock.phoneNumber(index),
+  startingHour: '12',
+  endingHour: '10',
+  statusOfScripts: 'sdafsdf',
+  stopLoss: 'asdas',
 }));

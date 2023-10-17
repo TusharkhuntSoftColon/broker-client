@@ -56,23 +56,27 @@ export type IOrderProductItem = {
 };
 
 export type IOrderItem = {
-  id: string;
-  taxes: number;
-  status: string;
-  shipping: number;
-  discount: number;
-  subTotal: number;
-  orderNumber: string;
-  totalAmount: number;
-  totalQuantity: number;
-  history: IOrderHistory;
-  customer: IOrderCustomer;
-  delivery: IOrderDelivery;
-  items: IOrderProductItem[];
-  createdAt: Date;
+  id: null | undefined;
+  spread: number;
+  stopsLevel: number;
+  inrialMargin: number;
+  maintenanceMargin: number;
+  minimumVolume: number;
+  maximumVolume: number;
   name: string;
+  calculation: string;
   contractSize: any;
   currency: any;
   tickSize: any;
   tickValue: any;
+  startTradeSessions: any;
+  endTradeSessions: any;
+  startingHour: any;
+  endingHour: any;
+  statusOfScripts: any;
+  stopLoss: any;
+  createdAt:any;
+  orderNumber:any;
+  customer:any;
+  status:any
 };

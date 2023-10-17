@@ -34,7 +34,7 @@ export default function UserTableRow({
   onSelectRow,
   onDeleteRow,
 }: Props) {
-  const { name, avatarUrl, company, role, exchange, email, phoneNumber , domain, userId} = row;
+  const { name, role, exchange,domain, phoneNumber, userId} = row;
 
   const confirm = useBoolean();
 

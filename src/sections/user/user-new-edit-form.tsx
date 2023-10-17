@@ -26,7 +26,7 @@ import { IUserItem } from 'src/types/user';
 // ----------------------------------------------------------------------
 
 type Props = {
-  currentUser?: IUserItem;
+  currentUser?: IUserItem | any;
 };
 
 export default function UserNewEditForm({ currentUser }: Props) {
@@ -37,25 +37,24 @@ export default function UserNewEditForm({ currentUser }: Props) {
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     phoneNumber: Yup.string().required('Phone number is required'),
-    userId: Yup.string().required("User Id is required"),
-    // exhangeGroup: Yup.string().required("Exhange group is required"),
-    // leverage: Yup.string().required("Leverage is required")
+    userId: Yup.string().required('User Id is required'),
+    exhangeGroup: Yup.string().required("Exhange group is required"),
+    leverage: Yup.string().required("Leverage is required")
   });
 
   const defaultValues = useMemo(
     () => ({
       name: currentUser?.name || '',
       phoneNumber: currentUser?.phoneNumber || '',
-      password: currentUser?.password || "",
-      userId: currentUser?.userId || "",
-      exhangeGroup: currentUser?.exhangeGroup || "",
-      leverage: currentUser?.leverage || ""
+      password: currentUser?.password || '',
+      userId: currentUser?.userId || '',
+      exhangeGroup: currentUser?.exhangeGroup || '',
+      leverage: currentUser?.leverage || '',
     }),
     [currentUser]
   );
 
-  console.log({currentUser});
-  
+  console.log({ currentUser });
 
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),
@@ -212,7 +211,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
             >
               <RHFTextField name="name" label="Full Name" />
               <RHFTextField name="userId" label="User Id" />
-              <RHFTextField name="password" type='password' label="Password" />
+              <RHFTextField name="password" type="password" label="Password" />
               <RHFTextField name="domain" label="Domain" />
 
               <RHFAutocomplete
@@ -244,7 +243,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
                 }}
               />
 
-               <RHFAutocomplete
+              <RHFAutocomplete
                 name="leverage"
                 label="Leverage"
                 options={[].map((country) => country)}

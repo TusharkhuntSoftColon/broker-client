@@ -127,7 +127,7 @@ export function useNavData() {
           // ORDER
           {
             title: t('symbol'),
-            path: paths.dashboard.order.root,
+            path: paths.dashboard.symbol.root,
             icon: ICONS.disabled,
           //   children: [
           //     { title: t('list'), path: paths.dashboard.order.root },

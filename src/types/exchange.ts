@@ -78,6 +78,7 @@ export type IProductItem = {
     enabled: boolean;
     content: string;
   };
+  status:any;
 };
 
 export type IProductTableFilterValue = string | string[];

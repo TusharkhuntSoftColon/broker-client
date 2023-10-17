@@ -93,12 +93,17 @@ export type IUserCard = {
 };
 
 export type IUserItem = {
+  id: string;
   name: string;
   phoneNumber: string;
   password: string;
   userId: string;
-  exhangeGroup: string;
-  leverage: string
+  exhangeGroup?: string;
+  leverage?: string;
+  status: any;
+  role: any;
+  exchange?: any;
+  domain?:any;
 };
 
 export type IUserAccount = {
