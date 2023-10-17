@@ -1,5 +1,6 @@
 // AUTH
 export const ADMIN_AUTH = '/auth/user/login';
+export const CREATE_ADMIN = "/auth/admin"
 
 // Exchange
 export const EXCHANGE_CREATE = '/exchange/create';
