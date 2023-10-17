@@ -1,55 +1,55 @@
 import isEqual from 'lodash/isEqual';
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
-import Card from '@mui/material/Card';
-import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
+import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
-import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
+import Tooltip from '@mui/material/Tooltip';
 
-import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useGetProducts } from 'src/api/product';
 import { _productList, PRODUCT_STOCK_OPTIONS } from 'src/_mock';
+import { useGetProducts } from 'src/api/product';
 
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
-useTable,
 emptyRows,
-TableNoData,
 getComparator,
-TableSkeleton,
 TableEmptyRows,
 TableHeadCustom,
-TableSelectedAction,
+TableNoData,
 TablePaginationCustom,
+TableSelectedAction,
+TableSkeleton,
+useTable,
 } from 'src/components/table';
 
 import { IProductItem, IProductTableFilters, IProductTableFilterValue } from 'src/types/exchange';
 
-import ExchangeTableRow from '../exchange-table-row';
 import ExchangeQuickEditForm from '../exchange-edit-form';
-import ProductTableToolbar from '../product-table-toolbar';
+import ExchangeTableRow from '../exchange-table-row';
 import ProductTableFiltersResult from '../product-table-filters-result';
+import ProductTableToolbar from '../product-table-toolbar';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  {id: "id", label: "Id", width: 160},
-  { id: 'name', label: 'Name',  width: 160 },
-  { is: "status", label: "Status" },
-  { is: "createdAt", label: "Created At" },
-  { is: "updatedAt", label: "Updated At" },
+  { id: 'id', label: 'Id', width: 160 },
+  { id: 'name', label: 'Name', width: 160 },
+  { is: 'status', label: 'Status' },
+  { is: 'createdAt', label: 'Created At' },
+  { is: 'updatedAt', label: 'Updated At' },
   // { id: 'createdAt', label: 'Create at', width: 160 },
   // { id: 'inventoryType', label: 'Stock', width: 160 },
   // { id: 'price', label: 'Price', width: 140 },
@@ -75,7 +75,7 @@ export default function ExchangeListView() {
 
   const table = useTable();
 
-      const quickEdit = useBoolean();
+  const quickEdit = useBoolean();
 
   const settings = useSettingsContext();
 
@@ -176,7 +176,7 @@ export default function ExchangeListView() {
           action={
             <Button
               // component={RouterLink}
-            onClick={quickEdit.onTrue}
+              onClick={quickEdit.onTrue}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
@@ -281,7 +281,6 @@ export default function ExchangeListView() {
             </Scrollbar>
           </TableContainer>
 
-
           <TablePaginationCustom
             count={dataFiltered.length}
             page={table.page}
@@ -295,9 +294,7 @@ export default function ExchangeListView() {
         </Card>
       </Container>
 
-          <ExchangeQuickEditForm open={quickEdit.value} onClose={quickEdit.onFalse}  />
-
-
+      <ExchangeQuickEditForm open={quickEdit.value} onClose={quickEdit.onFalse} />
 
       <ConfirmDialog
         open={confirm.value}

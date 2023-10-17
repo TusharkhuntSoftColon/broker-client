@@ -1,19 +1,18 @@
-import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-import LoadingButton from '@mui/lab/LoadingButton';
-import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
+import LoadingButton from '@mui/lab/LoadingButton';
+import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 
-import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
+import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 import { IUserItem } from 'src/types/user';
 
@@ -72,24 +71,23 @@ export default function ExchangeQuickEditForm({ currentUser, open, onClose }: Pr
       open={open}
       onClose={onClose}
       PaperProps={{
-        sx: { maxWidth: 720 },
+        sx: { maxWidth: 500 },
       }}
     >
       <FormProvider methods={methods} onSubmit={onSubmit}>
-        <DialogTitle>{currentUser ?"Update" : "Add"}</DialogTitle>
+        <DialogTitle>{currentUser ?"Update Exchange" : "Add Exchange"}</DialogTitle>
 
         <DialogContent>
-          <Alert variant="outlined" severity="info" sx={{ mb: 3 }}>
-            Account is waiting for confirmation
-          </Alert>
+      
 
           <Box
             rowGap={3}
             columnGap={2}
+            mt={2}
             display="grid"
             gridTemplateColumns={{
               xs: 'repeat(1, 1fr)',
-              sm: 'repeat(2, 1fr)',
+              sm: 'repeat(1, 1fr)',
             }}
           >
             {/* <RHFSelect name="status" label="Status">
@@ -149,7 +147,7 @@ export default function ExchangeQuickEditForm({ currentUser, open, onClose }: Pr
           </Button>
 
           <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-            Update
+            {currentUser ? "Update": "Add"}
           </LoadingButton>
         </DialogActions>
       </FormProvider>

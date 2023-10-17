@@ -152,7 +152,7 @@ export default function ProductTableToolbar({
               width: { xs: 1, md: 200 },
             }}
           >
-            <InputLabel>Exchange</InputLabel>
+            {/* <InputLabel>Exchange</InputLabel> */}
 
             {/* <Select
               multiple
@@ -178,7 +178,7 @@ export default function ProductTableToolbar({
               <RHFAutocomplete
                 name="name"
                 placeholder="Exchange"
-                disableCloseOnSelect
+                // disableCloseOnSelect
                 options={Exchanges.map((option) => option.label)}
                 getOptionLabel={(option) => option}
                 renderOption={(props, option) => {
