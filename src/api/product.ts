@@ -3,7 +3,7 @@ import { useMemo } from 'react';
 
 import { fetcher, endpoints } from 'src/utils/axios';
 
-import { IProductItem } from 'src/types/product';
+import { IProductItem } from 'src/types/exchange';
 
 // ----------------------------------------------------------------------
 

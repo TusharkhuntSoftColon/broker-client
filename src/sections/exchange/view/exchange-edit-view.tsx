@@ -30,14 +30,14 @@ export default function ExchangeEditView({ id }: Props) {
             name: 'Exchange',
             href: paths.dashboard.exchange.root,
           },
-          { name: currentProduct?.name },
+          // { name: currentProduct?.name },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
 
-      <ExchangeNewEditForm currentProduct={currentProduct} />
+      <ExchangeNewEditForm currentExchange={{}} />
     </Container>
   );
 }

@@ -1,6 +1,6 @@
 // ----------------------------------------------------------------------
 
-import { _mock } from "./_mock";
+import { _mock } from './_mock';
 
 export const PRODUCT_GENDER_OPTIONS = [
   { label: 'Men', value: 'Men' },
@@ -89,9 +89,34 @@ export const PRODUCT_CATEGORY_GROUP_OPTIONS = [
 
 export const PRODUCT_CHECKOUT_STEPS = ['Cart', 'Billing & address', 'Payment'];
 
-
 export const _productList = [...Array(20)].map((_, index) => ({
   name: _mock.exchange(index),
   id: _mock.exchangeId(index),
-  status: _mock.status(index)
+  status: _mock.status(index),
+  createdAt: _mock.dates(index),
+  updatedAt: _mock.dates(index),
+  label: _mock.exchange(index),
 }));
+
+export const Exchanges = [
+  { label: 'NYSE' },
+  { label: 'NASDAQ' },
+  { label: 'LSE' },
+  { label: 'TSE' },
+  { label: 'HKEX' },
+  { label: 'SSE' },
+  { label: 'Euronext' },
+  { label: 'TSX' },
+  { label: 'BSE' },
+  { label: 'FWB' },
+  { label: 'B3' },
+  { label: 'ASX' },
+  { label: 'KRX' },
+  { label: 'TWSE' },
+  { label: 'BMV' },
+  { label: 'MOEX' },
+  { label: 'JSE' },
+  { label: 'BIST' },
+  { label: 'SIX' },
+  { label: 'BME' },
+];
