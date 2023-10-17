@@ -13,4 +13,12 @@ export const EXCHANGE_DELETE = '/exchange/delete/';
 export const GET_SYMBOL_LIST = "/symbol/get";
 export const ADD_SYMBOL= "/symbol/create";
 export const UPDATE_SYMBOL= "/symbol/update/";
-export const DELETE_SYMBOL= "/symbol/delete/";
+export const DELETE_SYMBOL = "/symbol/delete/";
+
+
+// exchange
+
+export const GET_EXCHANGE_LIST = "/exchange/get";
+export const ADD_EXCHANGE= "/exchange/create";
+export const UPDATE_EXCHANGE= "/exchange/update/";
+export const DELETE_EXCHANGE = "/exchange/delete/";
