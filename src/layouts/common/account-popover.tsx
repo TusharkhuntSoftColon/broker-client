@@ -60,10 +60,10 @@ export default function AccountPopover() {
     }
   };
 
-  const handleClickItem = (path: string) => {
-    popover.onClose();
-    router.push(path);
-  };
+  // const handleClickItem = (path: string) => {
+  //   popover.onClose();
+  //   router.push(path);
+  // };
 
   return (
     <>

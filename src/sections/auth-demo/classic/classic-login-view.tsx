@@ -12,17 +12,22 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { PATH_AFTER_LOGIN } from 'src/config-global';
+import { PATH_AFTER_LOGIN, PATH_DASHBOARD } from 'src/config-global';
 
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import Iconify from 'src/components/iconify';
+import { useMutation } from '@tanstack/react-query';
+import { isAxiosError } from 'axios';
+import authService from 'src/services/authService';
+import { useSnackbar } from 'notistack';
+import { C } from '@fullcalendar/core/internal-common';
 
 // ----------------------------------------------------------------------
 
 export default function ClassicLoginView() {
   const password = useBoolean();
   const router = useRouter();
-
+  const { enqueueSnackbar } = useSnackbar();
 
   const LoginSchema = Yup.object().shape({
     id: Yup.string().required('Id is required'),
@@ -44,11 +49,27 @@ export default function ClassicLoginView() {
     formState: { isSubmitting },
   } = methods;
 
+  //login api
+  const { mutate, isLoading } = useMutation(authService.login, {
+    onSuccess: (data1) => {
+      enqueueSnackbar(data1?.message, { variant: 'success' });
+      localStorage.setItem('user', JSON.stringify(data1?.data));
+      router.push(PATH_DASHBOARD);
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+
   const onSubmit = handleSubmit(async (data) => {
+    console.log(data);
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      router.push(PATH_AFTER_LOGIN)
-      console.info('DATA', data);
+      mutate(data);
+      // await new Promise((resolve) => setTimeout(resolve, 500));
+      // router.push(PATH_AFTER_LOGIN);
+      // console.info('DATA', data);
     } catch (error) {
       console.error(error);
     }
@@ -87,7 +108,7 @@ export default function ClassicLoginView() {
         }}
       />
 
-{/* <Link
+      {/* <Link
         component={RouterLink}
         href={paths.auth.forgotPassword}
         variant="body2"
