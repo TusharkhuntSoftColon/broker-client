@@ -15,9 +15,8 @@ interface Props<
   label?: string;
   placeholder?: string;
   helperText?: React.ReactNode;
-  isReadOnly?: any;
+  isReadOnly?: boolean
 }
-``;
 
 export default function RHFAutocomplete<
   T,
@@ -42,7 +41,7 @@ export default function RHFAutocomplete<
         <Autocomplete
           {...field}
           onChange={(event, newValue) => setValue(name, newValue, { shouldValidate: true })}
-          readOnly={isReadOnly ? true : false}
+          readOnly={!!isReadOnly}
           renderInput={(params) => (
             <TextField
               label={label}

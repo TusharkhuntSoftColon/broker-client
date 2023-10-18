@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
 
 import useAuth from 'src/hooks/useAuth';
 
@@ -59,7 +59,7 @@ function Container({ children }: Props) {
 
       // router.replace(href);
     } else { 
-      router.replace('/admstr');
+      // router.replace('/admstr');
 
       setChecked(true);
     }

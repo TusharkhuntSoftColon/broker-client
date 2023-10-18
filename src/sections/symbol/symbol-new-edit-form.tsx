@@ -19,6 +19,7 @@ import { STOP_LOSS, TRADE_HOURS, STATUS_OF_SCRIPTS, TRADE_SESSIONS_DAYS } from '
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
+
 import { ISymbolItem } from 'src/types/symbol';
 
 // ----------------------------------------------------------------------
@@ -318,7 +319,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
 
               {/* <RHFAutocomplete
                 name="startTradeSessions"
-                isReadOnly={isView ? true : false}
+                isReadOnly={!!isView}
                 label="Start Trade Sessions"
                 options={TRADE_SESSIONS_DAYS.map((data) => data.label)}
                 getOptionLabel={(option: any) => option}
@@ -365,9 +366,16 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
               <RHFAutocomplete
                 name="endTradeSessions"
                 label="End Trade Sessions"
+<<<<<<< HEAD
                 isReadOnly={isView ? true : false}
                 options={TRADE_SESSIONS_DAYS.map((data) => data.label)}
                 getOptionLabel={(option: any) => option}
+=======
+                isReadOnly={!!isView}
+                options={TRADE_SESSIONS_DAYS}
+                getOptionLabel={(option: any) => option.label}
+                isOptionEqualToValue={(option, value) => option === value}
+>>>>>>> ed4e5567152dee0d866d969fc8ca032a97c6a373
                 renderOption={(props, option) => {
                   const { label } = TRADE_SESSIONS_DAYS.filter((data) => data.label === option)[0];
 
@@ -386,9 +394,16 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
               <RHFAutocomplete
                 name="startingHour"
                 label="Starting hour"
+<<<<<<< HEAD
                 isReadOnly={isView ? true : false}
                 options={TRADE_HOURS.map((data) => data.label)}
                 getOptionLabel={(option: any) => option}
+=======
+                isReadOnly={!!isView}
+                options={TRADE_HOURS}
+                getOptionLabel={(option: any) => option.label}
+                isOptionEqualToValue={(option, value) => option === value}
+>>>>>>> ed4e5567152dee0d866d969fc8ca032a97c6a373
                 renderOption={(props, option) => {
                   const { label } = TRADE_HOURS.filter((data) => data.label === option)[0];
 
@@ -406,9 +421,16 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
               <RHFAutocomplete
                 name="endingHour"
                 label="Ending Hour"
+<<<<<<< HEAD
                 isReadOnly={isView ? true : false}
                 options={TRADE_HOURS.map((data) => data.label)}
                 getOptionLabel={(option: any) => option}
+=======
+                isReadOnly={!!isView}
+                options={TRADE_HOURS}
+                getOptionLabel={(option: any) => option.label}
+                isOptionEqualToValue={(option, value) => option === value}
+>>>>>>> ed4e5567152dee0d866d969fc8ca032a97c6a373
                 renderOption={(props, option) => {
                   const { label } = TRADE_HOURS.filter((data) => data.label === option)[0];
 
@@ -427,9 +449,16 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
               <RHFAutocomplete
                 name="statusOfScripts"
                 label="Status Of Scripts"
+<<<<<<< HEAD
                 isReadOnly={isView ? true : false}
                 options={STATUS_OF_SCRIPTS.map((data) => data.label)}
                 getOptionLabel={(option: any) => option}
+=======
+                isReadOnly={!!isView}
+                options={STATUS_OF_SCRIPTS}
+                getOptionLabel={(option: any) => option.label}
+                isOptionEqualToValue={(option, value) => option === value}
+>>>>>>> ed4e5567152dee0d866d969fc8ca032a97c6a373
                 renderOption={(props, option) => {
                   const { label } = STATUS_OF_SCRIPTS.filter(
                     (country) => country.label === option
@@ -450,9 +479,16 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
               <RHFAutocomplete
                 name="stopLoss"
                 label="Stop Loss"
+<<<<<<< HEAD
                 isReadOnly={isView ? true : false}
                 options={STOP_LOSS.map((data) => data.label)}
                 getOptionLabel={(option: any) => option}
+=======
+                isReadOnly={!!isView}
+                options={STOP_LOSS}
+                getOptionLabel={(option: any) => option.label}
+                isOptionEqualToValue={(option, value) => option === value}
+>>>>>>> ed4e5567152dee0d866d969fc8ca032a97c6a373
                 renderOption={(props, option) => {
                   const { label } = STOP_LOSS.filter((data) => data.label === option)[0];
 
@@ -472,7 +508,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
             {!isView && (
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                  {!currentUser ? 'Create Symbol' : 'Save Changes'}
+                  {currentUser === undefined ? 'Create Symbol' : 'Save Changes'}
                 </LoadingButton>
               </Stack>
             )}
