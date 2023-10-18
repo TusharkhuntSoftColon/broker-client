@@ -13,12 +13,6 @@ import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import OrderNewEditForm from '../symbol-new-edit-form';
-import { _symbolList } from 'src/_mock';
-import { useMutation } from '@tanstack/react-query';
-import symbolService from 'src/services/symbolService';
-import { useEffect, useState } from 'react';
-import { isAxiosError } from 'axios';
-import { useSnackbar } from 'notistack';
 
 // ----------------------------------------------------------------------
 
