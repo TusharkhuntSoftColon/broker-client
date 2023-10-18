@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useMemo } from 'react';
+import { useMemo, useEffect } from 'react';
 import { isAxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
@@ -22,7 +22,6 @@ import FormProvider, { RHFTextField, RHFAutocomplete } from 'src/components/hook
 
 import { ISymbolItem } from 'src/types/symbol';
 
-
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -31,6 +30,7 @@ type Props = {
 };
 
 export default function SymbolNewEditForm({ currentUser, isView }: Props) {
+  console.log({ currentUser });
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -45,63 +45,20 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
     tickValue: Yup.string().required('Tick Value is required'),
     inrialMargin: Yup.string().required('inrialMargin is required'),
     maintenanceMargin: Yup.string().required('Maintenance Margin is required'),
-    minimumVolume: Yup.string().required('Minimum Volume is required'),
-    maximumVolume: Yup.string().required('Maximum Volume is required'),
-    startTradeSessions: Yup.object().shape({
-      label: Yup.string(),
-      value: Yup.string(),
-    }),
-    endTradeSessions: Yup.object().shape({
-      label: Yup.string(),
-      value: Yup.string(),
-    }),
-    startingHour: Yup.object().shape({
-      label: Yup.string(),
-      value: Yup.string(),
-    }),
-    endingHour: Yup.object().shape({
-      label: Yup.string(),
-      value: Yup.string(),
-    }),
-    statusOfScripts: Yup.object().shape({
-      label: Yup.string(),
-      value: Yup.string(),
-    }),
-    stopLoss: Yup.object().shape({
-      label: Yup.string(),
-      value: Yup.string(),
-    }),
+    mimVolume: Yup.string().required('Minimum Volume is required'),
+    maxVolume: Yup.string().required('Maximum Volume is required'),
+    startTradeSessions: Yup.string().required('Start Trade Sessions is required'),
+    endTradeSessions: Yup.string().required('End Trade Sessions is required'),
+    startingHour: Yup.string().required('Starting Hour is required'),
+    endingHour: Yup.string().required('Ending Hour is required'),
+    statusOfScripts: Yup.string().required('Status Of Scripts is required'),
+    stopLoss: Yup.string().required('Stop Loss is required'),
+    stopLevel: Yup.string().required('Stop Level is required'),
     // leverage: Yup.string().required("Leverage is required")
   });
 
-  console.log(currentUser);
-  const defaultValues = useMemo(
-    () => ({
-      name: currentUser?.name || '',
-      contractSize: currentUser?.contractSize || '',
-      currency: currentUser?.currency || '',
-      spread: currentUser?.spread || '',
-      stopLevel: currentUser?.stopLevel || '',
-      calculation: currentUser?.calculation || '',
-      tickSize: currentUser?.tickSize || '',
-      tickValue: currentUser?.tickValue || '',
-      inrialMargin: currentUser?.inrialMargin || '',
-      maintenanceMargin: currentUser?.maintenanceMargin || '',
-      mimVolume: currentUser?.mimVolume || '',
-      maxVolume: currentUser?.maxVolume || '',
-      startTradeSessions: currentUser?.startTradeSessions || '',
-      endTradeSessions: currentUser?.endTradeSessions || '',
-      startingHour: currentUser?.startingHour || '',
-      endingHour: currentUser?.endingHour || '',
-      statusOfScripts: currentUser?.statusOfScripts || '',
-      stopLoss: currentUser?.stopLoss || '',
-    }),
-    [currentUser]
-  );
-
   const methods = useForm({
-    resolver: yupResolver(NewUserSchema),
-    defaultValues,
+    // resolver: yupResolver(NewUserSchema),
   });
 
   const {
@@ -112,6 +69,29 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+
+  useEffect(() => {
+    if (currentUser) {
+      setValue('name', currentUser?.name || '');
+      setValue('contractSize', currentUser?.contractSize || '');
+      setValue('currency', currentUser?.currency || '');
+      setValue('spread', currentUser?.spread || '');
+      setValue('stopLevel', currentUser?.stopLevel || '');
+      setValue('calculation', currentUser?.calculation || '');
+      setValue('tickSize', currentUser?.tickSize || '');
+      setValue('tickValue', currentUser?.tickValue || '');
+      setValue('inrialMargin', currentUser?.inrialMargin || '');
+      setValue('maintenanceMargin', currentUser?.maintenanceMargin || '');
+      setValue('mimVolume', currentUser?.mimVolume || '');
+      setValue('maxVolume', currentUser?.maxVolume || '');
+      setValue('startTradeSessions', currentUser?.startTradeSessions || '');
+      setValue('endTradeSessions', currentUser?.endTradeSessions || '');
+      setValue('startingHour', currentUser?.startingHour || '');
+      setValue('endingHour', currentUser?.endingHour || '');
+      setValue('statusOfScripts', currentUser?.statusOfScripts || '');
+      setValue('stopLoss', currentUser?.stopLoss || '');
+    }
+  }, [currentUser, setValue]);
 
   // create symbol
   const { mutate: createSymbol } = useMutation(symbolService.addSymbol, {
@@ -140,9 +120,20 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
   });
 
   const onSubmit = handleSubmit(async (data) => {
+    try {
+      console.log({ data });
+
+      if (currentUser) {
+        await updateSymbol(data);
+      } else {
+        await createSymbol(data);
+      }
+
+      // currentUser == undefined ? await createSymbol(data) : await updateSymbol(data);
+    } catch (error) {
+      console.log({ error });
+    }
     // const values = watch();
-    // console.log({ values });
-    currentUser == undefined ? createSymbol(data) : updateSymbol(data);
     // try {
 
     //   await new Promise((resolve) => setTimeout(resolve, 500));
@@ -281,49 +272,21 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
               }}
             >
               <RHFTextField isReadOnly={!!isView} name="name" label="Name" />
-              <RHFTextField
-                isReadOnly={!!isView}
-                name="contractSize"
-                label="Contract Size"
-              />
+              <RHFTextField isReadOnly={!!isView} name="contractSize" label="Contract Size" />
               <RHFTextField isReadOnly={!!isView} name="currency" label="Currency" />
               <RHFTextField isReadOnly={!!isView} name="spread" label="Spread" />
-              <RHFTextField
-                isReadOnly={!!isView}
-                name="stopLevel"
-                label="Stops Level"
-              />
-              <RHFTextField
-                isReadOnly={!!isView}
-                name="calculation"
-                label="Calculation"
-              />
+              <RHFTextField isReadOnly={!!isView} name="stopLevel" label="Stops Level" />
+              <RHFTextField isReadOnly={!!isView} name="calculation" label="Calculation" />
               <RHFTextField isReadOnly={!!isView} name="tickSize" label="Tick Size" />
-              <RHFTextField
-                isReadOnly={!!isView}
-                name="tickValue"
-                label="Tick Value"
-              />
-              <RHFTextField
-                isReadOnly={!!isView}
-                name="inrialMargin"
-                label="I-nrial Margin"
-              />
+              <RHFTextField isReadOnly={!!isView} name="tickValue" label="Tick Value" />
+              <RHFTextField isReadOnly={!!isView} name="inrialMargin" label="I-nrial Margin" />
               <RHFTextField
                 isReadOnly={!!isView}
                 name="maintenanceMargin"
                 label="Maintenance Margin"
               />
-              <RHFTextField
-                isReadOnly={!!isView}
-                name="mimVolume"
-                label="Minimum Volume"
-              />
-              <RHFTextField
-                isReadOnly={!!isView}
-                name="maxVolume"
-                label="Maximum Volume"
-              />
+              <RHFTextField isReadOnly={!!isView} name="mimVolume" label="Minimum Volume" />
+              <RHFTextField isReadOnly={!!isView} name="maxVolume" label="Maximum Volume" />
 
               {/* <RHFAutocomplete
                 name="exhangeGroup"
@@ -354,17 +317,14 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
                 }}
               /> */}
 
-              <RHFAutocomplete
+              {/* <RHFAutocomplete
                 name="startTradeSessions"
                 isReadOnly={!!isView}
                 label="Start Trade Sessions"
-                options={TRADE_SESSIONS_DAYS}
-                getOptionLabel={(option: any) => option.label}
-                isOptionEqualToValue={(option, value) => option === value}
+                options={TRADE_SESSIONS_DAYS.map((data) => data.label)}
+                getOptionLabel={(option: any) => option}
                 renderOption={(props, option) => {
-                  const { label } = TRADE_SESSIONS_DAYS.filter(
-                    (data) => data.label === option.label
-                  )[0];
+                  const { label } = TRADE_SESSIONS_DAYS.filter((data) => data.label === option)[0];
 
                   if (!label) {
                     return null;
@@ -376,18 +336,48 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
                     </li>
                   );
                 }}
+              /> */}
+
+              <RHFAutocomplete
+                name="startTradeSessions"
+                label="Start Trade Sessions"
+                options={TRADE_SESSIONS_DAYS.map((data) => data.label)}
+                getOptionLabel={(option) => option}
+                renderOption={(props, option) => {
+                  const { value, label } = TRADE_SESSIONS_DAYS.filter(
+                    (data) => data.label === option
+                  )[0];
+
+                  console.log('====================================');
+                  console.log({ value, label });
+                  console.log('====================================');
+
+                  if (!label) {
+                    return null;
+                  }
+
+                  return (
+                    <li {...props} key={value}>
+                      {label}
+                    </li>
+                  );
+                }}
               />
               <RHFAutocomplete
                 name="endTradeSessions"
                 label="End Trade Sessions"
+<<<<<<< HEAD
+                isReadOnly={isView ? true : false}
+                options={TRADE_SESSIONS_DAYS.map((data) => data.label)}
+                getOptionLabel={(option: any) => option}
+=======
                 isReadOnly={!!isView}
                 options={TRADE_SESSIONS_DAYS}
                 getOptionLabel={(option: any) => option.label}
                 isOptionEqualToValue={(option, value) => option === value}
+>>>>>>> ed4e5567152dee0d866d969fc8ca032a97c6a373
                 renderOption={(props, option) => {
-                  const { label } = TRADE_SESSIONS_DAYS.filter(
-                    (data) => data.label === option.label
-                  )[0];
+                  const { label } = TRADE_SESSIONS_DAYS.filter((data) => data.label === option)[0];
 
                   if (!label) {
                     return null;
@@ -404,14 +394,18 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
               <RHFAutocomplete
                 name="startingHour"
                 label="Starting hour"
+<<<<<<< HEAD
+                isReadOnly={isView ? true : false}
+                options={TRADE_HOURS.map((data) => data.label)}
+                getOptionLabel={(option: any) => option}
+=======
                 isReadOnly={!!isView}
                 options={TRADE_HOURS}
                 getOptionLabel={(option: any) => option.label}
                 isOptionEqualToValue={(option, value) => option === value}
+>>>>>>> ed4e5567152dee0d866d969fc8ca032a97c6a373
                 renderOption={(props, option) => {
-                  const { label } = TRADE_HOURS.filter(
-                    (data) => data.label === option.label
-                  )[0];
+                  const { label } = TRADE_HOURS.filter((data) => data.label === option)[0];
 
                   if (!label) {
                     return null;
@@ -427,14 +421,18 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
               <RHFAutocomplete
                 name="endingHour"
                 label="Ending Hour"
+<<<<<<< HEAD
+                isReadOnly={isView ? true : false}
+                options={TRADE_HOURS.map((data) => data.label)}
+                getOptionLabel={(option: any) => option}
+=======
                 isReadOnly={!!isView}
                 options={TRADE_HOURS}
                 getOptionLabel={(option: any) => option.label}
                 isOptionEqualToValue={(option, value) => option === value}
+>>>>>>> ed4e5567152dee0d866d969fc8ca032a97c6a373
                 renderOption={(props, option) => {
-                  const { label } = TRADE_HOURS.filter(
-                    (data) => data.label === option.label
-                  )[0];
+                  const { label } = TRADE_HOURS.filter((data) => data.label === option)[0];
 
                   if (!label) {
                     return null;
@@ -451,13 +449,19 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
               <RHFAutocomplete
                 name="statusOfScripts"
                 label="Status Of Scripts"
+<<<<<<< HEAD
+                isReadOnly={isView ? true : false}
+                options={STATUS_OF_SCRIPTS.map((data) => data.label)}
+                getOptionLabel={(option: any) => option}
+=======
                 isReadOnly={!!isView}
                 options={STATUS_OF_SCRIPTS}
                 getOptionLabel={(option: any) => option.label}
                 isOptionEqualToValue={(option, value) => option === value}
+>>>>>>> ed4e5567152dee0d866d969fc8ca032a97c6a373
                 renderOption={(props, option) => {
-                  const {label} = STATUS_OF_SCRIPTS.filter(
-                    (country) => country.label === option.label
+                  const { label } = STATUS_OF_SCRIPTS.filter(
+                    (country) => country.label === option
                   )[0];
 
                   if (!label) {
@@ -475,14 +479,18 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
               <RHFAutocomplete
                 name="stopLoss"
                 label="Stop Loss"
+<<<<<<< HEAD
+                isReadOnly={isView ? true : false}
+                options={STOP_LOSS.map((data) => data.label)}
+                getOptionLabel={(option: any) => option}
+=======
                 isReadOnly={!!isView}
                 options={STOP_LOSS}
                 getOptionLabel={(option: any) => option.label}
                 isOptionEqualToValue={(option, value) => option === value}
+>>>>>>> ed4e5567152dee0d866d969fc8ca032a97c6a373
                 renderOption={(props, option) => {
-                  const { label } = STOP_LOSS.filter(
-                    (data) => data.label === option.label
-                  )[0];
+                  const { label } = STOP_LOSS.filter((data) => data.label === option)[0];
 
                   if (!label) {
                     return null;
