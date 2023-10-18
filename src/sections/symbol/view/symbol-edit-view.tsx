@@ -1,6 +1,13 @@
+import { isAxiosError } from 'axios';
+import { useSnackbar } from 'notistack';
+import { useState, useEffect } from 'react';
+import { useMutation } from '@tanstack/react-query';
+
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
+
+import symbolService from 'src/services/symbolService';
 
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -35,10 +42,11 @@ export default function SymbolEditView({ id }: { id: any }) {
   useEffect(() => {
     mutate(id);
   }, []);
+  
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Create a new product"
+        heading={id ? 'Update a symbol' : 'Create a new symbol'}
         links={[
           {
             name: 'Dashboard',

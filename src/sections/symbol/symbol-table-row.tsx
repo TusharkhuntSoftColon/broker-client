@@ -1,15 +1,21 @@
-import { Button, IconButton, Tooltip } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
-import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import { Button, Tooltip, IconButton } from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { usePopover } from 'src/components/custom-popover';
 import Iconify from 'src/components/iconify';
+<<<<<<< HEAD:src/sections/symbol/symbol-table-row.tsx
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { ISymbolItem } from 'src/types/symbol';
 
+=======
+import { usePopover } from 'src/components/custom-popover';
+import { ConfirmDialog } from 'src/components/custom-dialog';
+
+import { IOrderItem } from 'src/types/order';
+>>>>>>> f4eb9a21a16de2ed2e46cbe9722c0a0e268d1c7f:src/sections/order/order-table-row.tsx
 
 // ----------------------------------------------------------------------
 
@@ -155,7 +161,6 @@ export default function SymbolTableRow({
           </Button>
         }
       />
-      ;
     </>
   );
 

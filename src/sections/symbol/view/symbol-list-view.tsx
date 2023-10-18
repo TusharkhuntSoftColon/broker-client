@@ -1,17 +1,20 @@
-import { useCallback, useEffect, useState } from 'react';
+import { isAxiosError } from 'axios';
+import { useSnackbar } from 'notistack';
+import { useMutation } from '@tanstack/react-query';
+import { useState, useEffect, useCallback } from 'react';
 
-import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
-import Container from '@mui/material/Container';
-import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableContainer from '@mui/material/TableContainer';
+import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
+import Container from '@mui/material/Container';
+import TableBody from '@mui/material/TableBody';
+import IconButton from '@mui/material/IconButton';
+import TableContainer from '@mui/material/TableContainer';
 
-import { RouterLink } from 'src/routes/components';
-import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -19,20 +22,20 @@ import { fTimestamp } from 'src/utils/format-time';
 
 import {  _symbolList } from 'src/_mock';
 
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
-  emptyRows,
-  getComparator,
-  TableEmptyRows,
-  TableHeadCustom,
-  TableNoData,
-  TablePaginationCustom,
-  TableSelectedAction,
-  useTable,
+useTable,
+emptyRows,
+TableNoData,
+getComparator,
+TableEmptyRows,
+TableHeadCustom,
+TableSelectedAction,
+TablePaginationCustom,
 } from 'src/components/table';
 
 import { ISymbolItem, ISymbolTableFilters, ISymbolTableFilterValue, } from 'src/types/symbol';
@@ -42,9 +45,6 @@ import SymbolTableRow from '../symbol-table-row';
 import SymbolTableToolbar from '../symbol-table-toolbar';
 
 import symbolService from 'src/services/symbolService';
-import { isAxiosError } from 'axios';
-import { useSnackbar } from 'notistack';
-import { useMutation } from '@tanstack/react-query';
 
 // ----------------------------------------------------------------------
 
@@ -124,7 +124,7 @@ export default function SymbolListView() {
     [table]
   );
 
-  //delete row API
+  // delete row API
   const { mutate: deleteTableRow } = useMutation(symbolService.deleteSymbol, {
     onSuccess: (data) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
@@ -178,7 +178,7 @@ export default function SymbolListView() {
     [handleFilters]
   );
 
-  //list view page API
+  // list view page API
   const { mutate } = useMutation(symbolService.getSymbolList, {
     onSuccess: (data) => {
       setTableData(data?.data?.rows);
