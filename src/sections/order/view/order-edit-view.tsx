@@ -7,16 +7,34 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import OrderNewEditForm from '../order-new-edit-form';
 import { _symbolList } from 'src/_mock';
+import { useMutation } from '@tanstack/react-query';
+import symbolService from 'src/services/symbolService';
+import { useEffect, useState } from 'react';
+import { isAxiosError } from 'axios';
+import { useSnackbar } from 'notistack';
 
 // ----------------------------------------------------------------------
 
 export default function OrderEditView({ id }: { id: any }) {
   const settings = useSettingsContext();
 
-  const currentUser = _symbolList.find((user) => user.id === id);
+  const { enqueueSnackbar } = useSnackbar();
 
-  console.log({ currentUser });
+  const [currentSymbol, setCurrentSymbol] = useState<any>();
+  const { mutate } = useMutation(symbolService.getSymbol_by_Id, {
+    onSuccess: (data: any) => {
+      setCurrentSymbol(data?.data);
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
 
+  useEffect(() => {
+    mutate(id);
+  }, []);
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
@@ -38,7 +56,7 @@ export default function OrderEditView({ id }: { id: any }) {
         isView={true}
       />
 
-      <OrderNewEditForm currentUser={currentUser} />
+      <OrderNewEditForm currentUser={currentSymbol} />
     </Container>
   );
 }

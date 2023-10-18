@@ -142,6 +142,19 @@ export default function ExchangeTableRow({
         </TableCell> */}
 
         <TableCell align="right" sx={{ display: 'flex' }}>
+          <IconButton color={popover.open ? 'primary' : 'default'} onClick={quickEdit.onTrue}>
+            <Iconify icon="solar:pen-bold" />
+          </IconButton>
+          <IconButton
+            color={popover.open ? 'primary' : 'default'}
+            onClick={() => {
+              popover.onClose();
+
+              confirm.onTrue();
+            }}
+          />
+          <Iconify icon="solar:trash-bin-trash-bold" />
+
           <IconButton
             color={popover.open ? 'primary' : 'default'}
             onClick={() => {
@@ -150,7 +163,6 @@ export default function ExchangeTableRow({
               confirm.onTrue();
             }}
             sx={{ color: 'error.main' }}
-
           >
             <Iconify icon="solar:trash-bin-trash-bold" />
           </IconButton>

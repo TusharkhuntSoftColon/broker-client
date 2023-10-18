@@ -20,6 +20,9 @@ import { useSnackbar } from 'src/components/snackbar';
 
 import { IOrderItem } from 'src/types/order';
 import { STATUS_OF_SCRIPTS, STOP_LOSS, TRADE_HOURS, TRADE_SESSIONS_DAYS } from 'src/_mock';
+import { useMutation } from '@tanstack/react-query';
+import symbolService from 'src/services/symbolService';
+import { isAxiosError } from 'axios';
 
 // ----------------------------------------------------------------------
 
@@ -30,7 +33,6 @@ type Props = {
 
 export default function OrderNewEditForm({ currentUser, isView }: Props) {
   const router = useRouter();
-
   const { enqueueSnackbar } = useSnackbar();
 
   const NewUserSchema = Yup.object().shape({
@@ -73,20 +75,21 @@ export default function OrderNewEditForm({ currentUser, isView }: Props) {
     // leverage: Yup.string().required("Leverage is required")
   });
 
+  console.log(currentUser);
   const defaultValues = useMemo(
     () => ({
       name: currentUser?.name || '',
       contractSize: currentUser?.contractSize || '',
       currency: currentUser?.currency || '',
       spread: currentUser?.spread || '',
-      stopsLevel: currentUser?.stopsLevel || '',
+      stopLevel: currentUser?.stopLevel || '',
       calculation: currentUser?.calculation || '',
       tickSize: currentUser?.tickSize || '',
       tickValue: currentUser?.tickValue || '',
       inrialMargin: currentUser?.inrialMargin || '',
       maintenanceMargin: currentUser?.maintenanceMargin || '',
-      minimumVolume: currentUser?.minimumVolume || '',
-      maximumVolume: currentUser?.maximumVolume || '',
+      mimVolume: currentUser?.mimVolume || '',
+      maxVolume: currentUser?.maxVolume || '',
       startTradeSessions: currentUser?.startTradeSessions || '',
       endTradeSessions: currentUser?.endTradeSessions || '',
       startingHour: currentUser?.startingHour || '',
@@ -96,8 +99,6 @@ export default function OrderNewEditForm({ currentUser, isView }: Props) {
     }),
     [currentUser]
   );
-
-  console.log({ currentUser });
 
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),
@@ -113,11 +114,38 @@ export default function OrderNewEditForm({ currentUser, isView }: Props) {
     formState: { isSubmitting },
   } = methods;
 
+  //create symbol
+  const { mutate: createSymbol } = useMutation(symbolService.addSymbol, {
+    onSuccess: (data) => {
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      router.push(paths.dashboard.symbol.root);
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+
+  //create symbol
+  const { mutate: updateSymbol } = useMutation(symbolService.updateSymbol, {
+    onSuccess: (data) => {
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      router.push(paths.dashboard.symbol.root);
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+
   const onSubmit = handleSubmit(async (data) => {
     // const values = watch();
     // console.log({ values });
-    console.log({ data });
+    currentUser == undefined ? createSymbol(data) : updateSymbol(data);
     // try {
+
     //   await new Promise((resolve) => setTimeout(resolve, 500));
     //   reset();
     //   enqueueSnackbar(currentUser ? 'Update success!' : 'Create success!');
@@ -254,17 +282,49 @@ export default function OrderNewEditForm({ currentUser, isView }: Props) {
               }}
             >
               <RHFTextField isReadOnly={isView ? true : false} name="name" label="Full Name" />
-              <RHFTextField isReadOnly={isView ? true : false} name="contractSize" label="Contract Size" />
+              <RHFTextField
+                isReadOnly={isView ? true : false}
+                name="contractSize"
+                label="Contract Size"
+              />
               <RHFTextField isReadOnly={isView ? true : false} name="currency" label="Currency" />
               <RHFTextField isReadOnly={isView ? true : false} name="spread" label="Spread" />
-              <RHFTextField isReadOnly={isView ? true : false} name="stopsLevel" label="Stops Level" />
-              <RHFTextField isReadOnly={isView ? true : false} name="calculation" label="Calculation" />
+              <RHFTextField
+                isReadOnly={isView ? true : false}
+                name="stopLevel"
+                label="Stops Level"
+              />
+              <RHFTextField
+                isReadOnly={isView ? true : false}
+                name="calculation"
+                label="Calculation"
+              />
               <RHFTextField isReadOnly={isView ? true : false} name="tickSize" label="Tick Size" />
-              <RHFTextField isReadOnly={isView ? true : false} name="tickValue" label="Tick Value" />
-              <RHFTextField isReadOnly={isView ? true : false} name="inrialMargin" label="I-nrial Margin" />
-              <RHFTextField isReadOnly={isView ? true : false} name="maintenanceMargin" label="Maintenance Margin" />
-              <RHFTextField isReadOnly={isView ? true : false} name="minimumVolume" label="Minimum Volume" />
-              <RHFTextField isReadOnly={isView ? true : false} name="maximumVolume" label="Maximum Volume" />
+              <RHFTextField
+                isReadOnly={isView ? true : false}
+                name="tickValue"
+                label="Tick Value"
+              />
+              <RHFTextField
+                isReadOnly={isView ? true : false}
+                name="inrialMargin"
+                label="I-nrial Margin"
+              />
+              <RHFTextField
+                isReadOnly={isView ? true : false}
+                name="maintenanceMargin"
+                label="Maintenance Margin"
+              />
+              <RHFTextField
+                isReadOnly={isView ? true : false}
+                name="mimVolume"
+                label="Minimum Volume"
+              />
+              <RHFTextField
+                isReadOnly={isView ? true : false}
+                name="maxVolume"
+                label="Maximum Volume"
+              />
 
               {/* <RHFAutocomplete
                 name="exhangeGroup"
