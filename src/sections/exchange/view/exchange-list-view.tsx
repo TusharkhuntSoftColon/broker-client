@@ -1,5 +1,5 @@
 import isEqual from 'lodash/isEqual';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
@@ -24,23 +24,33 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
-useTable,
-emptyRows,
-TableNoData,
-getComparator,
-TableSkeleton,
-TableEmptyRows,
-TableHeadCustom,
-TableSelectedAction,
-TablePaginationCustom,
+  useTable,
+  emptyRows,
+  TableNoData,
+  getComparator,
+  TableSkeleton,
+  TableEmptyRows,
+  TableHeadCustom,
+  TableSelectedAction,
+  TablePaginationCustom,
 } from 'src/components/table';
 
-import { IProductItem, IExchangeItem, IProductTableFilters, IProductTableFilterValue } from 'src/types/exchange';
+import {
+  IProductItem,
+  IExchangeItem,
+  IProductTableFilters,
+  IProductTableFilterValue,
+} from 'src/types/exchange';
 
 import ExchangeTableRow from '../exchange-table-row';
 import ExchangeQuickEditForm from '../exchange-edit-form';
 import ProductTableToolbar from '../product-table-toolbar';
 import ProductTableFiltersResult from '../product-table-filters-result';
+import { useMutation } from '@tanstack/react-query';
+import exchangeService from 'src/services/exchangeService';
+import { useSnackbar } from 'notistack';
+import { isAxiosError } from 'axios';
+import { mutate } from 'swr';
 
 // ----------------------------------------------------------------------
 
@@ -73,6 +83,8 @@ const defaultFilters: IProductTableFilters = {
 export default function ExchangeListView() {
   const router = useRouter();
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const table = useTable();
 
   const quickEdit = useBoolean();
@@ -83,7 +95,7 @@ export default function ExchangeListView() {
 
   const [filters, setFilters] = useState(defaultFilters);
 
-  const { products, productsLoading, productsEmpty } = useGetProducts();
+  // const { products, productsLoading, productsEmpty } = useGetProducts();
 
   const confirm = useBoolean();
 
@@ -108,7 +120,7 @@ export default function ExchangeListView() {
 
   const canReset = !isEqual(defaultFilters, filters);
 
-  const notFound = (!dataFiltered.length && canReset) || productsEmpty;
+  // const notFound = (!dataFiltered.length && canReset) || productsEmpty;
 
   const handleFilters = useCallback(
     (name: string, value: IProductTableFilterValue) => {
@@ -121,15 +133,9 @@ export default function ExchangeListView() {
     [table]
   );
 
-  const handleDeleteRow = useCallback(
-    (id: string) => {
-      const deleteRow = tableData.filter((row) => row.id !== id);
-      setTableData(deleteRow);
-
-      table.onUpdatePageDeleteRow(dataInPage.length);
-    },
-    [dataInPage.length, table, tableData]
-  );
+  const handleDeleteRow = (id: any) => {
+    deleteExchange(id);
+  };
 
   const handleDeleteRows = useCallback(() => {
     const deleteRows = tableData.filter((row) => !table.selected.includes(row.id));
@@ -160,6 +166,33 @@ export default function ExchangeListView() {
     setFilters(defaultFilters);
   }, []);
 
+  //get exchange list
+  const { mutate } = useMutation(exchangeService.getExchangeList, {
+    onSuccess: (data) => {
+      setTableData(data?.data?.rows);
+      enqueueSnackbar(data?.message, { variant: 'success' });
+    },
+    onError: (error) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+  const { mutate: deleteExchange } = useMutation(exchangeService.deleteExchange, {
+    onSuccess: (data) => {
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      mutate();
+    },
+    onError: (error) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+
+  useEffect(() => {
+    mutate();
+  }, []);
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -184,7 +217,6 @@ export default function ExchangeListView() {
             </Button>
           }
           sx={{ mb: { xs: 3, md: 5 } }}
-          
         />
 
         <Card>
@@ -246,37 +278,29 @@ export default function ExchangeListView() {
                 />
 
                 <TableBody>
-                  {productsLoading ? (
-                    [...Array(table.rowsPerPage)].map((i, index) => (
-                      <TableSkeleton key={index} sx={{ height: denseHeight }} />
-                    ))
-                  ) : (
-                    <>
-                      {dataFiltered
-                        .slice(
-                          table.page * table.rowsPerPage,
-                          table.page * table.rowsPerPage + table.rowsPerPage
-                        )
-                        .map((row : any) => (
-                          <ExchangeTableRow
-                            key={row.id}
-                            row={row}
-                            selected={table.selected.includes(row.id)}
-                            onSelectRow={() => table.onSelectRow(row.id)}
-                            onDeleteRow={() => handleDeleteRow(row.id)}
-                            onEditRow={() => handleEditRow(row.id)}
-                            onViewRow={() => handleViewRow(row.id)}
-                          />
-                        ))}
-                    </>
-                  )}
+                  {dataFiltered
+                    .slice(
+                      table.page * table.rowsPerPage,
+                      table.page * table.rowsPerPage + table.rowsPerPage
+                    )
+                    .map((row: any) => (
+                      <ExchangeTableRow
+                        key={row?._id}
+                        row={row}
+                        selected={table.selected.includes(row?._id)}
+                        onSelectRow={() => table.onSelectRow(row?._id)}
+                        onDeleteRow={() => handleDeleteRow(row?._id)}
+                        onEditRow={() => handleEditRow(row?._id)}
+                        onViewRow={() => handleViewRow(row?._id)}
+                      />
+                    ))}
 
                   <TableEmptyRows
                     height={denseHeight}
                     emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
                   />
 
-                  <TableNoData notFound={notFound} />
+                  {/* <TableNoData notFound={notFound} /> */}
                 </TableBody>
               </Table>
             </Scrollbar>
@@ -295,7 +319,11 @@ export default function ExchangeListView() {
         </Card>
       </Container>
 
-      <ExchangeQuickEditForm open={quickEdit.value} onClose={quickEdit.onFalse} />
+      <ExchangeQuickEditForm
+        getFunction={() => mutate()}
+        open={quickEdit.value}
+        onClose={quickEdit.onFalse}
+      />
 
       <ConfirmDialog
         open={confirm.value}
@@ -336,28 +364,28 @@ function applyFilter({
 }) {
   const { name, stock, publish } = filters;
 
-  const stabilizedThis = inputData.map((el:any, index:any) => [el, index] as const);
+  const stabilizedThis = inputData.map((el: any, index: any) => [el, index] as const);
 
-  stabilizedThis.sort((a:any, b:any) => {
+  stabilizedThis.sort((a: any, b: any) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el:any) => el[0]);
+  inputData = stabilizedThis.map((el: any) => el[0]);
 
   if (name) {
     inputData = inputData.filter(
-      (product:any) => product.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+      (product: any) => product.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
     );
   }
 
   if (stock.length) {
-    inputData = inputData.filter((product:any) => stock.includes(product.inventoryType));
+    inputData = inputData.filter((product: any) => stock.includes(product.inventoryType));
   }
 
   if (publish.length) {
-    inputData = inputData.filter((product:any) => publish.includes(product.publish));
+    inputData = inputData.filter((product: any) => publish.includes(product.publish));
   }
 
   return inputData;

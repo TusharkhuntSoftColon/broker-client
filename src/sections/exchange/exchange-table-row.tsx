@@ -36,9 +36,7 @@ export default function ExchangeTableRow({
   onEditRow,
   onViewRow,
 }: Props) {
-  const { name, id, status, createdAt, updatedAt } = row;
-
-  console.log({ row });
+  const { name, _id, status, createdAt, updatedAt } = row;
 
   const confirm = useBoolean();
 
@@ -53,7 +51,7 @@ export default function ExchangeTableRow({
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{id}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{_id?.substring(0, 5)}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{name}</TableCell>
 
         <TableCell>
@@ -142,7 +140,6 @@ export default function ExchangeTableRow({
         </TableCell> */}
 
         <TableCell align="right" sx={{ display: 'flex' }}>
-
           <IconButton
             color={popover.open ? 'primary' : 'default'}
             onClick={() => {
