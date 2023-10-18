@@ -58,23 +58,23 @@ export type ISymbolProductItem = {
 export type ISymbolItem = {
   id: null | undefined;
   spread: number;
-  stopLevel: number | any;
+  stopLevel: number;
   inrialMargin: number;
   maintenanceMargin: number;
   mimVolume: number;
   maximumVolume: number;
   name: string;
   calculation?: string;
-  contractSize: number | any;
+  contractSize: string;
   currency: string | any;
-  tickSize: number | any;
-  tickValue: number | any;
+  tickSize: number;
+  tickValue: number;
   startTradeSessions?: any;
   endTradeSessions?: any;
   startingHour?: any;
   endingHour?: any;
   statusOfScripts?: any;
-  stopLoss?: any;
+  stAndTp?: any;
   createdAt?: any;
   orderNumber?: any;
   customer?: any;

@@ -16,7 +16,7 @@ import { countries } from 'src/assets/data';
 
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
+import FormProvider, { RHFTextField, RHFAutocomplete, RHFCheckbox } from 'src/components/hook-form';
 
 import { IUserItem } from 'src/types/user';
 import { EXCHANGE_GROUP } from 'src/_mock';
