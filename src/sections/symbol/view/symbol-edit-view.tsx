@@ -1,6 +1,6 @@
 import { isAxiosError } from 'axios';
 import { useSnackbar } from 'notistack';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, memo } from 'react';
 import { useMutation } from '@tanstack/react-query';
 
 import Container from '@mui/material/Container';
@@ -11,17 +11,16 @@ import symbolService from 'src/services/symbolService';
 
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-
-import OrderNewEditForm from '../symbol-new-edit-form';
+import SymbolNewEditForm from '../symbol-new-edit-form';
 
 // ----------------------------------------------------------------------
-
-export default function SymbolEditView({ id }: { id: any }) {
+function SymbolEditView({ id }: { id: any }) {
   const settings = useSettingsContext();
 
   const { enqueueSnackbar } = useSnackbar();
 
   const [currentSymbol, setCurrentSymbol] = useState<any>();
+  
   const { mutate } = useMutation(symbolService.getSymbol_by_Id, {
     onSuccess: (data: any) => {
       setCurrentSymbol(data?.data);
@@ -32,11 +31,12 @@ export default function SymbolEditView({ id }: { id: any }) {
       }
     },
   });
-
   useEffect(() => {
     mutate(id);
   }, []);
-  
+
+  console.log({ currentSymbol });
+
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
@@ -57,7 +57,9 @@ export default function SymbolEditView({ id }: { id: any }) {
         }}
       />
 
-      <OrderNewEditForm currentUser={currentSymbol} />
+      <SymbolNewEditForm currentUser={currentSymbol ? currentSymbol : undefined} />
     </Container>
   );
 }
+
+export default memo(SymbolEditView);

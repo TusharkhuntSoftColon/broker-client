@@ -21,7 +21,7 @@ export default function SymbolDetailsView({ id }: Props) {
 
   const currentSymbol = _symbolList.filter((symbol) => symbol.id === id)[0];
 
-  console.log(currentSymbol);
+  console.log({ currentSymbol });
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
