@@ -20,7 +20,7 @@ function SymbolEditView({ id }: { id: any }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const [currentSymbol, setCurrentSymbol] = useState<any>();
-  
+
   const { mutate } = useMutation(symbolService.getSymbol_by_Id, {
     onSuccess: (data: any) => {
       setCurrentSymbol(data?.data);

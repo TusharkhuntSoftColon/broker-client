@@ -13,16 +13,14 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, {
-RHFTextField,
-} from 'src/components/hook-form';
+import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
-import { IUserItem } from 'src/types/user';
+import { ExchangeProp, IUserItem } from 'src/types/user';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  currentExchange?: IUserItem;
+  currentExchange?: ExchangeProp;
 };
 
 export default function ExchangeNewEditForm({ currentExchange }: Props) {
@@ -32,8 +30,8 @@ export default function ExchangeNewEditForm({ currentExchange }: Props) {
 
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
-    phoneNumber: Yup.string().required('Phone number is required'),
-    userId: Yup.string().required("User Id is required"),
+    // phoneNumber: Yup.string().required('Phone number is required'),
+    // userId: Yup.string().required('User Id is required'),
     // exhangeGroup: Yup.string().required("Exhange group is required"),
     // leverage: Yup.string().required("Leverage is required")
   });
@@ -41,17 +39,11 @@ export default function ExchangeNewEditForm({ currentExchange }: Props) {
   const defaultValues = useMemo(
     () => ({
       name: currentExchange?.name || '',
-      phoneNumber: currentExchange?.phoneNumber || '',
-      password: currentExchange?.password || "",
-      userId: currentExchange?.userId || "",
-      exhangeGroup: currentExchange?.exhangeGroup || "",
-      leverage: currentExchange?.leverage || ""
     }),
     [currentExchange]
   );
 
-  console.log({currentExchange});
-  
+  console.log({ currentExchange });
 
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),

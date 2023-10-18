@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -15,6 +15,11 @@ import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 import { IUserItem } from 'src/types/user';
+import { useMutation } from '@tanstack/react-query';
+import exchangeService from 'src/services/exchangeService';
+import { useRouter } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
+import { isAxiosError } from 'axios';
 
 // ----------------------------------------------------------------------
 
@@ -22,21 +27,19 @@ type Props = {
   open: boolean;
   onClose: VoidFunction;
   currentUser?: IUserItem;
+  getFunction?: any;
 };
 
-export default function ExchangeQuickEditForm({ currentUser, open, onClose }: Props) {
+export default function ExchangeQuickEditForm({ getFunction, currentUser, open, onClose }: Props) {
   const { enqueueSnackbar } = useSnackbar();
-
-  console.log({currentUser});
-  
-
   const NewUserSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required')
+    name: Yup.string().required('Name is required'),
   });
 
   const defaultValues = useMemo(
     () => ({
-      name: currentUser?.name || ''
+      name: currentUser?.name || '',
+      symbols: [],
     }),
     [currentUser]
   );
@@ -49,20 +52,57 @@ export default function ExchangeQuickEditForm({ currentUser, open, onClose }: Pr
   const {
     reset,
     handleSubmit,
+    setValue,
     formState: { isSubmitting },
   } = methods;
 
+  //create exhange
+  const { mutate: createExchange } = useMutation(exchangeService.addExchange, {
+    onSuccess: (data) => {
+      getFunction();
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      onClose();
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+
+  //update exchnage
+  const { mutate: updateExchange } = useMutation(exchangeService.updateSymbol, {
+    onSuccess: (data) => {
+      onClose();
+      getFunction();
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      console.log('inside success functiono');
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+      console.log(error);
+    },
+  });
+
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      onClose();
-      enqueueSnackbar('Update success!');
-      console.info('DATA', data);
+      if (currentUser) {
+        updateExchange({ data, _id: currentUser?._id });
+      } else {
+        createExchange(data);
+      }
     } catch (error) {
-      console.error(error);
+      console.log({ error });
     }
   });
+
+  useEffect(() => {
+    if (currentUser) {
+      setValue('name', currentUser?.name || '');
+    }
+  }, [currentUser, setValue]);
 
   return (
     <Dialog
@@ -75,11 +115,9 @@ export default function ExchangeQuickEditForm({ currentUser, open, onClose }: Pr
       }}
     >
       <FormProvider methods={methods} onSubmit={onSubmit}>
-        <DialogTitle>{currentUser ?"Update Exchange" : "Add Exchange"}</DialogTitle>
+        <DialogTitle>{currentUser ? 'Update Exchange' : 'Add Exchange'}</DialogTitle>
 
         <DialogContent>
-      
-
           <Box
             rowGap={3}
             columnGap={2}
@@ -147,7 +185,7 @@ export default function ExchangeQuickEditForm({ currentUser, open, onClose }: Pr
           </Button>
 
           <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-            {currentUser ? "Update": "Add"}
+            {currentUser ? 'Update' : 'Add'}
           </LoadingButton>
         </DialogActions>
       </FormProvider>
