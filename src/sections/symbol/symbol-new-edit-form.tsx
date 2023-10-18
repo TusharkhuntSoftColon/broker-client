@@ -1,24 +1,23 @@
-import * as Yup from 'yup';
-import { useMemo, useEffect } from 'react';
-import { isAxiosError } from 'axios';
-import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { isAxiosError } from 'axios';
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import * as Yup from 'yup';
 
+import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
-import LoadingButton from '@mui/lab/LoadingButton';
 
-import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
 
+import { STATUS_OF_SCRIPTS, STOP_LOSS, TRADE_HOURS, TRADE_SESSIONS_DAYS } from 'src/_mock';
 import symbolService from 'src/services/symbolService';
-import { STOP_LOSS, TRADE_HOURS, STATUS_OF_SCRIPTS, TRADE_SESSIONS_DAYS } from 'src/_mock';
 
+import FormProvider, { RHFAutocomplete, RHFTextField } from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
 
 import { ISymbolItem } from 'src/types/symbol';
 
@@ -26,7 +25,7 @@ import { ISymbolItem } from 'src/types/symbol';
 
 type Props = {
   currentUser?: ISymbolItem | any;
-  isView?: any;
+  isView?: boolean;
 };
 
 export default function SymbolNewEditForm({ currentUser, isView }: Props) {
@@ -394,10 +393,6 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
                 renderOption={(props, option) => {
                   const { label } = TRADE_HOURS.filter((data) => data.label === option)[0];
 
-                  if (!label) {
-                    return null;
-                  }
-
                   return (
                     <li {...props} key={label}>
                       {label}
@@ -405,6 +400,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
                   );
                 }}
               />
+
               <RHFAutocomplete
                 name="endingHour"
                 label="Ending Hour"

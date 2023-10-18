@@ -93,7 +93,7 @@ export type IUserCard = {
 };
 
 export type IUserItem = {
-  id: string;
+  _id: string;
   name: string;
   phoneNumber: string;
   password: string;
@@ -111,6 +111,10 @@ export type IUserItem = {
   limitOfAddUser: string;
   leverageX: string;
   leverageY: string;
+};
+export type ExchangeProp = {
+  id?: string;
+  name?: string | any;
 };
 
 export type IUserAccount = {

@@ -4,7 +4,7 @@ export type IExchangeListView = {
   name: string;
   id: string;
   status: string;
-}
+};
 
 export type IProductFilterValue = string | string[] | number | number[];
 
@@ -43,11 +43,11 @@ export type IExchangeItem = {
   status: string;
   createdAt: string;
   updatedAt: string;
-  label: string
-}
+  label: string;
+};
 
 export type IProductItem = {
-  id: string;
+  _id?: string;
   sku: string;
   name: string;
   code: string;
