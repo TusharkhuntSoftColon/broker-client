@@ -51,19 +51,19 @@ export default function AccountPopover() {
 
   const handleLogout = async () => {
     try {
-      await logout();
+      // await logout();
       popover.onClose();
-      router.replace('/');
+      router.replace('/auth/login');
     } catch (error) {
       console.error(error);
       enqueueSnackbar('Unable to logout!', { variant: 'error' });
     }
   };
 
-  const handleClickItem = (path: string) => {
-    popover.onClose();
-    router.push(path);
-  };
+  // const handleClickItem = (path: string) => {
+  //   popover.onClose();
+  //   router.push(path);
+  // };
 
   return (
     <>

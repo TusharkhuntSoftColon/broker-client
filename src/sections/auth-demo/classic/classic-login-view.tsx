@@ -1,28 +1,34 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
+import { isAxiosError } from 'axios';
+import { useSnackbar } from 'notistack';
+import { useForm } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-import LoadingButton from '@mui/lab/LoadingButton';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
 import Stack from '@mui/material/Stack';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import LoadingButton from '@mui/lab/LoadingButton';
+import InputAdornment from '@mui/material/InputAdornment';
 
 import { useRouter } from 'src/routes/hooks';
 
+import useAuth from 'src/hooks/useAuth';
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { PATH_AFTER_LOGIN } from 'src/config-global';
+import { PATH_DASHBOARD } from 'src/config-global';
+import authService from 'src/services/authService';
 
-import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import Iconify from 'src/components/iconify';
+import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
 export default function ClassicLoginView() {
   const password = useBoolean();
   const router = useRouter();
-
+  const { setCredentialsAction } = useAuth();
+  const { enqueueSnackbar } = useSnackbar();
 
   const LoginSchema = Yup.object().shape({
     id: Yup.string().required('Id is required'),
@@ -44,15 +50,33 @@ export default function ClassicLoginView() {
     formState: { isSubmitting },
   } = methods;
 
+  // login api
+  const { mutate, isLoading } = useMutation(authService.login, {
+    onSuccess: (data) => {
+      console.log({ data });
+      setCredentialsAction(data?.data);
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      router.push(PATH_DASHBOARD);
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+
   const onSubmit = handleSubmit(async (data) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      router.push(PATH_AFTER_LOGIN)
-      console.info('DATA', data);
+      const res = await mutate(data);
+      console.log({ res });
+      // Continue with your success logic
     } catch (error) {
       console.error(error);
+      // Handle the error
     }
   });
+
+  type ValidationSchema = Yup.InferType<typeof LoginSchema>;
 
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 3 }}>
@@ -87,7 +111,7 @@ export default function ClassicLoginView() {
         }}
       />
 
-{/* <Link
+      {/* <Link
         component={RouterLink}
         href={paths.auth.forgotPassword}
         variant="body2"

@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -41,6 +41,11 @@ import SymbolTableFiltersResult from '../symbol-table-filters-result';
 import SymbolTableRow from '../symbol-table-row';
 import SymbolTableToolbar from '../symbol-table-toolbar';
 
+import symbolService from 'src/services/symbolService';
+import { isAxiosError } from 'axios';
+import { useSnackbar } from 'notistack';
+import { useMutation } from '@tanstack/react-query';
+
 // ----------------------------------------------------------------------
 
 
@@ -72,6 +77,8 @@ const defaultFilters: ISymbolTableFilters = {
 export default function SymbolListView() {
   const table = useTable({ defaultOrderBy: 'orderNumber' });
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const settings = useSettingsContext();
 
   const router = useRouter();
@@ -88,7 +95,7 @@ export default function SymbolListView() {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData : tableData,
+    inputData: tableData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
@@ -117,15 +124,22 @@ export default function SymbolListView() {
     [table]
   );
 
-  const handleDeleteRow = useCallback(
-    (id: string) => {
-      const deleteRow = tableData.filter((row) => row.id !== id);
-      setTableData(deleteRow);
-
-      table.onUpdatePageDeleteRow(dataInPage.length);
+  //delete row API
+  const { mutate: deleteTableRow } = useMutation(symbolService.deleteSymbol, {
+    onSuccess: (data) => {
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      mutate();
     },
-    [dataInPage.length, table, tableData]
-  );
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+
+  const handleDeleteRow = (id: any) => {
+    deleteTableRow(id);
+  };
 
   const handleDeleteRows = useCallback(() => {
     const deleteRows = tableData.filter((row) => !table.selected.includes(row.id));
@@ -163,6 +177,22 @@ export default function SymbolListView() {
     },
     [handleFilters]
   );
+
+  //list view page API
+  const { mutate } = useMutation(symbolService.getSymbolList, {
+    onSuccess: (data) => {
+      setTableData(data?.data?.rows);
+      enqueueSnackbar(data?.message, { variant: 'success' });
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+  useEffect(() => {
+    mutate();
+  }, []);
 
   return (
     <>
@@ -306,11 +336,11 @@ export default function SymbolListView() {
                       <SymbolTableRow
                         key={row.id}
                         row={row}
-                        selected={table.selected.includes(row.id)}
-                        onSelectRow={() => table.onSelectRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleEditRow(row.id)}
-                        onViewRow={() => handleViewRow(row.id)}
+                        selected={table.selected.includes(row._id)}
+                        onSelectRow={() => table.onSelectRow(row._id)}
+                        onDeleteRow={() => handleDeleteRow(row._id)}
+                        onEditRow={() => handleEditRow(row._id)}
+                        onViewRow={() => handleViewRow(row._id)}
                       />
                     ))}
 
@@ -379,19 +409,19 @@ function applyFilter({
 }) {
   const { status, name, startDate, endDate } = filters;
 
-  const stabilizedThis = inputData.map((el:any, index:any) => [el, index] as const);
+  const stabilizedThis = inputData.map((el: any, index: any) => [el, index] as const);
 
-  stabilizedThis.sort((a:any, b:any) => {
+  stabilizedThis.sort((a: any, b: any) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el:any) => el[0]);
+  inputData = stabilizedThis.map((el: any) => el[0]);
 
   if (name) {
     inputData = inputData.filter(
-      (order:any) =>
+      (order: any) =>
         order.orderNumber.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         order.customer.name.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
         order.customer.email.toLowerCase().indexOf(name.toLowerCase()) !== -1
@@ -399,13 +429,13 @@ function applyFilter({
   }
 
   if (status !== 'all') {
-    inputData = inputData.filter((order:any) => order.status === status);
+    inputData = inputData.filter((order: any) => order.status === status);
   }
 
   if (!dateError) {
     if (startDate && endDate) {
       inputData = inputData.filter(
-        (order:any) =>
+        (order: any) =>
           fTimestamp(order.createdAt) >= fTimestamp(startDate) &&
           fTimestamp(order.createdAt) <= fTimestamp(endDate)
       );

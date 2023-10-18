@@ -1,15 +1,13 @@
-import Button from '@mui/material/Button';
-import { IconButton, Tooltip } from '@mui/material';
+import { Button, IconButton, Tooltip } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
-import MenuItem from '@mui/material/MenuItem';
-import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
+import { usePopover } from 'src/components/custom-popover';
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import { ISymbolItem } from 'src/types/symbol';
 
 
@@ -41,12 +39,13 @@ export default function SymbolTableRow({
   const popover = usePopover();
 
   const renderPrimary = (
-    <TableRow hover selected={selected} onClick={() => onViewRow()} sx={{ cursor: 'pointer' }}>
-      <TableCell padding="checkbox">
-        <Checkbox checked={selected} onClick={onSelectRow} />
-      </TableCell>
+    <>
+      <TableRow hover selected={selected} sx={{ cursor: 'pointer' }}>
+        <TableCell padding="checkbox">
+          <Checkbox checked={selected} onClick={onSelectRow} />
+        </TableCell>
 
-      {/* <TableCell>
+        {/* <TableCell>
         <Box
           onClick={onViewRow}
           sx={{
@@ -60,7 +59,7 @@ export default function SymbolTableRow({
         </Box>
       </TableCell> */}
 
-      {/* <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
+        {/* <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
         <Avatar alt={customer.name} src={customer.avatarUrl} sx={{ mr: 2 }} />
 
         <ListItemText
@@ -74,7 +73,7 @@ export default function SymbolTableRow({
         />
       </TableCell> */}
 
-      {/* <TableCell>
+        {/* <TableCell>
         <ListItemText
           primary={format(new Date(createdAt), 'dd MMM yyyy')}
           secondary={format(new Date(createdAt), 'p')}
@@ -87,14 +86,14 @@ export default function SymbolTableRow({
         />
       </TableCell> */}
 
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{name}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{contractSize}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{currency}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{tickSize}</TableCell>
-      <TableCell sx={{ whiteSpace: 'nowrap' }}>{tickValue}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{name}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{contractSize}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{currency}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{tickSize}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{tickValue}</TableCell>
 
-      {/* <TableCell> {fCurrency(subTotal)} </TableCell> */}
-      {/* 
+        {/* <TableCell> {fCurrency(subTotal)} </TableCell> */}
+        {/* 
       <TableCell>
         <Label
           variant="soft"
@@ -109,36 +108,55 @@ export default function SymbolTableRow({
         </Label>
       </TableCell> */}
 
-      <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-        {/* <Iconify icon="eva:arrow-ios-downward-fill" /> */}
-        <Tooltip title="Edit" placement="top" arrow>
-          <IconButton
-            color={popover.open ? 'inherit' : 'default'}
-            onClick={(e) => {
-              e.stopPropagation();
-              onEditRow();
-              popover.onClose();
-            }}
-          >
-            <Iconify icon="solar:pen-bold" />
-          </IconButton>
-        </Tooltip>
+        <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+          {/* <Iconify icon="eva:arrow-ios-downward-fill" /> */}
+          <Tooltip title="Edit" placement="top" arrow>
+            <IconButton
+              color={popover.open ? 'inherit' : 'default'}
+              onClick={(e) => {
+                e.stopPropagation();
+                onEditRow();
+                popover.onClose();
+              }}
+            >
+              <Iconify icon="solar:pen-bold" />
+            </IconButton>
+          </Tooltip>
 
-        <Tooltip title="Delete" placement="top" arrow>
-          <IconButton
-            color={popover.open ? 'inherit' : 'default'}
-            onClick={(e) => {
-              e.stopPropagation();
-              confirm.onTrue();
-              popover.onClose();
+          <Tooltip title="Delete" placement="top" arrow>
+            <IconButton
+              color={popover.open ? 'inherit' : 'default'}
+              onClick={() => {
+                console.log('function');
+                confirm.onTrue();
+              }}
+              sx={{ color: 'error.main' }}
+            >
+              <Iconify icon="solar:trash-bin-trash-bold" />
+            </IconButton>
+          </Tooltip>
+        </TableCell>
+      </TableRow>
+      <ConfirmDialog
+        open={confirm.value}
+        onClose={confirm.onFalse}
+        title="Delete"
+        content="Are you sure want to delete?"
+        action={
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              onDeleteRow();
+              confirm.onFalse();
             }}
-            sx={{ color: 'error.main' }}
           >
-            <Iconify icon="solar:trash-bin-trash-bold" />
-          </IconButton>
-        </Tooltip>
-      </TableCell>
-    </TableRow>
+            Delete
+          </Button>
+        }
+      />
+      ;
+    </>
   );
 
   // const renderSecondary = (

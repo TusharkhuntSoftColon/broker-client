@@ -1,10 +1,10 @@
-
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
+import ListItemText from '@mui/material/ListItemText';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -14,6 +14,8 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 import { IProductItem } from 'src/types/exchange';
+
+import ExchangeQuickEditForm from './exchange-edit-form';
 
 // ----------------------------------------------------------------------
 
@@ -34,16 +36,13 @@ export default function ExchangeTableRow({
   onEditRow,
   onViewRow,
 }: Props) {
-  const {
-    name,
-    id,
-    status
-  } = row;
+  const { name, id, status, createdAt, updatedAt } = row;
 
-  console.log({row});
-  
+  console.log({ row });
 
   const confirm = useBoolean();
+
+  const quickEdit = useBoolean();
 
   const popover = usePopover();
 
@@ -56,15 +55,16 @@ export default function ExchangeTableRow({
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{id}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{name}</TableCell>
-        
-      <TableCell>
-        <Label
-          variant="soft"
-          color={status === 'Active' ? 'success' : 'warning'}
-        >
-          {status}
-        </Label>
-      </TableCell>
+
+        <TableCell>
+          {status ? (
+            <Label variant="soft" color={status === 'Active' ? 'success' : 'warning'}>
+              {status}
+            </Label>
+          ) : (
+            '-'
+          )}
+        </TableCell>
 
         {/* <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
           <Avatar
@@ -95,10 +95,9 @@ export default function ExchangeTableRow({
           />
         </TableCell> */}
 
-        {/* <TableCell>
+        <TableCell>
           <ListItemText
-            primary={format(new Date(createdAt), 'dd MMM yyyy')}
-            secondary={format(new Date(createdAt), 'p')}
+            primary={<span>{createdAt || '-'}</span>}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               mt: 0.5,
@@ -108,7 +107,19 @@ export default function ExchangeTableRow({
           />
         </TableCell>
 
-        <TableCell sx={{ typography: 'caption', color: 'text.secondary' }}>
+        <TableCell>
+          <ListItemText
+            primary={<span>{updatedAt || '-'}</span>}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              mt: 0.5,
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </TableCell>
+
+        {/*         <TableCell sx={{ typography: 'caption', color: 'text.secondary' }}>
           <LinearProgress
             value={(available * 100) / quantity}
             variant="determinate"
@@ -130,12 +141,38 @@ export default function ExchangeTableRow({
           </Label>
         </TableCell> */}
 
-        <TableCell align="right">
-          <IconButton color={popover.open ? 'primary' : 'default'} onClick={popover.onOpen}>
-            <Iconify icon="eva:more-vertical-fill" />
+        <TableCell align="right" sx={{ display: 'flex' }}>
+          <IconButton color={popover.open ? 'primary' : 'default'} onClick={quickEdit.onTrue}>
+            <Iconify icon="solar:pen-bold" />
+          </IconButton>
+          <IconButton
+            color={popover.open ? 'primary' : 'default'}
+            onClick={() => {
+              popover.onClose();
+
+              confirm.onTrue();
+            }}
+          />
+          <Iconify icon="solar:trash-bin-trash-bold" />
+
+          <IconButton
+            color={popover.open ? 'primary' : 'default'}
+            onClick={() => {
+              popover.onClose();
+
+              confirm.onTrue();
+            }}
+            sx={{ color: 'error.main' }}
+          >
+            <Iconify icon="solar:trash-bin-trash-bold" />
+          </IconButton>
+          <IconButton color={popover.open ? 'primary' : 'default'} onClick={quickEdit.onTrue}>
+            <Iconify icon="solar:pen-bold" />
           </IconButton>
         </TableCell>
       </TableRow>
+
+      <ExchangeQuickEditForm currentUser={row} open={quickEdit.value} onClose={quickEdit.onFalse} />
 
       <CustomPopover
         open={popover.open}

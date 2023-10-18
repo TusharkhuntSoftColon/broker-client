@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+
+import useAuth from 'src/hooks/useAuth';
 
 import { SplashScreen } from 'src/components/loading-screen';
 
@@ -34,36 +36,43 @@ function Container({ children }: Props) {
   const router = useRouter();
 
   const { authenticated, method } = useAuthContext();
+  const { token } = useAuth();
+
+  console.log({token});
+  
 
   const [checked, setChecked] = useState(false);
 
-  // const check = useCallback(() => {
-  //   if (!authenticated) {
-  //     const searchParams = new URLSearchParams({
-  //       returnTo: window.location.pathname,
-  //     }).toString();
+  const check = useCallback(() => {
+    if (!token) {
+      // const searchParams = new URLSearchParams({
+      //   returnTo: window.location.pathname,
+      // }).toString();
 
-  //     console.log({searchParams});
-      
+      // console.log({searchParams});
 
-  //     const loginPath = loginPaths[method];
+      router.replace('/auth/login');
 
-  //     const href = `${loginPath}?${searchParams}`;
+      // const loginPath = loginPaths[method];
 
-  //     router.replace(href);
-  //   } else {
-  //     setChecked(true);
-  //   }
-  // }, [authenticated, method, router]);
+      // const href = `${loginPath}?${searchParams}`;
 
-  // useEffect(() => {
-  //   check();
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
+      // router.replace(href);
+    } else { 
+      router.replace('/admstr');
 
-  // if (!checked) {
-  //   return null;
-  // }
+      setChecked(true);
+    }
+  }, [router, token]);
+
+  useEffect(() => {
+    check();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (!checked) {
+    return null;
+  }
 
   return <>{children}</>;
 }

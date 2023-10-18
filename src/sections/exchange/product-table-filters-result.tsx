@@ -6,7 +6,7 @@ import Stack, { StackProps } from '@mui/material/Stack';
 
 import Iconify from 'src/components/iconify';
 
-import { IProductTableFilters, IProductTableFilterValue } from 'src/types/product';
+import { IProductTableFilters, IProductTableFilterValue } from 'src/types/exchange';
 
 // ----------------------------------------------------------------------
 

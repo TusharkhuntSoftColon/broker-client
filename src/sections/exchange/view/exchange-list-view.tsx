@@ -12,7 +12,6 @@ import TableContainer from '@mui/material/TableContainer';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
-import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -36,18 +35,21 @@ TableSelectedAction,
 TablePaginationCustom,
 } from 'src/components/table';
 
-import { IProductItem, IExchangeListView, IProductTableFilters, IProductTableFilterValue } from 'src/types/exchange';
+import { IProductItem, IExchangeItem, IProductTableFilters, IProductTableFilterValue } from 'src/types/exchange';
 
 import ExchangeTableRow from '../exchange-table-row';
+import ExchangeQuickEditForm from '../exchange-edit-form';
 import ProductTableToolbar from '../product-table-toolbar';
 import ProductTableFiltersResult from '../product-table-filters-result';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  {id: "id", label: "Id", width: 160},
-  { id: 'name', label: 'Name',  width: 160 },
-  { is: "status", label: "Status" },
+  { id: 'id', label: 'Id', width: 160 },
+  { id: 'name', label: 'Name', width: 160 },
+  { is: 'status', label: 'Status' },
+  { is: 'createdAt', label: 'Created At' },
+  { is: 'updatedAt', label: 'Updated At' },
   // { id: 'createdAt', label: 'Create at', width: 160 },
   // { id: 'inventoryType', label: 'Stock', width: 160 },
   // { id: 'price', label: 'Price', width: 140 },
@@ -73,9 +75,11 @@ export default function ExchangeListView() {
 
   const table = useTable();
 
+  const quickEdit = useBoolean();
+
   const settings = useSettingsContext();
 
-  const [tableData, setTableData] = useState<IExchangeListView[]>(_productList);
+  const [tableData, setTableData] = useState<IExchangeItem[]>(_productList);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -171,8 +175,8 @@ export default function ExchangeListView() {
           ]}
           action={
             <Button
-              component={RouterLink}
-              href={paths.dashboard.exchange.new}
+              // component={RouterLink}
+              onClick={quickEdit.onTrue}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
@@ -290,6 +294,8 @@ export default function ExchangeListView() {
           />
         </Card>
       </Container>
+
+      <ExchangeQuickEditForm open={quickEdit.value} onClose={quickEdit.onFalse} />
 
       <ConfirmDialog
         open={confirm.value}

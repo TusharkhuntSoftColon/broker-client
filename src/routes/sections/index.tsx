@@ -10,7 +10,7 @@ import { componentsRoutes } from './components';
 // ----------------------------------------------------------------------
 
 export default function Router() {
-  return useRoutes([  
+  return useRoutes([
     // SET INDEX PAGE WITH SKIP HOME PAGE
     {
       path: '/',
@@ -22,7 +22,7 @@ export default function Router() {
     // SET INDEX PAGE WITH HOME PAGE
     // {
     //   path: '/',
-    //   element: ( 
+    //   element: (
     //     <MainLayout>
     //       <HomePage />
     //     </MainLayout>
