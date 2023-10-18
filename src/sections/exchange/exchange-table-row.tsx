@@ -1,17 +1,17 @@
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
-import MenuItem from '@mui/material/MenuItem';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
+import MenuItem from '@mui/material/MenuItem';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import Iconify from 'src/components/iconify';
+import Label from 'src/components/label';
 
 import { IProductItem } from 'src/types/exchange';
 
@@ -142,18 +142,6 @@ export default function ExchangeTableRow({
         </TableCell> */}
 
         <TableCell align="right" sx={{ display: 'flex' }}>
-          <IconButton color={popover.open ? 'primary' : 'default'} onClick={quickEdit.onTrue}>
-            <Iconify icon="solar:pen-bold" />
-          </IconButton>
-          <IconButton
-            color={popover.open ? 'primary' : 'default'}
-            onClick={() => {
-              popover.onClose();
-
-              confirm.onTrue();
-            }}
-          />
-          <Iconify icon="solar:trash-bin-trash-bold" />
 
           <IconButton
             color={popover.open ? 'primary' : 'default'}
