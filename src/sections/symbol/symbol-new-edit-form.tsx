@@ -500,7 +500,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
             {!isView && (
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                  {!currentUser ? 'Create Symbol' : 'Save Changes'}
+                  {currentUser === undefined ? 'Create Symbol' : 'Save Changes'}
                 </LoadingButton>
               </Stack>
             )}
