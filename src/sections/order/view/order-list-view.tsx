@@ -1,49 +1,49 @@
-import { useCallback, useEffect, useState } from 'react';
+import { isAxiosError } from 'axios';
+import { useSnackbar } from 'notistack';
+import { useMutation } from '@tanstack/react-query';
+import { useState, useEffect, useCallback } from 'react';
 
-import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
-import Container from '@mui/material/Container';
-import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableContainer from '@mui/material/TableContainer';
+import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
+import Container from '@mui/material/Container';
+import TableBody from '@mui/material/TableBody';
+import IconButton from '@mui/material/IconButton';
+import TableContainer from '@mui/material/TableContainer';
 
-import { RouterLink } from 'src/routes/components';
-import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
 
-import { _ordersList, ORDER_STATUS_OPTIONS } from 'src/_mock';
+import { ORDER_STATUS_OPTIONS } from 'src/_mock';
+import symbolService from 'src/services/symbolService';
 
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
-  emptyRows,
-  getComparator,
-  TableEmptyRows,
-  TableHeadCustom,
-  TableNoData,
-  TablePaginationCustom,
-  TableSelectedAction,
-  useTable,
+useTable,
+emptyRows,
+TableNoData,
+getComparator,
+TableEmptyRows,
+TableHeadCustom,
+TableSelectedAction,
+TablePaginationCustom,
 } from 'src/components/table';
 
-import { IOrderItem, IOrderTableFilters, IOrderTableFilterValue } from 'src/types/order';
+import { IOrderTableFilters, IOrderTableFilterValue } from 'src/types/order';
 
-import OrderTableFiltersResult from '../order-table-filters-result';
 import OrderTableRow from '../order-table-row';
 import OrderTableToolbar from '../order-table-toolbar';
-import { useMutation } from '@tanstack/react-query';
-import symbolService from 'src/services/symbolService';
-import { isAxiosError } from 'axios';
-import { useSnackbar } from 'notistack';
+import OrderTableFiltersResult from '../order-table-filters-result';
 
 // ----------------------------------------------------------------------
 
@@ -85,7 +85,7 @@ export default function OrderListView() {
 
   const confirm = useBoolean();
 
-  const [tableData, setTableData] = useState(_ordersList);
+  const [tableData, setTableData] = useState([]);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -124,7 +124,7 @@ export default function OrderListView() {
     [table]
   );
 
-  //delete row API
+  // delete row API
   const { mutate: deleteTableRow } = useMutation(symbolService.deleteSymbol, {
     onSuccess: (data) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
@@ -178,7 +178,7 @@ export default function OrderListView() {
     [handleFilters]
   );
 
-  //list view page API
+  // list view page API
   const { mutate } = useMutation(symbolService.getSymbolList, {
     onSuccess: (data) => {
       setTableData(data?.data?.rows);

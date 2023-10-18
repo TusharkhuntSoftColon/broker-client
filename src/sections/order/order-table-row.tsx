@@ -1,15 +1,15 @@
-import { Button, IconButton, Tooltip } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
-import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import { Button, Tooltip, IconButton } from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { usePopover } from 'src/components/custom-popover';
 import Iconify from 'src/components/iconify';
+import { usePopover } from 'src/components/custom-popover';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 
 import { IOrderItem } from 'src/types/order';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 
 // ----------------------------------------------------------------------
 
@@ -155,7 +155,6 @@ export default function OrderTableRow({
           </Button>
         }
       />
-      ;
     </>
   );
 

@@ -1,28 +1,26 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useMemo } from 'react';
-import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
+import { useMemo } from 'react';
+import { isAxiosError } from 'axios';
+import { useForm } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
+import LoadingButton from '@mui/lab/LoadingButton';
 
-import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 
-import { countries } from 'src/assets/data';
+import symbolService from 'src/services/symbolService';
+import { STOP_LOSS, TRADE_HOURS, STATUS_OF_SCRIPTS, TRADE_SESSIONS_DAYS } from 'src/_mock';
 
-import FormProvider, { RHFAutocomplete, RHFTextField } from 'src/components/hook-form';
-import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
+import FormProvider, { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
 
 import { IOrderItem } from 'src/types/order';
-import { STATUS_OF_SCRIPTS, STOP_LOSS, TRADE_HOURS, TRADE_SESSIONS_DAYS } from 'src/_mock';
-import { useMutation } from '@tanstack/react-query';
-import symbolService from 'src/services/symbolService';
-import { isAxiosError } from 'axios';
 
 // ----------------------------------------------------------------------
 
@@ -114,7 +112,7 @@ export default function OrderNewEditForm({ currentUser, isView }: Props) {
     formState: { isSubmitting },
   } = methods;
 
-  //create symbol
+  // create symbol
   const { mutate: createSymbol } = useMutation(symbolService.addSymbol, {
     onSuccess: (data) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
@@ -127,7 +125,7 @@ export default function OrderNewEditForm({ currentUser, isView }: Props) {
     },
   });
 
-  //create symbol
+  // create symbol
   const { mutate: updateSymbol } = useMutation(symbolService.updateSymbol, {
     onSuccess: (data) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
@@ -281,47 +279,47 @@ export default function OrderNewEditForm({ currentUser, isView }: Props) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField isReadOnly={isView ? true : false} name="name" label="Full Name" />
+              <RHFTextField isReadOnly={!!isView} name="name" label="Name" />
               <RHFTextField
-                isReadOnly={isView ? true : false}
+                isReadOnly={!!isView}
                 name="contractSize"
                 label="Contract Size"
               />
-              <RHFTextField isReadOnly={isView ? true : false} name="currency" label="Currency" />
-              <RHFTextField isReadOnly={isView ? true : false} name="spread" label="Spread" />
+              <RHFTextField isReadOnly={!!isView} name="currency" label="Currency" />
+              <RHFTextField isReadOnly={!!isView} name="spread" label="Spread" />
               <RHFTextField
-                isReadOnly={isView ? true : false}
+                isReadOnly={!!isView}
                 name="stopLevel"
                 label="Stops Level"
               />
               <RHFTextField
-                isReadOnly={isView ? true : false}
+                isReadOnly={!!isView}
                 name="calculation"
                 label="Calculation"
               />
-              <RHFTextField isReadOnly={isView ? true : false} name="tickSize" label="Tick Size" />
+              <RHFTextField isReadOnly={!!isView} name="tickSize" label="Tick Size" />
               <RHFTextField
-                isReadOnly={isView ? true : false}
+                isReadOnly={!!isView}
                 name="tickValue"
                 label="Tick Value"
               />
               <RHFTextField
-                isReadOnly={isView ? true : false}
+                isReadOnly={!!isView}
                 name="inrialMargin"
                 label="I-nrial Margin"
               />
               <RHFTextField
-                isReadOnly={isView ? true : false}
+                isReadOnly={!!isView}
                 name="maintenanceMargin"
                 label="Maintenance Margin"
               />
               <RHFTextField
-                isReadOnly={isView ? true : false}
+                isReadOnly={!!isView}
                 name="mimVolume"
                 label="Minimum Volume"
               />
               <RHFTextField
-                isReadOnly={isView ? true : false}
+                isReadOnly={!!isView}
                 name="maxVolume"
                 label="Maximum Volume"
               />
@@ -457,9 +455,9 @@ export default function OrderNewEditForm({ currentUser, isView }: Props) {
                 getOptionLabel={(option: any) => option.label}
                 isOptionEqualToValue={(option, value) => option.value === value}
                 renderOption={(props, option) => {
-                  const label = STATUS_OF_SCRIPTS.filter(
+                  const {label} = STATUS_OF_SCRIPTS.filter(
                     (country) => country.label === option.label
-                  )[0].label;
+                  )[0];
 
                   if (!label) {
                     return null;
