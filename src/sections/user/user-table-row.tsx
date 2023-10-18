@@ -95,7 +95,8 @@ export default function UserTableRow({
           <Tooltip title="Delete" placement="top" arrow>
             <IconButton
               color={popover.open ? 'inherit' : 'default'}
-              onClick={() => {
+              onClick={(e) => {
+                e.stopPropagation();
                 confirm.onTrue();
                 popover.onClose();
               }}
