@@ -19,6 +19,7 @@ import { STOP_LOSS, TRADE_HOURS, STATUS_OF_SCRIPTS, TRADE_SESSIONS_DAYS } from '
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
+
 import { ISymbolItem } from 'src/types/symbol';
 
 
@@ -355,7 +356,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
 
               <RHFAutocomplete
                 name="startTradeSessions"
-                isReadOnly={isView ? true : false}
+                isReadOnly={!!isView}
                 label="Start Trade Sessions"
                 options={TRADE_SESSIONS_DAYS}
                 getOptionLabel={(option: any) => option.label}
@@ -379,7 +380,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
               <RHFAutocomplete
                 name="endTradeSessions"
                 label="End Trade Sessions"
-                isReadOnly={isView ? true : false}
+                isReadOnly={!!isView}
                 options={TRADE_SESSIONS_DAYS}
                 getOptionLabel={(option: any) => option.label}
                 isOptionEqualToValue={(option, value) => option === value}
@@ -403,7 +404,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
               <RHFAutocomplete
                 name="startingHour"
                 label="Starting hour"
-                isReadOnly={isView ? true : false}
+                isReadOnly={!!isView}
                 options={TRADE_HOURS}
                 getOptionLabel={(option: any) => option.label}
                 isOptionEqualToValue={(option, value) => option === value}
@@ -426,7 +427,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
               <RHFAutocomplete
                 name="endingHour"
                 label="Ending Hour"
-                isReadOnly={isView ? true : false}
+                isReadOnly={!!isView}
                 options={TRADE_HOURS}
                 getOptionLabel={(option: any) => option.label}
                 isOptionEqualToValue={(option, value) => option === value}
@@ -450,7 +451,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
               <RHFAutocomplete
                 name="statusOfScripts"
                 label="Status Of Scripts"
-                isReadOnly={isView ? true : false}
+                isReadOnly={!!isView}
                 options={STATUS_OF_SCRIPTS}
                 getOptionLabel={(option: any) => option.label}
                 isOptionEqualToValue={(option, value) => option === value}
@@ -474,7 +475,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
               <RHFAutocomplete
                 name="stopLoss"
                 label="Stop Loss"
-                isReadOnly={isView ? true : false}
+                isReadOnly={!!isView}
                 options={STOP_LOSS}
                 getOptionLabel={(option: any) => option.label}
                 isOptionEqualToValue={(option, value) => option === value}
