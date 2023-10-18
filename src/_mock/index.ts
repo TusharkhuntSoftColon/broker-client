@@ -9,7 +9,7 @@ export * from './_exchange';
 export * from './_files';
 export * from './_invoice';
 export * from './_job';
-export * from './_order';
+export * from './_symbol';
 export * from './_others';
 export * from './_overview';
 export * from './_tour';

@@ -26,7 +26,7 @@ type Props = {
   }[];
 };
 
-export default function OrderDetailsToolbar({
+export default function SymbolDetailsToolbar({
   status,
   backLink,
   createdAt,

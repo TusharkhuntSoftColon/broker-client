@@ -36,6 +36,7 @@ export default function InvoiceDetailsView({ id }: Props) {
           { name: currentInvoice?.invoiceNumber },
         ]}
         sx={{ mb: { xs: 3, md: 5 } }}
+        
       />
 
       <InvoiceDetails invoice={currentInvoice} />

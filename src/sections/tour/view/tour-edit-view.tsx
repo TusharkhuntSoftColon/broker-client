@@ -38,6 +38,7 @@ export default function TourEditView({ id }: Props) {
         sx={{
           mb: { xs: 3, md: 5 },
         }}
+        
       />
 
       <TourNewEditForm currentTour={currentTour} />

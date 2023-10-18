@@ -70,6 +70,7 @@ export default function MultiLanguageView() {
               'https://react.i18next.com',
               'https://mui.com/guides/localization/#main-content',
             ]}
+            
           />
         </Container>
       </Box>

@@ -42,7 +42,7 @@ export default function CustomBreadcrumbs({
               </Typography>
             )}
 
-            {!isView && <IconButton
+            {isView && <IconButton
               color={popover.open ? 'inherit' : 'default'}
               onClick={(e) => {
                 e.stopPropagation();

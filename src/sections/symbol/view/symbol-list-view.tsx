@@ -17,7 +17,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
 
-import { _ordersList, ORDER_STATUS_OPTIONS } from 'src/_mock';
+import {  _symbolList } from 'src/_mock';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -35,15 +35,14 @@ import {
   useTable,
 } from 'src/components/table';
 
-import { IOrderItem, IOrderTableFilters, IOrderTableFilterValue } from 'src/types/order';
+import { ISymbolItem, ISymbolTableFilters, ISymbolTableFilterValue, } from 'src/types/symbol';
 
-import OrderTableFiltersResult from '../order-table-filters-result';
-import OrderTableRow from '../order-table-row';
-import OrderTableToolbar from '../order-table-toolbar';
+import SymbolTableFiltersResult from '../symbol-table-filters-result';
+import SymbolTableRow from '../symbol-table-row';
+import SymbolTableToolbar from '../symbol-table-toolbar';
 
 // ----------------------------------------------------------------------
 
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...ORDER_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Name' },
@@ -61,7 +60,7 @@ const TABLE_HEAD = [
   { id: '', width: 88 },
 ];
 
-const defaultFilters: IOrderTableFilters = {
+const defaultFilters: ISymbolTableFilters = {
   name: '',
   status: 'all',
   startDate: null,
@@ -70,7 +69,7 @@ const defaultFilters: IOrderTableFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function OrderListView() {
+export default function SymbolListView() {
   const table = useTable({ defaultOrderBy: 'orderNumber' });
 
   const settings = useSettingsContext();
@@ -79,7 +78,7 @@ export default function OrderListView() {
 
   const confirm = useBoolean();
 
-  const [tableData, setTableData] = useState(_ordersList);
+  const [tableData, setTableData] = useState(_symbolList);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -108,7 +107,7 @@ export default function OrderListView() {
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
   const handleFilters = useCallback(
-    (name: string, value: IOrderTableFilterValue) => {
+    (name: string, value: ISymbolTableFilterValue) => {
       table.onResetPage();
       setFilters((prevState) => ({
         ...prevState,
@@ -181,6 +180,7 @@ export default function OrderListView() {
             },
             { name: 'List' },
           ]}
+          
           action={
             <Button
               component={RouterLink}
@@ -239,7 +239,7 @@ export default function OrderListView() {
             ))}
           </Tabs> */}
 
-          <OrderTableToolbar
+          <SymbolTableToolbar
             filters={filters}
             onFilters={handleFilters}
             //
@@ -248,7 +248,7 @@ export default function OrderListView() {
           />
 
           {canReset && (
-            <OrderTableFiltersResult
+            <SymbolTableFiltersResult
               filters={filters}
               onFilters={handleFilters}
               //
@@ -303,7 +303,7 @@ export default function OrderListView() {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row:any) => (
-                      <OrderTableRow
+                      <SymbolTableRow
                         key={row.id}
                         row={row}
                         selected={table.selected.includes(row.id)}
@@ -374,7 +374,7 @@ function applyFilter({
 }: {
   inputData: any;
   comparator: (a: any, b: any) => number;
-  filters: IOrderTableFilters;
+  filters: ISymbolTableFilters;
   dateError: boolean;
 }) {
   const { status, name, startDate, endDate } = filters;

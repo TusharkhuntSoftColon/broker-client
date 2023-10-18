@@ -38,6 +38,7 @@ export default function JobEditView({ id }: Props) {
         sx={{
           mb: { xs: 3, md: 5 },
         }}
+        
       />
 
       <JobNewEditForm currentJob={currentJob} />

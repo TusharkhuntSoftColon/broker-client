@@ -36,6 +36,7 @@ export default function LabelView() {
               },
               { name: 'Label' },
             ]}
+            
           />
         </Container>
       </Box>

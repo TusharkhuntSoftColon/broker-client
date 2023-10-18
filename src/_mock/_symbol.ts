@@ -130,15 +130,6 @@ export const _orders = [...Array(20)].map((_, index) => {
   };
 });
 
-export const _ordersList = [...Array(20)].map((_, index) => ({
-  name: _mock.symbol(index),
-  contractSize: _mock.contractSize(index),
-  currency: _mock.currency(index),
-  tickSize: _mock.tickSize(index),
-  tickValue: _mock.tickValue(index),
-  id: _mock.id(index),
-}));
-
 export const _symbolList = [...Array(20)].map((_, index) => ({
   id: _mock.id(index),
   contractSize: '85807',

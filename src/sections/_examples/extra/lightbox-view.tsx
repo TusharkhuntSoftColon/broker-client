@@ -86,6 +86,7 @@ export default function LightboxView() {
               { name: 'Lightbox' },
             ]}
             moreLink={['https://www.npmjs.com/package/yet-another-react-lightbox']}
+            
           />
         </Container>
       </Box>

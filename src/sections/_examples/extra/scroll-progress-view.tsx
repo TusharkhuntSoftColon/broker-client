@@ -41,6 +41,7 @@ export default function ScrollProgressView() {
               },
               { name: 'Scroll Progress' },
             ]}
+            
           />
         </Container>
       </Box>

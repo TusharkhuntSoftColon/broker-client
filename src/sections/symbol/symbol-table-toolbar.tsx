@@ -9,20 +9,19 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-
-import { IOrderTableFilters, IOrderTableFilterValue } from 'src/types/order';
+import { ISymbolTableFilterValue, ISymbolTableFilters } from 'src/types/symbol';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  filters: IOrderTableFilters;
-  onFilters: (name: string, value: IOrderTableFilterValue) => void;
+  filters: ISymbolTableFilters;
+  onFilters: (name: string, value: ISymbolTableFilterValue) => void;
   //
   canReset: boolean;
   onResetFilters: VoidFunction;
 };
 
-export default function OrderTableToolbar({
+export default function SymbolTableToolbar({
   filters,
   onFilters,
   //

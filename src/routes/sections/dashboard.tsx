@@ -5,7 +5,8 @@ import { AuthGuard } from 'src/auth/guard';
 import DashboardLayout from 'src/layouts/dashboard';
 
 import { LoadingScreen } from 'src/components/loading-screen';
-import OrderEditPage from 'src/pages/dashboard/order/edit';
+import OrderEditPage from 'src/pages/dashboard/symbol/edit';
+import UserDetailsPage from 'src/pages/dashboard/user/details';
 
 // ----------------------------------------------------------------------
 
@@ -22,9 +23,9 @@ const ExchangeListPage = lazy(() => import('src/pages/dashboard/exchange/list'))
 const ExchangeCreatePage = lazy(() => import('src/pages/dashboard/exchange/new'));
 const ExchangeEditPage = lazy(() => import('src/pages/dashboard/exchange/edit'));
 // ORDER
-const OrderListPage = lazy(() => import('src/pages/dashboard/order/list'));
-const OrderDetailsPage = lazy(() => import('src/pages/dashboard/order/details'));
-const OrderCreatePage = lazy(() => import('src/pages/dashboard/order/new'));
+const OrderListPage = lazy(() => import('src/pages/dashboard/symbol/list'));
+const OrderDetailsPage = lazy(() => import('src/pages/dashboard/symbol/details'));
+const OrderCreatePage = lazy(() => import('src/pages/dashboard/symbol/new'));
 
 // INVOICE
 const InvoiceListPage = lazy(() => import('src/pages/dashboard/invoice/list'));
@@ -87,13 +88,14 @@ export const dashboardRoutes = [
       { path: 'booking', element: <OverviewBookingPage /> },
       { path: 'file', element: <OverviewFilePage /> },
       {
-        path: 'user', 
+        path: 'user',
         children: [
           { element: <UserListPage />, index: true },
           { path: 'profile', element: <UserProfilePage /> },
           { path: 'cards', element: <UserCardsPage /> },
           { path: 'list', element: <UserListPage /> },
           { path: 'new', element: <UserCreatePage /> },
+          { path: ':id', element: <UserDetailsPage /> },
           { path: ':id/edit', element: <UserEditPage /> },
           { path: 'account', element: <UserAccountPage /> },
         ],
@@ -115,7 +117,7 @@ export const dashboardRoutes = [
           { path: 'list', element: <OrderListPage /> },
           { path: 'new', element: <OrderCreatePage /> },
           { path: ':id', element: <OrderDetailsPage /> },
-          { path: ':id/edit', element: <OrderEditPage /> }
+          { path: ':id/edit', element: <OrderEditPage /> },
         ],
       },
       {

@@ -32,7 +32,7 @@ export default function UserCreateView() {
         }}
       />
 
-      <UserNewEditForm />
+      <UserNewEditForm isView={true} />
     </Container>
   );
 }

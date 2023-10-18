@@ -107,6 +107,7 @@ export default function PostListView() {
         sx={{
           mb: { xs: 3, md: 5 },
         }}
+        
       />
 
       <Stack

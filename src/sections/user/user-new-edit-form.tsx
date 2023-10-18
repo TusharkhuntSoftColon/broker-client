@@ -14,19 +14,21 @@ import { paths } from 'src/routes/paths';
 
 import { countries } from 'src/assets/data';
 
-import FormProvider, { RHFAutocomplete, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFAutocomplete, RHFCheckbox, RHFTextField } from 'src/components/hook-form';
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 
 import { IUserItem } from 'src/types/user';
+import { EXCHANGE_GROUP } from 'src/_mock';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  currentUser?: IUserItem | any;
+  currentUser?: IUserItem;
+  isView?: any;
 };
 
-export default function UserNewEditForm({ currentUser }: Props) {
+export default function UserNewEditForm({ currentUser, isView }: Props) {
   const router = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -35,8 +37,20 @@ export default function UserNewEditForm({ currentUser }: Props) {
     name: Yup.string().required('Name is required'),
     phoneNumber: Yup.string().required('Phone number is required'),
     userId: Yup.string().required('User Id is required'),
-    exhangeGroup: Yup.string().required("Exhange group is required"),
-    leverage: Yup.string().required("Leverage is required")
+    role: Yup.string().required('Role is required'),
+    exhangeGroup: Yup.object().shape({
+      label: Yup.string(),
+      value: Yup.string(),
+    }),
+    leverage: Yup.string().required('Leverage is required'),
+    domain: Yup.string().required('Domain is required'),
+    insertCustomBet: Yup.string().required('Insert Custom Bet is required'),
+    editBet: Yup.string().required('Edit Bet is required'),
+    deleteBet: Yup.string().required('Delete Bet is required'),
+    limitOfAddMaster: Yup.string().required('Limit Of Add Master is required'),
+    limitOfAddUser: Yup.string().required('Limit Of Add User is required'),
+    leverageX: Yup.string().required('Leverage X is required'),
+    leverageY: Yup.string().required('Leverage Y is required'),
   });
 
   const defaultValues = useMemo(
@@ -47,6 +61,15 @@ export default function UserNewEditForm({ currentUser }: Props) {
       userId: currentUser?.userId || '',
       exhangeGroup: currentUser?.exhangeGroup || '',
       leverage: currentUser?.leverage || '',
+      domain: currentUser?.domain || '',
+      insertCustomBet: currentUser?.insertCustomBet || '',
+      editBet: currentUser?.editBet || '',
+      role: currentUser?.role || '',
+      deleteBet: currentUser?.deleteBet || '',
+      limitOfAddMaster: currentUser?.limitOfAddMaster || '',
+      limitOfAddUser: currentUser?.limitOfAddUser || '',
+      leverageX: currentUser?.leverageX || '',
+      leverageY: currentUser?.leverageY || '',
     }),
     [currentUser]
   );
@@ -68,6 +91,8 @@ export default function UserNewEditForm({ currentUser }: Props) {
   } = methods;
 
   const values = watch();
+
+  console.log({ values });
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -206,20 +231,54 @@ export default function UserNewEditForm({ currentUser }: Props) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField name="name" label="Full Name" />
-              <RHFTextField name="userId" label="User Id" />
-              <RHFTextField name="password" type="password" label="Password" />
-              <RHFTextField name="domain" label="Domain" />
+              <RHFTextField isReadOnly={isView ? true : false} name="name" label="Full Name" />
+              <RHFTextField isReadOnly={isView ? true : false} name="userId" label="User Id" />
+              <RHFTextField
+                isReadOnly={isView ? true : false}
+                name="password"
+                type="password"
+                label="Password"
+              />
+              <RHFTextField isReadOnly={isView ? true : false} name="domain" label="Domain" />
+              <RHFTextField
+                isReadOnly={isView ? true : false}
+                name="limitOfAddSuperMaster"
+                label="Limit Of Add Super Master"
+              />
+
+              <RHFTextField
+                isReadOnly={isView ? true : false}
+                name="limitOfAddMaster"
+                label="Limit Of Add Master"
+              />
+
+              <RHFTextField
+                isReadOnly={isView ? true : false}
+                name="limitOfAddUser"
+                label="Limit Of Add User"
+              />
+
+              <RHFTextField
+                isReadOnly={isView ? true : false}
+                name="leverageX"
+                label="Leverage X"
+              />
+
+              <RHFTextField
+                isReadOnly={isView ? true : false}
+                name="leverageY"
+                label="Leverage Y"
+              />
 
               <RHFAutocomplete
                 name="exhangeGroup"
                 label="Exchange Group"
-                options={[].map((country) => country)}
-                getOptionLabel={(option) => option}
+                options={EXCHANGE_GROUP.map((country) => country)}
+                getOptionLabel={(option: any) => option.label}
                 isOptionEqualToValue={(option, value) => option === value}
                 renderOption={(props, option) => {
                   const { code, label, phone } = countries.filter(
-                    (country) => country.label === option
+                    (country) => country.label === option.label
                   )[0];
 
                   if (!label) {
@@ -228,13 +287,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
 
                   return (
                     <li {...props} key={label}>
-                      <Iconify
-                        key={label}
-                        icon={`circle-flags:${code.toLowerCase()}`}
-                        width={28}
-                        sx={{ mr: 1 }}
-                      />
-                      {label} ({code}) +{phone}
+                      {label}
                     </li>
                   );
                 }}
@@ -243,6 +296,7 @@ export default function UserNewEditForm({ currentUser }: Props) {
               <RHFAutocomplete
                 name="leverage"
                 label="Leverage"
+                isReadOnly={isView ? true : false}
                 options={[].map((country) => country)}
                 getOptionLabel={(option) => option}
                 isOptionEqualToValue={(option, value) => option === value}
@@ -268,15 +322,47 @@ export default function UserNewEditForm({ currentUser }: Props) {
                   );
                 }}
               />
+              <RHFAutocomplete
+                name="role"
+                label="Role"
+                isReadOnly={isView ? true : false}
+                options={[].map((country) => country)}
+                getOptionLabel={(option) => option}
+                isOptionEqualToValue={(option, value) => option === value}
+                renderOption={(props, option) => {
+                  const { code, label, phone } = countries.filter(
+                    (country) => country.label === option
+                  )[0];
 
-              <RHFTextField name="phoneNumber" label="Number" />
+                  if (!label) {
+                    return null;
+                  }
+
+                  return (
+                    <li {...props} key={label}>
+                      <Iconify
+                        key={label}
+                        icon={`circle-flags:${code.toLowerCase()}`}
+                        width={28}
+                        sx={{ mr: 1 }}
+                      />
+                      {label} ({code}) +{phone}
+                    </li>
+                  );
+                }}
+              />
+              <RHFCheckbox name="insertCustomBet" label="Insert Custom Bet" />
+              <RHFCheckbox name="editBet" label="Edit Bet" />
+              <RHFCheckbox name="deleteBet" label="Delete Bet" />
             </Box>
 
-            <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {!currentUser ? 'Create Admin' : 'Save Changes'}
-              </LoadingButton>
-            </Stack>
+            {isView && (
+              <Stack alignItems="flex-end" sx={{ mt: 3 }}>
+                <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                  {!currentUser ? 'Create Admin' : 'Save Changes'}
+                </LoadingButton>
+              </Stack>
+            )}
           </Card>
         </Grid>
       </Grid>

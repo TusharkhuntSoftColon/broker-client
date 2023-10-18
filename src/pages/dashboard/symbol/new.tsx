@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import OrderCreateView from 'src/sections/order/view/order-create-view';
+import OrderCreateView from 'src/sections/symbol/view/symbol-create-view';
 
 // ----------------------------------------------------------------------
 

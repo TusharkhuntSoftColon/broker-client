@@ -40,6 +40,7 @@ export default function ImageView() {
               },
               { name: 'Image' },
             ]}
+            
           />
         </Container>
       </Box>

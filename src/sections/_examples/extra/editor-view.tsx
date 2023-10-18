@@ -42,6 +42,7 @@ export default function EditorView() {
               { name: 'Editor' },
             ]}
             moreLink={['https://github.com/zenoamaro/react-quill']}
+            
           />
         </Container>
       </Box>

@@ -25,6 +25,7 @@ type Props = {
   row: IUserItem;
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
+  onViewRow: VoidFunction;
 };
 
 export default function UserTableRow({
@@ -33,8 +34,9 @@ export default function UserTableRow({
   onEditRow,
   onSelectRow,
   onDeleteRow,
+  onViewRow,
 }: Props) {
-  const { name, role, exchange,domain, phoneNumber, userId} = row;
+  const { name, role, exchange, domain, phoneNumber, userId } = row;
 
   const confirm = useBoolean();
 
@@ -44,7 +46,7 @@ export default function UserTableRow({
 
   return (
     <>
-      <TableRow hover selected={selected}>
+      <TableRow hover selected={selected} onClick={() => onViewRow()} sx={{ cursor: 'pointer' }}>
         <TableCell padding="checkbox">
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
@@ -62,7 +64,7 @@ export default function UserTableRow({
               color: 'text.disabled',
             }}
           /> */}
-        </TableCell> 
+        </TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{userId}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{domain}</TableCell>
@@ -72,56 +74,37 @@ export default function UserTableRow({
         {/* <TableCell sx={{ whiteSpace: 'nowrap' }}>{role}</TableCell> */}
 
         <TableCell>
-          <Label
-            variant="soft"
-            color="default"
-          >
+          <Label variant="soft" color="default">
             {exchange}
           </Label>
         </TableCell>
 
         <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
-          <Tooltip title="Quick Edit" placement="top" arrow>
-            <IconButton color={quickEdit.value ? 'inherit' : 'default'} onClick={quickEdit.onTrue}>
+          <Tooltip title="Edit" placement="top" arrow>
+            <IconButton
+              color={quickEdit.value ? 'inherit' : 'default'}
+              onClick={(e) => {
+                e.stopPropagation();
+                onEditRow();
+                popover.onClose();
+              }}
+            >
               <Iconify icon="solar:pen-bold" />
             </IconButton>
           </Tooltip>
-
-          <IconButton color={popover.open ? 'inherit' : 'default'} onClick={popover.onOpen}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
+          <Tooltip title="Delete" placement="top" arrow>
+            <IconButton
+              color={popover.open ? 'inherit' : 'default'}
+              onClick={() => {
+                confirm.onTrue();
+                popover.onClose();
+              }}
+            >
+              <Iconify icon="solar:trash-bin-trash-bold" />
+            </IconButton>
+          </Tooltip>
         </TableCell>
       </TableRow>
-
-      <UserQuickEditForm currentUser={row} open={quickEdit.value} onClose={quickEdit.onFalse} />
-
-      <CustomPopover
-        open={popover.open}
-        onClose={popover.onClose}
-        arrow="right-top"
-        sx={{ width: 140 }}
-      >
-        <MenuItem
-          onClick={() => {
-            confirm.onTrue();
-            popover.onClose();
-          }}
-          sx={{ color: 'error.main' }}
-        >
-          <Iconify icon="solar:trash-bin-trash-bold" />
-          Delete
-        </MenuItem>
-
-        <MenuItem
-          onClick={() => {
-            onEditRow();
-            popover.onClose();
-          }}
-        >
-          <Iconify icon="solar:pen-bold" />
-          Edit
-        </MenuItem>
-      </CustomPopover>
 
       <ConfirmDialog
         open={confirm.value}

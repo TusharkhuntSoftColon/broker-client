@@ -40,6 +40,7 @@ export default function PostEditView({ title }: Props) {
         sx={{
           mb: { xs: 3, md: 5 },
         }}
+        
       />
 
       <PostNewEditForm currentPost={currentPost} />

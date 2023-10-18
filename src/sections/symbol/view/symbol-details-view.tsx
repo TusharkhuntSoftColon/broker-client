@@ -1,20 +1,13 @@
 import { useState, useCallback } from 'react';
-
-import Stack from '@mui/material/Stack';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Unstable_Grid2';
 
 import { paths } from 'src/routes/paths';
 
-import { _orders, _symbolList, ORDER_STATUS_OPTIONS } from 'src/_mock';
+import { _symbolList } from 'src/_mock';
 
 import { useSettingsContext } from 'src/components/settings';
 
-import OrderDetailsInfo from '../order-details-info';
-import OrderDetailsItems from '../order-details-item';
-import OrderDetailsToolbar from '../order-details-toolbar';
-import OrderDetailsHistory from '../order-details-history';
-import OrderNewEditForm from '../order-new-edit-form';
+import SymbolNewEditForm from '../symbol-new-edit-form';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 
 // ----------------------------------------------------------------------
@@ -23,10 +16,10 @@ type Props = {
   id: string;
 };
 
-export default function OrderDetailsView({ id }: Props) {
+export default function SymbolDetailsView({ id }: Props) {
   const settings = useSettingsContext();
 
-  const currentSymbol = _symbolList.filter((order) => order.id === id)[0];
+  const currentSymbol = _symbolList.filter((symbol) => symbol.id === id)[0];
 
   console.log(currentSymbol);
   return (
@@ -47,9 +40,10 @@ export default function OrderDetailsView({ id }: Props) {
         sx={{
           mb: { xs: 3, md: 5 },
         }}
+        isView={true}
         id={currentSymbol?.id}
       />
-      <OrderNewEditForm currentUser={currentSymbol} isView={true} />
+      <SymbolNewEditForm currentUser={currentSymbol} isView={true} />
     </Container>
   );
 }

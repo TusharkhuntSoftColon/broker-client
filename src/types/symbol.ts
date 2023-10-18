@@ -1,8 +1,8 @@
 // ----------------------------------------------------------------------
 
-export type IOrderTableFilterValue = string | Date | null;
+export type ISymbolTableFilterValue = string | Date | null;
 
-export type IOrderTableFilters = {
+export type ISymbolTableFilters = {
   name: string;
   status: string;
   startDate: Date | null;
@@ -11,8 +11,8 @@ export type IOrderTableFilters = {
 
 // ----------------------------------------------------------------------
 
-export type IOrderHistory = {
-  orderTime: Date;
+export type ISymbolHistory = {
+  SymbolTime: Date;
   paymentTime: Date;
   deliveryTime: Date;
   completionTime: Date;
@@ -22,23 +22,23 @@ export type IOrderHistory = {
   }[];
 };
 
-export type IOrderShippingAddress = {
+export type ISymbolShippingAddress = {
   fullAddress: string;
   phoneNumber: string;
 };
 
-export type IOrderPayment = {
+export type ISymbolPayment = {
   cardType: string;
   cardNumber: string;
 };
 
-export type IOrderDelivery = {
+export type ISymbolDelivery = {
   shipBy: string;
   speedy: string;
   trackingNumber: string;
 };
 
-export type IOrderCustomer = {
+export type ISymbolCustomer = {
   id: string;
   name: string;
   email: string;
@@ -46,7 +46,7 @@ export type IOrderCustomer = {
   ipAddress: string;
 };
 
-export type IOrderProductItem = {
+export type ISymbolProductItem = {
   id: string;
   sku: string;
   name: string;
@@ -55,7 +55,7 @@ export type IOrderProductItem = {
   quantity: number;
 };
 
-export type IOrderItem = {
+export type ISymbolItem = {
   id: null | undefined;
   spread: number;
   stopsLevel: number;
@@ -76,7 +76,7 @@ export type IOrderItem = {
   statusOfScripts: any;
   stopLoss: any;
   createdAt:any;
-  orderNumber:any;
+  SymbolNumber:any;
   customer:any;
   status:any
 };

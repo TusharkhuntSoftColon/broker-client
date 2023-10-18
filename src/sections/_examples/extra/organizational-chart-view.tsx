@@ -36,6 +36,7 @@ export default function OrganizationalChartView() {
               'https://www.npmjs.com/package/react-organizational-chart',
               'https://daniel-hauser.github.io/react-organizational-chart/?path=/story/example-tree--basic',
             ]}
+            
           />
         </Container>
       </Box>

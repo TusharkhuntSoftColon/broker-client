@@ -66,6 +66,7 @@ export default function CopyToClipboardView() {
           <CustomBreadcrumbs
             heading="Copy To Clipboard"
             links={[{ name: 'Components', href: paths.components }, { name: 'Copy To Clipboard' }]}
+            
           />
         </Container>
       </Box>

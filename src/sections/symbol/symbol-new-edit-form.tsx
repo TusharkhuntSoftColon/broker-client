@@ -18,17 +18,17 @@ import FormProvider, { RHFAutocomplete, RHFTextField } from 'src/components/hook
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
 
-import { IOrderItem } from 'src/types/order';
 import { STATUS_OF_SCRIPTS, STOP_LOSS, TRADE_HOURS, TRADE_SESSIONS_DAYS } from 'src/_mock';
+import { ISymbolItem } from 'src/types/symbol';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  currentUser?: IOrderItem | any;
+  currentUser?: ISymbolItem | any;
   isView?: any;
 };
 
-export default function OrderNewEditForm({ currentUser, isView }: Props) {
+export default function SymbolNewEditForm({ currentUser, isView }: Props) {
   const router = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -254,27 +254,59 @@ export default function OrderNewEditForm({ currentUser, isView }: Props) {
               }}
             >
               <RHFTextField isReadOnly={isView ? true : false} name="name" label="Full Name" />
-              <RHFTextField isReadOnly={isView ? true : false} name="contractSize" label="Contract Size" />
+              <RHFTextField
+                isReadOnly={isView ? true : false}
+                name="contractSize"
+                label="Contract Size"
+              />
               <RHFTextField isReadOnly={isView ? true : false} name="currency" label="Currency" />
               <RHFTextField isReadOnly={isView ? true : false} name="spread" label="Spread" />
-              <RHFTextField isReadOnly={isView ? true : false} name="stopsLevel" label="Stops Level" />
-              <RHFTextField isReadOnly={isView ? true : false} name="calculation" label="Calculation" />
+              <RHFTextField
+                isReadOnly={isView ? true : false}
+                name="stopsLevel"
+                label="Stops Level"
+              />
+              <RHFTextField
+                isReadOnly={isView ? true : false}
+                name="calculation"
+                label="Calculation"
+              />
               <RHFTextField isReadOnly={isView ? true : false} name="tickSize" label="Tick Size" />
-              <RHFTextField isReadOnly={isView ? true : false} name="tickValue" label="Tick Value" />
-              <RHFTextField isReadOnly={isView ? true : false} name="inrialMargin" label="I-nrial Margin" />
-              <RHFTextField isReadOnly={isView ? true : false} name="maintenanceMargin" label="Maintenance Margin" />
-              <RHFTextField isReadOnly={isView ? true : false} name="minimumVolume" label="Minimum Volume" />
-              <RHFTextField isReadOnly={isView ? true : false} name="maximumVolume" label="Maximum Volume" />
+              <RHFTextField
+                isReadOnly={isView ? true : false}
+                name="tickValue"
+                label="Tick Value"
+              />
+              <RHFTextField
+                isReadOnly={isView ? true : false}
+                name="inrialMargin"
+                label="I-nrial Margin"
+              />
+              <RHFTextField
+                isReadOnly={isView ? true : false}
+                name="maintenanceMargin"
+                label="Maintenance Margin"
+              />
+              <RHFTextField
+                isReadOnly={isView ? true : false}
+                name="minimumVolume"
+                label="Minimum Volume"
+              />
+              <RHFTextField
+                isReadOnly={isView ? true : false}
+                name="maximumVolume"
+                label="Maximum Volume"
+              />
 
               {/* <RHFAutocomplete
                 name="exhangeGroup"
                 label="Exchange Group"
-                options={[].map((country) => country)}
+                options={[].map((data) => data)}
                 getOptionLabel={(option) => option}
                 isOptionEqualToValue={(option, value) => option === value}
                 renderOption={(props, option) => {
                   const { code, label, phone } = countries.filter(
-                    (country) => country.label === option
+                    (data) => data.label === option
                   )[0];
 
                   if (!label) {
@@ -297,14 +329,14 @@ export default function OrderNewEditForm({ currentUser, isView }: Props) {
 
               <RHFAutocomplete
                 name="startTradeSessions"
+                isReadOnly={isView ? true : false}
                 label="Start Trade Sessions"
                 options={TRADE_SESSIONS_DAYS}
-                defaultValue={[TRADE_SESSIONS_DAYS[0]]}
                 getOptionLabel={(option: any) => option.label}
-                isOptionEqualToValue={(option, value) => option.value === value}
+                isOptionEqualToValue={(option, value) => option === value}
                 renderOption={(props, option) => {
                   const { label } = TRADE_SESSIONS_DAYS.filter(
-                    (country) => country.label === option.label
+                    (data) => data.label === option.label
                   )[0];
 
                   if (!label) {
@@ -321,13 +353,13 @@ export default function OrderNewEditForm({ currentUser, isView }: Props) {
               <RHFAutocomplete
                 name="endTradeSessions"
                 label="End Trade Sessions"
+                isReadOnly={isView ? true : false}
                 options={TRADE_SESSIONS_DAYS}
-                defaultValue={[TRADE_SESSIONS_DAYS[0]]}
                 getOptionLabel={(option: any) => option.label}
-                isOptionEqualToValue={(option, value) => option.value === value}
+                isOptionEqualToValue={(option, value) => option === value}
                 renderOption={(props, option) => {
                   const { label } = TRADE_SESSIONS_DAYS.filter(
-                    (country) => country.label === option.label
+                    (data) => data.label === option.label
                   )[0];
 
                   if (!label) {
@@ -345,13 +377,13 @@ export default function OrderNewEditForm({ currentUser, isView }: Props) {
               <RHFAutocomplete
                 name="startingHour"
                 label="Starting hour"
+                isReadOnly={isView ? true : false}
                 options={TRADE_HOURS}
-                defaultValue={[TRADE_HOURS[0]]}
                 getOptionLabel={(option: any) => option.label}
-                isOptionEqualToValue={(option, value) => option.value === value}
+                isOptionEqualToValue={(option, value) => option === value}
                 renderOption={(props, option) => {
                   const { label } = TRADE_HOURS.filter(
-                    (country) => country.label === option.label
+                    (data) => data.label === option.label
                   )[0];
 
                   if (!label) {
@@ -368,13 +400,13 @@ export default function OrderNewEditForm({ currentUser, isView }: Props) {
               <RHFAutocomplete
                 name="endingHour"
                 label="Ending Hour"
+                isReadOnly={isView ? true : false}
                 options={TRADE_HOURS}
-                defaultValue={[TRADE_HOURS[0]]}
                 getOptionLabel={(option: any) => option.label}
-                isOptionEqualToValue={(option, value) => option.value === value}
+                isOptionEqualToValue={(option, value) => option === value}
                 renderOption={(props, option) => {
                   const { label } = TRADE_HOURS.filter(
-                    (country) => country.label === option.label
+                    (data) => data.label === option.label
                   )[0];
 
                   if (!label) {
@@ -392,13 +424,13 @@ export default function OrderNewEditForm({ currentUser, isView }: Props) {
               <RHFAutocomplete
                 name="statusOfScripts"
                 label="Status Of Scripts"
+                isReadOnly={isView ? true : false}
                 options={STATUS_OF_SCRIPTS}
-                defaultValue={[STATUS_OF_SCRIPTS[0]]}
                 getOptionLabel={(option: any) => option.label}
-                isOptionEqualToValue={(option, value) => option.value === value}
+                isOptionEqualToValue={(option, value) => option === value}
                 renderOption={(props, option) => {
                   const label = STATUS_OF_SCRIPTS.filter(
-                    (country) => country.label === option.label
+                    (data) => data.label === option.label
                   )[0].label;
 
                   if (!label) {
@@ -416,13 +448,13 @@ export default function OrderNewEditForm({ currentUser, isView }: Props) {
               <RHFAutocomplete
                 name="stopLoss"
                 label="Stop Loss"
+                isReadOnly={isView ? true : false}
                 options={STOP_LOSS}
-                defaultValue={[STOP_LOSS[0]]}
                 getOptionLabel={(option: any) => option.label}
-                isOptionEqualToValue={(option, value) => option.value === value}
+                isOptionEqualToValue={(option, value) => option === value}
                 renderOption={(props, option) => {
                   const { label } = STOP_LOSS.filter(
-                    (country) => country.label === option.label
+                    (data) => data.label === option.label
                   )[0];
 
                   if (!label) {

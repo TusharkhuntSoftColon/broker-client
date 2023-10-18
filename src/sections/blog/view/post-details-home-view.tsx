@@ -92,6 +92,7 @@ export default function PostDetailsHomeView({ title }: Props) {
             },
           ]}
           sx={{ maxWidth: 720, mx: 'auto' }}
+          
         />
       </Container>
 

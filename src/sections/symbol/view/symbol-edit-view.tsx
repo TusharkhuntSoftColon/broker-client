@@ -5,17 +5,22 @@ import { paths } from 'src/routes/paths';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import OrderNewEditForm from '../order-new-edit-form';
+import OrderNewEditForm from '../symbol-new-edit-form';
+import { _symbolList } from 'src/_mock';
 
 // ----------------------------------------------------------------------
 
-export default function OrderCreateView() {
+export default function SymbolEditView({ id }: { id: any }) {
   const settings = useSettingsContext();
+
+  const currentUser = _symbolList.find((user) => user.id === id);
+
+  console.log({ currentUser });
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Create a new Symbol"
+        heading="Create a new product"
         links={[
           {
             name: 'Dashboard',
@@ -32,7 +37,7 @@ export default function OrderCreateView() {
         }}
       />
 
-      <OrderNewEditForm />
+      <OrderNewEditForm currentUser={currentUser} />
     </Container>
   );
 }

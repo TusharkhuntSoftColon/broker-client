@@ -6,21 +6,20 @@ import Stack, { StackProps } from '@mui/material/Stack';
 
 import Iconify from 'src/components/iconify';
 import { shortDateLabel } from 'src/components/custom-date-range-picker';
-
-import { IOrderTableFilters, IOrderTableFilterValue } from 'src/types/order';
+import { ISymbolTableFilterValue, ISymbolTableFilters } from 'src/types/symbol';
 
 // ----------------------------------------------------------------------
 
 type Props = StackProps & {
-  filters: IOrderTableFilters;
-  onFilters: (name: string, value: IOrderTableFilterValue) => void;
+  filters: ISymbolTableFilters;
+  onFilters: (name: string, value: ISymbolTableFilterValue) => void;
   //
   onResetFilters: VoidFunction;
   //
   results: number;
 };
 
-export default function OrderTableFiltersResult({
+export default function SymbolTableFiltersResult({
   filters,
   onFilters,
   //

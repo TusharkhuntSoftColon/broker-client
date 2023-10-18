@@ -100,10 +100,17 @@ export type IUserItem = {
   userId: string;
   exhangeGroup?: string;
   leverage?: string;
-  status: any;
-  role: any;
-  exchange?: any;
-  domain?:any;
+  status: string;
+  role: string;
+  exchange?: string;
+  domain?: string;
+  insertCustomBet: boolean;
+  editBet: boolean;
+  deleteBet: boolean;
+  limitOfAddMaster: string;
+  limitOfAddUser: string;
+  leverageX: string;
+  leverageY: string;
 };
 
 export type IUserAccount = {

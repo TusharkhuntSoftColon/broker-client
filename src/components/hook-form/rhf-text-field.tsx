@@ -6,10 +6,11 @@ import TextField, { TextFieldProps } from '@mui/material/TextField';
 
 type Props = TextFieldProps & {
   name: string;
-  type?:any;
+  type?: any;
+  isReadOnly?: any;
 };
 
-export default function RHFTextField({ name, helperText, type, ...other }: Props) {
+export default function RHFTextField({ name, helperText, type, isReadOnly, ...other }: Props) {
   const { control } = useFormContext();
 
   return (
@@ -28,6 +29,9 @@ export default function RHFTextField({ name, helperText, type, ...other }: Props
             } else {
               field.onChange(event.target.value);
             }
+          }}
+          InputProps={{
+            readOnly: isReadOnly,
           }}
           error={!!error}
           helperText={error ? error?.message : helperText}

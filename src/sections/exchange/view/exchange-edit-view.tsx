@@ -35,6 +35,7 @@ export default function ExchangeEditView({ id }: Props) {
         sx={{
           mb: { xs: 3, md: 5 },
         }}
+        
       />
 
       <ExchangeNewEditForm currentProduct={currentProduct} />

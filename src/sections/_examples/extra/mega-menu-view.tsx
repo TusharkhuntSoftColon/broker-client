@@ -124,6 +124,7 @@ export default function MegaMenuView() {
               },
               { name: 'Mega Menu' },
             ]}
+            
           />
         </Container>
       </Box>

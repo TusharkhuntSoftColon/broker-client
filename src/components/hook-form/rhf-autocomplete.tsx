@@ -15,6 +15,7 @@ interface Props<
   label?: string;
   placeholder?: string;
   helperText?: React.ReactNode;
+  isReadOnly?: any;
 }
 ``;
 
@@ -28,6 +29,7 @@ export default function RHFAutocomplete<
   label,
   placeholder,
   helperText,
+  isReadOnly,
   ...other
 }: Omit<Props<T, Multiple, DisableClearable, FreeSolo>, 'renderInput'>) {
   const { control, setValue } = useFormContext();
@@ -40,6 +42,7 @@ export default function RHFAutocomplete<
         <Autocomplete
           {...field}
           onChange={(event, newValue) => setValue(name, newValue, { shouldValidate: true })}
+          readOnly={isReadOnly ? true : false}
           renderInput={(params) => (
             <TextField
               label={label}
@@ -49,7 +52,7 @@ export default function RHFAutocomplete<
               {...params}
               inputProps={{
                 ...params.inputProps,
-                autoComplete: 'disabled'
+                autoComplete: 'disabled',
               }}
             />
           )}

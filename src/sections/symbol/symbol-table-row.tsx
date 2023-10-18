@@ -10,13 +10,13 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { ISymbolItem } from 'src/types/symbol';
 
-import { IOrderItem } from 'src/types/order';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  row: IOrderItem;
+  row: ISymbolItem;
   selected: boolean;
   onViewRow: VoidFunction;
   onSelectRow: VoidFunction;
@@ -24,7 +24,7 @@ type Props = {
   onEditRow: VoidFunction;
 };
 
-export default function OrderTableRow({
+export default function SymbolTableRow({
   row,
   selected,
   onViewRow,

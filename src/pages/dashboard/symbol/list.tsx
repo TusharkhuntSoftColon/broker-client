@@ -1,6 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 
-import { OrderListView } from 'src/sections/order/view';
+import { SymbolListView } from 'src/sections/symbol/view';
 
 // ----------------------------------------------------------------------
 
@@ -11,7 +11,7 @@ export default function OrderListPage() {
         <title> Dashboard: Symbol List</title>
       </Helmet>
 
-      <OrderListView />
+      <SymbolListView />
     </>
   );
 }
