@@ -97,20 +97,22 @@ export type IUserItem = {
   name: string;
   phoneNumber: string;
   password: string;
-  userId: string;
-  exhangeGroup?: string;
+  ID: string;
+  exchangeGroup?: string;
+  allowedExchange: string;
   leverage?: string;
   status: string;
   role: string;
   exchange?: string;
-  domain?: string;
+  Domain?: string;
   insertCustomBet: boolean;
   editBet: boolean;
   deleteBet: boolean;
-  limitOfAddMaster: string;
-  limitOfAddUser: string;
-  leverageX: string;
-  leverageY: string;
+  limitOfAddSuperMaster:number;
+  limitOfAddMaster: number;
+  limitOfAddUser: number;
+  leverageX: number;
+  leverageY: number;
 };
 
 export type IUserAccount = {

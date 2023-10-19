@@ -43,7 +43,9 @@ export type IExchangeItem = {
   status: string;
   createdAt: string;
   updatedAt: string;
-  label: string
+  label: string;
+  statusOfExchange:string;
+  stAndTp:boolean;
 }
 
 export type IProductItem = {

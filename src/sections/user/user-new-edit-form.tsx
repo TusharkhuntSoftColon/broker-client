@@ -19,7 +19,10 @@ import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField, RHFAutocomplete, RHFCheckbox } from 'src/components/hook-form';
 
 import { IUserItem } from 'src/types/user';
-import { EXCHANGE_GROUP } from 'src/_mock';
+import { ALLOWED_EXCHANGE, EXCHANGE_GROUP, USER_ROLE } from 'src/_mock';
+import { useMutation } from '@tanstack/react-query';
+import adminService from 'src/services/adminService';
+import { isAxiosError } from 'axios';
 
 // ----------------------------------------------------------------------
 
@@ -35,37 +38,34 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
 
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
-    phoneNumber: Yup.string().required('Phone number is required'),
-    userId: Yup.string().required('User Id is required'),
+    ID: Yup.string().required('User Id is required'),
     role: Yup.string().required('Role is required'),
-    exhangeGroup: Yup.object().shape({
-      label: Yup.string(),
-      value: Yup.string(),
-    }),
-    leverage: Yup.string().required('Leverage is required'),
-    domain: Yup.string().required('Domain is required'),
+    exchangeGroup: Yup.string().required('Leverage Y is required'),
+    allowedExchange: Yup.string().required('Allowed Exchange Y is required'),
+    Domain: Yup.string().required('Domain is required'),
     insertCustomBet: Yup.string().required('Insert Custom Bet is required'),
     editBet: Yup.string().required('Edit Bet is required'),
     deleteBet: Yup.string().required('Delete Bet is required'),
-    limitOfAddMaster: Yup.string().required('Limit Of Add Master is required'),
-    limitOfAddUser: Yup.string().required('Limit Of Add User is required'),
-    leverageX: Yup.string().required('Leverage X is required'),
-    leverageY: Yup.string().required('Leverage Y is required'),
+    limitOfAddSuperMaster: Yup.number().required('Limit Of Add SuperMaster Bet is required'),
+    limitOfAddMaster: Yup.number().required('Limit Of Add Master is required'),
+    limitOfAddUser: Yup.number().required('Limit Of Add User is required'),
+    leverageX: Yup.number().required('Leverage X is required'),
+    leverageY: Yup.number().required('Leverage Y is required'),
   });
 
   const defaultValues = useMemo(
     () => ({
       name: currentUser?.name || '',
-      phoneNumber: currentUser?.phoneNumber || '',
       password: currentUser?.password || '',
-      userId: currentUser?.userId || '',
-      exhangeGroup: currentUser?.exhangeGroup || '',
-      leverage: currentUser?.leverage || '',
-      domain: currentUser?.domain || '',
+      ID: currentUser?.ID || '',
+      exchangeGroup: currentUser?.exchangeGroup || '',
+      allowedExchange: currentUser?.allowedExchange || '',
+      Domain: currentUser?.Domain || '',
       insertCustomBet: currentUser?.insertCustomBet || '',
       editBet: currentUser?.editBet || '',
       role: currentUser?.role || '',
       deleteBet: currentUser?.deleteBet || '',
+      limitOfAddSuperMaster: currentUser?.limitOfAddSuperMaster || '',
       limitOfAddMaster: currentUser?.limitOfAddMaster || '',
       limitOfAddUser: currentUser?.limitOfAddUser || '',
       leverageX: currentUser?.leverageX || '',
@@ -87,19 +87,36 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
     control,
     setValue,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = methods;
 
-  const values = watch();
+  // console.log({ errors });
+  // const values = watch();
 
-  console.log({ values });
+  // console.log({ values });
+
+  // create ADMIN
+  const { mutate: createAdmin } = useMutation(adminService.createAdmin, {
+    onSuccess: (data) => {
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      router.push(paths.dashboard.symbol.root);
+    },
+    onError: (error: any) => {
+      console.log({ error });
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log({ data });
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      enqueueSnackbar(currentUser ? 'Update success!' : 'Create success!');
-      router.push(paths.dashboard.user.list);
+      // await new Promise((resolve) => setTimeout(resolve, 500));
+      // reset();
+      // enqueueSnackbar(currentUser ? 'Update success!' : 'Create success!');
+      await createAdmin(data);
+      // router.push(paths.dashboard.user.list);
       console.info('DATA', data);
     } catch (error) {
       console.error(error);
@@ -232,54 +249,80 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
               }}
             >
               <RHFTextField isReadOnly={isView ? true : false} name="name" label="Full Name" />
-              <RHFTextField isReadOnly={isView ? true : false} name="userId" label="User Id" />
+              <RHFTextField isReadOnly={isView ? true : false} name="ID" label="User Id" />
               <RHFTextField
                 isReadOnly={isView ? true : false}
                 name="password"
                 type="password"
                 label="Password"
               />
-              <RHFTextField isReadOnly={isView ? true : false} name="domain" label="Domain" />
+              <RHFTextField isReadOnly={isView ? true : false} name="Domain" label="Domain" />
               <RHFTextField
                 isReadOnly={isView ? true : false}
                 name="limitOfAddSuperMaster"
+                type="number"
                 label="Limit Of Add Super Master"
               />
 
               <RHFTextField
                 isReadOnly={isView ? true : false}
                 name="limitOfAddMaster"
+                type="number"
                 label="Limit Of Add Master"
               />
 
               <RHFTextField
                 isReadOnly={isView ? true : false}
                 name="limitOfAddUser"
+                type="number"
                 label="Limit Of Add User"
               />
 
               <RHFTextField
                 isReadOnly={isView ? true : false}
                 name="leverageX"
+                type="number"
                 label="Leverage X"
               />
 
               <RHFTextField
                 isReadOnly={isView ? true : false}
                 name="leverageY"
+                type="number"
                 label="Leverage Y"
               />
 
               <RHFAutocomplete
-                name="exhangeGroup"
+                name="exchangeGroup"
                 label="Exchange Group"
-                options={EXCHANGE_GROUP.map((country) => country)}
-                getOptionLabel={(option: any) => option.label}
+                options={EXCHANGE_GROUP.map((data) => data.label)}
+                data={EXCHANGE_GROUP}
+                getOptionLabel={(option: any) => option}
                 isOptionEqualToValue={(option, value) => option === value}
                 renderOption={(props, option) => {
-                  const { code, label, phone } = countries.filter(
-                    (country) => country.label === option.label
-                  )[0];
+                  const { label } = EXCHANGE_GROUP.filter((data) => data.label === option)[0];
+
+                  if (!label) {
+                    return null;
+                  }
+
+                  return (
+                    <li {...props} key={label}>
+                      {label}
+                    </li>
+                  );
+                }}
+              />
+              
+              <RHFAutocomplete
+                name="allowedExchange"
+                label="Allowed Exchange"
+                options={ALLOWED_EXCHANGE.map((data) => data.label)}
+                data={ALLOWED_EXCHANGE}
+                getOptionLabel={(option: any) => option}
+                isOptionEqualToValue={(option, value) => option === value}
+                renderOption={(props, option) => {
+                  const { label } = ALLOWED_EXCHANGE.filter((data) => data.label === option)[0];
 
                   if (!label) {
                     return null;
@@ -293,9 +336,7 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
                 }}
               />
 
-         
-
-              <RHFAutocomplete
+              {/* <RHFAutocomplete
                 name="leverage"
                 label="Leverage"
                 isReadOnly={isView ? true : false}
@@ -323,18 +364,17 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
                     </li>
                   );
                 }}
-              />
+              /> */}
+
               <RHFAutocomplete
                 name="role"
                 label="Role"
-                isReadOnly={isView ? true : false}
-                options={[].map((country) => country)}
-                getOptionLabel={(option) => option}
+                options={USER_ROLE.map((data) => data.label)}
+                data={USER_ROLE}
+                getOptionLabel={(option: any) => option}
                 isOptionEqualToValue={(option, value) => option === value}
                 renderOption={(props, option) => {
-                  const { code, label, phone } = countries.filter(
-                    (country) => country.label === option
-                  )[0];
+                  const { label } = USER_ROLE.filter((data) => data.label === option)[0];
 
                   if (!label) {
                     return null;
@@ -342,13 +382,7 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
 
                   return (
                     <li {...props} key={label}>
-                      <Iconify
-                        key={label}
-                        icon={`circle-flags:${code.toLowerCase()}`}
-                        width={28}
-                        sx={{ mr: 1 }}
-                      />
-                      {label} ({code}) +{phone}
+                      {label}
                     </li>
                   );
                 }}
@@ -358,7 +392,7 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
               <RHFCheckbox name="deleteBet" label="Delete Bet" />
             </Box>
 
-            {isView && (
+            {!isView && (
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                   {!currentUser ? 'Create Admin' : 'Save Changes'}

@@ -5,7 +5,7 @@ import { paths } from 'src/routes/paths';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import OrderNewEditForm from '../symbol-new-edit-form';
+import SymbolNewEditForm from '../symbol-new-edit-form';
 
 // ----------------------------------------------------------------------
 
@@ -33,7 +33,7 @@ export default function SymbolCreateView() {
         
       />
 
-      <OrderNewEditForm />
+      <SymbolNewEditForm />
     </Container>
   );
 }

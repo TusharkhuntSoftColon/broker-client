@@ -38,7 +38,7 @@ export default function ExchangeEditView({ id }: Props) {
         
       />
 
-      <ExchangeNewEditForm currentExchange={{}} />
+      <ExchangeNewEditForm currentExchange={currentProduct} />
     </Container>
   );
 }

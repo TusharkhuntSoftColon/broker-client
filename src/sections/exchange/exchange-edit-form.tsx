@@ -12,31 +12,36 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFAutocomplete, RHFTextField } from 'src/components/hook-form';
 
-import { IUserItem } from 'src/types/user';
+import { STATUS_OF_EXCHANGE, STOP_LOSS } from 'src/_mock/_exchange';
+import { IExchangeItem } from 'src/types/exchange';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   open: boolean;
   onClose: VoidFunction;
-  currentUser?: IUserItem;
+  isView?: any;
+  currentUser?: IExchangeItem;
 };
 
-export default function ExchangeQuickEditForm({ currentUser, open, onClose }: Props) {
+export default function ExchangeQuickEditForm({ currentUser, open, onClose, isView }: Props) {
   const { enqueueSnackbar } = useSnackbar();
 
-  console.log({currentUser});
-  
+  console.log({ currentUser });
 
   const NewUserSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required')
+    name: Yup.string().required('Name is required'),
+    statusOfExchange: Yup.string().required('Status Of Exchange is required'),
+    stAndTp: Yup.string().required('Stop Loss is required'),
   });
 
   const defaultValues = useMemo(
     () => ({
-      name: currentUser?.name || ''
+      name: currentUser?.name || '',
+      statusOfExchange: currentUser?.statusOfExchange || '',
+      stAndTp: currentUser?.stAndTp || '',
     }),
     [currentUser]
   );
@@ -48,11 +53,13 @@ export default function ExchangeQuickEditForm({ currentUser, open, onClose }: Pr
 
   const {
     reset,
+    control,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log({ data });
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
@@ -75,11 +82,9 @@ export default function ExchangeQuickEditForm({ currentUser, open, onClose }: Pr
       }}
     >
       <FormProvider methods={methods} onSubmit={onSubmit}>
-        <DialogTitle>{currentUser ?"Update Exchange" : "Add Exchange"}</DialogTitle>
+        <DialogTitle>{currentUser ? 'Update Exchange' : 'Add Exchange'}</DialogTitle>
 
         <DialogContent>
-      
-
           <Box
             rowGap={3}
             columnGap={2}
@@ -103,6 +108,52 @@ export default function ExchangeQuickEditForm({ currentUser, open, onClose }: Pr
             <RHFTextField name="name" label="Name" />
             {/* <RHFTextField name="email" label="Email Address" /> */}
             {/* <RHFTextField name="phoneNumber" label="Phone Number" /> */}
+
+            <RHFAutocomplete
+              name="statusOfExchange"
+              label="Status Of Exchange"
+              control={control}
+              isReadOnly={isView ? true : false}
+              options={STATUS_OF_EXCHANGE.map((data) => data.label)}
+              data={STATUS_OF_EXCHANGE}
+              getOptionLabel={(option: any) => option}
+              renderOption={(props, option) => {
+                const { label } = STATUS_OF_EXCHANGE.filter((data) => data.label === option)[0];
+
+                if (!label) {
+                  return null;
+                }
+
+                return (
+                  <li {...props} key={label}>
+                    {label}
+                  </li>
+                );
+              }}
+            />
+
+            <RHFAutocomplete
+              name="stAndTp"
+              label="Stop Loss"
+              control={control}
+              isReadOnly={isView ? true : false}
+              options={STOP_LOSS.map((data) => data.label)}
+              data={STOP_LOSS}
+              getOptionLabel={(option: any) => option}
+              renderOption={(props, option) => {
+                const { label } = STOP_LOSS.filter((data) => data.label === option)[0];
+
+                if (!label) {
+                  return null;
+                }
+
+                return (
+                  <li {...props} key={label}>
+                    {label}
+                  </li>
+                );
+              }}
+            />
 
             {/* <RHFAutocomplete
               name="country"
@@ -147,7 +198,7 @@ export default function ExchangeQuickEditForm({ currentUser, open, onClose }: Pr
           </Button>
 
           <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-            {currentUser ? "Update": "Add"}
+            {currentUser ? 'Update' : 'Add'}
           </LoadingButton>
         </DialogActions>
       </FormProvider>

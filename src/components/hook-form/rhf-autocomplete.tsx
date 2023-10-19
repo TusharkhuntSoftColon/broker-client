@@ -3,6 +3,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import Autocomplete, { AutocompleteProps } from '@mui/material/Autocomplete';
 import { STOP_LOSS } from 'src/_mock';
+import { useState } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -18,6 +19,8 @@ interface Props<
   helperText?: React.ReactNode;
   isReadOnly?: boolean;
   control?: any;
+  data?: any;
+  multiple?: Multiple;
 }
 
 export default function RHFAutocomplete<
@@ -32,20 +35,26 @@ export default function RHFAutocomplete<
   helperText,
   isReadOnly,
   control,
+  data,
   ...other
 }: Omit<Props<T, Multiple, DisableClearable, FreeSolo>, 'renderInput'>) {
-  const { setValue } = useFormContext();
+  const { setValue, getValues, control: formControl } = useFormContext();
 
+  // const value = getValues('stAndTp');
+  console.log({ name });
   return (
+    <>
+    
     <Controller
       name={name}
-      control={control}
+      control={formControl}
       render={({ field, fieldState: { error } }) => (
         <Autocomplete
           {...field}
           onChange={(event, newValue) => {
             console.log({ newValue });
-            const selectedValue = STOP_LOSS.find((data) => data.label === newValue)?.value;
+            const selectedValue = data.find((data: any) => data.label === newValue)?.value;
+
             setValue(name, selectedValue, { shouldValidate: true });
           }}
           readOnly={!!isReadOnly}
@@ -66,5 +75,6 @@ export default function RHFAutocomplete<
         />
       )}
     />
+    </>
   );
 }

@@ -23,6 +23,17 @@ export const PRODUCT_COLOR_OPTIONS = [
   '#FFC107',
 ];
 
+export const STATUS_OF_EXCHANGE = [
+  { value: 'open', label: 'Open' },
+  { value: 'closeOnly', label: 'Close Only' },
+  { value: 'disabled', label: 'Disabled' },
+];
+
+export const STOP_LOSS = [
+  { value: true, label: 'On' },
+  { value: false, label: 'Off' },
+];
+
 export const PRODUCT_COLOR_NAME_OPTIONS = [
   { value: 'red', label: 'Red' },
   { value: 'blue', label: 'Blue' },

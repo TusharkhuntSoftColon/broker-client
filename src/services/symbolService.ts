@@ -43,7 +43,10 @@ const symbolService = {
   addSymbol: async (symbolData: any): Promise<any> => {
     console.log({ symbolData });
     try {
-      const response: AxiosResponse<any> = await client.post(ADD_SYMBOL, {...symbolData,stAndTp: Boolean(symbolData.stAndTp)} );
+      const response: AxiosResponse<any> = await client.post(ADD_SYMBOL, {
+        ...symbolData,
+        stAndTp: Boolean(symbolData.stAndTp),
+      });
       return response.data;
     } catch (error) {
       // You can log the error here for debugging purposes
@@ -62,8 +65,12 @@ const symbolService = {
     }
   },
   updateSymbol: async (symbolData: any): Promise<any> => {
+    console.log({ symbolData });
     try {
-      const response: AxiosResponse<any> = await client.post(`${UPDATE_SYMBOL}/${symbolData._id}`, symbolData.data);
+      const response: AxiosResponse<any> = await client.put(`${UPDATE_SYMBOL}${symbolData._id}`, {
+        ...symbolData.data,
+        stAndTp: Boolean(symbolData.data?.stAndTp),
+      });
       return response.data;
     } catch (error) {
       // You can log the error here for debugging purposes

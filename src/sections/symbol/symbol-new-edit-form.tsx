@@ -15,12 +15,13 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import symbolService from 'src/services/symbolService';
-import { STOP_LOSS, TRADE_HOURS, STATUS_OF_SCRIPTS, TRADE_SESSIONS_DAYS } from 'src/_mock';
+import {  TRADE_HOURS, STATUS_OF_SCRIPTS, TRADE_SESSIONS_DAYS } from 'src/_mock';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
 
 import { ISymbolItem } from 'src/types/symbol';
+import { STOP_LOSS } from 'src/_mock/_symbol';
 
 // ----------------------------------------------------------------------
 
@@ -69,7 +70,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
   } = methods;
 
   // const value = watch();
-  console.log({ errors });
+  console.log({ currentUser });
 
   useEffect(() => {
     if (currentUser) {
@@ -277,19 +278,45 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
               <RHFTextField isReadOnly={!!isView} name="name" label="Name" />
               <RHFTextField isReadOnly={!!isView} name="contractSize" label="Contract Size" />
               <RHFTextField isReadOnly={!!isView} name="currency" label="Currency" />
-              <RHFTextField isReadOnly={!!isView} name="spread" label="Spread" />
-              <RHFTextField isReadOnly={!!isView} name="stopLevel" label="Stop Level" />
+              <RHFTextField isReadOnly={!!isView} type="number" name="spread" label="Spread" />
+              <RHFTextField
+                isReadOnly={!!isView}
+                type="number"
+                name="stopLevel"
+                label="Stop Level"
+              />
               {/* <RHFTextField isReadOnly={!!isView} name="calculation" label="Calculation" /> */}
-              <RHFTextField isReadOnly={!!isView} name="tickSize" label="Tick Size" />
-              <RHFTextField isReadOnly={!!isView} name="tickValue" label="Tick Value" />
-              <RHFTextField isReadOnly={!!isView} name="inrialMargin" label="Inrial Margin" />
+              <RHFTextField isReadOnly={!!isView} type="number" name="tickSize" label="Tick Size" />
+              <RHFTextField
+                isReadOnly={!!isView}
+                type="number"
+                name="tickValue"
+                label="Tick Value"
+              />
+              <RHFTextField
+                isReadOnly={!!isView}
+                type="number"
+                name="inrialMargin"
+                label="Inrial Margin"
+              />
               <RHFTextField
                 isReadOnly={!!isView}
                 name="maintenanceMargin"
                 label="Maintenance Margin"
+                type="number"
               />
-              <RHFTextField isReadOnly={!!isView} name="mimVolume" label="Minimum Volume" />
-              <RHFTextField isReadOnly={!!isView} name="maxVolume" label="Maximum Volume" />
+              <RHFTextField
+                isReadOnly={!!isView}
+                type="number"
+                name="mimVolume"
+                label="Minimum Volume"
+              />
+              <RHFTextField
+                isReadOnly={!!isView}
+                type="number"
+                name="maxVolume"
+                label="Maximum Volume"
+              />
 
               {/* <RHFAutocomplete
                 name="exhangeGroup"
@@ -457,6 +484,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
                 control={control}
                 isReadOnly={isView ? true : false}
                 options={STOP_LOSS.map((data) => data.label)}
+                data={STOP_LOSS}
                 getOptionLabel={(option: any) => option}
                 renderOption={(props, option) => {
                   const { label } = STOP_LOSS.filter((data) => data.label === option)[0];
