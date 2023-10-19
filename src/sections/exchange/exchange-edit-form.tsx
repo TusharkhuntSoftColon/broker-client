@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -14,6 +14,12 @@ import DialogContent from '@mui/material/DialogContent';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFAutocomplete, RHFTextField } from 'src/components/hook-form';
 
+import { IUserItem } from 'src/types/user';
+import { useMutation } from '@tanstack/react-query';
+import exchangeService from 'src/services/exchangeService';
+import { useRouter } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
+import { isAxiosError } from 'axios';
 import { STATUS_OF_EXCHANGE, STOP_LOSS } from 'src/_mock/_exchange';
 import { IExchangeItem } from 'src/types/exchange';
 
@@ -24,9 +30,16 @@ type Props = {
   onClose: VoidFunction;
   isView?: any;
   currentUser?: IExchangeItem;
+  getFunction?: any;
 };
 
-export default function ExchangeQuickEditForm({ currentUser, open, onClose, isView }: Props) {
+export default function ExchangeQuickEditForm({
+  getFunction,
+  currentUser,
+  open,
+  onClose,
+  isView,
+}: Props) {
   const { enqueueSnackbar } = useSnackbar();
 
   console.log({ currentUser });
@@ -55,21 +68,58 @@ export default function ExchangeQuickEditForm({ currentUser, open, onClose, isVi
     reset,
     control,
     handleSubmit,
+    setValue,
     formState: { isSubmitting },
   } = methods;
+
+  //create exhange
+  const { mutate: createExchange } = useMutation(exchangeService.addExchange, {
+    onSuccess: (data) => {
+      getFunction();
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      onClose();
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+
+  //update exchnage
+  const { mutate: updateExchange } = useMutation(exchangeService.updateSymbol, {
+    onSuccess: (data) => {
+      onClose();
+      getFunction();
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      console.log('inside success functiono');
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+      console.log(error);
+    },
+  });
 
   const onSubmit = handleSubmit(async (data) => {
     console.log({ data });
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      onClose();
-      enqueueSnackbar('Update success!');
-      console.info('DATA', data);
+      if (currentUser) {
+        updateExchange({ data, _id: currentUser?._id });
+      } else {
+        createExchange(data);
+      }
     } catch (error) {
-      console.error(error);
+      console.log({ error });
     }
   });
+
+  useEffect(() => {
+    if (currentUser) {
+      setValue('name', currentUser?.name || '');
+    }
+  }, [currentUser, setValue]);
 
   return (
     <Dialog

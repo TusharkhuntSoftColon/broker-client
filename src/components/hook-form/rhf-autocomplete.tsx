@@ -44,37 +44,36 @@ export default function RHFAutocomplete<
   console.log({ name });
   return (
     <>
-    
-    <Controller
-      name={name}
-      control={formControl}
-      render={({ field, fieldState: { error } }) => (
-        <Autocomplete
-          {...field}
-          onChange={(event, newValue) => {
-            console.log({ newValue });
-            const selectedValue = data.find((data: any) => data.label === newValue)?.value;
+      <Controller
+        name={name}
+        control={formControl}
+        render={({ field, fieldState: { error } }) => (
+          <Autocomplete
+            {...field}
+            onChange={(event, newValue) => {
+              console.log({ newValue });
+              const selectedValue = data.find((data: any) => data.label === newValue)?.value;
 
-            setValue(name, selectedValue, { shouldValidate: true });
-          }}
-          readOnly={!!isReadOnly}
-          renderInput={(params) => (
-            <TextField
-              label={label}
-              placeholder={placeholder}
-              error={!!error}
-              helperText={error ? error?.message : helperText}
-              {...params}
-              inputProps={{
-                ...params.inputProps,
-                autoComplete: 'disabled',
-              }}
-            />
-          )}
-          {...other}
-        />
-      )}
-    />
+              setValue(name, selectedValue, { shouldValidate: true });
+            }}
+            readOnly={!!isReadOnly}
+            renderInput={(params) => (
+              <TextField
+                label={label}
+                placeholder={placeholder}
+                error={!!error}
+                helperText={error ? error?.message : helperText}
+                {...params}
+                inputProps={{
+                  ...params.inputProps,
+                  autoComplete: 'disabled',
+                }}
+              />
+            )}
+            {...other}
+          />
+        )}
+      />
     </>
   );
 }

@@ -8,6 +8,11 @@ import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import ExchangeNewEditForm from '../exchange-new-edit-form';
+import { useMutation } from '@tanstack/react-query';
+import exchangeService from 'src/services/exchangeService';
+import { isAxiosError } from 'axios';
+import { useSnackbar } from 'notistack';
+import { useState } from 'react';
 
 // ----------------------------------------------------------------------
 
@@ -16,10 +21,19 @@ type Props = {
 };
 
 export default function ExchangeEditView({ id }: Props) {
+  const { enqueueSnackbar } = useSnackbar();
   const settings = useSettingsContext();
+  const [currentExchange, setCurrentExchange] = useState<any>();
 
-  const { product: currentProduct } = useGetProduct(id);
-
+  const {} = useMutation(exchangeService.getExchangeListById, {
+    onSuccess: (data) => {
+      setCurrentExchange(data?.data);
+    },
+    onError: (errror) => {
+      if (isAxiosError(errror)) {
+      }
+    },
+  });
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
@@ -35,10 +49,9 @@ export default function ExchangeEditView({ id }: Props) {
         sx={{
           mb: { xs: 3, md: 5 },
         }}
-        
       />
 
-      <ExchangeNewEditForm currentExchange={currentProduct} />
+      <ExchangeNewEditForm currentExchange={{ }} />
     </Container>
   );
 }
