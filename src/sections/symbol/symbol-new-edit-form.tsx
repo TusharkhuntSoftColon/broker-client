@@ -45,7 +45,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
     tickValue: Yup.number().required('Tick Value is required'),
     inrialMargin: Yup.number().required('inrialMargin is required'),
     maintenanceMargin: Yup.number().required('Maintenance Margin is required'),
-    mimVolume: Yup.number().required('Minimum Volume is required'),
+    minVolume: Yup.number().required('Minimum Volume is required'),
     maxVolume: Yup.number().required('Maximum Volume is required'),
     // startTradeSessions: Yup.string().required('Maintenance Margin is required'),
     // endTradeSessions: Yup.string().required('Maintenance Margin is required'),
@@ -54,6 +54,10 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
     // statusOfScripts: Yup.string().required('Maintenance Margin is required'),
     stAndTp: Yup.string().required('Maintenance Margin is required'),
   });
+
+  // const value = STOP_LOSS.find((data) => data.value === currentUser?.stAndTp)?.value;
+
+  // console.log({ value });
 
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),
@@ -83,7 +87,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
       setValue('tickValue', currentUser?.tickValue || '');
       setValue('inrialMargin', currentUser?.inrialMargin || '');
       setValue('maintenanceMargin', currentUser?.maintenanceMargin || '');
-      setValue('mimVolume', currentUser?.mimVolume || '');
+      setValue('minVolume', currentUser?.minVolume || '');
       setValue('maxVolume', currentUser?.maxVolume || '');
       // setValue('startTradeSessions', currentUser?.startTradeSessions || '');
       // setValue('endTradeSessions', currentUser?.endTradeSessions || '');
@@ -307,7 +311,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
               <RHFTextField
                 isReadOnly={!!isView}
                 type="number"
-                name="mimVolume"
+                name="minVolume"
                 label="Minimum Volume"
               />
               <RHFTextField
@@ -480,14 +484,13 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
                 control={control}
                 isReadOnly={isView ? true : false}
                 options={STOP_LOSS.map((data) => data.label)}
-                // defaultValue={STOP_LOSS.map((data) =>
-                //   data.value === currentUser?.stAndTp ? data.label : ''
-                // )}
+                isLabled={false}
+                value={STOP_LOSS.find((data) => data.value === currentUser?.stAndTp)?.label}
                 data={STOP_LOSS}
                 getOptionLabel={(option: any) => option}
                 renderOption={(props, option) => {
                   const { label } = STOP_LOSS.filter((data) => data.label === option)[0];
- 
+
                   if (!label) {
                     return null;
                   }

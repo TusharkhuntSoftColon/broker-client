@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useEffect, useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -22,6 +22,7 @@ import { paths } from 'src/routes/paths';
 import { isAxiosError } from 'axios';
 import { STATUS_OF_EXCHANGE, STOP_LOSS } from 'src/_mock/_exchange';
 import { IExchangeItem } from 'src/types/exchange';
+import symbolService from 'src/services/symbolService';
 
 // ----------------------------------------------------------------------
 
@@ -42,19 +43,21 @@ export default function ExchangeQuickEditForm({
 }: Props) {
   const { enqueueSnackbar } = useSnackbar();
 
+  const [symbolData, setSymbolData] = useState<any>([]);
+
   console.log({ currentUser });
 
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
-    statusOfExchange: Yup.string().required('Status Of Exchange is required'),
-    stAndTp: Yup.string().required('Stop Loss is required'),
+    // statusOfExchange: Yup.string().required('Status Of Exchange is required'),
+    // stAndTp: Yup.string().required('Stop Loss is required'),
   });
 
   const defaultValues = useMemo(
     () => ({
       name: currentUser?.name || '',
-      statusOfExchange: currentUser?.statusOfExchange || '',
-      stAndTp: currentUser?.stAndTp || '',
+      // statusOfExchange: currentUser?.statusOfExchange || '',
+      // stAndTp: currentUser?.stAndTp || '',
     }),
     [currentUser]
   );
@@ -87,11 +90,11 @@ export default function ExchangeQuickEditForm({
   });
 
   //update exchnage
-  const { mutate: updateExchange } = useMutation(exchangeService.updateSymbol, {
+  const { mutate: updateExchange } = useMutation(exchangeService.updateExchange, {
     onSuccess: (data) => {
-      onClose();
       getFunction();
       enqueueSnackbar(data?.message, { variant: 'success' });
+      onClose();
       console.log('inside success functiono');
     },
     onError: (error: any) => {
@@ -99,6 +102,19 @@ export default function ExchangeQuickEditForm({
         enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
       }
       console.log(error);
+    },
+  });
+
+  // Get symbol API
+  const { mutate } = useMutation(symbolService.getSymbolList, {
+    onSuccess: (data) => {
+      setSymbolData(data?.data?.rows);
+      enqueueSnackbar(data?.message, { variant: 'success' });
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
     },
   });
 
@@ -121,6 +137,18 @@ export default function ExchangeQuickEditForm({
     }
   }, [currentUser, setValue]);
 
+  useEffect(() => {
+    mutate();
+  }, []);
+
+  const SymbolOption: any = [];
+
+  for (let i = 0; i < symbolData?.length; i++) {
+    SymbolOption.push({
+      label: symbolData[i]?.name,
+      value: symbolData[i]?._id,
+    });
+  }
   return (
     <Dialog
       fullWidth
@@ -163,6 +191,7 @@ export default function ExchangeQuickEditForm({
               name="statusOfExchange"
               label="Status Of Exchange"
               control={control}
+              isLabled={true}
               isReadOnly={isView ? true : false}
               options={STATUS_OF_EXCHANGE.map((data) => data.label)}
               data={STATUS_OF_EXCHANGE}
@@ -189,9 +218,37 @@ export default function ExchangeQuickEditForm({
               isReadOnly={isView ? true : false}
               options={STOP_LOSS.map((data) => data.label)}
               data={STOP_LOSS}
+              isLabled={true}
               getOptionLabel={(option: any) => option}
               renderOption={(props, option) => {
                 const { label } = STOP_LOSS.filter((data) => data.label === option)[0];
+
+                if (!label) {
+                  return null;
+                }
+
+                return (
+                  <li {...props} key={label}>
+                    {label}
+                  </li>
+                );
+              }}
+            />
+
+            <RHFAutocomplete
+              name="symbol"
+              label="Symbol"
+              control={control}
+              isReadOnly={isView ? true : false}
+              options={SymbolOption?.map((data: any) => data.label)}
+              isLabled={false}
+              defaultValue={
+                SymbolOption?.find((data: any) => data.value === currentUser?.stAndTp)?.value
+              }
+              data={SymbolOption}
+              getOptionLabel={(option: any) => option}
+              renderOption={(props, option) => {
+                const { label } = SymbolOption?.filter((data: any) => data.label === option)[0];
 
                 if (!label) {
                   return null;

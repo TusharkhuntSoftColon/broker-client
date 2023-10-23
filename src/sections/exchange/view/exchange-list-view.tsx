@@ -93,6 +93,8 @@ export default function ExchangeListView() {
 
   const [tableData, setTableData] = useState<IExchangeItem[]>(_productList);
 
+  console.log({ tableData });
+
   const [filters, setFilters] = useState(defaultFilters);
 
   // const { products, productsLoading, productsEmpty } = useGetProducts();

@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
@@ -23,6 +23,10 @@ import { ALLOWED_EXCHANGE, EXCHANGE_GROUP, USER_ROLE } from 'src/_mock';
 import { useMutation } from '@tanstack/react-query';
 import adminService from 'src/services/adminService';
 import { isAxiosError } from 'axios';
+import { Checkbox } from '@mui/material';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
+import exchangeService from 'src/services/exchangeService';
 
 // ----------------------------------------------------------------------
 
@@ -33,6 +37,8 @@ type Props = {
 
 export default function UserNewEditForm({ currentUser, isView }: Props) {
   const router = useRouter();
+
+  const [exchangeData, setExchangeData] = useState<any>();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -99,7 +105,7 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
   const { mutate: createAdmin } = useMutation(adminService.createAdmin, {
     onSuccess: (data) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
-      router.push(paths.dashboard.symbol.root);
+      router.push(paths.dashboard.user.root);
     },
     onError: (error: any) => {
       console.log({ error });
@@ -109,12 +115,25 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
     },
   });
 
+  //get exchange list
+  const { mutate } = useMutation(exchangeService.getExchangeList, {
+    onSuccess: (data) => {
+      setExchangeData(data?.data?.rows);
+      enqueueSnackbar(data?.message, { variant: 'success' });
+    },
+    onError: (error) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+
   const onSubmit = handleSubmit(async (data) => {
     console.log({ data });
     try {
-      // await new Promise((resolve) => setTimeout(resolve, 500));
-      // reset();
-      // enqueueSnackbar(currentUser ? 'Update success!' : 'Create success!');
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      reset();
+      enqueueSnackbar(currentUser ? 'Update success!' : 'Create success!');
       await createAdmin(data);
       // router.push(paths.dashboard.user.list);
       console.info('DATA', data);
@@ -122,6 +141,23 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
       console.error(error);
     }
   });
+
+  useEffect(() => {
+    mutate();
+  }, []);
+
+  console.log({ exchangeData });
+
+  const ExchangeOptions: any = [];
+
+  for (let i = 0; i < exchangeData?.length; i++) {
+    ExchangeOptions.push({
+      label: exchangeData[i]?.name,
+      value: exchangeData[i]?._id,
+    });
+  }
+
+  // console.log({ ExchangeOptions });
 
   // const handleDrop = useCallback(
   //   (acceptedFiles: File[]) => {
@@ -313,16 +349,17 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
                   );
                 }}
               />
-              
+
               <RHFAutocomplete
                 name="allowedExchange"
                 label="Allowed Exchange"
-                options={ALLOWED_EXCHANGE.map((data) => data.label)}
-                data={ALLOWED_EXCHANGE}
+                options={ExchangeOptions.map((data: any) => data.label)}
+                data={ExchangeOptions}
+                isLabled={false}
                 getOptionLabel={(option: any) => option}
                 isOptionEqualToValue={(option, value) => option === value}
-                renderOption={(props, option) => {
-                  const { label } = ALLOWED_EXCHANGE.filter((data) => data.label === option)[0];
+                renderOption={(props, option, { selected }) => {
+                  const { label } = ExchangeOptions.filter((data: any) => data.label === option)[0];
 
                   if (!label) {
                     return null;
@@ -330,6 +367,12 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
 
                   return (
                     <li {...props} key={label}>
+                      <Checkbox
+                        icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+                        checkedIcon={<CheckBoxIcon fontSize="small" />}
+                        style={{ marginRight: 8 }}
+                        checked={selected}
+                      />
                       {label}
                     </li>
                   );
