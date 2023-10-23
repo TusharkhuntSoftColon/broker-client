@@ -368,9 +368,10 @@ function applyFilter({
   inputData = stabilizedThis.map((el: any) => el[0]);
 
   if (name) {
-    inputData = inputData.filter(
-      (user: any) => user.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
-    );
+    inputData = inputData.filter((user: any) => {
+      console.log({ user });
+      return user.name.toLowerCase().indexOf(name.toLowerCase()) !== -1;
+    });
   }
 
   if (status !== 'all') {

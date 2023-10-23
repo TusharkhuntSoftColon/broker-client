@@ -61,7 +61,7 @@ export type ISymbolItem = {
   stopLevel: number;
   inrialMargin: number;
   maintenanceMargin: number;
-  mimVolume: number;
+  minVolume: number;
   maximumVolume: number;
   name: string;
   calculation?: string;

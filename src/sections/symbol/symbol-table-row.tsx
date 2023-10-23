@@ -11,7 +11,6 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 
 import { ISymbolItem } from 'src/types/symbol';
 
-
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -88,8 +87,8 @@ export default function SymbolTableRow({
       </TableCell> */}
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{name}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{contractSize}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{currency}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{contractSize}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{tickSize}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{tickValue}</TableCell>
 

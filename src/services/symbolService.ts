@@ -18,7 +18,7 @@ const symbolService = {
     try {
       const response: AxiosResponse<any> = await client.get(GET_SYMBOL_LIST);
 
-      console.log({ response });
+      // console.log({ response });
 
       return response.data;
     } catch (error) {
@@ -69,7 +69,7 @@ const symbolService = {
     try {
       const response: AxiosResponse<any> = await client.put(`${UPDATE_SYMBOL}${symbolData._id}`, {
         ...symbolData.data,
-        stAndTp: Boolean(symbolData.data?.stAndTp),
+        stAndTp: symbolData.data?.stAndTp === 'true',
       });
       return response.data;
     } catch (error) {

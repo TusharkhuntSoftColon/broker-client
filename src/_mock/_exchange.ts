@@ -24,9 +24,9 @@ export const PRODUCT_COLOR_OPTIONS = [
 ];
 
 export const STATUS_OF_EXCHANGE = [
-  { value: 'open', label: 'Open' },
-  { value: 'closeOnly', label: 'Close Only' },
-  { value: 'disabled', label: 'Disabled' },
+  { value: 'Open', label: 'Open' },
+  { value: 'Close Only', label: 'Close Only' },
+  { value: 'Disabled', label: 'Disabled' },
 ];
 
 export const STOP_LOSS = [

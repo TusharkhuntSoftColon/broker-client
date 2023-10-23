@@ -21,6 +21,7 @@ interface Props<
   control?: any;
   data?: any;
   multiple?: Multiple;
+  isLabled?: any;
 }
 
 export default function RHFAutocomplete<
@@ -36,6 +37,7 @@ export default function RHFAutocomplete<
   isReadOnly,
   control,
   data,
+  isLabled,
   ...other
 }: Omit<Props<T, Multiple, DisableClearable, FreeSolo>, 'renderInput'>) {
   const { setValue, getValues, control: formControl } = useFormContext();
@@ -54,7 +56,9 @@ export default function RHFAutocomplete<
               console.log({ newValue });
               const selectedValue = data.find((data: any) => data.label === newValue)?.value;
 
-              setValue(name, selectedValue, { shouldValidate: true });
+              const selectedLabel = data.find((data: any) => data.label === newValue)?.label;
+
+              setValue(name, isLabled ? selectedLabel : selectedValue, { shouldValidate: true });
             }}
             readOnly={!!isReadOnly}
             renderInput={(params) => (

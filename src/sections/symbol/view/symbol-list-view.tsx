@@ -20,7 +20,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
 
-import {  _symbolList } from 'src/_mock';
+import { _symbolList } from 'src/_mock';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -28,26 +28,26 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
-useTable,
-emptyRows,
-TableNoData,
-getComparator,
-TableEmptyRows,
-TableHeadCustom,
-TableSelectedAction,
-TablePaginationCustom,
+  useTable,
+  emptyRows,
+  TableNoData,
+  getComparator,
+  TableEmptyRows,
+  TableHeadCustom,
+  TableSelectedAction,
+  TablePaginationCustom,
 } from 'src/components/table';
 
-import { ISymbolItem, ISymbolTableFilters, ISymbolTableFilterValue, } from 'src/types/symbol';
+import { ISymbolItem, ISymbolTableFilters, ISymbolTableFilterValue } from 'src/types/symbol';
 
 import SymbolTableFiltersResult from '../symbol-table-filters-result';
 import SymbolTableRow from '../symbol-table-row';
 import SymbolTableToolbar from '../symbol-table-toolbar';
 
 import symbolService from 'src/services/symbolService';
+import { C } from '@fullcalendar/core/internal-common';
 
 // ----------------------------------------------------------------------
-
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Name' },
@@ -86,6 +86,8 @@ export default function SymbolListView() {
   const confirm = useBoolean();
 
   const [tableData, setTableData] = useState(_symbolList);
+
+  console.log({ _symbolList });
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -210,7 +212,6 @@ export default function SymbolListView() {
             },
             { name: 'List' },
           ]}
-          
           action={
             <Button
               component={RouterLink}
@@ -332,7 +333,7 @@ export default function SymbolListView() {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row:any) => (
+                    .map((row: any) => (
                       <SymbolTableRow
                         key={row.id}
                         row={row}
@@ -412,32 +413,34 @@ function applyFilter({
   const stabilizedThis = inputData.map((el: any, index: any) => [el, index] as const);
 
   stabilizedThis.sort((a: any, b: any) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
+    const symbol = comparator(a[0], b[0]);
+    if (symbol !== 0) return symbol;
     return a[1] - b[1];
   });
 
   inputData = stabilizedThis.map((el: any) => el[0]);
+  console.log({ inputData });
 
   if (name) {
-    inputData = inputData.filter(
-      (order: any) =>
-        order.orderNumber.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.customer.name.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        order.customer.email.toLowerCase().indexOf(name.toLowerCase()) !== -1
-    );
+    inputData = inputData.filter((symbol: any) => {
+      return (
+        symbol.name.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
+        symbol.currency.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        // order.customer.email.toLowerCase().indexOf(name.toLowerCase()) !== -1
+      );
+    });
   }
 
   if (status !== 'all') {
-    inputData = inputData.filter((order: any) => order.status === status);
+    inputData = inputData.filter((symbol: any) => symbol.status === status);
   }
 
   if (!dateError) {
     if (startDate && endDate) {
       inputData = inputData.filter(
-        (order: any) =>
-          fTimestamp(order.createdAt) >= fTimestamp(startDate) &&
-          fTimestamp(order.createdAt) <= fTimestamp(endDate)
+        (symbol: any) =>
+          fTimestamp(symbol.createdAt) >= fTimestamp(startDate) &&
+          fTimestamp(symbol.createdAt) <= fTimestamp(endDate)
       );
     }
   }

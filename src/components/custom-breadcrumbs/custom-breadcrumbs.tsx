@@ -47,7 +47,7 @@ export default function CustomBreadcrumbs({
               color={popover.open ? 'inherit' : 'default'}
               onClick={(e) => {
                 e.stopPropagation();
-                router.push(paths.dashboard.symbol.edit(id));
+                router.push(paths.dashboard.user.edit(id));
                 popover.onClose();
               }}
               sx={{ marginLeft: '31rem' }}
