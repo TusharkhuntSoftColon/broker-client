@@ -15,6 +15,7 @@ import { NavSectionVertical } from 'src/components/nav-section';
 
 import { NAV } from '../config-layout';
 import { useNavData } from './config-navigation';
+import { NavItemBaseProps } from '../main/nav/types';
 import NavToggleButton from '../common/nav-toggle-button';
 
 // ----------------------------------------------------------------------
@@ -22,10 +23,13 @@ import NavToggleButton from '../common/nav-toggle-button';
 type Props = {
   openNav: boolean;
   onCloseNav: VoidFunction;
+    nav: {
+    items: NavItemBaseProps[];
+  }[];
 };
 
-export default function NavVertical({ openNav, onCloseNav }: Props) {
-  const { user } = useMockedUser();
+export default function NavVertical({ openNav, onCloseNav,nav }: Props) {
+  const { ADMIN } = useMockedUser();
 
   const pathname = usePathname();
 
@@ -54,9 +58,9 @@ export default function NavVertical({ openNav, onCloseNav }: Props) {
       <Logo sx={{ mt: 3, ml: 4, mb: 1 }} />
 
       <NavSectionVertical
-        data={navData}
+        data={nav}
         slotProps={{
-          currentRole: user?.role,
+          currentRole: ADMIN?.role,
         }}
       />
 

@@ -10,12 +10,20 @@ import { NavSectionMini } from 'src/components/nav-section';
 
 import { NAV } from '../config-layout';
 import { useNavData } from './config-navigation';
+import { NavItemBaseProps } from '../main/nav/types';
 import NavToggleButton from '../common/nav-toggle-button';
 
 // ----------------------------------------------------------------------
 
-export default function NavMini() {
-  const { user } = useMockedUser();
+type Props = {
+    nav: {
+    items: NavItemBaseProps[];
+  }[];
+};
+
+
+export default function NavMini({nav}: Props) {
+  const { ADMIN } = useMockedUser();
 
   const navData = useNavData();
 
@@ -46,9 +54,9 @@ export default function NavMini() {
         <Logo sx={{ mx: 'auto', my: 2 }} />
 
         <NavSectionMini
-          data={navData}
+          data={nav}
           slotProps={{
-            currentRole: user?.role,
+            currentRole: ADMIN?.role,
           }}
         />
       </Stack>

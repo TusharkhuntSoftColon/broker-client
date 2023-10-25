@@ -24,16 +24,17 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
-  useTable,
-  emptyRows,
-  TableNoData,
-  getComparator,
-  TableEmptyRows,
-  TableHeadCustom,
-  TableSelectedAction,
-  TablePaginationCustom,
+useTable,
+emptyRows,
+TableNoData,
+getComparator,
+TableEmptyRows,
+TableHeadCustom,
+TableSelectedAction,
+TablePaginationCustom,
 } from 'src/components/table';
 
+import { Roles } from 'src/types/role';
 import { IUserItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
 
 import UserTableRow from '../user-table-row';
@@ -136,7 +137,7 @@ export default function UserListView() {
 
   const handleViewRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.user.details(id));
+      router.push(paths[Roles.ADMIN].user.details(id));
     },
     [router]
   );

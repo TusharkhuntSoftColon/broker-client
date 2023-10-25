@@ -14,13 +14,21 @@ import { NavSectionHorizontal } from 'src/components/nav-section';
 import { HEADER } from '../config-layout';
 import { useNavData } from './config-navigation';
 import HeaderShadow from '../common/header-shadow';
+import { NavItemBaseProps } from '../main/nav/types';
 
 // ----------------------------------------------------------------------
 
-function NavHorizontal() {
+type Props = {
+    nav: {
+    items: NavItemBaseProps[];
+  }[];
+};
+
+
+function NavHorizontal({nav}: Props) {
   const theme = useTheme();
 
-  const { user } = useMockedUser();
+  const { ADMIN } = useMockedUser();
 
   const navData = useNavData();
 
@@ -46,9 +54,9 @@ function NavHorizontal() {
           }}
         >
           <NavSectionHorizontal
-            data={navData}
+            data={nav}
             slotProps={{
-              currentRole: user?.role,
+              currentRole: ADMIN?.role,
             }}
             sx={{
               ...theme.mixins.toolbar,
