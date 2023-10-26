@@ -46,6 +46,8 @@ import SymbolTableToolbar from '../symbol-table-toolbar';
 
 import symbolService from 'src/services/symbolService';
 import { C } from '@fullcalendar/core/internal-common';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteSymbol } from 'src/store/slices/symbol';
 
 // ----------------------------------------------------------------------
 
@@ -85,10 +87,11 @@ export default function SymbolListView() {
 
   const confirm = useBoolean();
 
-  const [tableData, setTableData] = useState(_symbolList);
+  const dispatch = useDispatch();
 
-  console.log({ _symbolList });
+  const symbolData = useSelector((data: any) => data?.symbol?.symbolList);
 
+  console.log({ symbolData });
   const [filters, setFilters] = useState(defaultFilters);
 
   const dateError =
@@ -97,7 +100,7 @@ export default function SymbolListView() {
       : false;
 
   const dataFiltered = applyFilter({
-    inputData: tableData,
+    inputData: symbolData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
     dateError,
@@ -140,19 +143,21 @@ export default function SymbolListView() {
   });
 
   const handleDeleteRow = (id: any) => {
-    deleteTableRow(id);
+    console.log({ id });
+    // deleteTableRow(id);
+    dispatch(deleteSymbol(id));
   };
 
   const handleDeleteRows = useCallback(() => {
-    const deleteRows = tableData.filter((row) => !table.selected.includes(row.id));
-    setTableData(deleteRows);
+    const deleteRows = symbolData.filter((row: any) => !table.selected.includes(row.id));
+    // setTableData(deleteRows);
 
     table.onUpdatePageDeleteRows({
-      totalRows: tableData.length,
+      totalRows: symbolData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, tableData]);
+  }, [dataFiltered.length, dataInPage.length, table, symbolData]);
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
@@ -183,7 +188,7 @@ export default function SymbolListView() {
   // list view page API
   const { mutate } = useMutation(symbolService.getSymbolList, {
     onSuccess: (data) => {
-      setTableData(data?.data?.rows);
+      // setTableData(data?.data?.rows);
       enqueueSnackbar(data?.message, { variant: 'success' });
     },
     onError: (error: any) => {
@@ -294,11 +299,11 @@ export default function SymbolListView() {
             <TableSelectedAction
               dense={table.dense}
               numSelected={table.selected.length}
-              rowCount={tableData.length}
+              rowCount={symbolData.length}
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  tableData.map((row) => row.id)
+                  symbolData.map((row: any) => row.id)
                 )
               }
               action={
@@ -316,13 +321,13 @@ export default function SymbolListView() {
                   order={table.order}
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={tableData.length}
+                  rowCount={symbolData.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      tableData.map((row) => row.id)
+                      symbolData.map((row: any) => row.id)
                     )
                   }
                 />
@@ -339,15 +344,15 @@ export default function SymbolListView() {
                         row={row}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}
-                        onDeleteRow={() => handleDeleteRow(row._id)}
-                        onEditRow={() => handleEditRow(row._id)}
-                        onViewRow={() => handleViewRow(row._id)}
+                        onDeleteRow={() => handleDeleteRow(row.id)}
+                        onEditRow={() => handleEditRow(row.id)}
+                        onViewRow={() => handleViewRow(row.id)}
                       />
                     ))}
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, symbolData.length)}
                   />
 
                   <TableNoData notFound={notFound} />

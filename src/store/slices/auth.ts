@@ -1,35 +1,42 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/naming-convention */
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
-import type { RootState } from "../index";
+import type { RootState } from '../index';
 
 // Define a type for the slice state
 interface AuthState {
   token: null | string;
   refreshToken: null | string;
-  role: string| null
+  role: string | null;
+  active: string | null;
 }
 
 // Define the initial state using that type
 const initialState: AuthState = {
   token: null,
   refreshToken: null,
-  role: null
+  role: null,
+  active: null,
 };
 
 const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
   reducers: {
     resetState: () => initialState,
     setCredentials: (state, action) => {
-      const { accessToken, role,refreshToken } = action.payload;
+      const { accessToken, role, refreshToken } = action.payload;
       console.log(action.payload);
 
       state.token = accessToken;
       state.refreshToken = refreshToken;
-      state.role = role
+      if (role === 'SUPER_ADMIN') {
+        state.active = 'dashboard';
+      } else {
+        state.active = 'admin';
+      }
+      state.role = role;
     },
     setRefreshToken: (state, action) => {
       const { access_token, refresh_token } = action.payload;
@@ -39,8 +46,7 @@ const authSlice = createSlice({
   },
 });
 
-export const { setCredentials, resetState, setRefreshToken } =
-  authSlice.actions;
+export const { setCredentials, resetState, setRefreshToken } = authSlice.actions;
 
 export default authSlice.reducer;
 

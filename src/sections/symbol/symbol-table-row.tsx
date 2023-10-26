@@ -40,7 +40,7 @@ export default function SymbolTableRow({
 
   const renderPrimary = (
     <>
-      <TableRow hover selected={selected} sx={{ cursor: 'pointer' }}>
+      <TableRow hover selected={selected} sx={{ cursor: 'pointer' }} onClick={onViewRow}>
         <TableCell padding="checkbox">
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
@@ -126,8 +126,9 @@ export default function SymbolTableRow({
           <Tooltip title="Delete" placement="top" arrow>
             <IconButton
               color={popover.open ? 'inherit' : 'default'}
-              onClick={() => {
+              onClick={(e) => {
                 console.log('function');
+                e.stopPropagation();
                 confirm.onTrue();
               }}
               sx={{ color: 'error.main' }}
@@ -146,7 +147,8 @@ export default function SymbolTableRow({
           <Button
             variant="contained"
             color="error"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               onDeleteRow();
               confirm.onFalse();
             }}

@@ -17,8 +17,6 @@ export default function MainLayout({ children }: Props) {
   const homePage = pathname === '/';
 
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', height: 1 }}>
-      <Header />
 
       <Box
         component="main"
@@ -32,7 +30,6 @@ export default function MainLayout({ children }: Props) {
         {children}
       </Box>
 
-      <Footer />
-    </Box>
+
   );
 }

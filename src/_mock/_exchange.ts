@@ -131,3 +131,8 @@ export const Exchanges = [
   { label: 'SIX' },
   { label: 'BME' },
 ];
+
+export const ExchangeStatus = [
+  { value: 'Active', label: 'Active' },
+  { value: 'In Active', label: 'In Active' },
+];

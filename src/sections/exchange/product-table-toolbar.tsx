@@ -12,6 +12,8 @@ import FormControl from '@mui/material/FormControl';
 import { SelectChangeEvent } from '@mui/material/Select';
 import InputAdornment from '@mui/material/InputAdornment';
 
+import { useBoolean } from 'src/hooks/use-boolean';
+
 import { fDate } from 'src/utils/format-time';
 
 import { Exchanges } from 'src/_mock';
@@ -53,12 +55,15 @@ export default function ProductTableToolbar({
 
   const popover = usePopover();
 
+  const openDateRange = useBoolean();
+
   const handleFilterName = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       onFilters('name', event.target.value);
     },
     [onFilters]
   );
+
 
   const handleFilterStock = useCallback(
     (event: SelectChangeEvent<string[]>) => {

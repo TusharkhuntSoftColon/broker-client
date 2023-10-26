@@ -36,7 +36,7 @@ export default function UserTableRow({
   onDeleteRow,
   onViewRow,
 }: Props) {
-  const { name, role, exchange, domain, phoneNumber, userId } = row;
+  const { name, role, exchange, phoneNumber, ID, Domain } = row;
 
   const confirm = useBoolean();
 
@@ -66,8 +66,8 @@ export default function UserTableRow({
           /> */}
         </TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{userId}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{domain}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{ID}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{Domain}</TableCell>
 
         {/* <TableCell sx={{ whiteSpace: 'nowrap' }}>{company}</TableCell> */}
 
@@ -113,7 +113,14 @@ export default function UserTableRow({
         title="Delete"
         content="Are you sure want to delete?"
         action={
-          <Button variant="contained" color="error" onClick={onDeleteRow}>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              onDeleteRow()
+              confirm.onFalse();
+            }}
+          >
             Delete
           </Button>
         }
