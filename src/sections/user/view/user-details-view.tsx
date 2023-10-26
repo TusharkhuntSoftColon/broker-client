@@ -9,6 +9,7 @@ import { useSettingsContext } from 'src/components/settings';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 import UserNewEditForm from '../user-new-edit-form';
+import { useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
@@ -17,9 +18,10 @@ type Props = {
 };
 
 export default function UserDetailsView({ id }: Props) {
+  const adminData = useSelector((data: any) => data?.admin?.adminList);
   const settings = useSettingsContext();
 
-  const currentUser = _userList.filter((user) => user.id === id)[0];
+  const currentUser = adminData.filter((user: any) => user.id === id)[0];
 
   console.log({ currentUser });
   return (
@@ -41,6 +43,7 @@ export default function UserDetailsView({ id }: Props) {
           mb: { xs: 3, md: 5 },
         }}
         isView={true}
+        path={paths.dashboard.user.edit(id)}
         id={currentUser?.id}
       />
       <UserNewEditForm currentUser={currentUser} isView={true} />

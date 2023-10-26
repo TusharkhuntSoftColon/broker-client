@@ -38,7 +38,7 @@ function Container({ children }: Props) {
   const { authenticated, method } = useAuthContext();
   const { token } = useAuth();
 
-  console.log({token});
+  // console.log({token});
   
 
   const [checked, setChecked] = useState(false);

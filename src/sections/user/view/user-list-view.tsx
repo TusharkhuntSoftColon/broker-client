@@ -1,5 +1,5 @@
 import isEqual from 'lodash/isEqual';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
@@ -39,6 +39,9 @@ import { IUserItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/u
 import UserTableRow from '../user-table-row';
 import UserTableToolbar from '../user-table-toolbar';
 import UserTableFiltersResult from '../user-table-filters-result';
+import { useDispatch, useSelector } from 'react-redux';
+import { addAdmin, deleteAdmin } from 'src/store/slices/admin';
+import { useSnackbar } from 'notistack';
 
 // ----------------------------------------------------------------------
 
@@ -66,25 +69,29 @@ const defaultFilters: IUserTableFilters = {
 export default function UserListView() {
   const table = useTable();
 
+  const dispatch = useDispatch();
+
   const settings = useSettingsContext();
 
   const router = useRouter();
 
   const confirm = useBoolean();
 
-  const [tableData, setTableData] = useState(_userList);
+  const { enqueueSnackbar } = useSnackbar();
 
-  console.log({ tableData });
+  const adminData = useSelector((data: any) => data?.admin?.adminList);
+
+  console.log({ adminData });
 
   const [filters, setFilters] = useState(defaultFilters);
 
   const dataFiltered = applyFilter({
-    inputData: tableData,
+    inputData: adminData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
   });
 
-  const dataInPage = dataFiltered.slice(
+  const dataInPage = dataFiltered?.slice(
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
@@ -93,7 +100,7 @@ export default function UserListView() {
 
   const canReset = !isEqual(defaultFilters, filters);
 
-  const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
+  const notFound = (!dataFiltered?.length && canReset) || !dataFiltered?.length;
 
   const handleFilters = useCallback(
     (name: string, value: IUserTableFilterValue) => {
@@ -108,27 +115,28 @@ export default function UserListView() {
 
   const handleDeleteRow = useCallback(
     (id: string) => {
-      const deleteRow = tableData.filter((row) => row.id !== id);
-      setTableData(deleteRow);
-
+      console.log('delete row works');
+      dispatch(deleteAdmin(id));
+      enqueueSnackbar('Deleted Successfully', { variant: 'success' });
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage.length, table, tableData]
+    [dataInPage?.length, table, adminData]
   );
 
   const handleDeleteRows = useCallback(() => {
-    const deleteRows = tableData.filter((row) => !table.selected.includes(row.id));
-    setTableData(deleteRows);
+    const deleteRows = adminData.filter((row: any) => !table.selected.includes(row.id));
+    // setadminData(deleteRows);
 
     table.onUpdatePageDeleteRows({
-      totalRows: tableData.length,
+      totalRows: adminData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, tableData]);
+  }, [dataFiltered?.length, dataInPage?.length, table, adminData]);
 
   const handleEditRow = useCallback(
     (id: string) => {
+      console.log({ id });
       router.push(paths.dashboard.user.edit(id));
     },
     [router]
@@ -136,6 +144,7 @@ export default function UserListView() {
 
   const handleViewRow = useCallback(
     (id: string) => {
+      console.log({ id });
       router.push(paths.dashboard.user.details(id));
     },
     [router]
@@ -243,11 +252,11 @@ export default function UserListView() {
             <TableSelectedAction
               dense={table.dense}
               numSelected={table.selected.length}
-              rowCount={tableData.length}
+              rowCount={adminData?.length}
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  tableData.map((row) => row.id)
+                  adminData.map((row: any) => row.id)
                 )
               }
               action={
@@ -265,13 +274,13 @@ export default function UserListView() {
                   order={table.order}
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={tableData.length}
+                  rowCount={adminData?.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      tableData.map((row) => row.id)
+                      adminData.map((row: any) => row.id)
                     )
                   }
                 />
@@ -296,7 +305,7 @@ export default function UserListView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, adminData.length)}
                   />
 
                   <TableNoData notFound={notFound} />
@@ -357,15 +366,15 @@ function applyFilter({
 }) {
   const { name, status, role } = filters;
 
-  const stabilizedThis = inputData.map((el: any, index: any) => [el, index] as const);
+  const stabilizedThis = inputData?.map((el: any, index: any) => [el, index] as const);
 
-  stabilizedThis.sort((a: any, b: any) => {
+  stabilizedThis?.sort((a: any, b: any) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el: any) => el[0]);
+  inputData = stabilizedThis?.map((el: any) => el[0]);
 
   if (name) {
     inputData = inputData.filter((user: any) => {

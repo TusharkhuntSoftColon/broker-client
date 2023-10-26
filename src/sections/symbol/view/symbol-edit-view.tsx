@@ -1,6 +1,6 @@
 import { isAxiosError } from 'axios';
 import { useSnackbar } from 'notistack';
-import { useState, useEffect, memo } from 'react';
+import { useState, useEffect, memo, useMemo } from 'react';
 import { useMutation } from '@tanstack/react-query';
 
 import Container from '@mui/material/Container';
@@ -12,6 +12,7 @@ import symbolService from 'src/services/symbolService';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import SymbolNewEditForm from '../symbol-new-edit-form';
+import { useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 function SymbolEditView({ id }: { id: any }) {
@@ -19,11 +20,23 @@ function SymbolEditView({ id }: { id: any }) {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const [currentSymbol, setCurrentSymbol] = useState<any>();
+  const symbolData = useSelector((data: any) => data?.symbol?.symbolList);
+
+  console.log({ id });
+  console.log({ symbolData });
+
+  const currentSymbol = useMemo(
+    () => symbolData?.filter((symbol: any) => symbol.id === id)[0],
+    [symbolData]
+  );
+
+  console.log({ currentSymbol });
+
+  // const [currentSymbol, setCurrentSymbol] = useState<any>();
 
   const { mutate } = useMutation(symbolService.getSymbol_by_Id, {
     onSuccess: (data: any) => {
-      setCurrentSymbol(data?.data);
+      // setCurrentSymbol(data?.data);
     },
     onError: (error: any) => {
       if (isAxiosError(error)) {
@@ -31,11 +44,11 @@ function SymbolEditView({ id }: { id: any }) {
       }
     },
   });
-  useEffect(() => {
-    mutate(id);
-  }, []);
+  // useEffect(() => {
+  //   mutate(id);
+  // }, []);
 
-  console.log({ currentSymbol });
+  // console.log({ symbolData });
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>

@@ -43,7 +43,7 @@ export default function RHFAutocomplete<
   const { setValue, getValues, control: formControl } = useFormContext();
 
   // const value = getValues('stAndTp');
-  console.log({ name });
+  // console.log({ name });
   return (
     <>
       <Controller
@@ -53,7 +53,7 @@ export default function RHFAutocomplete<
           <Autocomplete
             {...field}
             onChange={(event, newValue) => {
-              console.log({ newValue });
+              // console.log({ newValue });
               const selectedValue = data.find((data: any) => data.label === newValue)?.value;
 
               const selectedLabel = data.find((data: any) => data.label === newValue)?.label;
