@@ -64,7 +64,6 @@ export default function ProductTableToolbar({
     [onFilters]
   );
 
-
   const handleFilterStock = useCallback(
     (event: SelectChangeEvent<string[]>) => {
       console.log({ event });
@@ -153,16 +152,20 @@ export default function ProductTableToolbar({
               <Button
                 style={{
                   width: 'max-content',
-                  height: '100%',
+                  // height: '100%',
                   backgroundColor: 'transparent',
                   color: '#637381',
-                  border: '0.5px solid rgba(145, 158, 171, 0.2)',
-
+                  padding: '0.9rem',
                   fontWeight: 'normal',
                 }}
                 sx={{
+                  width: 'max-content',
+                  height: '100%',
+                  backgroundColor: 'transparent',
+                  border: '0.5px solid rgba(145, 158, 171, 0.2)',
+                  color: '#637381',
                   '&:hover': {
-                    borderColor: '#212B36 !important',
+                    borderColor: 'white !important',
                   },
                 }}
                 variant="contained"
