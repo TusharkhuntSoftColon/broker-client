@@ -16,7 +16,7 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fDate } from 'src/utils/format-time';
 
-import { Exchanges } from 'src/_mock';
+import { Exchanges, ExchangeStatus } from 'src/_mock';
 
 import Iconify from 'src/components/iconify';
 import { RHFAutocomplete } from 'src/components/hook-form';
@@ -61,6 +61,7 @@ export default function ProductTableToolbar({
 
   const handleFilterName = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
+      console.log(event.target);
       onFilters('name', event.target.value);
     },
     [onFilters]
@@ -88,6 +89,9 @@ export default function ProductTableToolbar({
     [onFilters]
   );
 
+  const handleStatusChange = (e: any) => {
+    console.log(e.target);
+  };
   const NewJobSchema = Yup.object().shape({});
 
   const defaultValues = useMemo(
@@ -217,13 +221,20 @@ export default function ProductTableToolbar({
 
               <Stack spacing={1.5}>
                 <RHFAutocomplete
-                  name="name"
-                  placeholder="Exchange"
-                  // disableCloseOnSelect
-                  options={Exchanges.map((option) => option.label)}
-                  getOptionLabel={(option) => option}
+                  name="status"
+                  label="Status"
+                  control={control}
+                  // isReadOnly={isView ? true : false}
+                  // onChange={(e) => handleStatusChange(e)}
+                  options={ExchangeStatus.map((data) => data.label)}
+                  isLabled={false}
+                  // value={ExchangeStatus.map((data) => data.value)}
+                  data={ExchangeStatus}
+                  getOptionLabel={(option: any) => option}
                   renderOption={(props, option) => {
-                    const { label } = Exchanges.filter((country) => country.label === option)[0];
+                    const { label } = ExchangeStatus.filter(
+                      (country: any) => country.label === option
+                    )[0];
 
                     if (!label) {
                       return null;

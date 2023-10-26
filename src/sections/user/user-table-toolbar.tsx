@@ -22,7 +22,7 @@ type Props = {
   filters: IUserTableFilters;
   onFilters: (name: string, value: IUserTableFilterValue) => void;
   //
-  roleOptions: string[];
+  roleOptions: string[] | any;
 };
 
 export default function UserTableToolbar({
@@ -33,6 +33,8 @@ export default function UserTableToolbar({
 }: Props) {
   const popover = usePopover();
 
+  console.log({ filters});
+
   const handleFilterName = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       onFilters('name', event.target.value);
@@ -42,6 +44,7 @@ export default function UserTableToolbar({
 
   const handleFilterRole = useCallback(
     (event: SelectChangeEvent<string[]>) => {
+      console.log(event.target.value);
       onFilters(
         'role',
         typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
@@ -84,10 +87,14 @@ export default function UserTableToolbar({
               },
             }}
           >
-            {roleOptions.map((option) => (
-              <MenuItem key={option} value={option}>
-                <Checkbox disableRipple size="small" checked={filters.role.includes(option)} />
-                {option}
+            {roleOptions.map((option: any) => (
+              <MenuItem key={option.label} value={option.label}>
+                <Checkbox
+                  disableRipple
+                  size="small"
+                  checked={filters.role.includes(option.label)}
+                />
+                {option.label}
               </MenuItem>
             ))}
           </Select>

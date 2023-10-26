@@ -102,13 +102,13 @@ export type IUserItem = {
   allowedExchange: string;
   leverage?: string;
   status: string;
-  role: string;
+  role: string | any;
   exchange?: string;
   Domain?: string;
   insertCustomBet: boolean;
   editBet: boolean;
   deleteBet: boolean;
-  limitOfAddSuperMaster:number;
+  limitOfAddSuperMaster: number;
   limitOfAddMaster: number;
   limitOfAddUser: number;
   leverageX: number;

@@ -65,7 +65,7 @@ export default function ExchangeQuickEditForm({
       statusOfExchange: currentUser?.statusOfExchange || '',
       stAndTp: currentUser?.stAndTp || '',
       symbol: currentUser?.symbol || '',
-      isActiveExchange: currentUser?.isActiveExchange || '',
+      isActiveExchange: currentUser?.isActiveExchange,
     }),
     [currentUser]
   );
@@ -147,6 +147,7 @@ export default function ExchangeQuickEditForm({
   useEffect(() => {
     if (currentUser) {
       setValue('name', currentUser?.name || '');
+      setValue('isActiveExchange', currentUser?.isActiveExchange || false);
     }
   }, [currentUser, setValue]);
 
@@ -232,8 +233,9 @@ export default function ExchangeQuickEditForm({
               control={control}
               isReadOnly={isView ? true : false}
               options={STOP_LOSS.map((data) => data.label)}
-              data={STOP_LOSS}
               isLabled={false}
+              value={STOP_LOSS.find((data) => data.value === currentUser?.stAndTp)?.label}
+              data={STOP_LOSS}
               getOptionLabel={(option: any) => option}
               renderOption={(props, option) => {
                 const { label } = STOP_LOSS.filter((data) => data.label === option)[0];
@@ -278,7 +280,6 @@ export default function ExchangeQuickEditForm({
               <RHFSwitch
                 name="isActiveExchange"
                 labelPlacement="start"
-                defaultValue={currentUser?.isActiveExchange}
                 label={
                   <>
                     <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
