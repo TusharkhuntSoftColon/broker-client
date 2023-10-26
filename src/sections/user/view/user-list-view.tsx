@@ -19,7 +19,7 @@ import { RouterLink } from 'src/routes/components';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { deleteAdmin } from 'src/store/slices/admin';
-import { _roles, USER_STATUS_OPTIONS } from 'src/_mock';
+import { _roles, Exchanges, USER_STATUS_OPTIONS } from 'src/_mock';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -233,7 +233,7 @@ export default function UserListView() {
             filters={filters}
             onFilters={handleFilters}
             //
-            roleOptions={_roles}
+            roleOptions={Exchanges}
           />
 
           {canReset && (

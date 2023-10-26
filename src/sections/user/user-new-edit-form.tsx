@@ -19,16 +19,17 @@ import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField, RHFAutocomplete, RHFCheckbox } from 'src/components/hook-form';
 
 import { IUserItem } from 'src/types/user';
-import { ALLOWED_EXCHANGE, EXCHANGE_GROUP, USER_ROLE } from 'src/_mock';
+import { ALLOWED_EXCHANGE, EXCHANGE_GROUP, Exchanges, USER_ROLE } from 'src/_mock';
 import { useMutation } from '@tanstack/react-query';
 import adminService from 'src/services/adminService';
 import { isAxiosError } from 'axios';
-import { Checkbox } from '@mui/material';
+import { Checkbox, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
 import exchangeService from 'src/services/exchangeService';
 import { useDispatch, useSelector } from 'react-redux';
 import { addAdmin, updateAdmin } from 'src/store/slices/admin';
+import OutlinedInput from '@mui/material/OutlinedInput';
 
 // ----------------------------------------------------------------------
 
@@ -42,9 +43,13 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
 
   const [exchangeData, setExchangeData] = useState<any>();
 
+  const [exchange, setExchange] = useState<any>([]);
+
   const adminData = useSelector((data: any) => data?.admin?.adminList);
 
   // console.log({ adminData });
+
+  console.log({ currentUser });
 
   const dispatch = useDispatch();
 
@@ -57,10 +62,10 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
     exchangeGroup: Yup.string().required('Leverage Y is required'),
     allowedExchange: Yup.string().required('Allowed Exchange Y is required'),
     Domain: Yup.string().required('Domain is required'),
-    insertCustomBet: Yup.string().required('Insert Custom Bet is required'),
-    editBet: Yup.string().required('Edit Bet is required'),
-    deleteBet: Yup.string().required('Delete Bet is required'),
-    limitOfAddSuperMaster: Yup.number().required('Limit Of Add SuperMaster Bet is required'),
+    // insertCustomBet: Yup.string().required('Insert Custom Bet is required'),
+    // editBet: Yup.string().required('Edit Bet is required'),
+    // deleteBet: Yup.string().required('Delete Bet is required'),
+    limitOfAddSuperMaster: Yup.number().required('Limit Of Add Super Master Bet is required'),
     limitOfAddMaster: Yup.number().required('Limit Of Add Master is required'),
     limitOfAddUser: Yup.number().required('Limit Of Add User is required'),
     leverageX: Yup.number().required('Leverage X is required'),
@@ -73,17 +78,17 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
       password: currentUser?.password || '',
       ID: currentUser?.ID || '',
       exchangeGroup: currentUser?.exchangeGroup || '',
-      allowedExchange: currentUser?.allowedExchange || '',
+      allowedExchange: currentUser?.allowedExchange || [],
       Domain: currentUser?.Domain || '',
-      insertCustomBet: currentUser?.insertCustomBet || '',
-      editBet: currentUser?.editBet || '',
+      insertCustomBet: currentUser?.insertCustomBet || false,
+      editBet: currentUser?.editBet || false,
       role: currentUser?.role || '',
-      deleteBet: currentUser?.deleteBet || '',
-      limitOfAddSuperMaster: currentUser?.limitOfAddSuperMaster || '',
-      limitOfAddMaster: currentUser?.limitOfAddMaster || '',
-      limitOfAddUser: currentUser?.limitOfAddUser || '',
-      leverageX: currentUser?.leverageX || '',
-      leverageY: currentUser?.leverageY || '',
+      deleteBet: currentUser?.deleteBet || false,
+      limitOfAddSuperMaster: currentUser?.limitOfAddSuperMaster || null,
+      limitOfAddMaster: currentUser?.limitOfAddMaster || null,
+      limitOfAddUser: currentUser?.limitOfAddUser || null,
+      leverageX: currentUser?.leverageX || null,
+      leverageY: currentUser?.leverageY || null,
     }),
     [currentUser]
   );
@@ -108,6 +113,14 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
   // const values = watch();
 
   // console.log({ values });
+
+  useEffect(() => {
+    if (currentUser) {
+      setValue('insertCustomBet', currentUser?.insertCustomBet || false);
+      setValue('deleteBet', currentUser?.deleteBet || false);
+      setValue('editBet', currentUser?.editBet || false);
+    }
+  }, [currentUser, setValue]);
 
   // create ADMIN
   const { mutate: createAdmin } = useMutation(adminService.createAdmin, {
@@ -174,7 +187,7 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
     });
   }
 
-  // console.log({ ExchangeOptions });
+  console.log({ ExchangeOptions });
 
   // const handleDrop = useCallback(
   //   (acceptedFiles: File[]) => {
@@ -191,6 +204,28 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
   //   [setValue]
   // );
 
+  // const handleFilterRole = useCallback(
+  //   (event: SelectChangeEvent<string[]>) => {
+  //     console.log(event.target.value);
+  //     onFilters(
+  //       'role',
+  //       typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
+  //     );
+  //   },
+  //   [onFilters]
+  // );
+
+  const handleFilterRole = (e: any) => {
+    console.log(e.target.value);
+
+    exchange.push(e.target.value);
+  };
+
+  console.log({ exchange });
+
+  const handleAllowedExchange = (e: any) => {
+    console.log(e);
+  };
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
@@ -370,11 +405,15 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
               <RHFAutocomplete
                 name="allowedExchange"
                 label="Allowed Exchange"
+                control={control}
                 options={ExchangeOptions.map((data: any) => data.label)}
                 data={ExchangeOptions}
                 isLabled={false}
+                value={
+                  ExchangeOptions.find((data: any) => data.value === currentUser?.allowedExchange)
+                    ?.label
+                }
                 getOptionLabel={(option: any) => option}
-                isOptionEqualToValue={(option, value) => option === value}
                 renderOption={(props, option, { selected }) => {
                   const { label } = ExchangeOptions.filter((data: any) => data.label === option)[0];
 
@@ -395,6 +434,40 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
                   );
                 }}
               />
+
+              {/* <FormControl
+                sx={{
+                  flexShrink: 0,
+                  width: { xs: 1, md: 200 },
+                }}
+              >
+                <InputLabel>Exchange</InputLabel>
+
+                <Select
+                  multiple
+                  name="allowedExchange"
+                  value={currentUser ? currentUser.allowedExchange : []}
+                  onChange={(e) => handleFilterRole(e)}
+                  input={<OutlinedInput label="Exchange" />}
+                  renderValue={(selected) => selected?.map((value: any) => value).join(', ')}
+                  MenuProps={{
+                    PaperProps: {
+                      sx: { maxHeight: 240 },
+                    },
+                  }}
+                >
+                  {Exchanges.map((option: any) => (
+                    <MenuItem key={option.label} value={option.label}>
+                      <Checkbox
+                        disableRipple
+                        size="small"
+                        checked={Exchanges.includes(option.label)}
+                      />
+                      {option.label}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl> */}
 
               {/* <RHFAutocomplete
                 name="leverage"

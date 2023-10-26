@@ -58,6 +58,7 @@ export default function ProductTableToolbar({
 
   const handleFilterName = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
+      console.log(event.target);
       onFilters('name', event.target.value);
     },
     [onFilters]
@@ -87,6 +88,9 @@ export default function ProductTableToolbar({
     [onFilters]
   );
 
+  const handleStatusChange = (e: any) => {
+    console.log(e.target);
+  };
   const NewJobSchema = Yup.object().shape({});
 
   const defaultValues = useMemo(
@@ -208,9 +212,10 @@ export default function ProductTableToolbar({
                   label="Status"
                   control={control}
                   // isReadOnly={isView ? true : false}
+                  // onChange={(e) => handleStatusChange(e)}
                   options={ExchangeStatus.map((data) => data.label)}
                   isLabled={false}
-                  // value={ExchangeStatus.find((data) => data.value === currentUser?.stAndTp)?.label}
+                  value={ExchangeStatus.map((data) => data.value)}
                   data={ExchangeStatus}
                   getOptionLabel={(option: any) => option}
                   renderOption={(props, option) => {

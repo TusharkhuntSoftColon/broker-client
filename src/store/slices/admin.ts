@@ -26,6 +26,7 @@ const adminSlice = createSlice({
     addAdmin: (state, action) => {
       // console.log('Action in slice', action.payload);
       const data = action.payload;
+      console.log({ data });
       // state.adminList = state.adminList.concat({
       //   data,
       //   id: Math.random().toString(36).substr(2, 5),
@@ -33,7 +34,13 @@ const adminSlice = createSlice({
 
       state.adminList = [
         ...state.adminList,
-        { ...data, id: Math.random().toString(36).substr(2, 5) },
+        {
+          ...data,
+          id: Math.random().toString(36).substr(2, 5),
+          deleteBet: data?.deleteBet === 'true',
+          editBet: data?.editBet === 'true',
+          insertCustomBet: data?.insertCustomBet === 'true',
+        },
       ];
       // state.adminList = [
       //   ...state.adminList,
@@ -48,7 +55,11 @@ const adminSlice = createSlice({
     },
     updateAdmin: (state, action) => {
       const { id, updatedData } = action.payload;
-      const data = { ...updatedData, id: id };
+      console.log({ updatedData });
+      const data = {
+        ...updatedData,
+        id: id
+      };
       const dataIndex = state.adminList.findIndex((item: any) => item.id === id);
 
       console.log({ dataIndex });
