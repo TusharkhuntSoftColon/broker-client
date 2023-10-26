@@ -413,6 +413,7 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
                   ExchangeOptions.find((data: any) => data.value === currentUser?.allowedExchange)
                     ?.label
                 }
+                multiple
                 getOptionLabel={(option: any) => option}
                 renderOption={(props, option, { selected }) => {
                   const { label } = ExchangeOptions.filter((data: any) => data.label === option)[0];
