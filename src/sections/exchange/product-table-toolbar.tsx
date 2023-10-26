@@ -26,6 +26,7 @@ import { useDateRangePicker } from 'src/components/custom-date-range-picker';
 import CustomDateRangePicker from 'src/components/custom-date-range-picker/custom-date-range-picker';
 
 import { IProductTableFilters, IProductTableFilterValue } from 'src/types/exchange';
+import { useSettingsContext } from 'src/components/settings';
 
 // ----------------------------------------------------------------------
 
@@ -52,6 +53,7 @@ export default function ProductTableToolbar({
 }: Props) {
   console.log({ stockOptions });
   const rangeCalendarPicker = useDateRangePicker(new Date(), new Date());
+  const settings = useSettingsContext();
 
   const popover = usePopover();
 
@@ -165,7 +167,8 @@ export default function ProductTableToolbar({
                   border: '0.5px solid rgba(145, 158, 171, 0.2)',
                   color: '#637381',
                   '&:hover': {
-                    borderColor: 'white !important',
+                    borderColor:
+                      settings.themeMode === 'dark' ? 'white !important' : 'black !important',
                   },
                 }}
                 variant="contained"
