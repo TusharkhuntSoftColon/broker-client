@@ -3,15 +3,18 @@ import { useForm } from 'react-hook-form';
 import { useMemo, useCallback } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import { Button } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
-import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import { SelectChangeEvent } from '@mui/material/Select';
 import InputAdornment from '@mui/material/InputAdornment';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
+import { useBoolean } from 'src/hooks/use-boolean';
+
+import { fDate } from 'src/utils/format-time';
 
 import { Exchanges, ExchangeStatus } from 'src/_mock';
 
@@ -19,11 +22,11 @@ import Iconify from 'src/components/iconify';
 import { RHFAutocomplete } from 'src/components/hook-form';
 import FormProvider from 'src/components/hook-form/form-provider';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useDateRangePicker } from 'src/components/custom-date-range-picker';
+import CustomDateRangePicker from 'src/components/custom-date-range-picker/custom-date-range-picker';
 
 import { IProductTableFilters, IProductTableFilterValue } from 'src/types/exchange';
-import CustomDateRangePicker from 'src/components/custom-date-range-picker/custom-date-range-picker';
-import { useBoolean } from 'src/hooks/use-boolean';
-import { useDateRangePicker } from 'src/components/custom-date-range-picker';
+import { useSettingsContext } from 'src/components/settings';
 
 // ----------------------------------------------------------------------
 
@@ -48,9 +51,9 @@ export default function ProductTableToolbar({
   stockOptions,
   publishOptions,
 }: Props) {
-  // console.log({ stockOptions });
-
-  console.log({ filters });
+  console.log({ stockOptions });
+  const rangeCalendarPicker = useDateRangePicker(new Date(), new Date());
+  const settings = useSettingsContext();
 
   const popover = usePopover();
 
@@ -63,8 +66,6 @@ export default function ProductTableToolbar({
     },
     [onFilters]
   );
-
-  const rangeCalendarPicker = useDateRangePicker(new Date(), null);
 
   const handleFilterStock = useCallback(
     (event: SelectChangeEvent<string[]>) => {
@@ -122,20 +123,6 @@ export default function ProductTableToolbar({
     }
   });
 
-  const handleFilterStartDate = useCallback(
-    (newValue: Date | null | any) => {
-      onFilters('startDate', newValue);
-    },
-    [onFilters]
-  );
-
-  const handleFilterEndDate = useCallback(
-    (newValue: Date | null | any) => {
-      onFilters('endDate', newValue);
-    },
-    [onFilters]
-  );
-
   return (
     <>
       <FormProvider methods={methods} onSubmit={onSubmit}>
@@ -168,7 +155,33 @@ export default function ProductTableToolbar({
 
             <Stack spacing={1.5}>
               {/* <DatePicker format="dd/MM/yyyy" /> */}
+              <Button
+                style={{
+                  width: 'max-content',
+                  // height: '100%',
+                  backgroundColor: 'transparent',
+                  color: '#637381',
+                  padding: '0.9rem',
+                  fontWeight: 'normal',
+                }}
+                sx={{
+                  width: 'max-content',
+                  height: '100%',
+                  backgroundColor: 'transparent',
+                  border: '0.5px solid rgba(145, 158, 171, 0.2)',
+                  color: '#637381',
+                  '&:hover': {
+                    borderColor:
+                      settings.themeMode === 'dark' ? 'white !important' : 'black !important',
+                  },
+                }}
+                variant="contained"
+                onClick={rangeCalendarPicker.onOpen}
+              >
+                {fDate(rangeCalendarPicker.startDate)} - {fDate(rangeCalendarPicker.endDate)}
+              </Button>
               <CustomDateRangePicker
+                variant="calendar"
                 open={rangeCalendarPicker.open}
                 startDate={rangeCalendarPicker.startDate}
                 endDate={rangeCalendarPicker.endDate}
@@ -215,11 +228,13 @@ export default function ProductTableToolbar({
                   // onChange={(e) => handleStatusChange(e)}
                   options={ExchangeStatus.map((data) => data.label)}
                   isLabled={false}
-                  value={ExchangeStatus.map((data) => data.value)}
+                  // value={ExchangeStatus.map((data) => data.value)}
                   data={ExchangeStatus}
                   getOptionLabel={(option: any) => option}
                   renderOption={(props, option) => {
-                    const { label } = ExchangeStatus.filter((data) => data.label === option)[0];
+                    const { label } = ExchangeStatus.filter(
+                      (country: any) => country.label === option
+                    )[0];
 
                     if (!label) {
                       return null;
@@ -231,24 +246,6 @@ export default function ProductTableToolbar({
                       </li>
                     );
                   }}
-                  // name="name"
-                  // placeholder="Exchange"
-                  // // disableCloseOnSelect
-                  // options={Exchanges.map((option) => option.label)}
-                  // getOptionLabel={(option) => option}
-                  // renderOption={(props, option) => {
-                  //   const { label } = Exchanges.filter((country) => country.label === option)[0];
-
-                  //   if (!label) {
-                  //     return null;
-                  //   }
-
-                  //   return (
-                  //     <li {...props} key={label}>
-                  //       {label}
-                  //     </li>
-                  //   );
-                  // }}
                   // renderTags={(selected, getTagProps) =>
                   //   selected.map((option, index) => (
                   //     <Chip
