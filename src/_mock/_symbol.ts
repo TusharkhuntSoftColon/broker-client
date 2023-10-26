@@ -141,7 +141,7 @@ export const _symbolList = [...Array(20)].map((_, index) => ({
   name: _mock.fullName(index),
   tickSize: _mock.boolean(index),
   tickValue: _mock.companyName(index),
-  inrialMargin: '234',
+  initialMargin: '234',
   minimumVolume: 'dasdsd',
   maximumVolume: 'asdasd',
   startTradeSessions: 'Sunday',

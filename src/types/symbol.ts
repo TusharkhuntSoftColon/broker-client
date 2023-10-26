@@ -59,7 +59,7 @@ export type ISymbolItem = {
   id: null | undefined;
   spread: number;
   stopLevel: number;
-  inrialMargin: number;
+  initialMargin: number;
   maintenanceMargin: number;
   minVolume: number;
   maximumVolume: number;

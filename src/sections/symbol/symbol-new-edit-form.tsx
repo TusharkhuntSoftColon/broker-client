@@ -21,6 +21,8 @@ import { useSnackbar } from 'src/components/snackbar';
 import { ISymbolItem } from 'src/types/symbol';
 import { STOP_LOSS } from 'src/_mock/_symbol';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useDispatch } from 'react-redux';
+import { addSymbol,updateSymbol } from 'src/store/slices/symbol';
 
 // ----------------------------------------------------------------------
 
@@ -43,7 +45,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
     // calculation: Yup.string().required('Calculation is required'),
     tickSize: Yup.number().required('Tick Size is required'),
     tickValue: Yup.number().required('Tick Value is required'),
-    inrialMargin: Yup.number().required('inrialMargin is required'),
+    initialMargin: Yup.number().required('InitialMargin is required'),
     maintenanceMargin: Yup.number().required('Maintenance Margin is required'),
     minVolume: Yup.number().required('Minimum Volume is required'),
     maxVolume: Yup.number().required('Maximum Volume is required'),
@@ -59,6 +61,8 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
 
   // console.log({ value });
 
+  const dispatch = useDispatch();
+
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),
   });
@@ -73,7 +77,6 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
   } = methods;
 
   // const value = watch();
-  console.log({ currentUser });
 
   useEffect(() => {
     if (currentUser) {
@@ -85,7 +88,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
       // setValue('calculation', currentUser?.calculation || '');
       setValue('tickSize', currentUser?.tickSize || '');
       setValue('tickValue', currentUser?.tickValue || '');
-      setValue('inrialMargin', currentUser?.inrialMargin || '');
+      setValue('initialMargin', currentUser?.initialMargin || '');
       setValue('maintenanceMargin', currentUser?.maintenanceMargin || '');
       setValue('minVolume', currentUser?.minVolume || '');
       setValue('maxVolume', currentUser?.maxVolume || '');
@@ -113,28 +116,31 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
   });
 
   // create symbol
-  const { mutate: updateSymbol } = useMutation(symbolService.updateSymbol, {
-    onSuccess: (data) => {
-      enqueueSnackbar(data?.message, { variant: 'success' });
-      router.push(paths.dashboard.symbol.root);
-    },
-    onError: (error: any) => {
-      if (isAxiosError(error)) {
-        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-      }
-    },
-  });
+  // const { mutate: updateSymbol } = useMutation(symbolService.updateSymbol, {
+  //   onSuccess: (data) => {
+  //     enqueueSnackbar(data?.message, { variant: 'success' });
+  //     router.push(paths.dashboard.symbol.root);
+  //   },
+  //   onError: (error: any) => {
+  //     if (isAxiosError(error)) {
+  //       enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+  //     }
+  //   },
+  // });
 
   const onSubmit = handleSubmit(async (data: any) => {
-    console.log('Worked');
+    // console.log('Worked');
     try {
       console.log({ data });
 
       if (currentUser) {
-        await updateSymbol({ data, _id: currentUser._id });
+        // await updateSymbol({ data, _id: currentUser._id });
+        dispatch(updateSymbol({ id: currentUser?.id, updatedData: data }))
       } else {
-        await createSymbol(data);
+        // await createSymbol(data);
+        dispatch(addSymbol(data));
       }
+      router.push(paths.dashboard.symbol.root);
 
       // currentUser == undefined ? await createSymbol(data) : await updateSymbol(data);
     } catch (error) {
@@ -299,7 +305,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
               <RHFTextField
                 isReadOnly={!!isView}
                 type="number"
-                name="inrialMargin"
+                name="initialMargin"
                 label="Inrial Margin"
               />
               <RHFTextField

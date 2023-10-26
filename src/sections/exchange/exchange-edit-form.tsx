@@ -10,9 +10,10 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
+import Typography from '@mui/material/Typography';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFAutocomplete, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFAutocomplete, RHFSwitch, RHFTextField } from 'src/components/hook-form';
 
 import { IUserItem } from 'src/types/user';
 import { useMutation } from '@tanstack/react-query';
@@ -23,6 +24,8 @@ import { isAxiosError } from 'axios';
 import { STATUS_OF_EXCHANGE, STOP_LOSS } from 'src/_mock/_exchange';
 import { IExchangeItem } from 'src/types/exchange';
 import symbolService from 'src/services/symbolService';
+import { useDispatch } from 'react-redux';
+import { addExchange, updateExchange } from 'src/store/slices/exchange';
 
 // ----------------------------------------------------------------------
 
@@ -43,21 +46,26 @@ export default function ExchangeQuickEditForm({
 }: Props) {
   const { enqueueSnackbar } = useSnackbar();
 
+  const dispatch = useDispatch();
+
   const [symbolData, setSymbolData] = useState<any>([]);
 
   console.log({ currentUser });
 
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
-    // statusOfExchange: Yup.string().required('Status Of Exchange is required'),
-    // stAndTp: Yup.string().required('Stop Loss is required'),
+    statusOfExchange: Yup.string().required('Status Of Exchange is required'),
+    stAndTp: Yup.string().required('Stop Loss is required'),
+    symbol: Yup.string().required('Symbol is required'),
   });
 
   const defaultValues = useMemo(
     () => ({
       name: currentUser?.name || '',
-      // statusOfExchange: currentUser?.statusOfExchange || '',
-      // stAndTp: currentUser?.stAndTp || '',
+      statusOfExchange: currentUser?.statusOfExchange || '',
+      stAndTp: currentUser?.stAndTp || '',
+      symbol: currentUser?.symbol || '',
+      isActiveExchange: currentUser?.isActiveExchange || '',
     }),
     [currentUser]
   );
@@ -90,20 +98,20 @@ export default function ExchangeQuickEditForm({
   });
 
   //update exchnage
-  const { mutate: updateExchange } = useMutation(exchangeService.updateExchange, {
-    onSuccess: (data) => {
-      getFunction();
-      enqueueSnackbar(data?.message, { variant: 'success' });
-      onClose();
-      console.log('inside success functiono');
-    },
-    onError: (error: any) => {
-      if (isAxiosError(error)) {
-        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-      }
-      console.log(error);
-    },
-  });
+  // const { mutate: updateExchange } = useMutation(exchangeService.updateExchange, {
+  //   onSuccess: (data) => {
+  //     getFunction();
+  //     enqueueSnackbar(data?.message, { variant: 'success' });
+  //     onClose();
+  //     console.log('inside success functiono');
+  //   },
+  //   onError: (error: any) => {
+  //     if (isAxiosError(error)) {
+  //       enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+  //     }
+  //     console.log(error);
+  //   },
+  // });
 
   // Get symbol API
   const { mutate } = useMutation(symbolService.getSymbolList, {
@@ -122,10 +130,15 @@ export default function ExchangeQuickEditForm({
     console.log({ data });
     try {
       if (currentUser) {
-        updateExchange({ data, _id: currentUser?._id });
+        // updateExchange({ data, _id: currentUser?._id });
+        dispatch(updateExchange({ id: currentUser?._id, updatedData: data }));
+        console.log({ data });
       } else {
-        createExchange(data);
+        // createExchange(data);
+        dispatch(addExchange(data));
       }
+      reset();
+      onClose();
     } catch (error) {
       console.log({ error });
     }
@@ -149,6 +162,8 @@ export default function ExchangeQuickEditForm({
       value: symbolData[i]?._id,
     });
   }
+
+  // console.log({ SymbolOption });
   return (
     <Dialog
       fullWidth
@@ -218,7 +233,7 @@ export default function ExchangeQuickEditForm({
               isReadOnly={isView ? true : false}
               options={STOP_LOSS.map((data) => data.label)}
               data={STOP_LOSS}
-              isLabled={true}
+              isLabled={false}
               getOptionLabel={(option: any) => option}
               renderOption={(props, option) => {
                 const { label } = STOP_LOSS.filter((data) => data.label === option)[0];
@@ -241,10 +256,7 @@ export default function ExchangeQuickEditForm({
               control={control}
               isReadOnly={isView ? true : false}
               options={SymbolOption?.map((data: any) => data.label)}
-              isLabled={false}
-              defaultValue={
-                SymbolOption?.find((data: any) => data.value === currentUser?.stAndTp)?.value
-              }
+              isLabled={true}
               data={SymbolOption}
               getOptionLabel={(option: any) => option}
               renderOption={(props, option) => {
@@ -262,6 +274,21 @@ export default function ExchangeQuickEditForm({
               }}
             />
 
+            {currentUser && (
+              <RHFSwitch
+                name="isActiveExchange"
+                labelPlacement="start"
+                defaultValue={currentUser?.isActiveExchange}
+                label={
+                  <>
+                    <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+                      Active or In Active Exchange
+                    </Typography>
+                  </>
+                }
+                sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
+              />
+            )}
             {/* <RHFAutocomplete
               name="country"
               label="Country"

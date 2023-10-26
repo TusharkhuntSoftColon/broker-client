@@ -8,6 +8,7 @@ import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { useSettingsContext } from 'src/components/settings';
 
 import UserNewEditForm from '../user-new-edit-form';
+import { useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
@@ -18,7 +19,12 @@ type Props = {
 export default function UserEditView({ id }: Props) {
   const settings = useSettingsContext();
 
-  const currentUser = _userList.find((user) => user.id === id);
+  console.log({ id });
+  const adminData = useSelector((data: any) => data?.admin?.adminList);
+
+  const currentUser = adminData.find((user: any) => user.id === id);
+
+  console.log({ currentUser });
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>

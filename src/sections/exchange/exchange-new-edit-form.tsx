@@ -62,6 +62,7 @@ export default function ExchangeNewEditForm({ currentExchange }: Props) {
   const values = watch();
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log({ data });
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();

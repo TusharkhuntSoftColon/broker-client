@@ -51,6 +51,8 @@ import exchangeService from 'src/services/exchangeService';
 import { useSnackbar } from 'notistack';
 import { isAxiosError } from 'axios';
 import { mutate } from 'swr';
+import { useDispatch, useSelector } from 'react-redux';
+import { deleteExchange } from 'src/store/slices/exchange';
 
 // ----------------------------------------------------------------------
 
@@ -89,11 +91,11 @@ export default function ExchangeListView() {
 
   const quickEdit = useBoolean();
 
+  const dispatch = useDispatch();
+
   const settings = useSettingsContext();
 
-  const [tableData, setTableData] = useState<IExchangeItem[]>(_productList);
-
-  console.log({ tableData });
+  const exchangeList = useSelector((data: any) => data?.exchange?.exchangeList);
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -108,7 +110,7 @@ export default function ExchangeListView() {
   // }, [products]);
 
   const dataFiltered = applyFilter({
-    inputData: tableData,
+    inputData: exchangeList,
     comparator: getComparator(table.order, table.orderBy),
     filters,
   });
@@ -136,19 +138,22 @@ export default function ExchangeListView() {
   );
 
   const handleDeleteRow = (id: any) => {
-    deleteExchange(id);
+    // deleteExchange(id);
+    dispatch(deleteExchange(id));
+    enqueueSnackbar('Deleted Successfully', { variant: 'success' });
+    table.onUpdatePageDeleteRow(dataInPage.length);
   };
 
   const handleDeleteRows = useCallback(() => {
-    const deleteRows = tableData.filter((row) => !table.selected.includes(row.id));
-    setTableData(deleteRows);
+    const deleteRows = exchangeList.filter((row: any) => !table.selected.includes(row.id));
+    // setTableData(deleteRows);
 
     table.onUpdatePageDeleteRows({
-      totalRows: tableData.length,
+      totalRows: exchangeList.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, tableData]);
+  }, [dataFiltered.length, dataInPage.length, table, exchangeList]);
 
   const handleEditRow = useCallback(
     (id: string) => {
@@ -171,7 +176,7 @@ export default function ExchangeListView() {
   //get exchange list
   const { mutate } = useMutation(exchangeService.getExchangeList, {
     onSuccess: (data) => {
-      setTableData(data?.data?.rows);
+      // setTableData(data?.data?.rows);
       enqueueSnackbar(data?.message, { variant: 'success' });
     },
     onError: (error) => {
@@ -180,17 +185,17 @@ export default function ExchangeListView() {
       }
     },
   });
-  const { mutate: deleteExchange } = useMutation(exchangeService.deleteExchange, {
-    onSuccess: (data) => {
-      enqueueSnackbar(data?.message, { variant: 'success' });
-      mutate();
-    },
-    onError: (error) => {
-      if (isAxiosError(error)) {
-        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-      }
-    },
-  });
+  // const { mutate: deleteExchange } = useMutation(exchangeService.deleteExchange, {
+  //   onSuccess: (data) => {
+  //     enqueueSnackbar(data?.message, { variant: 'success' });
+  //     mutate();
+  //   },
+  //   onError: (error) => {
+  //     if (isAxiosError(error)) {
+  //       enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+  //     }
+  //   },
+  // });
 
   useEffect(() => {
     mutate();
@@ -246,11 +251,11 @@ export default function ExchangeListView() {
             <TableSelectedAction
               dense={table.dense}
               numSelected={table.selected.length}
-              rowCount={tableData.length}
+              rowCount={exchangeList.length}
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  tableData.map((row) => row.id)
+                  exchangeList.map((row: any) => row.id)
                 )
               }
               action={
@@ -268,13 +273,13 @@ export default function ExchangeListView() {
                   order={table.order}
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={tableData.length}
+                  rowCount={exchangeList.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      tableData.map((row) => row.id)
+                      exchangeList.map((row: any) => row.id)
                     )
                   }
                 />
@@ -299,7 +304,7 @@ export default function ExchangeListView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, exchangeList.length)}
                   />
 
                   {/* <TableNoData notFound={notFound} /> */}
