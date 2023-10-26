@@ -221,8 +221,10 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
     exchange.push(e.target.value);
   };
 
-  console.log({ exchange });
+  // const Data = ExchangeOptions.find((data: any) => data.value === currentUser?.allowedExchange)
+  //   ?.value;
 
+  // console.log({ Data });
   const handleAllowedExchange = (e: any) => {
     console.log(e);
   };
@@ -385,6 +387,7 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
                 label="Exchange Group"
                 options={EXCHANGE_GROUP.map((data) => data.label)}
                 data={EXCHANGE_GROUP}
+                isReadOnly={isView ? true : false}
                 getOptionLabel={(option: any) => option}
                 isOptionEqualToValue={(option, value) => option === value}
                 renderOption={(props, option) => {
@@ -406,6 +409,7 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
                 name="allowedExchange"
                 label="Allowed Exchange"
                 control={control}
+                isReadOnly={isView ? true : false}
                 options={ExchangeOptions.map((data: any) => data.label)}
                 data={ExchangeOptions}
                 isLabled={false}
@@ -505,6 +509,7 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
                 label="Role"
                 options={USER_ROLE.map((data) => data.label)}
                 data={USER_ROLE}
+                isReadOnly={isView ? true : false}
                 getOptionLabel={(option: any) => option}
                 isOptionEqualToValue={(option, value) => option === value}
                 renderOption={(props, option) => {
@@ -521,9 +526,13 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
                   );
                 }}
               />
-              <RHFCheckbox name="insertCustomBet" label="Insert Custom Bet" />
-              <RHFCheckbox name="editBet" label="Edit Bet" />
-              <RHFCheckbox name="deleteBet" label="Delete Bet" />
+              <RHFCheckbox
+                isReadOnly={isView ? true : false}
+                name="insertCustomBet"
+                label="Insert Custom Bet"
+              />
+              <RHFCheckbox isReadOnly={isView ? true : false} name="editBet" label="Edit Bet" />
+              <RHFCheckbox isReadOnly={isView ? true : false} name="deleteBet" label="Delete Bet" />
             </Box>
 
             {!isView && (
