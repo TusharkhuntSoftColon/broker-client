@@ -14,6 +14,7 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
+import useAuth from 'src/hooks/useAuth';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { _roles, _userList, USER_STATUS_OPTIONS } from 'src/_mock';
@@ -34,7 +35,6 @@ TableSelectedAction,
 TablePaginationCustom,
 } from 'src/components/table';
 
-import { Roles } from 'src/types/role';
 import { IUserItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
 
 import UserTableRow from '../user-table-row';
@@ -66,6 +66,8 @@ const defaultFilters: IUserTableFilters = {
 
 export default function UserListView() {
   const table = useTable();
+
+    const {  active} = useAuth()
 
   const settings = useSettingsContext();
 
@@ -137,9 +139,9 @@ export default function UserListView() {
 
   const handleViewRow = useCallback(
     (id: string) => {
-      router.push(paths[Roles.ADMIN].user.details(id));
+      router.push(paths[active].user.details(id));
     },
-    [router]
+    [active, router]
   );
 
   const handleFilterStatus = useCallback(

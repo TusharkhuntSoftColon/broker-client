@@ -3,6 +3,7 @@ import { Navigate } from 'react-router';
 
 import Box from '@mui/material/Box';
 
+import useAuth from 'src/hooks/useAuth';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useResponsive } from 'src/hooks/use-responsive';
 
@@ -20,7 +21,9 @@ type Props = {
 };
 
 const  AdminLayout = ({ children }: Props) => {
-  const [manager, setmaneger] = useState(true);
+const { role } = useAuth()
+  
+  const [manager, setmaneger] = useState(role === "ADMIN" ? true : null);
 
   const adminNav = useAdminNav()
 

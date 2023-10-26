@@ -3,17 +3,18 @@ import { Navigate } from 'react-router';
 
 import Box from '@mui/material/Box';
 
+import useAuth from 'src/hooks/useAuth';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useResponsive } from 'src/hooks/use-responsive';
 
 import { useSettingsContext } from 'src/components/settings';
 
-import { useNavData } from './config-navigation';
-import Header from './header';
 import Main from './main';
-import NavHorizontal from './nav-horizontal';
+import Header from './header';
 import NavMini from './nav-mini';
 import NavVertical from './nav-vertical';
+import NavHorizontal from './nav-horizontal';
+import { useNavData } from './config-navigation';
 
 // ----------------------------------------------------------------------
 
@@ -22,7 +23,9 @@ type Props = {
 };
 
 export default function DashboardLayout({ children }: Props) {
-  const [manager, setmaneger] = useState(false);
+  const { role } = useAuth()
+  
+  const [manager, setmaneger] = useState(role === "SUPER_ADMIN" ? true : null);
 
   const adminNav = useNavData();
 
