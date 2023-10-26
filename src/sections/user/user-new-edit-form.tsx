@@ -27,11 +27,13 @@ import { Checkbox } from '@mui/material';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
 import exchangeService from 'src/services/exchangeService';
+import { useDispatch, useSelector } from 'react-redux';
+import { addAdmin, updateAdmin } from 'src/store/slices/admin';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  currentUser?: IUserItem;
+  currentUser?: IUserItem | any;
   isView?: any;
 };
 
@@ -39,6 +41,12 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
   const router = useRouter();
 
   const [exchangeData, setExchangeData] = useState<any>();
+
+  const adminData = useSelector((data: any) => data?.admin?.adminList);
+
+  // console.log({ adminData });
+
+  const dispatch = useDispatch();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -80,7 +88,7 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
     [currentUser]
   );
 
-  console.log({ currentUser });
+  // console.log({ currentUser });
 
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),
@@ -108,7 +116,6 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
       router.push(paths.dashboard.user.root);
     },
     onError: (error: any) => {
-      console.log({ error });
       if (isAxiosError(error)) {
         enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
       }
@@ -130,12 +137,22 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
 
   const onSubmit = handleSubmit(async (data) => {
     console.log({ data });
+    console.log({ currentUser });
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
       enqueueSnackbar(currentUser ? 'Update success!' : 'Create success!');
-      await createAdmin(data);
-      // router.push(paths.dashboard.user.list);
+      // await createAdmin(data);
+      // console.log({ currentUser });
+      if (currentUser) {
+        console.log('UPDATE CALLED');
+        const adminID = currentUser.id;
+        dispatch(updateAdmin({ id: adminID, updatedData: data }));
+      } else {
+        console.log('ADD CALLED');
+        dispatch(addAdmin(data));
+      }
+      router.push(paths.dashboard.user.list);
       console.info('DATA', data);
     } catch (error) {
       console.error(error);
@@ -146,7 +163,7 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
     mutate();
   }, []);
 
-  console.log({ exchangeData });
+  // console.log({ exchangeData });
 
   const ExchangeOptions: any = [];
 

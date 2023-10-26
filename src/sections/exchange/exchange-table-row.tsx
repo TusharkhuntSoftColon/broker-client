@@ -53,6 +53,7 @@ export default function ExchangeTableRow({
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{_id?.substring(0, 5)}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{name}</TableCell>
+        {/* <TableCell sx={{ whiteSpace: 'nowrap' }}>{s}</TableCell> */}
 
         <TableCell>
           {status ? (
@@ -203,7 +204,14 @@ export default function ExchangeTableRow({
         title="Delete"
         content="Are you sure want to delete?"
         action={
-          <Button variant="contained" color="error" onClick={onDeleteRow}>
+          <Button
+            variant="contained"
+            color="error"
+            onClick={() => {
+              onDeleteRow();
+              confirm.onFalse;
+            }}
+          >
             Delete
           </Button>
         }
