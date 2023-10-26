@@ -15,9 +15,10 @@ import FormControlLabel, {
 interface RHFCheckboxProps extends Omit<FormControlLabelProps, 'control'> {
   name: string;
   helperText?: React.ReactNode;
+  isReadOnly: any;
 }
 
-export function RHFCheckbox({ name, helperText, ...other }: RHFCheckboxProps) {
+export function RHFCheckbox({ name, helperText, isReadOnly, ...other }: RHFCheckboxProps) {
   const { control } = useFormContext();
 
   return (
@@ -25,10 +26,12 @@ export function RHFCheckbox({ name, helperText, ...other }: RHFCheckboxProps) {
       name={name}
       control={control}
       render={({ field, fieldState: { error } }) => {
-        console.log({ field });
         return (
           <div>
-            <FormControlLabel control={<Checkbox {...field} checked={field.value} />} {...other} />
+            <FormControlLabel
+              control={<Checkbox readOnly={!!isReadOnly} {...field} checked={field.value} />}
+              {...other}
+            />
 
             {(!!error || helperText) && (
               <FormHelperText error={!!error}>{error ? error?.message : helperText}</FormHelperText>

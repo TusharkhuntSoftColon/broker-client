@@ -89,9 +89,6 @@ export default function ProductTableToolbar({
     [onFilters]
   );
 
-  const handleStatusChange = (e: any) => {
-    console.log(e.target);
-  };
   const NewJobSchema = Yup.object().shape({});
 
   const defaultValues = useMemo(
@@ -107,11 +104,20 @@ export default function ProductTableToolbar({
   });
 
   const {
+    watch,
     reset,
     control,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+
+  const value = watch();
+
+  const handleStatusChange = (e: any) => {
+    onFilters('isActiveExchange', value?.status);
+  };
+
+  // console.log({ value });
 
   const onSubmit = handleSubmit(async (data) => {
     try {
