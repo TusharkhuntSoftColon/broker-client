@@ -47,6 +47,8 @@ export type IExchangeItem = {
   label: string;
   statusOfExchange:string;
   stAndTp:boolean;
+  symbol:any;
+  isActiveExchange:any;
 }
 
 export type IProductItem = {

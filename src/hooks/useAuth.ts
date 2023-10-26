@@ -9,6 +9,10 @@ const useAuth = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const token = useSelector((state: RootState) => state.auth.token)
+    const role = useSelector((state: RootState) => state.auth.role)
+    const userRole = useSelector((state: RootState) => state.auth.role)
+    const active = useSelector((state: RootState) => state.auth.active)
+
 
     const setCredentialsAction = (params: any) => {
         dispatch(setCredentials(params))
@@ -20,6 +24,9 @@ const useAuth = () => {
     }
 
     return {
+        role,
+        active,
+        userRole,
         token,
         setCredentialsAction,
         logoutAction

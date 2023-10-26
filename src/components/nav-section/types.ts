@@ -1,6 +1,6 @@
-import { StackProps } from '@mui/material/Stack';
-import { Theme, SxProps } from '@mui/material/styles';
 import { ListItemButtonProps } from '@mui/material/ListItemButton';
+import { StackProps } from '@mui/material/Stack';
+import { SxProps, Theme } from '@mui/material/styles';
 
 // ----------------------------------------------------------------------
 
@@ -58,7 +58,6 @@ export type NavGroupProps = {
 
 export type NavProps = StackProps & {
   data: {
-    subheader: string;
     items: NavItemBaseProps[];
   }[];
   slotProps?: SlotProps;

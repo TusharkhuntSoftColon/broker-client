@@ -1,7 +1,9 @@
 import { Navigate, useRoutes } from 'react-router-dom';
 
-import { PATH_AFTER_LOGIN } from 'src/config-global';
+import useAuth from 'src/hooks/useAuth';
+import { useMockedUser } from 'src/hooks/use-mocked-user';
 
+import { paths } from '../paths';
 import { mainRoutes } from './main';
 import { authDemoRoutes } from './auth-demo';
 import { dashboardRoutes } from './dashboard';
@@ -10,11 +12,14 @@ import { componentsRoutes } from './components';
 // ----------------------------------------------------------------------
 
 export default function Router() {
+  const { SUPER_ADMIN, ADMIN } = useMockedUser();
+  const { active } = useAuth();
+
   return useRoutes([
     // SET INDEX PAGE WITH SKIP HOME PAGE
     {
       path: '/',
-      element: <Navigate to={PATH_AFTER_LOGIN} replace />,
+      element: <Navigate to={paths[active as keyof typeof paths]?.root} replace />,
     },
 
     // ----------------------------------------------------------------------

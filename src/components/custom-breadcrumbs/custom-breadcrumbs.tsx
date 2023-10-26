@@ -12,6 +12,7 @@ import Iconify from '../iconify';
 import LinkItem from './link-item';
 import { usePopover } from '../custom-popover';
 import { CustomBreadcrumbsProps } from './types';
+import { useLocation } from 'react-router';
 
 // ----------------------------------------------------------------------
 
@@ -23,12 +24,18 @@ export default function CustomBreadcrumbs({
   moreLink,
   activeLast,
   sx,
+  path,
   isView,
   ...other
 }: CustomBreadcrumbsProps) {
   const lastLink = links[links.length - 1].name;
 
   const router = useRouter();
+
+  const location = useLocation();
+
+  // console.log(location.pathname);
+
   const popover = usePopover();
 
   return (
@@ -36,24 +43,26 @@ export default function CustomBreadcrumbs({
       <Stack direction="row" alignItems="center" justifyContent="space-around">
         <Box sx={{ flexGrow: 1 }}>
           {/* HEADING */}
-          <Box display="flex" alignItems="center">
+          <Box display={'flex'} alignItems="center">
             {heading && (
               <Typography variant="h4" gutterBottom>
                 {heading}
               </Typography>
             )}
 
-            {isView && <IconButton
-              color={popover.open ? 'inherit' : 'default'}
-              onClick={(e) => {
-                e.stopPropagation();
-                router.push(paths.dashboard.user.edit(id));
-                popover.onClose();
-              }}
-              sx={{ marginLeft: '31rem' }}
-            >
-              <Iconify icon="solar:pen-bold" />
-            </IconButton>}
+            {isView && (
+              <IconButton
+                color={popover.open ? 'inherit' : 'default'}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  router.push(path);
+                  popover.onClose();
+                }}
+                sx={{ marginLeft: '31rem' }}
+              >
+                <Iconify icon="solar:pen-bold" />
+              </IconButton>
+            )}
           </Box>
           {/* BREADCRUMBS */}
           {!!links.length && (

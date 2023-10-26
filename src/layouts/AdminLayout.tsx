@@ -10,26 +10,25 @@ import { useResponsive } from 'src/hooks/use-responsive';
 import { useSettingsContext } from 'src/components/settings';
 
 import Main from './main';
-import Header from './header';
-import NavMini from './nav-mini';
-import NavVertical from './nav-vertical';
-import NavHorizontal from './nav-horizontal';
-import { useNavData } from './config-navigation';
-
-// ----------------------------------------------------------------------
+import Header from './dashboard/header';
+import NavMini from './dashboard/nav-mini';
+import NavVertical from './dashboard/nav-vertical';
+import NavHorizontal from './dashboard/nav-horizontal';
+import { useAdminNav } from './dashboard/config-navigation';
 
 type Props = {
   children: React.ReactNode;
 };
 
-export default function DashboardLayout({ children }: Props) {
-  const { role } = useAuth()
+const  AdminLayout = ({ children }: Props) => {
+const { role } = useAuth()
   
-  const [manager, setmaneger] = useState(role === "SUPER_ADMIN" ? true : null);
+  const [manager, setmaneger] = useState(role === "ADMIN" ? true : null);
 
-  const adminNav = useNavData();
+  const adminNav = useAdminNav()
 
   const settings = useSettingsContext();
+
 
   const lgUp = useResponsive('up', 'lg');
 
@@ -39,13 +38,11 @@ export default function DashboardLayout({ children }: Props) {
 
   const isMini = settings.themeLayout === 'mini';
 
-  const renderNavMini = <NavMini  nav={adminNav}/>;
+  const renderNavMini = <NavMini nav={adminNav}/>;
 
-  const renderHorizontal = <NavHorizontal  nav={adminNav}/>;
+  const renderHorizontal = <NavHorizontal nav={adminNav}/>;
 
-  const renderNavVertical = (
-    <NavVertical nav={adminNav} openNav={nav.value} onCloseNav={nav.onFalse} />
-  );
+  const renderNavVertical = <NavVertical nav={adminNav} openNav={nav.value} onCloseNav={nav.onFalse} />;
 
   if (isHorizontal) {
     return (
@@ -97,3 +94,5 @@ export default function DashboardLayout({ children }: Props) {
     </>
   );
 }
+
+  export default AdminLayout
