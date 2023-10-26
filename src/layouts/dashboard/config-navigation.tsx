@@ -318,5 +318,26 @@ export function useNavData() {
     [t]
   );
 
+  
   return data;
+}
+
+export function useAdminNav() {
+  const { t } = useTranslate();
+  const adminData = useMemo(
+    () => [
+      {
+        items: [
+          // USER
+          {
+            title: t('admin'),
+            path: paths.admin.user.root,
+            icon: ICONS.user,
+          },
+        ],
+      },
+    ],
+    [t]
+  );
+  return adminData
 }

@@ -1,5 +1,7 @@
 import isEqual from 'lodash/isEqual';
-import { useState, useCallback, useEffect } from 'react';
+import { useSnackbar } from 'notistack';
+import { useState, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
@@ -16,7 +18,8 @@ import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { _roles, _userList, USER_STATUS_OPTIONS } from 'src/_mock';
+import { deleteAdmin } from 'src/store/slices/admin';
+import { _roles, USER_STATUS_OPTIONS } from 'src/_mock';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -24,14 +27,14 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
-  useTable,
-  emptyRows,
-  TableNoData,
-  getComparator,
-  TableEmptyRows,
-  TableHeadCustom,
-  TableSelectedAction,
-  TablePaginationCustom,
+useTable,
+emptyRows,
+TableNoData,
+getComparator,
+TableEmptyRows,
+TableHeadCustom,
+TableSelectedAction,
+TablePaginationCustom,
 } from 'src/components/table';
 
 import { IUserItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
@@ -39,9 +42,6 @@ import { IUserItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/u
 import UserTableRow from '../user-table-row';
 import UserTableToolbar from '../user-table-toolbar';
 import UserTableFiltersResult from '../user-table-filters-result';
-import { useDispatch, useSelector } from 'react-redux';
-import { addAdmin, deleteAdmin } from 'src/store/slices/admin';
-import { useSnackbar } from 'notistack';
 
 // ----------------------------------------------------------------------
 
@@ -120,7 +120,7 @@ export default function UserListView() {
       enqueueSnackbar('Deleted Successfully', { variant: 'success' });
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
-    [dataInPage?.length, table, adminData]
+    [dispatch, enqueueSnackbar, table, dataInPage.length]
   );
 
   const handleDeleteRows = useCallback(() => {

@@ -19,6 +19,7 @@ import { SettingsDrawer, SettingsProvider } from 'src/components/settings';
 import SnackbarProvider from 'src/components/snackbar/snackbar-provider';
 
 import { CheckoutProvider } from 'src/sections/checkout/context';
+import { RoleBasedGuard } from './auth/guard';
 
 // import { AuthProvider } from 'src/auth/context/auth0';
 // import { AuthProvider } from 'src/auth/context/amplify';
@@ -31,6 +32,8 @@ export default function App() {
 
   return (
     // <AuthProvider>
+      <RoleBasedGuard hasContent roles={["ADMIN"]} sx={{ py: 10 }}>
+
       <LocalizationProvider>
         <SettingsProvider
           defaultSettings={{
@@ -55,6 +58,7 @@ export default function App() {
           </ThemeProvider>
         </SettingsProvider>
       </LocalizationProvider>
+      </RoleBasedGuard>
     // </AuthProvider>
   );
 }

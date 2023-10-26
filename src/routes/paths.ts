@@ -12,6 +12,7 @@ const ROOTS = {
   AUTH: '/auth',
   AUTH_DEMO: '/auth',
   DASHBOARD: '/admstr',
+  ADMIN: "/admin"
 };
 
 // ----------------------------------------------------------------------
@@ -180,4 +181,20 @@ export const paths = {
       },
     },
   },
+  admin: {
+    root: `${ROOTS.ADMIN}/user`,
+    user: {
+      root: `${ROOTS.ADMIN}/user`,
+      new: `${ROOTS.ADMIN}/user/new`,
+      list: `${ROOTS.ADMIN}/user/list`,
+      cards: `${ROOTS.ADMIN}/user/cards`,
+      profile: `${ROOTS.ADMIN}/user/profile`,
+      account: `${ROOTS.ADMIN}/user/account`,
+      details: (id: string) => `${ROOTS.ADMIN}/user/${id}`,
+      edit: (id: string) => `${ROOTS.ADMIN}/user/${id}/edit`,
+      demo: {
+        edit: `${ROOTS.ADMIN}/user/${MOCK_ID}/edit`,
+      },
+    },
+  }
 };

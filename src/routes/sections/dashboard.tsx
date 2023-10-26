@@ -2,11 +2,12 @@ import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { AuthGuard } from 'src/auth/guard';
+import AdminLayout from 'src/layouts/AdminLayout';
 import DashboardLayout from 'src/layouts/dashboard';
-
-import { LoadingScreen } from 'src/components/loading-screen';
 import OrderEditPage from 'src/pages/dashboard/symbol/edit';
 import UserDetailsPage from 'src/pages/dashboard/user/details';
+
+import { LoadingScreen } from 'src/components/loading-screen';
 
 // ----------------------------------------------------------------------
 
@@ -167,6 +168,33 @@ export const dashboardRoutes = [
       { path: 'kanban', element: <KanbanPage /> },
       { path: 'permission', element: <PermissionDeniedPage /> },
       { path: 'blank', element: <BlankPage /> },
+    ],
+  },
+  {
+    path: '/admin',
+    element: (
+      <AuthGuard>
+        <AdminLayout>
+          <Suspense fallback={<LoadingScreen />}>
+            <Outlet />
+          </Suspense>
+        </AdminLayout>
+      </AuthGuard>
+    ),
+    children: [
+      {
+        path: 'user',
+        children: [
+          { element: <UserListPage />, index: true },
+          { path: 'profile', element: <UserProfilePage /> },
+          { path: 'cards', element: <UserCardsPage /> },
+          { path: 'list', element: <UserListPage /> },
+          { path: 'new', element: <UserCreatePage /> },
+          { path: ':id', element: <UserDetailsPage /> },
+          { path: ':id/edit', element: <UserEditPage /> },
+          { path: 'account', element: <UserAccountPage /> },
+        ],
+      },
     ],
   },
 ];
