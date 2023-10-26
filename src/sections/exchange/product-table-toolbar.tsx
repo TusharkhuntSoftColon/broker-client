@@ -3,15 +3,16 @@ import { useForm } from 'react-hook-form';
 import { useMemo, useCallback } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
+import { Button } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
-import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import { SelectChangeEvent } from '@mui/material/Select';
 import InputAdornment from '@mui/material/InputAdornment';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
+import { fDate } from 'src/utils/format-time';
 
 import { Exchanges } from 'src/_mock';
 
@@ -19,6 +20,8 @@ import Iconify from 'src/components/iconify';
 import { RHFAutocomplete } from 'src/components/hook-form';
 import FormProvider from 'src/components/hook-form/form-provider';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useDateRangePicker } from 'src/components/custom-date-range-picker';
+import CustomDateRangePicker from 'src/components/custom-date-range-picker/custom-date-range-picker';
 
 import { IProductTableFilters, IProductTableFilterValue } from 'src/types/exchange';
 
@@ -45,8 +48,9 @@ export default function ProductTableToolbar({
   stockOptions,
   publishOptions,
 }: Props) {
-  console.log({stockOptions});
-  
+  console.log({ stockOptions });
+  const rangeCalendarPicker = useDateRangePicker(new Date(), new Date());
+
   const popover = usePopover();
 
   const handleFilterName = useCallback(
@@ -58,8 +62,8 @@ export default function ProductTableToolbar({
 
   const handleFilterStock = useCallback(
     (event: SelectChangeEvent<string[]>) => {
-      console.log({event});
-      
+      console.log({ event });
+
       onFilters(
         'stock',
         typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
@@ -78,30 +82,28 @@ export default function ProductTableToolbar({
     [onFilters]
   );
 
-    const NewJobSchema = Yup.object().shape({
-    });
-  
-  const defaultValues = useMemo(
-  () => ({
-  name: ""
-  }),
-  []
-);
+  const NewJobSchema = Yup.object().shape({});
 
-    const methods = useForm({
+  const defaultValues = useMemo(
+    () => ({
+      name: '',
+    }),
+    []
+  );
+
+  const methods = useForm({
     resolver: yupResolver(NewJobSchema),
     defaultValues,
-    });
+  });
 
-      const {
+  const {
     reset,
     control,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
 
-
-      const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async (data) => {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
@@ -111,50 +113,78 @@ export default function ProductTableToolbar({
     }
   });
 
-
   return (
     <>
       <FormProvider methods={methods} onSubmit={onSubmit}>
-          
-      <Stack
-        spacing={2}
-        alignItems={{ xs: 'flex-end', md: 'center' }}
-        direction={{
-          xs: 'column',
-          md: 'row',
-        }}
-        sx={{
-          p: 2.5,
-          pr: { xs: 2.5, md: 1 },
-        }}
-      >
-        <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
-          <TextField
-            fullWidth
-            value={filters.name}
-            onChange={handleFilterName}
-            placeholder="Search..."
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
-                </InputAdornment>
-              ),
-            }}
-          />
+        <Stack
+          spacing={2}
+          alignItems={{ xs: 'flex-end', md: 'center' }}
+          direction={{
+            xs: 'column',
+            md: 'row',
+          }}
+          sx={{
+            p: 2.5,
+            pr: { xs: 2.5, md: 1 },
+          }}
+        >
+          <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
+            <TextField
+              fullWidth
+              value={filters.name}
+              onChange={handleFilterName}
+              placeholder="Search..."
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
+                  </InputAdornment>
+                ),
+              }}
+            />
 
-          <Stack spacing={1.5}>
-            <DatePicker format="dd/MM/yyyy" />
-          </Stack>
-          <FormControl
-            sx={{
-              flexShrink: 0,
-              width: { xs: 1, md: 200 },
-            }}
-          >
-            {/* <InputLabel>Exchange</InputLabel> */}
+            <Stack spacing={1.5}>
+              {/* <DatePicker format="dd/MM/yyyy" /> */}
+              <Button
+                style={{
+                  width: 'max-content',
+                  height: '100%',
+                  backgroundColor: 'transparent',
+                  color: '#637381',
+                  border: '0.5px solid rgba(145, 158, 171, 0.2)',
 
-            {/* <Select
+                  fontWeight: 'normal',
+                }}
+                sx={{
+                  '&:hover': {
+                    borderColor: '#212B36 !important',
+                  },
+                }}
+                variant="contained"
+                onClick={rangeCalendarPicker.onOpen}
+              >
+                {fDate(rangeCalendarPicker.startDate)} - {fDate(rangeCalendarPicker.endDate)}
+              </Button>
+              <CustomDateRangePicker
+                variant="calendar"
+                open={rangeCalendarPicker.open}
+                startDate={rangeCalendarPicker.startDate}
+                endDate={rangeCalendarPicker.endDate}
+                onChangeStartDate={rangeCalendarPicker.onChangeStartDate}
+                onChangeEndDate={rangeCalendarPicker.onChangeEndDate}
+                onClose={rangeCalendarPicker.onClose}
+                error={rangeCalendarPicker.error}
+              />
+            </Stack>
+            <FormControl
+              sx={{
+                flexShrink: 0,
+                width: { xs: 1, md: 200 },
+              }}
+            >
+              {/* <InputLabel>Exchange</InputLabel> */}
+
+              {/* <Select
               multiple
               value={filters.stock}
               onChange={handleFilterStock}
@@ -174,49 +204,47 @@ export default function ProductTableToolbar({
               ))}
             </Select> */}
 
-            <Stack spacing={1.5}>
-              <RHFAutocomplete
-                name="name"
-                placeholder="Exchange"
-                // disableCloseOnSelect
-                options={Exchanges.map((option) => option.label)}
-                getOptionLabel={(option) => option}
-                renderOption={(props, option) => {
-                  const { label } = Exchanges.filter(
-                    (country) => country.label === option
-                  )[0];
+              <Stack spacing={1.5}>
+                <RHFAutocomplete
+                  name="name"
+                  placeholder="Exchange"
+                  // disableCloseOnSelect
+                  options={Exchanges.map((option) => option.label)}
+                  getOptionLabel={(option) => option}
+                  renderOption={(props, option) => {
+                    const { label } = Exchanges.filter((country) => country.label === option)[0];
 
-                  if (!label) {
-                    return null;
-                  }
+                    if (!label) {
+                      return null;
+                    }
 
-                  return (
-                    <li {...props} key={label}>
-                      {label} 
-                    </li>
-                  );
-                }}
-                // renderTags={(selected, getTagProps) =>
-                //   selected.map((option, index) => (
-                //     <Chip
-                //       {...getTagProps({ index })}
-                //       key={option}
-                //       label={option}
-                //       size="small"
-                //       color="info"
-                //       variant="soft"
-                //     />
-                //   ))
-                // }
-              />
-            </Stack>
-          </FormControl>
+                    return (
+                      <li {...props} key={label}>
+                        {label}
+                      </li>
+                    );
+                  }}
+                  // renderTags={(selected, getTagProps) =>
+                  //   selected.map((option, index) => (
+                  //     <Chip
+                  //       {...getTagProps({ index })}
+                  //       key={option}
+                  //       label={option}
+                  //       size="small"
+                  //       color="info"
+                  //       variant="soft"
+                  //     />
+                  //   ))
+                  // }
+                />
+              </Stack>
+            </FormControl>
 
-          <IconButton onClick={popover.onOpen}>
-            <Iconify icon="eva:more-vertical-fill" />
-          </IconButton>
+            <IconButton onClick={popover.onOpen}>
+              <Iconify icon="eva:more-vertical-fill" />
+            </IconButton>
+          </Stack>
         </Stack>
-      </Stack>
       </FormProvider>
 
       {/* <FormControl
@@ -247,7 +275,6 @@ export default function ProductTableToolbar({
             ))}
             </Select>
           </FormControl> */}
-
 
       <CustomPopover
         open={popover.open}
@@ -281,8 +308,7 @@ export default function ProductTableToolbar({
           <Iconify icon="solar:export-bold" />
           Export
         </MenuItem>
-        </CustomPopover>
-      
+      </CustomPopover>
     </>
   );
 }
