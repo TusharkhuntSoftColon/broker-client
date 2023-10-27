@@ -174,6 +174,7 @@ export default function OverviewAppView() {
         layout={layout}
         style={{ padding: '2px' }}
         onDrop={onDrop}
+        isBounded
         measureBeforeMount={false}
         useCSSTransforms={mounted}
         onLayoutChange={(layout: any) => console.log({layout})}
