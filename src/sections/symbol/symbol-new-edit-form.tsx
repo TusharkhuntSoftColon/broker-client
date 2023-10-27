@@ -1,28 +1,28 @@
-import { useMutation } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
-import { useEffect } from 'react';
-import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
+import { useMemo } from 'react';
+import { isAxiosError } from 'axios';
+import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { useMutation } from '@tanstack/react-query';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
+import LoadingButton from '@mui/lab/LoadingButton';
 
-import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 
+import { STOP_LOSS } from 'src/_mock/_symbol';
 import symbolService from 'src/services/symbolService';
+import { addSymbol, updateSymbol } from 'src/store/slices/symbol';
 
-import FormProvider, { RHFAutocomplete, RHFTextField } from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
+import FormProvider, { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
 
 import { ISymbolItem } from 'src/types/symbol';
-import { STOP_LOSS } from 'src/_mock/_symbol';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useDispatch } from 'react-redux';
-import { addSymbol,updateSymbol } from 'src/store/slices/symbol';
 
 // ----------------------------------------------------------------------
 
@@ -54,17 +54,39 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
     // startingHour: Yup.string().required('Maintenance Margin is required'),
     // endingHour: Yup.string().required('Maintenance Margin is required'),
     // statusOfScripts: Yup.string().required('Maintenance Margin is required'),
-    stAndTp: Yup.string().required('Maintenance Margin is required'),
+    stAndTp: Yup.mixed<any>().nullable().required('stAndTp is required'),
   });
 
   // const value = STOP_LOSS.find((data) => data.value === currentUser?.stAndTp)?.value;
 
   // console.log({ value });
 
+  const defaultValues = useMemo(
+    () => ({
+      name: currentUser?.name || '',
+      contractSize: currentUser?.contractSize || '',
+      currency: currentUser?.currency || '',
+      spread: currentUser?.spread || '',
+      stopLevel: currentUser?.stopLevel || '',
+      tickSize: currentUser?.tickSize || '',
+      tickValue: currentUser?.tickValue || '',
+      initialMargin: currentUser?.initialMargin || '',
+      maintenanceMargin: currentUser?.maintenanceMargin || '',
+      minVolume: currentUser?.minVolume || '',
+      maxVolume: currentUser?.maxVolume || '',
+      stAndTp: currentUser?.stAndTp || null,
+      limitOfAddUser: currentUser?.limitOfAddUser || '',
+      leverageX: currentUser?.leverageX || '',
+      leverageY: currentUser?.leverageY || '',
+    }),
+    [currentUser]
+  );
+
   const dispatch = useDispatch();
 
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),
+    defaultValues,
   });
 
   const {
@@ -78,28 +100,28 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
 
   // const value = watch();
 
-  useEffect(() => {
-    if (currentUser) {
-      setValue('name', currentUser?.name || '');
-      setValue('contractSize', currentUser?.contractSize || '');
-      setValue('currency', currentUser?.currency || '');
-      setValue('spread', currentUser?.spread || '');
-      setValue('stopLevel', currentUser?.stopLevel || '');
-      // setValue('calculation', currentUser?.calculation || '');
-      setValue('tickSize', currentUser?.tickSize || '');
-      setValue('tickValue', currentUser?.tickValue || '');
-      setValue('initialMargin', currentUser?.initialMargin || '');
-      setValue('maintenanceMargin', currentUser?.maintenanceMargin || '');
-      setValue('minVolume', currentUser?.minVolume || '');
-      setValue('maxVolume', currentUser?.maxVolume || '');
-      // setValue('startTradeSessions', currentUser?.startTradeSessions || '');
-      // setValue('endTradeSessions', currentUser?.endTradeSessions || '');
-      // setValue('startingHour', currentUser?.startingHour || '');
-      // setValue('endingHour', currentUser?.endingHour || '');
-      // setValue('statusOfScripts', currentUser?.statusOfScripts || '');
-      setValue('stAndTp', currentUser?.stAndTp || '');
-    }
-  }, [currentUser, setValue]);
+  // useEffect(() => {
+  //   if (currentUser) {
+  //     setValue('name', currentUser?.name || '');
+  //     setValue('contractSize', currentUser?.contractSize || '');
+  //     setValue('currency', currentUser?.currency || '');
+  //     setValue('spread', currentUser?.spread || '');
+  //     setValue('stopLevel', currentUser?.stopLevel || '');
+  //     // setValue('calculation', currentUser?.calculation || '');
+  //     setValue('tickSize', currentUser?.tickSize || '');
+  //     setValue('tickValue', currentUser?.tickValue || '');
+  //     setValue('initialMargin', currentUser?.initialMargin || '');
+  //     setValue('maintenanceMargin', currentUser?.maintenanceMargin || '');
+  //     setValue('minVolume', currentUser?.minVolume || '');
+  //     setValue('maxVolume', currentUser?.maxVolume || '');
+  //     // setValue('startTradeSessions', currentUser?.startTradeSessions || '');
+  //     // setValue('endTradeSessions', currentUser?.endTradeSessions || '');
+  //     // setValue('startingHour', currentUser?.startingHour || '');
+  //     // setValue('endingHour', currentUser?.endingHour || '');
+  //     // setValue('statusOfScripts', currentUser?.statusOfScripts || '');
+  //     setValue('stAndTp', currentUser?.stAndTp || '');
+  //   }
+  // }, [currentUser]);
 
   // create symbol
   const { mutate: createSymbol } = useMutation(symbolService.addSymbol, {
@@ -135,7 +157,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
 
       if (currentUser) {
         // await updateSymbol({ data, _id: currentUser._id });
-        dispatch(updateSymbol({ id: currentUser?.id, updatedData: data }))
+        dispatch(updateSymbol({ id: currentUser?.id, updatedData: data }));
       } else {
         // await createSymbol(data);
         dispatch(addSymbol(data));
@@ -487,26 +509,19 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
               <RHFAutocomplete
                 name="stAndTp"
                 label="Stop Loss"
-                control={control}
-                isReadOnly={isView ? true : false}
-                options={STOP_LOSS.map((data) => data.label)}
+                // control={control}
+                isReadOnly={!!isView}
+                options={STOP_LOSS}
                 isLabled={false}
-                value={STOP_LOSS.find((data) => data.value === currentUser?.stAndTp)?.label}
-                data={STOP_LOSS}
-                getOptionLabel={(option: any) => option}
-                renderOption={(props, option) => {
-                  const { label } = STOP_LOSS.filter((data) => data.label === option)[0];
-
-                  if (!label) {
-                    return null;
-                  }
-
-                  return (
-                    <li {...props} key={label}>
-                      {label}
-                    </li>
-                  );
-                }}
+                // value={STOP_LOSS.find((data) => data.value === currentUser?.stAndTp)?.label}
+                // data={STOP_LOSS}
+                isOptionEqualToValue={(option, value) => option.value === value.value}
+                getOptionLabel={(option: any) => option.label}
+                renderOption={(props, option) => (
+                  <li {...props} key={option.value}>
+                    {option.label}
+                  </li>
+                )}
               />
             </Box>
 

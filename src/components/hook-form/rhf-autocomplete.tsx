@@ -2,8 +2,7 @@ import { Controller, useFormContext } from 'react-hook-form';
 
 import TextField from '@mui/material/TextField';
 import Autocomplete, { AutocompleteProps } from '@mui/material/Autocomplete';
-import { STOP_LOSS } from 'src/_mock';
-import { useState } from 'react';
+
 
 // ----------------------------------------------------------------------
 
@@ -45,20 +44,19 @@ export default function RHFAutocomplete<
   // const value = getValues('stAndTp');
   // console.log({ name });
   return (
-    <>
-      <Controller
+    <Controller
         name={name}
         control={formControl}
         render={({ field, fieldState: { error } }) => (
           <Autocomplete
             {...field}
             onChange={(event, newValue) => {
-              // console.log({ newValue });
-              const selectedValue = data.find((data: any) => data.label === newValue)?.value;
+              console.log({ newValue });
+              // const selectedValue = data.find((data: any) => data.label === newValue)?.value;
 
-              const selectedLabel = data.find((data: any) => data.label === newValue)?.label;
+              // const selectedLabel = data.find((data: any) => data.label === newValue)?.label;
 
-              setValue(name, isLabled ? selectedLabel : selectedValue, { shouldValidate: true });
+              setValue(name, newValue, { shouldValidate: true });
             }}
             readOnly={!!isReadOnly}
             renderInput={(params) => (
@@ -78,6 +76,5 @@ export default function RHFAutocomplete<
           />
         )}
       />
-    </>
   );
 }

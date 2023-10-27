@@ -1,35 +1,32 @@
 import * as Yup from 'yup';
-import { useEffect, useMemo, useState } from 'react';
+import { isAxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
+import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
+import { Checkbox } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { countries } from 'src/assets/data';
+import adminService from 'src/services/adminService';
+import { USER_ROLE, EXCHANGE_GROUP } from 'src/_mock';
+import exchangeService from 'src/services/exchangeService';
+import { addAdmin, updateAdmin } from 'src/store/slices/admin';
 
-import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFTextField, RHFAutocomplete, RHFCheckbox } from 'src/components/hook-form';
+import FormProvider, { RHFCheckbox, RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
 
 import { IUserItem } from 'src/types/user';
-import { ALLOWED_EXCHANGE, EXCHANGE_GROUP, Exchanges, USER_ROLE } from 'src/_mock';
-import { useMutation } from '@tanstack/react-query';
-import adminService from 'src/services/adminService';
-import { isAxiosError } from 'axios';
-import { Checkbox, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
-import exchangeService from 'src/services/exchangeService';
-import { useDispatch, useSelector } from 'react-redux';
-import { addAdmin, updateAdmin } from 'src/store/slices/admin';
-import OutlinedInput from '@mui/material/OutlinedInput';
 
 // ----------------------------------------------------------------------
 
@@ -60,7 +57,7 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
     ID: Yup.string().required('User Id is required'),
     role: Yup.string().required('Role is required'),
     exchangeGroup: Yup.string().required('Leverage Y is required'),
-    allowedExchange: Yup.string().required('Allowed Exchange Y is required'),
+    allowedExchange: Yup.array().min(1, 'Must have at least 1 exchange'),
     Domain: Yup.string().required('Domain is required'),
     // insertCustomBet: Yup.string().required('Insert Custom Bet is required'),
     // editBet: Yup.string().required('Edit Bet is required'),
@@ -135,7 +132,7 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
     },
   });
 
-  //get exchange list
+  // get exchange list
   const { mutate } = useMutation(exchangeService.getExchangeList, {
     onSuccess: (data) => {
       setExchangeData(data?.data?.rows);
@@ -338,45 +335,45 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFTextField isReadOnly={isView ? true : false} name="name" label="Full Name" />
-              <RHFTextField isReadOnly={isView ? true : false} name="ID" label="User Id" />
+              <RHFTextField isReadOnly={!!isView} name="name" label="Full Name" />
+              <RHFTextField isReadOnly={!!isView} name="ID" label="User Id" />
               <RHFTextField
-                isReadOnly={isView ? true : false}
+                isReadOnly={!!isView}
                 name="password"
                 type="password"
                 label="Password"
               />
-              <RHFTextField isReadOnly={isView ? true : false} name="Domain" label="Domain" />
+              <RHFTextField isReadOnly={!!isView} name="Domain" label="Domain" />
               <RHFTextField
-                isReadOnly={isView ? true : false}
+                isReadOnly={!!isView}
                 name="limitOfAddSuperMaster"
                 type="number"
                 label="Limit Of Add Super Master"
               />
 
               <RHFTextField
-                isReadOnly={isView ? true : false}
+                isReadOnly={!!isView}
                 name="limitOfAddMaster"
                 type="number"
                 label="Limit Of Add Master"
               />
 
               <RHFTextField
-                isReadOnly={isView ? true : false}
+                isReadOnly={!!isView}
                 name="limitOfAddUser"
                 type="number"
                 label="Limit Of Add User"
               />
 
               <RHFTextField
-                isReadOnly={isView ? true : false}
+                isReadOnly={!!isView}
                 name="leverageX"
                 type="number"
                 label="Leverage X"
               />
 
               <RHFTextField
-                isReadOnly={isView ? true : false}
+                isReadOnly={!!isView}
                 name="leverageY"
                 type="number"
                 label="Leverage Y"
@@ -387,7 +384,7 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
                 label="Exchange Group"
                 options={EXCHANGE_GROUP.map((data) => data.label)}
                 data={EXCHANGE_GROUP}
-                isReadOnly={isView ? true : false}
+                isReadOnly={!!isView}
                 getOptionLabel={(option: any) => option}
                 isOptionEqualToValue={(option, value) => option === value}
                 renderOption={(props, option) => {
@@ -408,15 +405,13 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
               <RHFAutocomplete
                 name="allowedExchange"
                 label="Allowed Exchange"
-                control={control}
-                isReadOnly={isView ? true : false}
+                // control={control}
+                isReadOnly={!!isView}
                 options={ExchangeOptions.map((data: any) => data.label)}
+                freeSolo
                 data={ExchangeOptions}
                 isLabled={false}
-                value={
-                  ExchangeOptions.find((data: any) => data.value === currentUser?.allowedExchange)
-                    ?.label
-                }
+            
                 multiple
                 getOptionLabel={(option: any) => option}
                 renderOption={(props, option, { selected }) => {
@@ -509,7 +504,7 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
                 label="Role"
                 options={USER_ROLE.map((data) => data.label)}
                 data={USER_ROLE}
-                isReadOnly={isView ? true : false}
+                isReadOnly={!!isView}
                 getOptionLabel={(option: any) => option}
                 isOptionEqualToValue={(option, value) => option === value}
                 renderOption={(props, option) => {
@@ -527,12 +522,12 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
                 }}
               />
               <RHFCheckbox
-                isReadOnly={isView ? true : false}
+                isReadOnly={!!isView}
                 name="insertCustomBet"
                 label="Insert Custom Bet"
               />
-              <RHFCheckbox isReadOnly={isView ? true : false} name="editBet" label="Edit Bet" />
-              <RHFCheckbox isReadOnly={isView ? true : false} name="deleteBet" label="Delete Bet" />
+              <RHFCheckbox isReadOnly={!!isView} name="editBet" label="Edit Bet" />
+              <RHFCheckbox isReadOnly={!!isView} name="deleteBet" label="Delete Bet" />
             </Box>
 
             {!isView && (

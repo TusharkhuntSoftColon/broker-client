@@ -30,8 +30,8 @@ export const STATUS_OF_EXCHANGE = [
 ];
 
 export const STOP_LOSS = [
-  { value: true, label: 'On' },
-  { value: false, label: 'Off' },
+  { value: "true", label: 'On' },
+  { value: "false", label: 'Off' },
 ];
 
 export const PRODUCT_COLOR_NAME_OPTIONS = [

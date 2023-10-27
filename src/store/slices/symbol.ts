@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { createSlice } from '@reduxjs/toolkit';
 
-import type { RootState } from '../index';
 
 // Define a type for the slice state
 interface AuthState {
@@ -36,7 +35,6 @@ const symbolSlice = createSlice({
         {
           ...data,
           id: Math.random().toString(36).substr(2, 5),
-          stAndTp: data?.stAndTp === 'true',
         },
       ];
     },
@@ -45,7 +43,7 @@ const symbolSlice = createSlice({
       const dataIndex = state.symbolList.findIndex((item: any) => item.id === id);
 
       console.log({ updatedData });
-      const data = { ...updatedData, stAndTp: updatedData?.stAndTp === 'true', id: id };
+      const data = { ...updatedData, id };
 
       // console.log({ dataIndex });
       if (dataIndex !== -1) {

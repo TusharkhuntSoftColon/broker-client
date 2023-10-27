@@ -1,31 +1,29 @@
 import * as Yup from 'yup';
-import { useEffect, useMemo, useState } from 'react';
+import { isAxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
+import { useDispatch } from 'react-redux';
+import { useMutation } from '@tanstack/react-query';
+import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
+import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import Typography from '@mui/material/Typography';
+
+import symbolService from 'src/services/symbolService';
+import exchangeService from 'src/services/exchangeService';
+import { STOP_LOSS, STATUS_OF_EXCHANGE } from 'src/_mock/_exchange';
+import { addExchange, updateExchange } from 'src/store/slices/exchange';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFAutocomplete, RHFSwitch, RHFTextField } from 'src/components/hook-form';
+import FormProvider, { RHFSwitch, RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
 
-import { IUserItem } from 'src/types/user';
-import { useMutation } from '@tanstack/react-query';
-import exchangeService from 'src/services/exchangeService';
-import { useRouter } from 'src/routes/hooks';
-import { paths } from 'src/routes/paths';
-import { isAxiosError } from 'axios';
-import { STATUS_OF_EXCHANGE, STOP_LOSS } from 'src/_mock/_exchange';
 import { IExchangeItem } from 'src/types/exchange';
-import symbolService from 'src/services/symbolService';
-import { useDispatch } from 'react-redux';
-import { addExchange, updateExchange } from 'src/store/slices/exchange';
 
 // ----------------------------------------------------------------------
 
@@ -55,7 +53,7 @@ export default function ExchangeQuickEditForm({
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     statusOfExchange: Yup.string().required('Status Of Exchange is required'),
-    stAndTp: Yup.string().required('Stop Loss is required'),
+    stAndTp: Yup.mixed<any>().nullable().required('stAndTp is required'),
     symbol: Yup.string().required('Symbol is required'),
   });
 
@@ -63,7 +61,7 @@ export default function ExchangeQuickEditForm({
     () => ({
       name: currentUser?.name || '',
       statusOfExchange: currentUser?.statusOfExchange || '',
-      stAndTp: currentUser?.stAndTp || '',
+      stAndTp: currentUser?.stAndTp || null,
       symbol: currentUser?.symbol || '',
       isActiveExchange: currentUser?.isActiveExchange,
     }),
@@ -83,7 +81,7 @@ export default function ExchangeQuickEditForm({
     formState: { isSubmitting },
   } = methods;
 
-  //create exhange
+  // create exhange
   const { mutate: createExchange } = useMutation(exchangeService.addExchange, {
     onSuccess: (data) => {
       getFunction();
@@ -97,7 +95,7 @@ export default function ExchangeQuickEditForm({
     },
   });
 
-  //update exchnage
+  // update exchnage
   // const { mutate: updateExchange } = useMutation(exchangeService.updateExchange, {
   //   onSuccess: (data) => {
   //     getFunction();
@@ -207,8 +205,8 @@ export default function ExchangeQuickEditForm({
               name="statusOfExchange"
               label="Status Of Exchange"
               control={control}
-              isLabled={true}
-              isReadOnly={isView ? true : false}
+              isLabled
+              isReadOnly={!!isView}
               options={STATUS_OF_EXCHANGE.map((data) => data.label)}
               data={STATUS_OF_EXCHANGE}
               getOptionLabel={(option: any) => option}
@@ -230,35 +228,28 @@ export default function ExchangeQuickEditForm({
             <RHFAutocomplete
               name="stAndTp"
               label="Stop Loss"
-              control={control}
-              isReadOnly={isView ? true : false}
-              options={STOP_LOSS.map((data) => data.label)}
+              // control={control}
+              isReadOnly={!!isView}
+              options={STOP_LOSS}
               isLabled={false}
-              value={STOP_LOSS.find((data) => data.value === currentUser?.stAndTp)?.label}
-              data={STOP_LOSS}
-              getOptionLabel={(option: any) => option}
-              renderOption={(props, option) => {
-                const { label } = STOP_LOSS.filter((data) => data.label === option)[0];
-
-                if (!label) {
-                  return null;
-                }
-
-                return (
-                  <li {...props} key={label}>
-                    {label}
-                  </li>
-                );
-              }}
+              // value={STOP_LOSS.find((data) => data.value === currentUser?.stAndTp)?.label}
+              // data={STOP_LOSS}
+              isOptionEqualToValue={(option, value) => option.value === value.value}
+              getOptionLabel={(option: any) => option.label}
+              renderOption={(props, option) => (
+                <li {...props} key={option.value}>
+                  {option.label}
+                </li>
+              )}
             />
 
             <RHFAutocomplete
               name="symbol"
               label="Symbol"
               control={control}
-              isReadOnly={isView ? true : false}
+              isReadOnly={!!isView}
               options={SymbolOption?.map((data: any) => data.label)}
-              isLabled={true}
+              isLabled
               data={SymbolOption}
               getOptionLabel={(option: any) => option}
               renderOption={(props, option) => {
@@ -281,11 +272,9 @@ export default function ExchangeQuickEditForm({
                 name="isActiveExchange"
                 labelPlacement="start"
                 label={
-                  <>
-                    <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                      Active or In Active Exchange
-                    </Typography>
-                  </>
+                  <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+                    Active or In Active Exchange
+                  </Typography>
                 }
                 sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
               />

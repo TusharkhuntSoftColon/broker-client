@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { createSlice } from '@reduxjs/toolkit';
 
-import type { RootState } from '../index';
 
 // Define a type for the slice state
 interface ExchangeState {
@@ -31,7 +30,6 @@ const exchangeSlice = createSlice({
           ...data,
           _id: Math.random().toString(36).substr(2, 5),
           status: 'Active',
-          stAndTp: data?.stAndTp === 'true',
           createdAt: new Date().toDateString(),
           updatedAt: new Date().toDateString(),
         },
@@ -45,7 +43,6 @@ const exchangeSlice = createSlice({
         ...updatedData,
         _id: id,
         status: updatedData?.isActiveExchange === true ? 'Active' : 'In Active',
-        stAndTp: updatedData?.stAndTp === 'true',
         createdAt: new Date().toDateString(),
         updatedAt: new Date().toDateString(),
       };
