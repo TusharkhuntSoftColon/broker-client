@@ -1,37 +1,28 @@
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import { useTheme } from '@mui/material/styles';
-import Container from '@mui/material/Container';
-import Grid from '@mui/material/Unstable_Grid2';
-
+import { useState, useEffect } from 'react';
 import { Responsive, WidthProvider } from 'react-grid-layout';
+
+import Container from '@mui/material/Container';
+import { useTheme } from '@mui/material/styles';
+
 import { useMockedUser } from 'src/hooks/use-mocked-user';
-import '/node_modules/react-grid-layout/css/styles.css';
-import '/node_modules/react-resizable/css/styles.css';
-import { SeoIllustration } from 'src/assets/illustrations';
-import { _appAuthors, _appRelated, _appFeatured, _appInvoices, _appInstalled } from 'src/_mock';
+
+import { _appRelated, _appInvoices } from 'src/_mock';
 
 import { useSettingsContext } from 'src/components/settings';
 
-import AppWidget from '../app-widget';
-import AppWelcome from '../app-welcome';
-import AppFeatured from '../app-featured';
 import AppNewInvoice from '../app-new-invoice';
-import AppTopAuthors from '../app-top-authors';
 import AppTopRelated from '../app-top-related';
 import AppAreaInstalled from '../app-area-installed';
-import AppWidgetSummary from '../app-widget-summary';
 import AppCurrentDownload from '../app-current-download';
-import AppTopInstalledCountries from '../app-top-installed-countries';
-import { useEffect, useState } from 'react';
+import "/node_modules/react-resizable/css/styles.css";
+import "/node_modules/react-grid-layout/css/styles.css";
 
 // ----------------------------------------------------------------------
 
 const ResponsiveReactGridLayout = WidthProvider(Responsive);
 export default function OverviewAppView() {
-  //app current download component
-  const AppCurrentDownloadComponent = () => {
-    return (
+  // app current download component
+  const AppCurrentDownloadComponent = () => (
       <AppCurrentDownload
         title="Current Download"
         chart={{
@@ -44,11 +35,9 @@ export default function OverviewAppView() {
         }}
       />
     );
-  };
 
-  //app invoice component
-  const AppInvoiceComponent = () => {
-    return (
+  // app invoice component
+  const AppInvoiceComponent = () => (
       <AppNewInvoice
         title="New Invoice"
         tableData={_appInvoices}
@@ -61,16 +50,12 @@ export default function OverviewAppView() {
         ]}
       />
     );
-  };
 
   // app top related component
-  const AppTopRelatedComponent = () => {
-    return <AppTopRelated title="Top Related Applications" list={_appRelated} />;
-  };
+  const AppTopRelatedComponent = () => <AppTopRelated title="Top Related Applications" list={_appRelated} />;
 
-  //app AppAreaInstalled compoent
-  const AppAreaInstalledcompoent = () => {
-    return (
+  // app AppAreaInstalled compoent
+  const AppAreaInstalledcompoent = () => (
       <AppAreaInstalled
         title="Area Installed"
         subheader="(+43%) than last year"
@@ -120,7 +105,6 @@ export default function OverviewAppView() {
         }}
       />
     );
-  };
 
   const { user } = useMockedUser();
 
@@ -134,17 +118,17 @@ export default function OverviewAppView() {
       component: <AppAreaInstalledcompoent />,
       x: 0,
       y: 0,
-      w: 5,
-      h: 12.8,
-      minH: 12.8,
-      maxH: 12.8,
+      w: 6,
+      h: 13.7,
+      minH: 13.7,
+      maxH: 13.7,
     },
     {
       i: 'c',
       component: <AppInvoiceComponent />,
       x: 0,
-      y: 10,
-      w: 5,
+      y: 13.7,
+      w: 6,
       h: 13.7,
       minH: 13.7,
       maxH: 13.7,
@@ -152,22 +136,22 @@ export default function OverviewAppView() {
     {
       i: 'b',
       component: <AppCurrentDownloadComponent />,
-      x: 5,
+      x: 6,
       y: 0,
-      w: 4.9,
-      h: 12.5,
-      minH: 12.5,
-      maxH: 12.5,
+      w: 6,
+      h: 13.7,
+      minH: 13.7,
+      maxH: 13.7,
     },
     {
       i: 'd',
       component: <AppTopRelatedComponent />,
-      x: 5,
-      y: 10,
-      w: 4.9,
-      h: 11.3,
-      minH: 11.3,
-      maxH: 11.3,
+      x: 6,
+      y: 24,
+      w: 6,
+      h: 13.7,
+      minH: 13.7,
+      maxH: 13.7,
     },
   ]);
 
@@ -192,13 +176,14 @@ export default function OverviewAppView() {
         onDrop={onDrop}
         measureBeforeMount={false}
         useCSSTransforms={mounted}
+        onLayoutChange={(layout: any) => console.log({layout})}
         compactType={compactType}
         preventCollision={!compactType}
-        isDroppable={true}
+        isDroppable
         droppingItem={{ i: 'xx', h: 2, w: 2 }}
       >
         {layout.map((itm: any, i: any) => (
-          <div key={i} data-grid={itm} className="block">
+          <div key={i} data-grid={itm} className="block" style={{height: "inherit"}}>
             {itm.component}
           </div>
         ))}
@@ -268,7 +253,7 @@ export default function OverviewAppView() {
               ],
             }}
           /> 
-        </Grid>*/}
+        </Grid> */}
 
       {/*  <Grid xs={12} md={6} lg={8}>
           <AppAreaInstalled
@@ -337,7 +322,7 @@ export default function OverviewAppView() {
 
       {/*   <Grid xs={12} md={6} lg={4}>
            <AppTopRelated title="Top Related Applications" list={_appRelated} /> 
-        </Grid>*/}
+        </Grid> */}
 
       {/* <Grid xs={12} md={6} lg={4}>
           <AppTopInstalledCountries title="Top Installed Countries" list={_appInstalled} />

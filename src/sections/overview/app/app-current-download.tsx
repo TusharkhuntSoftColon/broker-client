@@ -94,7 +94,7 @@ export default function AppCurrentDownload({ title, subheader, chart, ...other }
   });
 
   return (
-    <Card {...other} sx={{ borderRadius: 0 }}>
+    <Card {...other} sx={{ borderRadius: 0, height: "inherit" }}>
       <CardHeader title={title} subheader={subheader} sx={{ mb: 5 }} />
 
       <StyledChart

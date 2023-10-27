@@ -4,8 +4,8 @@ import { useState, useCallback } from 'react';
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
 import { useTheme } from '@mui/material/styles';
-import CardHeader from '@mui/material/CardHeader';
 import ButtonBase from '@mui/material/ButtonBase';
+import CardHeader from '@mui/material/CardHeader';
 import Card, { CardProps } from '@mui/material/Card';
 
 import Iconify from 'src/components/iconify';
@@ -75,7 +75,7 @@ export default function AppAreaInstalled({ title, subheader, chart, ...other }: 
 
   return (
     <>
-      <Card {...other} sx={{ borderRadius: 0 }}>
+      <Card {...other} sx={{ borderRadius: 0, height: "inherit" }}>
         <CardHeader
           title={title}
           subheader={subheader}
