@@ -526,9 +526,9 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-              <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+            {!isView &&  <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                 {currentUser === undefined ? 'Create Symbol' : 'Save Changes'}
-              </LoadingButton>
+              </LoadingButton>}
             </Stack>
           </Card>
         </Grid>

@@ -37,9 +37,6 @@ const adminSlice = createSlice({
         {
           ...data,
           id: Math.random().toString(36).substr(2, 5),
-          deleteBet: data?.deleteBet === 'true',
-          editBet: data?.editBet === 'true',
-          insertCustomBet: data?.insertCustomBet === 'true',
         },
       ];
       // state.adminList = [

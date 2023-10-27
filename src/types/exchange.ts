@@ -75,6 +75,7 @@ export type IProductItem = {
   inventoryType: string;
   subDescription: string;
   priceSale: number | null;
+  isActiveExchange: any;
   status: string;
   updatedAt: string;
   reviews: IProductReview[];

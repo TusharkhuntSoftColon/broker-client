@@ -52,18 +52,18 @@ export default function ExchangeQuickEditForm({
 
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
-    statusOfExchange: Yup.string().required('Status Of Exchange is required'),
+    statusOfExchange: Yup.mixed<any>().nullable().required('Status Of Exchange is required'),
     stAndTp: Yup.mixed<any>().nullable().required('stAndTp is required'),
-    symbol: Yup.string().required('Symbol is required'),
+    symbol: Yup.mixed<any>().nullable().required('Symbol is required'),
   });
 
   const defaultValues = useMemo(
     () => ({
       name: currentUser?.name || '',
-      statusOfExchange: currentUser?.statusOfExchange || '',
+      statusOfExchange: currentUser?.statusOfExchange || null,
       stAndTp: currentUser?.stAndTp || null,
-      symbol: currentUser?.symbol || '',
-      isActiveExchange: currentUser?.isActiveExchange,
+      symbol: currentUser?.symbol || null,
+      isActiveExchange: currentUser?.isActiveExchange || true,
     }),
     [currentUser]
   );
@@ -134,20 +134,13 @@ export default function ExchangeQuickEditForm({
       } else {
         // createExchange(data);
         dispatch(addExchange(data));
+        reset();
       }
-      reset();
       onClose();
     } catch (error) {
       console.log({ error });
     }
   });
-
-  useEffect(() => {
-    if (currentUser) {
-      setValue('name', currentUser?.name || '');
-      setValue('isActiveExchange', currentUser?.isActiveExchange || false);
-    }
-  }, [currentUser, setValue]);
 
   useEffect(() => {
     mutate();
@@ -204,25 +197,18 @@ export default function ExchangeQuickEditForm({
             <RHFAutocomplete
               name="statusOfExchange"
               label="Status Of Exchange"
-              control={control}
+              // control={control}
               isLabled
               isReadOnly={!!isView}
-              options={STATUS_OF_EXCHANGE.map((data) => data.label)}
-              data={STATUS_OF_EXCHANGE}
-              getOptionLabel={(option: any) => option}
-              renderOption={(props, option) => {
-                const { label } = STATUS_OF_EXCHANGE.filter((data) => data.label === option)[0];
-
-                if (!label) {
-                  return null;
-                }
-
-                return (
-                  <li {...props} key={label}>
-                    {label}
-                  </li>
-                );
-              }}
+              options={STATUS_OF_EXCHANGE}
+              // data={STATUS_OF_EXCHANGE}
+              isOptionEqualToValue={(option, value) => option.value === value.value}
+              getOptionLabel={(option: any) => option.label}
+              renderOption={(props, option) => (
+                <li {...props} key={option.value}>
+                  {option.label}
+                </li>
+              )}
             />
 
             <RHFAutocomplete

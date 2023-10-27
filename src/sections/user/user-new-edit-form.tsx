@@ -109,15 +109,7 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
   // console.log({ errors });
   // const values = watch();
 
-  // console.log({ values });
-
-  useEffect(() => {
-    if (currentUser) {
-      setValue('insertCustomBet', currentUser?.insertCustomBet || false);
-      setValue('deleteBet', currentUser?.deleteBet || false);
-      setValue('editBet', currentUser?.editBet || false);
-    }
-  }, [currentUser, setValue]);
+  // console.log({ values }); 
 
   // create ADMIN
   const { mutate: createAdmin } = useMutation(adminService.createAdmin, {

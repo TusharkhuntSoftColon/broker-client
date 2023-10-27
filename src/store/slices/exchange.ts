@@ -29,7 +29,6 @@ const exchangeSlice = createSlice({
         {
           ...data,
           _id: Math.random().toString(36).substr(2, 5),
-          status: 'Active',
           createdAt: new Date().toDateString(),
           updatedAt: new Date().toDateString(),
         },
@@ -42,7 +41,6 @@ const exchangeSlice = createSlice({
       const data = {
         ...updatedData,
         _id: id,
-        status: updatedData?.isActiveExchange === true ? 'Active' : 'In Active',
         createdAt: new Date().toDateString(),
         updatedAt: new Date().toDateString(),
       };

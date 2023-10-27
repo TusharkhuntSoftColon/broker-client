@@ -1,7 +1,7 @@
+import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import Checkbox from '@mui/material/Checkbox';
-import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
@@ -10,12 +10,10 @@ import { useBoolean } from 'src/hooks/use-boolean';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
+import { usePopover } from 'src/components/custom-popover';
 import { ConfirmDialog } from 'src/components/custom-dialog';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 import { IUserItem } from 'src/types/user';
-
-import UserQuickEditForm from './user-quick-edit-form';
 
 // ----------------------------------------------------------------------
 
@@ -36,7 +34,8 @@ export default function UserTableRow({
   onDeleteRow,
   onViewRow,
 }: Props) {
-  const { name, role, exchange, phoneNumber, ID, Domain } = row;
+  const { name, role, exchange, phoneNumber, allowedExchange, ID, Domain } = row;
+  console.log({ allowedExchange });
 
   const confirm = useBoolean();
 
@@ -74,9 +73,13 @@ export default function UserTableRow({
         {/* <TableCell sx={{ whiteSpace: 'nowrap' }}>{role}</TableCell> */}
 
         <TableCell>
-          <Label variant="soft" color="default">
-            {exchange}
-          </Label>
+          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+            {allowedExchange.map((_el: any) => (
+              <Label variant="soft" color="default">
+                {_el}
+              </Label>
+            ))}
+          </Box>
         </TableCell>
 
         <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
@@ -117,7 +120,7 @@ export default function UserTableRow({
             variant="contained"
             color="error"
             onClick={() => {
-              onDeleteRow()
+              onDeleteRow();
               confirm.onFalse();
             }}
           >

@@ -1,5 +1,9 @@
+import { isAxiosError } from 'axios';
 import isEqual from 'lodash/isEqual';
-import { useState, useCallback, useEffect } from 'react';
+import { useSnackbar } from 'notistack';
+import { useMutation } from '@tanstack/react-query';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect, useCallback } from 'react';
 
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
@@ -15,8 +19,9 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { useGetProducts } from 'src/api/product';
-import { _productList, PRODUCT_STOCK_OPTIONS } from 'src/_mock';
+import { PRODUCT_STOCK_OPTIONS } from 'src/_mock';
+import exchangeService from 'src/services/exchangeService';
+import { deleteExchange } from 'src/store/slices/exchange';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -24,35 +29,25 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
-  useTable,
-  emptyRows,
-  TableNoData,
-  getComparator,
-  TableSkeleton,
-  TableEmptyRows,
-  TableHeadCustom,
-  TableSelectedAction,
-  TablePaginationCustom,
+useTable,
+emptyRows,
+getComparator,
+TableEmptyRows,
+TableHeadCustom,
+TableSelectedAction,
+TablePaginationCustom,
 } from 'src/components/table';
 
 import {
-  IProductItem,
-  IExchangeItem,
-  IProductTableFilters,
-  IProductTableFilterValue,
+IProductItem,
+IProductTableFilters,
+IProductTableFilterValue,
 } from 'src/types/exchange';
 
 import ExchangeTableRow from '../exchange-table-row';
 import ExchangeQuickEditForm from '../exchange-edit-form';
 import ProductTableToolbar from '../product-table-toolbar';
 import ProductTableFiltersResult from '../product-table-filters-result';
-import { useMutation } from '@tanstack/react-query';
-import exchangeService from 'src/services/exchangeService';
-import { useSnackbar } from 'notistack';
-import { isAxiosError } from 'axios';
-import { mutate } from 'swr';
-import { useDispatch, useSelector } from 'react-redux';
-import { deleteExchange } from 'src/store/slices/exchange';
 
 // ----------------------------------------------------------------------
 
@@ -108,6 +103,9 @@ export default function ExchangeListView() {
   //     setTableData(products);
   //   }
   // }, [products]);
+
+  console.log({exchangeList});
+  
 
   const dataFiltered = applyFilter({
     inputData: exchangeList,
@@ -173,7 +171,7 @@ export default function ExchangeListView() {
     setFilters(defaultFilters);
   }, []);
 
-  //get exchange list
+  // get exchange list
   const { mutate } = useMutation(exchangeService.getExchangeList, {
     onSuccess: (data) => {
       // setTableData(data?.data?.rows);
