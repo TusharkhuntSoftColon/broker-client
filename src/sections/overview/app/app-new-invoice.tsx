@@ -44,7 +44,7 @@ export default function AppNewInvoice({
   ...other
 }: Props) {
   return (
-    <Card {...other}>
+    <Card {...other} sx={{ borderRadius: 0 }}>
       <CardHeader title={title} subheader={subheader} sx={{ mb: 3 }} />
 
       <TableContainer sx={{ overflow: 'unset' }}>
