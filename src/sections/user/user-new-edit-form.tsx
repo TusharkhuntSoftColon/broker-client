@@ -109,7 +109,7 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
   // console.log({ errors });
   // const values = watch();
 
-  // console.log({ values }); 
+  // console.log({ values });
 
   // create ADMIN
   const { mutate: createAdmin } = useMutation(adminService.createAdmin, {
@@ -403,7 +403,6 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
                 freeSolo
                 data={ExchangeOptions}
                 isLabled={false}
-            
                 multiple
                 getOptionLabel={(option: any) => option}
                 renderOption={(props, option, { selected }) => {
@@ -513,11 +512,7 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
                   );
                 }}
               />
-              <RHFCheckbox
-                isReadOnly={!!isView}
-                name="insertCustomBet"
-                label="Insert Custom Bet"
-              />
+              <RHFCheckbox isReadOnly={!!isView} name="insertCustomBet" label="Insert Custom Bet" />
               <RHFCheckbox isReadOnly={!!isView} name="editBet" label="Edit Bet" />
               <RHFCheckbox isReadOnly={!!isView} name="deleteBet" label="Delete Bet" />
             </Box>

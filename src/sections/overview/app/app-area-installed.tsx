@@ -75,7 +75,7 @@ export default function AppAreaInstalled({ title, subheader, chart, ...other }: 
 
   return (
     <>
-      <Card {...other}>
+      <Card {...other} sx={{ borderRadius: 0 }}>
         <CardHeader
           title={title}
           subheader={subheader}

@@ -134,7 +134,7 @@ export default function OverviewAppView() {
       component: <AppAreaInstalledcompoent />,
       x: 0,
       y: 0,
-      w: 4.9,
+      w: 5,
       h: 12.8,
       minH: 12.8,
       maxH: 12.8,
@@ -144,11 +144,11 @@ export default function OverviewAppView() {
       component: <AppInvoiceComponent />,
       x: 0,
       y: 10,
-      w: 4.9,
+      w: 5,
       h: 13.7,
       minH: 13.7,
       maxH: 13.7,
-    }, // Adjusted y
+    },
     {
       i: 'b',
       component: <AppCurrentDownloadComponent />,
@@ -168,7 +168,7 @@ export default function OverviewAppView() {
       h: 11.3,
       minH: 11.3,
       maxH: 11.3,
-    }, // Adjusted y
+    },
   ]);
 
   const settings = useSettingsContext();
@@ -188,6 +188,7 @@ export default function OverviewAppView() {
         height={700}
         cols={{ lg: 12, md: 10, sm: 6, xs: 4, xxs: 2 }}
         layout={layout}
+        style={{ padding: '2px' }}
         onDrop={onDrop}
         measureBeforeMount={false}
         useCSSTransforms={mounted}
