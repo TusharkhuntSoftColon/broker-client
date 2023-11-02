@@ -18,7 +18,7 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { TableHeadCustom } from 'src/components/table';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { _appInvoices, newInvoiceData } from 'src/_mock';
+import { _appInvoices, newSymbolTableData, symbolTableDashboard } from 'src/_mock';
 import React from 'react';
 import Typography from '@mui/material/Typography';
 import Tabs from '@mui/material/Tabs';
@@ -28,15 +28,9 @@ import Tab from '@mui/material/Tab';
 
 type RowProps = {
   id: any;
-  symbol: any;
-  positions: any;
-  buy_volume: any;
-  buy_price: any;
-  sell_volume: any;
-  sell_price: any;
-  net_volume: any;
-  profit: any;
-  unCovered: any;
+  symbol: string;
+  bid: number;
+  ask: number;
 };
 
 interface Props extends CardProps {
@@ -81,7 +75,7 @@ function a11yProps(index: number) {
   };
 }
 
-export default function AppNewInvoice() {
+export default function SymbolTableDashboard() {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -90,54 +84,36 @@ export default function AppNewInvoice() {
 
   const tabs = [
     {
-      label: 'Summary',
+      label: 'Symbols',
       value: 0,
-      title: 'Exchange Table',
-      tableDatas: newInvoiceData,
+      title: 'Symbol',
+      tableDatas: newSymbolTableData,
       tableLabel: [
         { id: 'symbol', label: 'Symbol' },
-        { id: 'positions', label: 'Positions' },
-        { id: 'buy_volume', label: 'Buy Volume' },
-        { id: 'buy_price', label: 'Buy Price' },
-        { id: 'sell_volume', label: 'Sell Volume' },
-        { id: 'sell_price', label: 'Sell Price' },
-        { id: 'net_volume', label: 'Net Volume' },
-        { id: 'profit', label: 'Profit (INR)' },
-        { id: 'unCovered', label: 'Uncovered (INR)' },
+        { id: 'bid', label: 'Bid' },
+        { id: 'ask', label: 'Ask' },
       ],
     },
     {
-      label: 'Exposure',
+      label: 'Details',
       value: 1,
       title: 'New Invoice 2',
-      tableDatas: newInvoiceData,
+      tableDatas: newSymbolTableData,
       tableLabel: [
         { id: 'symbol', label: 'Symbol' },
-        { id: 'positions', label: 'Positions' },
-        { id: 'buy_volume', label: 'Buy Volume' },
-        { id: 'buy_price', label: 'Buy Price' },
-        { id: 'sell_volume', label: 'Sell Volume' },
-        { id: 'sell_price', label: 'Sell Price' },
-        { id: 'net_volume', label: 'Net Volume' },
-        { id: 'profit', label: 'Profit (INR)' },
-        { id: 'unCovered', label: 'Uncovered (INR)' },
+        { id: 'bid', label: 'Bid' },
+        { id: 'ask', label: 'Ask' },
       ],
     },
     {
-      label: 'News',
+      label: 'Ticks',
       value: 2,
       title: 'New Invoice 3',
-      tableDatas: newInvoiceData,
+      tableDatas: newSymbolTableData,
       tableLabel: [
         { id: 'symbol', label: 'Symbol' },
-        { id: 'positions', label: 'Positions' },
-        { id: 'buy_volume', label: 'Buy Volume' },
-        { id: 'buy_price', label: 'Buy Price' },
-        { id: 'sell_volume', label: 'Sell Volume' },
-        { id: 'sell_price', label: 'Sell Price' },
-        { id: 'net_volume', label: 'Net Volume' },
-        { id: 'profit', label: 'Profit (INR)' },
-        { id: 'unCovered', label: 'Uncovered (INR)' },
+        { id: 'bid', label: 'Bid' },
+        { id: 'ask', label: 'Ask' },
       ],
     },
   ];
@@ -167,11 +143,12 @@ export default function AppNewInvoice() {
                 <CardHeader title={data.title} sx={{ mb: 4, mt: -1 }} />
                 <TableContainer sx={{ overflow: 'unset', height: '400px' }}>
                   <Scrollbar>
-                    <Table stickyHeader sx={{ minWidth: 680 }}>
+                    <Table stickyHeader>
                       <TableHeadCustom headLabel={data.tableLabel} />
+
                       <TableBody>
                         {data.tableDatas.map((row) => (
-                          <AppNewInvoiceRow key={row.id} row={row} />
+                          <SymbolNewRow key={row.id} row={row} value={value} />
                         ))}
                       </TableBody>
                     </Table>
@@ -192,8 +169,9 @@ export default function AppNewInvoice() {
               display: 'none',
             },
             '& .MuiTab-root': {
-              marginRight: 0,
+              marginRight: 0, // Remove auto margin right for each tab
             },
+            bottom: 0,
           }}
         >
           {tabs.map((data: any) => {
@@ -203,7 +181,7 @@ export default function AppNewInvoice() {
                 {...a11yProps(data.value)}
                 sx={{
                   // ml: 2,
-                  width: '10%',
+                  width: '30%',
                   marginRight: '0px !important',
                   borderTop: value === data.value ? 'none' : '1px solid #d3d3d3',
                   borderLeft: value === data.value ? 'none' : '0.5px solid #d3d3d3',
@@ -223,11 +201,12 @@ export default function AppNewInvoice() {
 
 // ----------------------------------------------------------------------
 
-type AppNewInvoiceRowProps = {
+type SymbolNewRowProps = {
   row: RowProps;
+  value?: any;
 };
 
-function AppNewInvoiceRow({ row }: AppNewInvoiceRowProps) {
+function SymbolNewRow({ row, value }: SymbolNewRowProps) {
   const popover = usePopover();
 
   const handleDownload = () => {
@@ -252,16 +231,10 @@ function AppNewInvoiceRow({ row }: AppNewInvoiceRowProps) {
 
   return (
     <>
-      <TableRow>
+      <TableRow sx={{ border: '1px solid #000000' }}>
         <TableCell>{row.symbol}</TableCell>
-        <TableCell>{row.positions}</TableCell>
-        <TableCell>{row.buy_volume}</TableCell>
-        <TableCell>{row.buy_price}</TableCell>
-        <TableCell>{row.sell_volume}</TableCell>
-        <TableCell>{row.sell_price}</TableCell>
-        <TableCell>{row.net_volume}</TableCell>
-        <TableCell>{row.profit}</TableCell>
-        <TableCell>{row.unCovered}</TableCell>
+        <TableCell>{row.bid}</TableCell>
+        <TableCell>{row.ask}</TableCell>
       </TableRow>
 
       <CustomPopover

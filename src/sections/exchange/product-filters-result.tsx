@@ -53,6 +53,8 @@ export default function ProductFiltersResult({
     onFilters('rating', '');
   };
 
+  console.log({ filters });
+
   return (
     <Stack spacing={1.5} {...other}>
       <Box sx={{ typography: 'body2' }}>
@@ -121,6 +123,8 @@ export default function ProductFiltersResult({
             <Chip size="small" label={filters.rating} onDelete={handleRemoveRating} />
           </Block>
         )}
+
+        
 
         {canReset && (
           <Button

@@ -41,8 +41,38 @@ export const STATUS_OF_SCRIPTS = [
 ];
 
 export const STOP_LOSS = [
-  { value: "true", label: 'On' },
-  { value: "false", label: 'Off' },
+  { value: 'true', label: 'On' },
+  { value: 'false', label: 'Off' },
+];
+
+export const SYMBOL_CURRENCY = [
+  {
+    label: 'INR',
+    value: 'INR',
+  },
+  {
+    label: 'USD',
+    value: 'USD',
+  },
+];
+
+export const SYMBOL_TICK_SIZE = [
+  {
+    label: '0-10',
+    value: [0, 10],
+  },
+  {
+    label: '11-20',
+    value: [11, 20],
+  },
+  {
+    label: '21-30',
+    value: [21, 30],
+  },
+  {
+    label: '31-40',
+    value: [31, 40],
+  },
 ];
 
 const ITEMS = [...Array(3)].map((_, index) => ({
@@ -153,3 +183,5 @@ export const _symbolList = [...Array(20)].map((_, index) => ({
   statusOfScripts: 'sdafsdf',
   stopLoss: 'asdas',
 }));
+
+

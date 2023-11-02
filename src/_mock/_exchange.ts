@@ -30,8 +30,8 @@ export const STATUS_OF_EXCHANGE = [
 ];
 
 export const STOP_LOSS = [
-  { value: "true", label: 'On' },
-  { value: "false", label: 'Off' },
+  { value: 'true', label: 'On' },
+  { value: 'false', label: 'Off' },
 ];
 
 export const PRODUCT_COLOR_NAME_OPTIONS = [
@@ -133,6 +133,6 @@ export const Exchanges = [
 ];
 
 export const ExchangeStatus = [
-  { value: 'Active', label: 'Active' },
-  { value: 'In Active', label: 'In Active' },
+  { value: true, label: 'Active' },
+  { value: false, label: 'In Active' },
 ];

@@ -2,12 +2,13 @@ import { CustomFile } from 'src/components/upload';
 
 // ----------------------------------------------------------------------
 
-export type IUserTableFilterValue = string | string[];
+export type IUserTableFilterValue = string | string[] | any;
 
 export type IUserTableFilters = {
   name: string;
-  role: string[];
-  status: string;
+  exchange: string[];
+  status: any;
+  dateRange: any;
 };
 
 // ----------------------------------------------------------------------
@@ -113,6 +114,8 @@ export type IUserItem = {
   limitOfAddUser: number;
   leverageX: number;
   leverageY: number;
+  isActiveAdmin?: any;
+  createdAt?: any;
 };
 export type ExchangeProp = {
   id?: string;

@@ -3,7 +3,6 @@ import { Controller, useFormContext } from 'react-hook-form';
 import TextField from '@mui/material/TextField';
 import Autocomplete, { AutocompleteProps } from '@mui/material/Autocomplete';
 
-
 // ----------------------------------------------------------------------
 
 interface Props<
@@ -40,41 +39,33 @@ export default function RHFAutocomplete<
   ...other
 }: Omit<Props<T, Multiple, DisableClearable, FreeSolo>, 'renderInput'>) {
   const { setValue, getValues, control: formControl } = useFormContext();
-
-  // const value = getValues('stAndTp');
-  // console.log({ name });
   return (
     <Controller
-        name={name}
-        control={formControl}
-        render={({ field, fieldState: { error } }) => (
-          <Autocomplete
-            {...field}
-            onChange={(event, newValue) => {
-              console.log({ newValue });
-              // const selectedValue = data.find((data: any) => data.label === newValue)?.value;
-
-              // const selectedLabel = data.find((data: any) => data.label === newValue)?.label;
-
-              setValue(name, newValue, { shouldValidate: true });
-            }}
-            readOnly={!!isReadOnly}
-            renderInput={(params) => (
-              <TextField
-                label={label}
-                placeholder={placeholder}
-                error={!!error}
-                helperText={error ? error?.message : helperText}
-                {...params}
-                inputProps={{
-                  ...params.inputProps,
-                  autoComplete: 'disabled',
-                }}
-              />
-            )}
-            {...other}
-          />
-        )}
-      />
+      name={name}
+      control={formControl}
+      render={({ field, fieldState: { error } }) => (
+        <Autocomplete
+          {...field}
+          onChange={(event, newValue) => {
+            setValue(name, newValue, { shouldValidate: true });
+          }}
+          readOnly={!!isReadOnly}
+          renderInput={(params) => (
+            <TextField
+              label={label}
+              placeholder={placeholder}
+              error={!!error}
+              helperText={error ? error?.message : helperText}
+              {...params}
+              inputProps={{
+                ...params.inputProps,
+                autoComplete: 'disabled',
+              }}
+            />
+          )}
+          {...other}
+        />
+      )}
+    />
   );
 }

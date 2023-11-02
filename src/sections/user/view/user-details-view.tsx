@@ -23,7 +23,6 @@ export default function UserDetailsView({ id }: Props) {
 
   const currentUser = adminData.filter((user: any) => user.id === id)[0];
 
-  console.log({ currentUser });
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs

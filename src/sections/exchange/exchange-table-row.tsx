@@ -38,8 +38,6 @@ export default function ExchangeTableRow({
 }: Props) {
   const { name, _id, isActiveExchange, createdAt, updatedAt } = row;
 
-  console.log({ isActiveExchange });
-
   const confirm = useBoolean();
 
   const quickEdit = useBoolean();
@@ -56,12 +54,6 @@ export default function ExchangeTableRow({
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{_id?.substring(0, 5)}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{name}</TableCell>
         {/* <TableCell sx={{ whiteSpace: 'nowrap' }}>{s}</TableCell> */}
-
-        <TableCell>
-          <Label variant="soft" color={isActiveExchange ? 'success' : 'warning'}>
-            {isActiveExchange === true ? 'Active' : 'In Active'}
-          </Label>
-        </TableCell>
 
         {/* <TableCell sx={{ display: 'flex', alignItems: 'center' }}>
           <Avatar
@@ -114,6 +106,12 @@ export default function ExchangeTableRow({
               typography: 'caption',
             }}
           />
+        </TableCell>
+
+        <TableCell>
+          <Label variant="soft" color={isActiveExchange ? 'success' : 'warning'}>
+            {isActiveExchange === true ? 'Active' : 'In Active'}
+          </Label>
         </TableCell>
 
         {/*         <TableCell sx={{ typography: 'caption', color: 'text.secondary' }}>

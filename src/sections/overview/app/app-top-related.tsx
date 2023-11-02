@@ -32,7 +32,7 @@ interface Props extends CardProps {
 
 export default function AppTopRelated({ title, subheader, list, ...other }: Props) {
   return (
-    <Card {...other} sx={{ borderRadius: 0, height: "inherit" }}>
+    <Card {...other} sx={{ borderRadius: 0, height: "inherit", border: '1px solid #d3d3d3', WebkitBorderRadius:'5px' }}>
       <CardHeader title={title} subheader={subheader} />
 
       <Scrollbar>

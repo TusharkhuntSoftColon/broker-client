@@ -9,7 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import { Checkbox } from '@mui/material';
+import { Checkbox, Typography } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
@@ -24,7 +24,12 @@ import exchangeService from 'src/services/exchangeService';
 import { addAdmin, updateAdmin } from 'src/store/slices/admin';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFCheckbox, RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
+import FormProvider, {
+  RHFCheckbox,
+  RHFTextField,
+  RHFAutocomplete,
+  RHFSwitch,
+} from 'src/components/hook-form';
 
 import { IUserItem } from 'src/types/user';
 
@@ -43,10 +48,6 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
   const [exchange, setExchange] = useState<any>([]);
 
   const adminData = useSelector((data: any) => data?.admin?.adminList);
-
-  // console.log({ adminData });
-
-  console.log({ currentUser });
 
   const dispatch = useDispatch();
 
@@ -86,11 +87,10 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
       limitOfAddUser: currentUser?.limitOfAddUser || null,
       leverageX: currentUser?.leverageX || null,
       leverageY: currentUser?.leverageY || null,
+      isActiveAdmin: currentUser?.isActiveAdmin || true,
     }),
     [currentUser]
   );
-
-  // console.log({ currentUser });
 
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),
@@ -105,11 +105,6 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
     handleSubmit,
     formState: { isSubmitting, errors },
   } = methods;
-
-  // console.log({ errors });
-  // const values = watch();
-
-  // console.log({ values });
 
   // create ADMIN
   const { mutate: createAdmin } = useMutation(adminService.createAdmin, {
@@ -138,20 +133,15 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log({ data });
-    console.log({ currentUser });
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
       enqueueSnackbar(currentUser ? 'Update success!' : 'Create success!');
       // await createAdmin(data);
-      // console.log({ currentUser });
       if (currentUser) {
-        console.log('UPDATE CALLED');
         const adminID = currentUser.id;
         dispatch(updateAdmin({ id: adminID, updatedData: data }));
       } else {
-        console.log('ADD CALLED');
         dispatch(addAdmin(data));
       }
       router.push(paths.dashboard.user.list);
@@ -165,7 +155,6 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
     mutate();
   }, []);
 
-  // console.log({ exchangeData });
 
   const ExchangeOptions: any = [];
 
@@ -176,7 +165,17 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
     });
   }
 
-  console.log({ ExchangeOptions });
+  const ExchangeOption = [
+    { label: 'NYSE', value: 'abcdefg' },
+    { label: 'NASDAQ', value: 'abcdef' },
+    { label: 'LSE', value: 'abcdeased' },
+    { label: 'TSE', value: 'abcdefgh' },
+    { label: 'HKEX', value: 'absdffg' },
+    { label: 'SSE', value: 'absdfefg' },
+    { label: 'TSX', value: 'absdfefg' },
+    { label: 'BSE', value: 'absdfefg' },
+    { label: 'BIST', value: 'absdfefg' },
+  ];
 
   // const handleDrop = useCallback(
   //   (acceptedFiles: File[]) => {
@@ -195,7 +194,6 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
 
   // const handleFilterRole = useCallback(
   //   (event: SelectChangeEvent<string[]>) => {
-  //     console.log(event.target.value);
   //     onFilters(
   //       'role',
   //       typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
@@ -204,19 +202,10 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
   //   [onFilters]
   // );
 
-  const handleFilterRole = (e: any) => {
-    console.log(e.target.value);
-
-    exchange.push(e.target.value);
-  };
-
   // const Data = ExchangeOptions.find((data: any) => data.value === currentUser?.allowedExchange)
   //   ?.value;
 
-  // console.log({ Data });
-  const handleAllowedExchange = (e: any) => {
-    console.log(e);
-  };
+
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
@@ -399,14 +388,14 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
                 label="Allowed Exchange"
                 // control={control}
                 isReadOnly={!!isView}
-                options={ExchangeOptions.map((data: any) => data.label)}
+                options={ExchangeOption.map((data: any) => data.label)}
                 freeSolo
-                data={ExchangeOptions}
+                data={ExchangeOption}
                 isLabled={false}
                 multiple
                 getOptionLabel={(option: any) => option}
                 renderOption={(props, option, { selected }) => {
-                  const { label } = ExchangeOptions.filter((data: any) => data.label === option)[0];
+                  const { label } = ExchangeOption.filter((data: any) => data.label === option)[0];
 
                   if (!label) {
                     return null;
@@ -515,6 +504,19 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
               <RHFCheckbox isReadOnly={!!isView} name="insertCustomBet" label="Insert Custom Bet" />
               <RHFCheckbox isReadOnly={!!isView} name="editBet" label="Edit Bet" />
               <RHFCheckbox isReadOnly={!!isView} name="deleteBet" label="Delete Bet" />
+
+              {currentUser && (
+                <RHFSwitch
+                  name="isActiveAdmin"
+                  labelPlacement="start"
+                  label={
+                    <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+                      Active or In Active Admin
+                    </Typography>
+                  }
+                  sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
+                />
+              )}
             </Box>
 
             {!isView && (

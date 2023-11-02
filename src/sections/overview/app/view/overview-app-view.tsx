@@ -14,8 +14,11 @@ import AppNewInvoice from '../app-new-invoice';
 import AppTopRelated from '../app-top-related';
 import AppAreaInstalled from '../app-area-installed';
 import AppCurrentDownload from '../app-current-download';
-import "/node_modules/react-resizable/css/styles.css";
-import "/node_modules/react-grid-layout/css/styles.css";
+import '/node_modules/react-resizable/css/styles.css';
+import '/node_modules/react-grid-layout/css/styles.css';
+import TabsTable from 'src/sections/dashboard/table';
+import SymbolTableDashboard from '../symbol-new-table';
+import ClientTableDashboard from '../client-new-table';
 
 // ----------------------------------------------------------------------
 
@@ -23,90 +26,80 @@ const ResponsiveReactGridLayout = WidthProvider(Responsive);
 export default function OverviewAppView() {
   // app current download component
   const AppCurrentDownloadComponent = () => (
-      <AppCurrentDownload
-        title="Current Download"
-        chart={{
-          series: [
-            { label: 'Mac', value: 12244 },
-            { label: 'Window', value: 53345 },
-            { label: 'iOS', value: 44313 },
-            { label: 'Android', value: 78343 },
-          ],
-        }}
-      />
-    );
+    <AppCurrentDownload
+      title="Current Download"
+      chart={{
+        series: [
+          { label: 'Mac', value: 12244 },
+          { label: 'Window', value: 53345 },
+          { label: 'iOS', value: 44313 },
+          { label: 'Android', value: 78343 },
+        ],
+      }}
+    />
+  );
 
   // app invoice component
-  const AppInvoiceComponent = () => (
-      <AppNewInvoice
-        title="New Invoice"
-        tableData={_appInvoices}
-        tableLabels={[
-          { id: 'id', label: 'Invoice ID' },
-          { id: 'category', label: 'Category' },
-          { id: 'price', label: 'Price' },
-          { id: 'status', label: 'Status' },
-          { id: '' },
-        ]}
-      />
-    );
+  const AppInvoiceComponent = () => <TabsTable />;
 
   // app top related component
-  const AppTopRelatedComponent = () => <AppTopRelated title="Top Related Applications" list={_appRelated} />;
+  const AppTopRelatedComponent = () => (
+    <AppTopRelated title="Top Related Applications" list={_appRelated} />
+  );
 
   // app AppAreaInstalled compoent
   const AppAreaInstalledcompoent = () => (
-      <AppAreaInstalled
-        title="Area Installed"
-        subheader="(+43%) than last year"
-        chart={{
-          categories: [
-            'Jan',
-            'Feb',
-            'Mar',
-            'Apr',
-            'May',
-            'Jun',
-            'Jul',
-            'Aug',
-            'Sep',
-            'Oct',
-            'Nov',
-            'Dec',
-          ],
-          series: [
-            {
-              year: '2019',
-              data: [
-                {
-                  name: 'Asia',
-                  data: [10, 41, 35, 51, 49, 62, 69, 91, 148, 35, 51, 49],
-                },
-                {
-                  name: 'America',
-                  data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 13, 56, 77],
-                },
-              ],
-            },
-            {
-              year: '2020',
-              data: [
-                {
-                  name: 'Asia',
-                  data: [51, 35, 41, 10, 91, 69, 62, 148, 91, 69, 62, 49],
-                },
-                {
-                  name: 'America',
-                  data: [56, 13, 34, 10, 77, 99, 88, 45, 77, 99, 88, 77],
-                },
-              ],
-            },
-          ],
-        }}
-      />
-    );
+    <AppAreaInstalled
+      title="Area Installed"
+      subheader="(+43%) than last year"
+      chart={{
+        categories: [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apr',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
+        ],
+        series: [
+          {
+            year: '2019',
+            data: [
+              {
+                name: 'Asia',
+                data: [10, 41, 35, 51, 49, 62, 69, 91, 148, 35, 51, 49],
+              },
+              {
+                name: 'America',
+                data: [10, 34, 13, 56, 77, 88, 99, 77, 45, 13, 56, 77],
+              },
+            ],
+          },
+          {
+            year: '2020',
+            data: [
+              {
+                name: 'Asia',
+                data: [51, 35, 41, 10, 91, 69, 62, 148, 91, 69, 62, 49],
+              },
+              {
+                name: 'America',
+                data: [56, 13, 34, 10, 77, 99, 88, 45, 77, 99, 88, 77],
+              },
+            ],
+          },
+        ],
+      }}
+    />
+  );
 
-  const { user } = useMockedUser();
+  // const { user } = useMockedUser();
 
   const theme = useTheme();
 
@@ -115,7 +108,7 @@ export default function OverviewAppView() {
   const [layout, setlayout] = useState<any>([
     {
       i: 'a',
-      component: <AppAreaInstalledcompoent />,
+      component: <SymbolTableDashboard />,
       x: 0,
       y: 0,
       w: 4,
@@ -125,7 +118,7 @@ export default function OverviewAppView() {
     },
     {
       i: 'c',
-      component: <AppInvoiceComponent />,
+      component: <AppNewInvoice />,
       x: 0,
       y: 13.7,
       w: 12,
@@ -134,21 +127,11 @@ export default function OverviewAppView() {
       maxH: 13.7,
     },
     {
-      i: 'b',
-      component: <AppCurrentDownloadComponent />,
+      i: 'd',
+      component: <ClientTableDashboard />,
       x: 4,
       y: 0,
-      w: 3,
-      h: 13.7,
-      minH: 13.7,
-      maxH: 13.7,
-    },
-    {
-      i: 'd',
-      component: <AppTopRelatedComponent />,
-      x: 7,
-      y: 0,
-      w: 5,
+      w: 8,
       h: 13.7,
       minH: 13.7,
       maxH: 13.7,
@@ -175,16 +158,18 @@ export default function OverviewAppView() {
         style={{ padding: '2px' }}
         onDrop={onDrop}
         isBounded
+        isDraggable
         measureBeforeMount={false}
         useCSSTransforms={mounted}
-        onLayoutChange={(layout: any) => console.log({layout})}
+        onLayoutChange={(layout: any) => console.log({ layout })}
         compactType={compactType}
         preventCollision={!compactType}
+        // draggableHandle=".grid-item__title"
         isDroppable
         droppingItem={{ i: 'xx', h: 2, w: 2 }}
       >
         {layout.map((itm: any, i: any) => (
-          <div key={i} data-grid={itm} className="block" style={{height: "inherit"}}>
+          <div key={i} data-grid={itm} className="block" style={{ height: 'inherit' }}>
             {itm.component}
           </div>
         ))}

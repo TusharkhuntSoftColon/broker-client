@@ -18,13 +18,8 @@ type Props = {
 
 export default function UserEditView({ id }: Props) {
   const settings = useSettingsContext();
-
-  console.log({ id });
   const adminData = useSelector((data: any) => data?.admin?.adminList);
-
   const currentUser = adminData.find((user: any) => user.id === id);
-
-  console.log({ currentUser });
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>

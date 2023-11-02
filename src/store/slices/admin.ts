@@ -37,6 +37,7 @@ const adminSlice = createSlice({
         {
           ...data,
           id: Math.random().toString(36).substr(2, 5),
+          createdAt: new Date().toDateString(),
         },
       ];
       // state.adminList = [
@@ -55,7 +56,8 @@ const adminSlice = createSlice({
       console.log({ updatedData });
       const data = {
         ...updatedData,
-        id: id
+        id: id,
+        createdAt: new Date().toDateString(),
       };
       const dataIndex = state.adminList.findIndex((item: any) => item.id === id);
 

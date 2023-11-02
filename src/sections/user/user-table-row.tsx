@@ -5,6 +5,7 @@ import Checkbox from '@mui/material/Checkbox';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
+import ListItemText from '@mui/material/ListItemText';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -34,8 +35,17 @@ export default function UserTableRow({
   onDeleteRow,
   onViewRow,
 }: Props) {
-  const { name, role, exchange, phoneNumber, allowedExchange, ID, Domain } = row;
-  console.log({ allowedExchange });
+  const {
+    name,
+    role,
+    exchange,
+    phoneNumber,
+    allowedExchange,
+    ID,
+    Domain,
+    isActiveAdmin,
+    createdAt,
+  } = row;
 
   const confirm = useBoolean();
 
@@ -80,6 +90,24 @@ export default function UserTableRow({
               </Label>
             ))}
           </Box>
+        </TableCell>
+
+        <TableCell>
+          <ListItemText
+            primary={<span>{createdAt || '-'}</span>}
+            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
+            secondaryTypographyProps={{
+              mt: 0.5,
+              component: 'span',
+              typography: 'caption',
+            }}
+          />
+        </TableCell>
+
+        <TableCell>
+          <Label variant="soft" color={isActiveAdmin ? 'success' : 'warning'}>
+            {isActiveAdmin === true ? 'Active' : 'In Active'}
+          </Label>
         </TableCell>
 
         <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>

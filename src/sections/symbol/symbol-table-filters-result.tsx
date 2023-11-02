@@ -30,14 +30,26 @@ export default function SymbolTableFiltersResult({
 }: Props) {
   const shortLabel = shortDateLabel(filters.startDate, filters.endDate);
 
+  console.log({ filters });
+
   const handleRemoveStatus = () => {
-    onFilters('status', 'all');
+    onFilters('status', null);
+  };
+
+  const handleRemoveCurrency = () => {
+    onFilters('currency', null);
+  };
+
+  const handleRemoveTickSize = () => {
+    onFilters('tickSize', null);
   };
 
   const handleRemoveDate = () => {
     onFilters('startDate', null);
     onFilters('endDate', null);
   };
+
+  console.log({ filters });
 
   return (
     <Stack spacing={1.5} {...other}>
@@ -49,9 +61,21 @@ export default function SymbolTableFiltersResult({
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
-        {filters.status !== 'all' && (
-          <Block label="Status:">
-            <Chip size="small" label={filters.status} onDelete={handleRemoveStatus} />
+        {filters?.currency !== null && (
+          <Block label="Currency :">
+            <Chip size="small" label={filters?.currency?.label} onDelete={handleRemoveCurrency} />
+          </Block>
+        )}
+
+        {filters?.tickSize !== null && (
+          <Block label="Tick Size :">
+            <Chip size="small" label={filters?.tickSize?.label} onDelete={handleRemoveTickSize} />
+          </Block>
+        )}
+
+        {filters?.status !== null && (
+          <Block label="Status :">
+            <Chip size="small" label={filters?.status?.label} onDelete={handleRemoveStatus} />
           </Block>
         )}
 
