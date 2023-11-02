@@ -2,6 +2,7 @@ import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 import Stack, { StackProps } from '@mui/material/Stack';
 
 import Iconify from 'src/components/iconify';
@@ -38,6 +39,16 @@ export default function ProductTableFiltersResult({
     onFilters('publish', newValue);
   };
 
+  const handleRemoveStatus = () => {
+    onFilters('status', null);
+  };
+
+  const handleRemoveDate = () => {
+    onFilters('dateRange', []);
+  };
+
+  console.log({ filters });
+
   return (
     <Stack spacing={1.5} {...other}>
       <Box sx={{ typography: 'body2' }}>
@@ -56,6 +67,21 @@ export default function ProductTableFiltersResult({
           </Block>
         )}
 
+        {!!filters.dateRange.length && (
+          <Block label="Selected Range:">
+            {filters.dateRange.map((item: any) => {
+              return (
+                <Chip
+                  key={item}
+                  label={item.toDateString()}
+                  size="small"
+                  onDelete={() => handleRemoveDate()}
+                />
+              );
+            })}
+          </Block>
+        )}
+
         {!!filters.publish.length && (
           <Block label="Publish:">
             {filters.publish.map((item) => (
@@ -66,6 +92,12 @@ export default function ProductTableFiltersResult({
                 onDelete={() => handleRemovePublish(item)}
               />
             ))}
+          </Block>
+        )}
+
+        {filters?.status !== null && (
+          <Block label="Status :">
+            <Chip size="small" label={filters?.status?.label} onDelete={handleRemoveStatus} />
           </Block>
         )}
 

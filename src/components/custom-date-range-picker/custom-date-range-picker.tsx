@@ -22,6 +22,7 @@ export default function CustomDateRangePicker({
   startDate,
   endDate,
   //
+  handleSelectedDate,
   onChangeStartDate,
   onChangeEndDate,
   //
@@ -109,7 +110,7 @@ export default function CustomDateRangePicker({
           Cancel
         </Button>
 
-        <Button disabled={error} variant="contained" onClick={onClose}>
+        <Button disabled={error} variant="contained" onClick={handleSelectedDate}>
           Apply
         </Button>
       </DialogActions>

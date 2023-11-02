@@ -4,9 +4,11 @@ export type ISymbolTableFilterValue = string | Date | null;
 
 export type ISymbolTableFilters = {
   name: string;
-  status: string;
+  currency: null | string | any;
+  status: null | string | any;
   startDate: Date | null;
   endDate: Date | null;
+  tickSize:any;
 };
 
 // ----------------------------------------------------------------------
@@ -79,4 +81,5 @@ export type ISymbolItem = {
   orderNumber?: any;
   customer?: any;
   status?: any;
+  isActiveSymbol?: any;
 };

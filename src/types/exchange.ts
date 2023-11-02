@@ -40,16 +40,15 @@ export type IProductReview = {
 export type IExchangeItem = {
   name: string;
   id: string;
-  _id?:any;
+  _id?: any;
   status: string;
   createdAt: string;
   updatedAt: string;
   label: string;
-  statusOfExchange:string;
-  stAndTp:boolean;
-  symbol:any;
-  isActiveExchange:any;
-}
+  statusOfExchange: string;
+  stAndTp: boolean;
+  isActiveExchange: any;
+};
 
 export type IProductItem = {
   _id?: string;
@@ -76,7 +75,7 @@ export type IProductItem = {
   subDescription: string;
   priceSale: number | null;
   isActiveExchange: any;
-  status: string;
+  status: any;
   updatedAt: string;
   reviews: IProductReview[];
   createdAt: string;
@@ -95,10 +94,12 @@ export type IProductItem = {
   };
 };
 
-export type IProductTableFilterValue = string | string[];
+export type IProductTableFilterValue = string | string[] | any;
 
 export type IProductTableFilters = {
   name: string;
   stock: string[];
   publish: string[];
+  status: any;
+  dateRange: any;
 };

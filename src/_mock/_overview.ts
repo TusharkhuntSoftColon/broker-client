@@ -46,10 +46,10 @@ export const _appAuthors = [...Array(3)].map((_, index) => ({
   totalFavorites: _mock.number.nativeL(index),
 }));
 
-export const _appInvoices = [...Array(5)].map((_, index) => {
-  const category = ['Android', 'Mac', 'Windows', 'Android', 'Mac'][index];
+export const _appInvoices = [...Array(7)].map((_, index) => {
+  const category = ['Android', 'Mac', 'Windows', 'Android', 'Mac', 'Android'][index];
 
-  const status = ['paid', 'out of date', 'progress', 'paid', 'paid'][index];
+  const status = ['paid', 'out of date', 'progress', 'paid', 'paid', 'Progress'][index];
 
   return {
     id: _mock.id(index),
@@ -60,6 +60,104 @@ export const _appInvoices = [...Array(5)].map((_, index) => {
   };
 });
 
+export const newInvoiceData = [
+  {
+    id: 0,
+    symbol: 'MANNAPURAM/08',
+    positions: '1 / 0',
+    buy_volume: '2500 / 0',
+    buy_price: '147.75 / 0.00',
+    sell_volume: '0 / 0',
+    sell_price: '0.00 / 0.00',
+    net_volume: '2500',
+    profit: '-17750.00 / 0.00',
+    unCovered: '-17750',
+  },
+  {
+    id: 1,
+    symbol: 'INDUSTOWER/08',
+    positions: '1 / 0',
+    buy_volume: '2500 / 0',
+    buy_price: '189.75 / 0.00',
+    sell_volume: '0 / 0',
+    sell_price: '0.00 / 0.00',
+    net_volume: '2500',
+    profit: '-7875.00 / 0.00',
+    unCovered: '-7875',
+  },
+  {
+    id: 2,
+    symbol: 'TATAPOWER/08',
+    positions: '1 / 0',
+    buy_volume: '2500 / 0',
+    buy_price: '143.10 / 0.00',
+    sell_volume: '0 / 0',
+    sell_price: '0.00 / 0.00',
+    net_volume: '2500',
+    profit: '-65454.00 / 0.00',
+    unCovered: '-65454',
+  },
+  {
+    id: 3,
+    symbol: 'ONGC/08',
+    positions: '1 / 0',
+    buy_volume: '2000 / 0',
+    buy_price: '157.87 / 0.00',
+    sell_volume: '0 / 0',
+    sell_price: '0.00 / 0.00',
+    net_volume: '2000',
+    profit: '-57896.00 / 0.00',
+    unCovered: '-57896',
+  },
+  {
+    id: 4,
+    symbol: 'TATASTEEL/08',
+    positions: '1 / 0',
+    buy_volume: '1750 / 0',
+    buy_price: '123.01 / 0.00',
+    sell_volume: '0 / 0',
+    sell_price: '0.00 / 0.00',
+    net_volume: '1750',
+    profit: '-750.00 / 0.00',
+    unCovered: '-750',
+  },
+  {
+    id: 5,
+    symbol: 'SBIN/08',
+    positions: '1 / 0',
+    buy_volume: '1500 / 0',
+    buy_price: '198.67 / 0.00',
+    sell_volume: '0 / 0',
+    sell_price: '0.00 / 0.00',
+    net_volume: '1500',
+    profit: '12956.00 / 0.00',
+    unCovered: '12956',
+  },
+  {
+    id: 6,
+    symbol: 'BATAINIDA/08',
+    positions: '1 / 0',
+    buy_volume: '1000 / 0',
+    buy_price: '190.45 / 0.00',
+    sell_volume: '0 / 0',
+    sell_price: '0.00 / 0.00',
+    net_volume: '1000',
+    profit: '-7820.00 / 0.00',
+    unCovered: '-7820',
+  },
+  {
+    id: 7,
+    symbol: 'HDFCBANK/08',
+    positions: '1 / 0',
+    buy_volume: '550 / 0',
+    buy_price: '145.05 / 0.00',
+    sell_volume: '0 / 0',
+    sell_price: '0.00 / 0.00',
+    net_volume: '550',
+    profit: '17790.00 / 0.00',
+    unCovered: '17790',
+  },
+];
 export const _appFeatured = [...Array(3)].map((_, index) => ({
   id: _mock.id(index),
   title: _mock.postTitle(index),
@@ -328,3 +426,306 @@ export const _bookingNew = [...Array(5)].map((_, index) => ({
   avatarUrl: _mock.image.avatar(index),
   coverUrl: _mock.image.travel(index),
 }));
+
+export const symbolTableDashboard = [...Array(10)].map((_, index) => {
+  const bid = [123, 446, 533, 23234, 675, 3234, 8784, 8858, 485, 7, 5458, 5, 554, 548, 8, 5, 5][
+    index
+  ];
+
+  const ask = [12324, 444, 6554, 7451, 14554, 5444, 6565, 65, 65, 6956, 65, 6, 95, 2, 5][index];
+
+  return {
+    id: _mock.id(index),
+    symbol: `BANKNIFTY/${index}`,
+    bid,
+    ask,
+  };
+});
+
+export const clientsTableDashboard = [...Array(10)].map((_, index) => {
+  const bid = [123, 446, 533, 23234, 675, 3234, 8784, 8858, 485, 7, 5458, 5, 554, 548, 8, 5, 5][
+    index
+  ];
+
+  const login = [
+    120521, 120521, 120521, 120521, 120521, 120521, 120521, 120521, 120521, 120521, 120521, 120521,
+    120521, 120521, 120521, 120521, 120521, 120521,
+  ][index];
+
+  const position = [
+    104354, 104354, 104354, 104354, 104354, 104354, 104354, 104354, 104354, 104354, 104354, 104354,
+    104354, 104354, 104354, 104354, 104354, 104354,
+  ][index];
+
+  const price1 = [
+    104354, 104354, 104354, 104354, 104354, 104354, 104354, 104354, 104354, 104354, 104354, 104354,
+    104354, 104354, 104354, 104354, 104354, 104354,
+  ][index];
+
+  const price2 = [
+    104354, 104354, 104354, 104354, 104354, 104354, 104354, 104354, 104354, 104354, 104354, 104354,
+    104354, 104354, 104354, 104354, 104354, 104354,
+  ][index];
+
+  const volume = [
+    '1K',
+    '25',
+    '1K',
+    '104354',
+    '104354',
+    '104354',
+    '104354',
+    '104354',
+    '104354',
+    '104354',
+    '104354',
+    '104354',
+    '104354',
+    '104354',
+    '104354',
+    '104354',
+    '104354',
+    '104354',
+  ][index];
+
+  const ask = [12324, 444, 6554, 7451, 14554, 5444, 6565, 65, 65, 6956, 65, 6, 95, 2, 5][index];
+  const type = [
+    'sell',
+    'buy',
+    'sell',
+    'buy',
+    'sell',
+    'buy',
+    'sell',
+    'buy',
+    'sell',
+    'buy',
+    'sell',
+    'buy',
+    'sell',
+    'buy',
+    'sell',
+  ][index];
+  const reason = [
+    'Mobile',
+    'Client',
+    'Mobile',
+    'Client',
+    'Mobile',
+    'Client',
+    'Mobile',
+    'Client',
+    'Mobile',
+    'Client',
+    'Mobile',
+    'Client',
+    'Mobile',
+    'Client',
+    'Mobile',
+  ][index];
+
+  return {
+    id: _mock.id(index),
+    login,
+    position,
+    symbol: `BANKNIFTY/${index}`,
+    type,
+    volume,
+    price1,
+    price2,
+    reason,
+    swap: 0.0,
+  };
+});
+
+export const newClientsTableData = [
+  {
+    id: 0,
+    login: 120521,
+    position: 10477383,
+    symbol: 'ashokley/08',
+    type: 'sell',
+    volume: '1K',
+    price1: 186.05,
+    price2: 185.25,
+    reason: 'Mobile',
+    swap: 0.0,
+  },
+  {
+    id: 1,
+    login: 120522,
+    position: 10825326,
+    symbol: 'banknifty/08',
+    type: 'buy',
+    volume: '25',
+    price1: 43965.7,
+    price2: 44282.7,
+    reason: 'Client',
+    swap: 0.0,
+  },
+  {
+    id: 2,
+    login: 120508,
+    position: 10681332,
+    symbol: 'bataindia/08',
+    type: 'buy',
+    volume: '1K',
+    price1: 1720.25,
+    price2: 1700.25,
+    reason: 'Client',
+    swap: 0.0,
+  },
+  {
+    id: 0,
+    login: 120521,
+    position: 10477383,
+    symbol: 'ashokley/08',
+    type: 'sell',
+    volume: '1K',
+    price1: 186.05,
+    price2: 185.25,
+    reason: 'Mobile',
+    swap: 0.0,
+  },
+  {
+    id: 0,
+    login: 120521,
+    position: 10477383,
+    symbol: 'ashokley/08',
+    type: 'sell',
+    volume: '1K',
+    price1: 186.05,
+    price2: 185.25,
+    reason: 'Mobile',
+    swap: 0.0,
+  },
+  {
+    id: 0,
+    login: 120521,
+    position: 10477383,
+    symbol: 'ashokley/08',
+    type: 'sell',
+    volume: '1K',
+    price1: 186.05,
+    price2: 185.25,
+    reason: 'Mobile',
+    swap: 0.0,
+  },
+  {
+    id: 0,
+    login: 120521,
+    position: 10477383,
+    symbol: 'ashokley/08',
+    type: 'sell',
+    volume: '1K',
+    price1: 186.05,
+    price2: 185.25,
+    reason: 'Mobile',
+    swap: 0.0,
+  },
+  {
+    id: 0,
+    login: 120521,
+    position: 10477383,
+    symbol: 'ashokley/08',
+    type: 'sell',
+    volume: '1K',
+    price1: 186.05,
+    price2: 185.25,
+    reason: 'Mobile',
+    swap: 0.0,
+  },
+  {
+    id: 0,
+    login: 120521,
+    position: 10477383,
+    symbol: 'ashokley/08',
+    type: 'sell',
+    volume: '1K',
+    price1: 186.05,
+    price2: 185.25,
+    reason: 'Mobile',
+    swap: 0.0,
+  },
+  {
+    id: 0,
+    login: 120521,
+    position: 10477383,
+    symbol: 'ashokley/08',
+    type: 'sell',
+    volume: '1K',
+    price1: 186.05,
+    price2: 185.25,
+    reason: 'Mobile',
+    swap: 0.0,
+  },
+];
+
+export const newSymbolTableData = [
+  {
+    id: 0,
+    symbol: 'BANKNIFTY/08',
+    bid:44283.00,
+    ask:44292.10,
+  },
+  {
+    id: 1,
+    symbol: 'NIFTY/08',
+    bid:19271.80,
+    ask:19272.00,
+  },
+  {
+    id: 2,
+    symbol: 'GIFT-NIFTY/08',
+    bid:19262.00,
+    ask:19262.50,
+  },
+  {
+    id: 3,
+    symbol: 'SILVER/09',
+    bid:73332.00,
+    ask:73336.00,
+  },
+  {
+    id: 4,
+    symbol: 'GOLD/10',
+    bid:58720.00,
+    ask:58729.10,
+  },
+  {
+    id: 5,
+    symbol: 'DOWJONES/08',
+    bid:34132,
+    ask:34137,
+  },
+  {
+    id: 6,
+    symbol: 'NASDAQ/08',
+    bid:14760.20,
+    ask:14761.20,
+  },
+  {
+    id: 7,
+    symbol: 'NQ/09',
+    bid:14802.00,
+    ask:14802.75,
+  },
+  {
+    id: 8,
+    symbol: 'ES/09',
+    bid:4382.00,
+    ask:4382.25,
+  },
+  {
+    id: 9,
+    symbol: 'YM/09',
+    bid:34168.00,
+    ask:34170.00,
+  },
+  {
+    id: 10,
+    symbol: 'SI/09',
+    bid:24.095,
+    ask:24.100,
+  }
+];

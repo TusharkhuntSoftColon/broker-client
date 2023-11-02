@@ -1,6 +1,6 @@
 import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
-import { useMemo, useCallback } from 'react';
+import { useMemo, useCallback, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import { Button } from '@mui/material';
@@ -51,7 +51,6 @@ export default function ProductTableToolbar({
   stockOptions,
   publishOptions,
 }: Props) {
-  console.log({ stockOptions });
   const rangeCalendarPicker = useDateRangePicker(new Date(), new Date());
   const settings = useSettingsContext();
 
@@ -67,10 +66,16 @@ export default function ProductTableToolbar({
     [onFilters]
   );
 
+  const handleDateRangeChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      // console.log(event.target);
+      // onFilters('name', event.target.value);
+    },
+    [onFilters]
+  );
+
   const handleFilterStock = useCallback(
     (event: SelectChangeEvent<string[]>) => {
-      console.log({ event });
-
       onFilters(
         'stock',
         typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
@@ -113,11 +118,29 @@ export default function ProductTableToolbar({
 
   const value = watch();
 
-  const handleStatusChange = (e: any) => {
-    onFilters('isActiveExchange', value?.status);
-  };
+  useEffect(() => {
+    handleStatusChange();
+  }, [value?.status]);
 
-  // console.log({ value });
+  useEffect(() => {
+    handleDateChange();
+  }, [value?.dateRange]);
+
+  const handleDateChange = useCallback(() => {
+    value.dateRange &&
+      onFilters('dateRange', [rangeCalendarPicker.startDate, rangeCalendarPicker.endDate]);
+  }, [value?.dateRange]);
+  const handleStatusChange = useCallback(() => {
+    value.status && onFilters('status', value?.status);
+  }, [value?.status]);
+
+  const handleSelectedDate = () => {
+    const date = [rangeCalendarPicker.startDate, rangeCalendarPicker.endDate];
+
+    onFilters('dateRange', date);
+
+    rangeCalendarPicker.onClose();
+  };
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -187,6 +210,7 @@ export default function ProductTableToolbar({
                 {fDate(rangeCalendarPicker.startDate)} - {fDate(rangeCalendarPicker.endDate)}
               </Button>
               <CustomDateRangePicker
+                // name="dateRange"
                 variant="calendar"
                 open={rangeCalendarPicker.open}
                 startDate={rangeCalendarPicker.startDate}
@@ -195,6 +219,7 @@ export default function ProductTableToolbar({
                 onChangeEndDate={rangeCalendarPicker.onChangeEndDate}
                 onClose={rangeCalendarPicker.onClose}
                 error={rangeCalendarPicker.error}
+                handleSelectedDate={handleSelectedDate}
               />
             </Stack>
             <FormControl
@@ -229,29 +254,17 @@ export default function ProductTableToolbar({
                 <RHFAutocomplete
                   name="status"
                   label="Status"
-                  control={control}
-                  // isReadOnly={isView ? true : false}
-                  // onChange={(e) => handleStatusChange(e)}
-                  options={ExchangeStatus.map((data) => data.label)}
+                  options={ExchangeStatus}
                   isLabled={false}
                   // value={ExchangeStatus.map((data) => data.value)}
                   data={ExchangeStatus}
-                  getOptionLabel={(option: any) => option}
-                  renderOption={(props, option) => {
-                    const { label } = ExchangeStatus.filter(
-                      (country: any) => country.label === option
-                    )[0];
-
-                    if (!label) {
-                      return null;
-                    }
-
-                    return (
-                      <li {...props} key={label}>
-                        {label}
-                      </li>
-                    );
-                  }}
+                  isOptionEqualToValue={(option, value) => option.value === value.value}
+                  getOptionLabel={(option: any) => option.label}
+                  renderOption={(props, option) => (
+                    <li {...props} key={option.label}>
+                      {option.label}
+                    </li>
+                  )}
                   // renderTags={(selected, getTagProps) =>
                   //   selected.map((option, index) => (
                   //     <Chip

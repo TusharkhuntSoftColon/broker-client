@@ -58,20 +58,24 @@ const TABLE_HEAD = [
     id: 'contractSize',
     label: 'Contract Size',
   },
+
   { id: 'tickSize', label: 'Tick Size' },
   {
     id: 'tickValue',
     label: 'Tick Value',
   },
+  { is: 'status', label: 'Status' },
 
   { id: '', width: 88 },
 ];
 
 const defaultFilters: ISymbolTableFilters = {
   name: '',
-  status: 'all',
+  currency: null,
+  status: null,
   startDate: null,
   endDate: null,
+  tickSize: null,
 };
 
 // ----------------------------------------------------------------------
@@ -91,7 +95,6 @@ export default function SymbolListView() {
 
   const symbolData = useSelector((data: any) => data?.symbol?.symbolList);
 
-  console.log({ symbolData });
   const [filters, setFilters] = useState(defaultFilters);
 
   const dateError =
@@ -114,7 +117,11 @@ export default function SymbolListView() {
   const denseHeight = table.dense ? 52 : 72;
 
   const canReset =
-    !!filters.name || filters.status !== 'all' || (!!filters.startDate && !!filters.endDate);
+    !!filters.name ||
+    filters.currency !== null ||
+    filters.status !== null ||
+    filters.tickSize !== null ||
+    (!!filters.startDate && !!filters.endDate);
 
   const notFound = (!dataFiltered.length && canReset) || !dataFiltered.length;
 
@@ -143,8 +150,6 @@ export default function SymbolListView() {
   });
 
   const handleDeleteRow = (id: any) => {
-    console.log({ id });
-    // deleteTableRow(id);
     dispatch(deleteSymbol(id));
   };
 
@@ -172,7 +177,6 @@ export default function SymbolListView() {
 
   const handleEditRow = useCallback(
     (id: string) => {
-      console.log({ id });
       router.push(paths.dashboard.symbol.edit(id));
     },
     [router]
@@ -413,7 +417,7 @@ function applyFilter({
   filters: ISymbolTableFilters;
   dateError: boolean;
 }) {
-  const { status, name, startDate, endDate } = filters;
+  const { currency, name, startDate, endDate, status, tickSize } = filters;
 
   const stabilizedThis = inputData.map((el: any, index: any) => [el, index] as const);
 
@@ -424,20 +428,34 @@ function applyFilter({
   });
 
   inputData = stabilizedThis.map((el: any) => el[0]);
-  console.log({ inputData });
 
   if (name) {
     inputData = inputData.filter((symbol: any) => {
       return (
-        symbol.name.toLowerCase().indexOf(name.toLowerCase()) !== -1 ||
-        symbol.currency.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        symbol.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+        // symbol.currency.toLowerCase().indexOf(name.toLowerCase()) !== -1
         // order.customer.email.toLowerCase().indexOf(name.toLowerCase()) !== -1
       );
     });
   }
 
-  if (status !== 'all') {
-    inputData = inputData.filter((symbol: any) => symbol.status === status);
+  if (currency !== null) {
+    inputData = inputData.filter(
+      (symbol: any) =>
+        symbol.currency.label.toLowerCase().trim() === currency.label.toLowerCase().trim()
+    );
+  }
+
+  if (status !== null) {
+    inputData = inputData.filter((user: any) => {
+      return user?.isActiveSymbol === status?.value;
+    });
+  }
+
+  if (tickSize !== null) {
+    inputData = inputData.filter((data: any) => {
+      return data.tickSize > tickSize.value[0] && data.tickSize < tickSize.value[1];
+    });
   }
 
   if (!dateError) {

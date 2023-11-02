@@ -48,13 +48,11 @@ export default function ExchangeQuickEditForm({
 
   const [symbolData, setSymbolData] = useState<any>([]);
 
-  console.log({ currentUser });
 
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     statusOfExchange: Yup.mixed<any>().nullable().required('Status Of Exchange is required'),
     stAndTp: Yup.mixed<any>().nullable().required('stAndTp is required'),
-    symbol: Yup.mixed<any>().nullable().required('Symbol is required'),
   });
 
   const defaultValues = useMemo(
@@ -62,8 +60,7 @@ export default function ExchangeQuickEditForm({
       name: currentUser?.name || '',
       statusOfExchange: currentUser?.statusOfExchange || null,
       stAndTp: currentUser?.stAndTp || null,
-      symbol: currentUser?.symbol || null,
-      isActiveExchange: currentUser?.isActiveExchange || true,
+      isActiveExchange: currentUser?.isActiveExchange || null,
     }),
     [currentUser]
   );
@@ -155,6 +152,14 @@ export default function ExchangeQuickEditForm({
     });
   }
 
+  const symbols = [
+    {label:"Tata",value:"12345"},
+    {label:"Adani",value:"12345"},
+    {label:"Infosys",value:"12345"},
+    {label:"TCS",value:"12345"},
+    {label:"Adani Energy",value:"12345"},
+  ]
+
   // console.log({ SymbolOption });
   return (
     <Dialog
@@ -229,17 +234,17 @@ export default function ExchangeQuickEditForm({
               )}
             />
 
-            <RHFAutocomplete
+            {/* <RHFAutocomplete
               name="symbol"
               label="Symbol"
               control={control}
               isReadOnly={!!isView}
-              options={SymbolOption?.map((data: any) => data.label)}
+              options={symbols?.map((data: any) => data.label)}
               isLabled
-              data={SymbolOption}
+              data={symbols}
               getOptionLabel={(option: any) => option}
               renderOption={(props, option) => {
-                const { label } = SymbolOption?.filter((data: any) => data.label === option)[0];
+                const { label } = symbols?.filter((data: any) => data.label === option)[0];
 
                 if (!label) {
                   return null;
@@ -251,7 +256,7 @@ export default function ExchangeQuickEditForm({
                   </li>
                 );
               }}
-            />
+            /> */}
 
             {currentUser && (
               <RHFSwitch

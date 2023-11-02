@@ -15,14 +15,15 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { STOP_LOSS } from 'src/_mock/_symbol';
+import { STOP_LOSS, SYMBOL_CURRENCY } from 'src/_mock/_symbol';
 import symbolService from 'src/services/symbolService';
 import { addSymbol, updateSymbol } from 'src/store/slices/symbol';
 
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
+import FormProvider, { RHFTextField, RHFAutocomplete, RHFSwitch } from 'src/components/hook-form';
 
 import { ISymbolItem } from 'src/types/symbol';
+import { Typography } from '@mui/material';
 
 // ----------------------------------------------------------------------
 
@@ -39,7 +40,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     contractSize: Yup.string().required('Contract size is required'),
-    currency: Yup.string().required('Currency is required'),
+    currency: Yup.mixed<any>().nullable().required('Currency is required'),
     spread: Yup.number().required('Spread is required'),
     stopLevel: Yup.number().required('Stop Level is required'),
     // calculation: Yup.string().required('Calculation is required'),
@@ -65,7 +66,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
     () => ({
       name: currentUser?.name || '',
       contractSize: currentUser?.contractSize || '',
-      currency: currentUser?.currency || '',
+      currency: currentUser?.currency || null,
       spread: currentUser?.spread || '',
       stopLevel: currentUser?.stopLevel || '',
       tickSize: currentUser?.tickSize || '',
@@ -78,6 +79,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
       limitOfAddUser: currentUser?.limitOfAddUser || '',
       leverageX: currentUser?.leverageX || '',
       leverageY: currentUser?.leverageY || '',
+      isActiveSymbol: currentUser?.isActiveSymbol || true,
     }),
     [currentUser]
   );
@@ -308,7 +310,24 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
             >
               <RHFTextField isReadOnly={!!isView} name="name" label="Name" />
               <RHFTextField isReadOnly={!!isView} name="contractSize" label="Contract Size" />
-              <RHFTextField isReadOnly={!!isView} name="currency" label="Currency" />
+              {/* <RHFTextField isReadOnly={!!isView} name="currency" label="Currency" /> */}
+              <RHFAutocomplete
+                name="currency"
+                label="Currency"
+                // control={control}
+                isReadOnly={!!isView}
+                options={SYMBOL_CURRENCY}
+                isLabled={false}
+                // value={STOP_LOSS.find((data) => data.value === currentUser?.stAndTp)?.label}
+                // data={STOP_LOSS}
+                isOptionEqualToValue={(option, value) => option.value === value.value}
+                getOptionLabel={(option: any) => option.label}
+                renderOption={(props, option) => (
+                  <li {...props} key={option.value}>
+                    {option.label}
+                  </li>
+                )}
+              />
               <RHFTextField isReadOnly={!!isView} type="number" name="spread" label="Spread" />
               <RHFTextField
                 isReadOnly={!!isView}
@@ -328,7 +347,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
                 isReadOnly={!!isView}
                 type="number"
                 name="initialMargin"
-                label="Inrial Margin"
+                label="Initial Margin"
               />
               <RHFTextField
                 isReadOnly={!!isView}
@@ -523,12 +542,27 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
                   </li>
                 )}
               />
+
+              {currentUser && (
+                <RHFSwitch
+                  name="isActiveSymbol"
+                  labelPlacement="start"
+                  label={
+                    <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+                      Active or In Active Symbol
+                    </Typography>
+                  }
+                  sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
+                />
+              )}
             </Box>
 
             <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-            {!isView &&  <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                {currentUser === undefined ? 'Create Symbol' : 'Save Changes'}
-              </LoadingButton>}
+              {!isView && (
+                <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+                  {currentUser === undefined ? 'Create Symbol' : 'Save Changes'}
+                </LoadingButton>
+              )}
             </Stack>
           </Card>
         </Grid>

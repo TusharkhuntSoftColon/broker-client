@@ -10,6 +10,7 @@ import { usePopover } from 'src/components/custom-popover';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 
 import { ISymbolItem } from 'src/types/symbol';
+import Label from 'src/components/label';
 
 // ----------------------------------------------------------------------
 
@@ -30,7 +31,9 @@ export default function SymbolTableRow({
   onEditRow,
   onDeleteRow,
 }: Props) {
-  const { name, contractSize, currency, tickSize, tickValue } = row;
+  const { name, contractSize, currency, tickSize, tickValue, isActiveSymbol } = row;
+
+  // console.log({ row });
 
   const confirm = useBoolean();
 
@@ -87,10 +90,17 @@ export default function SymbolTableRow({
       </TableCell> */}
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{name}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{currency}</TableCell>
+        {/* <TableCell sx={{ whiteSpace: 'nowrap' }}>{currency}</TableCell> */}
+        <TableCell>{currency.label}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{contractSize}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{tickSize}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{tickValue}</TableCell>
+
+        <TableCell>
+          <Label variant="soft" color={isActiveSymbol ? 'success' : 'warning'}>
+            {isActiveSymbol === true ? 'Active' : 'In Active'}
+          </Label>
+        </TableCell>
 
         {/* <TableCell> {fCurrency(subTotal)} </TableCell> */}
         {/* 

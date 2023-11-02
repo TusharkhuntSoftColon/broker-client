@@ -29,13 +29,19 @@ export default function UserTableFiltersResult({
   ...other
 }: Props) {
   const handleRemoveStatus = () => {
-    onFilters('status', 'all');
+    onFilters('status', null);
   };
 
-  const handleRemoveRole = (inputValue: string) => {
-    const newValue = filters.role.filter((item) => item !== inputValue);
-    onFilters('role', newValue);
+  const handleRemoveExchange = (inputValue: string) => {
+    const newValue = filters.exchange.filter((item) => item !== inputValue);
+    onFilters('exchange', newValue);
   };
+
+  const handleRemoveDate = () => {
+    onFilters('dateRange', []);
+  };
+
+  console.log({ filters });
 
   return (
     <Stack spacing={1.5} {...other}>
@@ -47,17 +53,37 @@ export default function UserTableFiltersResult({
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
-        {filters.status !== 'all' && (
+        {filters.status !== null && (
           <Block label="Status:">
-            <Chip size="small" label={filters.status} onDelete={handleRemoveStatus} />
+            <Chip size="small" label={filters.status?.label} onDelete={handleRemoveStatus} />
           </Block>
         )}
 
-        {!!filters.role.length && (
-          <Block label="Role:">
-            {filters.role.map((item) => (
-              <Chip key={item} label={item} size="small" onDelete={() => handleRemoveRole(item)} />
+        {!!filters.exchange.length && (
+          <Block label="Exchange:">
+            {filters.exchange.map((item) => (
+              <Chip
+                key={item}
+                label={item}
+                size="small"
+                onDelete={() => handleRemoveExchange(item)}
+              />
             ))}
+          </Block>
+        )}
+
+        {!!filters.dateRange.length && (
+          <Block label="Selected Range:">
+            {filters.dateRange.map((item: any) => {
+              return (
+                <Chip
+                  key={item}
+                  label={item.toDateString()}
+                  size="small"
+                  onDelete={() => handleRemoveDate()}
+                />
+              );
+            })}
           </Block>
         )}
 

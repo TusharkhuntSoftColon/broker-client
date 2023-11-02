@@ -29,34 +29,31 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
-useTable,
-emptyRows,
-getComparator,
-TableEmptyRows,
-TableHeadCustom,
-TableSelectedAction,
-TablePaginationCustom,
+  useTable,
+  emptyRows,
+  getComparator,
+  TableEmptyRows,
+  TableHeadCustom,
+  TableSelectedAction,
+  TablePaginationCustom,
 } from 'src/components/table';
 
-import {
-IProductItem,
-IProductTableFilters,
-IProductTableFilterValue,
-} from 'src/types/exchange';
+import { IProductItem, IProductTableFilters, IProductTableFilterValue } from 'src/types/exchange';
 
 import ExchangeTableRow from '../exchange-table-row';
 import ExchangeQuickEditForm from '../exchange-edit-form';
 import ProductTableToolbar from '../product-table-toolbar';
 import ProductTableFiltersResult from '../product-table-filters-result';
+import { isWithinInterval, parse, parseISO } from 'date-fns';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'id', label: 'Id', width: 160 },
   { id: 'name', label: 'Name', width: 160 },
-  { is: 'status', label: 'Status' },
   { is: 'createdAt', label: 'Created At' },
   { is: 'updatedAt', label: 'Updated At' },
+  { is: 'status', label: 'Status' },
   // { id: 'createdAt', label: 'Create at', width: 160 },
   // { id: 'inventoryType', label: 'Stock', width: 160 },
   // { id: 'price', label: 'Price', width: 140 },
@@ -73,6 +70,8 @@ const defaultFilters: IProductTableFilters = {
   name: '',
   publish: [],
   stock: [],
+  status: null,
+  dateRange: [],
 };
 
 // ----------------------------------------------------------------------
@@ -103,9 +102,6 @@ export default function ExchangeListView() {
   //     setTableData(products);
   //   }
   // }, [products]);
-
-  console.log({exchangeList});
-  
 
   const dataFiltered = applyFilter({
     inputData: exchangeList,
@@ -194,10 +190,6 @@ export default function ExchangeListView() {
   //     }
   //   },
   // });
-
-  useEffect(() => {
-    mutate();
-  }, []);
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -367,7 +359,7 @@ function applyFilter({
   comparator: (a: any, b: any) => number;
   filters: IProductTableFilters;
 }) {
-  const { name, stock, publish } = filters;
+  const { name, stock, publish, status, dateRange } = filters;
 
   const stabilizedThis = inputData.map((el: any, index: any) => [el, index] as const);
 
@@ -391,6 +383,17 @@ function applyFilter({
 
   if (publish.length) {
     inputData = inputData.filter((product: any) => publish.includes(product.publish));
+  }
+
+  if (status) {
+    inputData = inputData.filter((_el: any) => status.value === _el?.isActiveExchange);
+  }
+
+  if (dateRange.length > 0) {
+    inputData = inputData.filter((item: any) => {
+      const createdAtDate = parse(item.createdAt, 'EEE MMM dd yyyy', new Date());
+      return isWithinInterval(createdAtDate, { start: dateRange[0], end: dateRange[1] });
+    });
   }
 
   return inputData;

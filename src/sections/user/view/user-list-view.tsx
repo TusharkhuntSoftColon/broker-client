@@ -27,14 +27,14 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
-useTable,
-emptyRows,
-TableNoData,
-getComparator,
-TableEmptyRows,
-TableHeadCustom,
-TableSelectedAction,
-TablePaginationCustom,
+  useTable,
+  emptyRows,
+  TableNoData,
+  getComparator,
+  TableEmptyRows,
+  TableHeadCustom,
+  TableSelectedAction,
+  TablePaginationCustom,
 } from 'src/components/table';
 
 import { IUserItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
@@ -42,6 +42,7 @@ import { IUserItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/u
 import UserTableRow from '../user-table-row';
 import UserTableToolbar from '../user-table-toolbar';
 import UserTableFiltersResult from '../user-table-filters-result';
+import { isWithinInterval, parse } from 'date-fns';
 
 // ----------------------------------------------------------------------
 
@@ -55,13 +56,16 @@ const TABLE_HEAD = [
   // { id: 'company', label: 'Company' },
   // { id: 'role', label: 'Role', width: 180 },
   { id: 'exchange', label: 'Exchange' },
+  { is: 'createdAt', label: 'Created At' },
+  { is: 'status', label: 'Status' },
   { id: '', width: 88 },
 ];
 
 const defaultFilters: IUserTableFilters = {
   name: '',
-  role: [],
-  status: 'all',
+  exchange: [],
+  status: null,
+  dateRange: [],
 };
 
 // ----------------------------------------------------------------------
@@ -80,8 +84,6 @@ export default function UserListView() {
   const { enqueueSnackbar } = useSnackbar();
 
   const adminData = useSelector((data: any) => data?.admin?.adminList);
-
-  console.log({ adminData });
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -115,7 +117,6 @@ export default function UserListView() {
 
   const handleDeleteRow = useCallback(
     (id: string) => {
-      console.log('delete row works');
       dispatch(deleteAdmin(id));
       enqueueSnackbar('Deleted Successfully', { variant: 'success' });
       table.onUpdatePageDeleteRow(dataInPage.length);
@@ -136,7 +137,6 @@ export default function UserListView() {
 
   const handleEditRow = useCallback(
     (id: string) => {
-      console.log({ id });
       router.push(paths.dashboard.user.edit(id));
     },
     [router]
@@ -144,7 +144,6 @@ export default function UserListView() {
 
   const handleViewRow = useCallback(
     (id: string) => {
-      console.log({ id });
       router.push(paths.dashboard.user.details(id));
     },
     [router]
@@ -291,17 +290,19 @@ export default function UserListView() {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row: any) => (
-                      <UserTableRow
-                        key={row.id}
-                        row={row}
-                        selected={table.selected.includes(row.id)}
-                        onSelectRow={() => table.onSelectRow(row.id)}
-                        onDeleteRow={() => handleDeleteRow(row.id)}
-                        onEditRow={() => handleEditRow(row.id)}
-                        onViewRow={() => handleViewRow(row.id)}
-                      />
-                    ))}
+                    .map((row: any) => {
+                      return (
+                        <UserTableRow
+                          key={row.id}
+                          row={row}
+                          selected={table.selected.includes(row.id)}
+                          onSelectRow={() => table.onSelectRow(row.id)}
+                          onDeleteRow={() => handleDeleteRow(row.id)}
+                          onEditRow={() => handleEditRow(row.id)}
+                          onViewRow={() => handleViewRow(row.id)}
+                        />
+                      );
+                    })}
 
                   <TableEmptyRows
                     height={denseHeight}
@@ -364,7 +365,7 @@ function applyFilter({
   comparator: (a: any, b: any) => number;
   filters: IUserTableFilters;
 }) {
-  const { name, status, role } = filters;
+  const { name, status, exchange, dateRange } = filters;
 
   const stabilizedThis = inputData?.map((el: any, index: any) => [el, index] as const);
 
@@ -378,17 +379,27 @@ function applyFilter({
 
   if (name) {
     inputData = inputData.filter((user: any) => {
-      console.log({ user });
       return user.name.toLowerCase().indexOf(name.toLowerCase()) !== -1;
     });
   }
 
-  if (status !== 'all') {
-    inputData = inputData.filter((user: any) => user.status === status);
+  if (status) {
+    inputData = inputData.filter((user: any) => {
+      return user?.isActiveAdmin === status?.value;
+    });
   }
 
-  if (role.length) {
-    inputData = inputData.filter((user: any) => role.includes(user.role));
+  if (exchange.length) {
+    inputData = inputData.filter((user: any) => {
+      return user.allowedExchange.some((data: any) => exchange.includes(data));
+    });
+  }
+
+  if (dateRange.length > 0) {
+    inputData = inputData.filter((item: any) => {
+      const createdAtDate = parse(item.createdAt, 'EEE MMM dd yyyy', new Date());
+      return isWithinInterval(createdAtDate, { start: dateRange[0], end: dateRange[1] });
+    });
   }
 
   return inputData;

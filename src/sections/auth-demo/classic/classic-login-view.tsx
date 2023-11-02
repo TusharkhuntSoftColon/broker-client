@@ -53,7 +53,6 @@ export default function ClassicLoginView() {
   // login api
   const { mutate, isLoading } = useMutation(authService.login, {
     onSuccess: (data) => {
-      console.log({ data });
       setCredentialsAction(data?.data);
       enqueueSnackbar(data?.message, { variant: 'success' });
       router.push(PATH_DASHBOARD);
@@ -68,7 +67,6 @@ export default function ClassicLoginView() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const res = await mutate(data);
-      console.log({ res });
       // Continue with your success logic
     } catch (error) {
       console.error(error);
