@@ -23,7 +23,9 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-
+import { styled } from '@mui/system';
+import NorthEastIcon from '@mui/icons-material/NorthEast';
+import SouthEastIcon from '@mui/icons-material/SouthEast';
 // ----------------------------------------------------------------------
 
 type RowProps = {
@@ -46,6 +48,16 @@ interface TabPanelProps {
   value: number;
   styles: any;
 }
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(even)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+}));
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  border: '1px solid #dddddd',
+}));
 
 function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, styles, ...other } = props;
@@ -86,34 +98,34 @@ export default function SymbolTableDashboard() {
     {
       label: 'Symbols',
       value: 0,
-      title: 'Symbol',
+      title: 'Symbol Table',
       tableDatas: newSymbolTableData,
       tableLabel: [
-        { id: 'symbol', label: 'Symbol' },
-        { id: 'bid', label: 'Bid' },
-        { id: 'ask', label: 'Ask' },
+        { id: 'symbol', label: 'Symbol', align: 'left', border: '1px solid #dddddd !important' },
+        { id: 'bid', label: 'Bid', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'ask', label: 'Ask', align: 'right', border: '1px solid #dddddd !important' },
       ],
     },
     {
       label: 'Details',
       value: 1,
-      title: 'New Invoice 2',
+      title: 'Details Table',
       tableDatas: newSymbolTableData,
       tableLabel: [
-        { id: 'symbol', label: 'Symbol' },
-        { id: 'bid', label: 'Bid' },
-        { id: 'ask', label: 'Ask' },
+        { id: 'symbol', label: 'Symbol', align: 'left', border: '1px solid #dddddd !important'  },
+        { id: 'bid', label: 'Bid', align: 'right', border: '1px solid #dddddd !important'  },
+        { id: 'ask', label: 'Ask', align: 'right', border: '1px solid #dddddd !important'  },
       ],
     },
     {
       label: 'Ticks',
       value: 2,
-      title: 'New Invoice 3',
+      title: 'Ticks Table',
       tableDatas: newSymbolTableData,
       tableLabel: [
-        { id: 'symbol', label: 'Symbol' },
-        { id: 'bid', label: 'Bid' },
-        { id: 'ask', label: 'Ask' },
+        { id: 'symbol', label: 'Symbol', align: 'left', border: '1px solid #dddddd !important'  },
+        { id: 'bid', label: 'Bid', align: 'right', border: '1px solid #dddddd !important'  },
+        { id: 'ask', label: 'Ask', align: 'right', border: '1px solid #dddddd !important'  },
       ],
     },
   ];
@@ -144,18 +156,19 @@ export default function SymbolTableDashboard() {
                 <TableContainer sx={{ overflow: 'unset', height: '400px' }}>
                   <Scrollbar>
                     <Table stickyHeader>
-                      <TableHeadCustom headLabel={data.tableLabel} />
+                      <TableHeadCustom
+                        sx={{ textAlign: 'right', border: '1px solid #dddddd' }}
+                        headLabel={data.tableLabel}
+                      />
 
                       <TableBody>
-                        {data.tableDatas.map((row) => (
-                          <SymbolNewRow key={row.id} row={row} value={value} />
+                        {data.tableDatas.map((row, index) => (
+                          <SymbolNewRow key={row.id} row={row} index={index} value={value} />
                         ))}
                       </TableBody>
                     </Table>
                   </Scrollbar>
                 </TableContainer>
-
-                <Divider sx={{ borderStyle: 'dashed' }} />
               </CustomTabPanel>
             );
           })}
@@ -171,7 +184,6 @@ export default function SymbolTableDashboard() {
             '& .MuiTab-root': {
               marginRight: 0, // Remove auto margin right for each tab
             },
-            bottom: 0,
           }}
         >
           {tabs.map((data: any) => {
@@ -181,7 +193,7 @@ export default function SymbolTableDashboard() {
                 {...a11yProps(data.value)}
                 sx={{
                   // ml: 2,
-                  width: '30%',
+                  width: '20%',
                   marginRight: '0px !important',
                   borderTop: value === data.value ? 'none' : '1px solid #d3d3d3',
                   borderLeft: value === data.value ? 'none' : '0.5px solid #d3d3d3',
@@ -204,9 +216,10 @@ export default function SymbolTableDashboard() {
 type SymbolNewRowProps = {
   row: RowProps;
   value?: any;
+  index?: any;
 };
 
-function SymbolNewRow({ row, value }: SymbolNewRowProps) {
+function SymbolNewRow({ row, value, index }: SymbolNewRowProps) {
   const popover = usePopover();
 
   const handleDownload = () => {
@@ -229,13 +242,50 @@ function SymbolNewRow({ row, value }: SymbolNewRowProps) {
     console.info('DELETE', row.id);
   };
 
+  console.log({ row });
+
   return (
     <>
-      <TableRow sx={{ border: '1px solid #000000' }}>
-        <TableCell>{row.symbol}</TableCell>
-        <TableCell>{row.bid}</TableCell>
-        <TableCell>{row.ask}</TableCell>
-      </TableRow>
+      <StyledTableRow>
+        <StyledTableCell
+          style={{
+            textAlign: 'left',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '4px',
+            padding: '9px',
+            borderLeft: 'none',
+          }}
+        >
+          {index % 2 === 0 ? (
+            <NorthEastIcon style={{ fontSize: '18px', color: 'green' }} />
+          ) : (
+            <SouthEastIcon style={{ fontSize: '18px', color: 'red' }} />
+          )}
+          {row.symbol}
+        </StyledTableCell>
+        <StyledTableCell
+          style={{
+            color: index % 2 === 0 ? 'blue' : 'red',
+            textAlign: 'right',
+            width: '40px',
+            padding: '9px',
+          }}
+        >
+          {row.bid}
+        </StyledTableCell>
+        <StyledTableCell
+          style={{
+            color: index % 2 === 0 ? 'blue' : 'red',
+            textAlign: 'right',
+            width: '40px',
+            padding: '9px',
+            borderRight: 'none',
+          }}
+        >
+          {row.ask}
+        </StyledTableCell>
+      </StyledTableRow>
 
       <CustomPopover
         open={popover.open}
