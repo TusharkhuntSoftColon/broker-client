@@ -23,6 +23,7 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import { styled } from '@mui/system';
 
 // ----------------------------------------------------------------------
 
@@ -52,6 +53,16 @@ interface TabPanelProps {
   value: number;
   styles: any;
 }
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(even)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+}));
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  border: '1px solid #dddddd',
+}));
 
 function CustomTabPanel(props: TabPanelProps) {
   const { children, value, index, styles, ...other } = props;
@@ -95,49 +106,49 @@ export default function AppNewInvoice() {
       title: 'Exchange Table',
       tableDatas: newInvoiceData,
       tableLabel: [
-        { id: 'symbol', label: 'Symbol' },
-        { id: 'positions', label: 'Positions' },
-        { id: 'buy_volume', label: 'Buy Volume' },
-        { id: 'buy_price', label: 'Buy Price' },
-        { id: 'sell_volume', label: 'Sell Volume' },
-        { id: 'sell_price', label: 'Sell Price' },
-        { id: 'net_volume', label: 'Net Volume' },
-        { id: 'profit', label: 'Profit (INR)' },
-        { id: 'unCovered', label: 'Uncovered (INR)' },
+        { id: 'symbol', label: 'Symbol', align: 'left', border: '1px solid #dddddd !important' },
+        { id: 'positions', label: 'Positions', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'buy_volume', label: 'Buy Volume', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'buy_price', label: 'Buy Price', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'sell_volume', label: 'Sell Volume', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'sell_price', label: 'Sell Price', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'net_volume', label: 'Net Volume', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'profit', label: 'Profit (INR)', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'unCovered', label: 'Uncovered (INR)', align: 'right', border: '1px solid #dddddd !important' },
       ],
     },
     {
       label: 'Exposure',
       value: 1,
-      title: 'New Invoice 2',
+      title: 'Exposure Table',
       tableDatas: newInvoiceData,
       tableLabel: [
-        { id: 'symbol', label: 'Symbol' },
-        { id: 'positions', label: 'Positions' },
-        { id: 'buy_volume', label: 'Buy Volume' },
-        { id: 'buy_price', label: 'Buy Price' },
-        { id: 'sell_volume', label: 'Sell Volume' },
-        { id: 'sell_price', label: 'Sell Price' },
-        { id: 'net_volume', label: 'Net Volume' },
-        { id: 'profit', label: 'Profit (INR)' },
-        { id: 'unCovered', label: 'Uncovered (INR)' },
+        { id: 'symbol', label: 'Symbol', align: 'left', border: '1px solid #dddddd !important' },
+        { id: 'positions', label: 'Positions', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'buy_volume', label: 'Buy Volume', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'buy_price', label: 'Buy Price', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'sell_volume', label: 'Sell Volume', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'sell_price', label: 'Sell Price', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'net_volume', label: 'Net Volume', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'profit', label: 'Profit (INR)', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'unCovered', label: 'Uncovered (INR)', align: 'right', border: '1px solid #dddddd !important' },
       ],
     },
     {
       label: 'News',
       value: 2,
-      title: 'New Invoice 3',
+      title: 'News Table',
       tableDatas: newInvoiceData,
       tableLabel: [
-        { id: 'symbol', label: 'Symbol' },
-        { id: 'positions', label: 'Positions' },
-        { id: 'buy_volume', label: 'Buy Volume' },
-        { id: 'buy_price', label: 'Buy Price' },
-        { id: 'sell_volume', label: 'Sell Volume' },
-        { id: 'sell_price', label: 'Sell Price' },
-        { id: 'net_volume', label: 'Net Volume' },
-        { id: 'profit', label: 'Profit (INR)' },
-        { id: 'unCovered', label: 'Uncovered (INR)' },
+        { id: 'symbol', label: 'Symbol', align: 'left', border: '1px solid #dddddd !important' },
+        { id: 'positions', label: 'Positions', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'buy_volume', label: 'Buy Volume', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'buy_price', label: 'Buy Price', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'sell_volume', label: 'Sell Volume', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'sell_price', label: 'Sell Price', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'net_volume', label: 'Net Volume', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'profit', label: 'Profit (INR)', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'unCovered', label: 'Uncovered (INR)', align: 'right', border: '1px solid #dddddd !important' },
       ],
     },
   ];
@@ -177,8 +188,6 @@ export default function AppNewInvoice() {
                     </Table>
                   </Scrollbar>
                 </TableContainer>
-
-                <Divider sx={{ borderStyle: 'dashed' }} />
               </CustomTabPanel>
             );
           })}
@@ -203,7 +212,7 @@ export default function AppNewInvoice() {
                 {...a11yProps(data.value)}
                 sx={{
                   // ml: 2,
-                  width: '10%',
+                  width: '7%',
                   marginRight: '0px !important',
                   borderTop: value === data.value ? 'none' : '1px solid #d3d3d3',
                   borderLeft: value === data.value ? 'none' : '0.5px solid #d3d3d3',
@@ -252,17 +261,33 @@ function AppNewInvoiceRow({ row }: AppNewInvoiceRowProps) {
 
   return (
     <>
-      <TableRow>
-        <TableCell>{row.symbol}</TableCell>
-        <TableCell>{row.positions}</TableCell>
-        <TableCell>{row.buy_volume}</TableCell>
-        <TableCell>{row.buy_price}</TableCell>
-        <TableCell>{row.sell_volume}</TableCell>
-        <TableCell>{row.sell_price}</TableCell>
-        <TableCell>{row.net_volume}</TableCell>
-        <TableCell>{row.profit}</TableCell>
-        <TableCell>{row.unCovered}</TableCell>
-      </TableRow>
+      <StyledTableRow>
+        <StyledTableCell sx={{ textAlign: 'left', padding: '9px', borderLeft: 'none' }}>
+          {row.symbol}
+        </StyledTableCell>
+        <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          {row.positions}
+        </StyledTableCell>
+        <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          {row.buy_volume}
+        </StyledTableCell>
+        <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          {row.buy_price}
+        </StyledTableCell>
+        <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          {row.sell_volume}
+        </StyledTableCell>
+        <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          {row.sell_price}
+        </StyledTableCell>
+        <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          {row.net_volume}
+        </StyledTableCell>
+        <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.profit}</StyledTableCell>
+        <StyledTableCell sx={{ textAlign: 'right', padding: '9px', borderRight: 'none' }}>
+          {row.unCovered}
+        </StyledTableCell>
+      </StyledTableRow>
 
       <CustomPopover
         open={popover.open}

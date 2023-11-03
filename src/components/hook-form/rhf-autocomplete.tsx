@@ -36,6 +36,7 @@ export default function RHFAutocomplete<
   control,
   data,
   isLabled,
+  resetFunction,
   ...other
 }: Omit<Props<T, Multiple, DisableClearable, FreeSolo>, 'renderInput'>) {
   const { setValue, getValues, control: formControl } = useFormContext();
