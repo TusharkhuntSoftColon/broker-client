@@ -4,9 +4,8 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import Stack, { StackProps } from '@mui/material/Stack';
 
-import Iconify from 'src/components/iconify';
-
-import { IProductTableFilters, IProductTableFilterValue } from 'src/types/exchange';
+import Iconify from '../../components/iconify';
+import { IProductTableFilters, IProductTableFilterValue } from '../../types/exchange';
 
 // ----------------------------------------------------------------------
 
@@ -19,7 +18,7 @@ type Props = StackProps & {
   results: number;
 };
 
-export default function ProductTableFiltersResult({
+export default function BrokerageTableFiltersResult({
   filters,
   onFilters,
   //
@@ -93,7 +92,7 @@ export default function ProductTableFiltersResult({
         )}
 
         {filters?.status !== null && (
-          <Block label="Status :">
+          <Block label="Client :">
             <Chip size="small" label={filters?.status?.label} onDelete={handleRemoveStatus} />
           </Block>
         )}

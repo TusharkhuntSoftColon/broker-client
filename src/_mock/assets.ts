@@ -5,7 +5,7 @@ export const _id = [...Array(40)].map(
 );
 
 export const _dates = [
-    '2023-01-01',
+  '2023-01-01',
   '2023-03-15',
   '2023-06-30',
   '2023-09-10',
@@ -19,8 +19,25 @@ export const _dates = [
   '2025-01-01',
   '2025-03-17',
   '2025-06-20',
-  '2025-10-3'
-]
+  '2025-10-3',
+];
+
+export const brokerage_call_option = ['C', 'F', 'T', 'I', 'R', 'X'];
+
+export const brokerage_call_method = ['Q', 'P', 'Q', 'P', 'Q', 'P', 'Q', 'P', 'Q', 'P', 'Q', 'P'];
+
+export const _brokerage_rate = ['50000', '400', '20', '400000', '50000', '400', '20', '400000'];
+
+export const _brokerage_per = [
+  '1.00',
+  '1.000',
+  '10.000',
+  '10000.0',
+  '1.00',
+  '1.000',
+  '10.000',
+  '10000.0',
+];
 
 export const _fullAddress = [
   '19034 Verna Unions Apt. 164 - Honolulu, RI / 87535',
@@ -50,71 +67,80 @@ export const _fullAddress = [
 ];
 
 export const _status = [
-  "Active",
-  "Inactive",
-  "Active",
-  "Inactive",
-  "Active", "Inactive", "Active", "Inactive", "Active", "Inactive", "Active", "Inactive", "Active", "Inactive"
-]
+  'Active',
+  'Inactive',
+  'Active',
+  'Inactive',
+  'Active',
+  'Inactive',
+  'Active',
+  'Inactive',
+  'Active',
+  'Inactive',
+  'Active',
+  'Inactive',
+  'Active',
+  'Inactive',
+];
 
 export const _exchangeID = [
-  "ABC12",
-    "DEF34",
-    "GHI56",
-    "JKL78",
-    "MNO90",
-    "PQR12",
-    "STU34",
-    "VWX56",
-    "YZA78",
-  "12345",
-      "ABC12",
-    "DEF34",
-    "GHI56",
-    "JKL78",
-    "MNO90",
-    "PQR12",
-    "STU34",
-    "VWX56",
-    "YZA78",
-    "12345"
-]
+  'ABC12',
+  'DEF34',
+  'GHI56',
+  'JKL78',
+  'MNO90',
+  'PQR12',
+  'STU34',
+  'VWX56',
+  'YZA78',
+  '12345',
+  'ABC12',
+  'DEF34',
+  'GHI56',
+  'JKL78',
+  'MNO90',
+  'PQR12',
+  'STU34',
+  'VWX56',
+  'YZA78',
+  '12345',
+];
 
 export const _symbol = [
-    "AAPL",    // Apple Inc. (stock)
-  "MSFT",    // Microsoft Corporation (stock)
-  "GOOGL",   // Alphabet Inc. (Google) (stock)
-  "BTCUSD",  // Bitcoin/US Dollar (crypto)
-  "ETHUSD",  // Ethereum/US Dollar (crypto)
-  "GLD",     // SPDR Gold Trust (ETF)
-  "EURUSD",  // Euro/US Dollar (forex)
-  "CL1",     // Crude Oil Futures (commodity)
-  "GC1",     // Gold Futures (commodity)
-  "ES1",  
-]
+  'AAPL', // Apple Inc. (stock)
+  'MSFT', // Microsoft Corporation (stock)
+  'GOOGL', // Alphabet Inc. (Google) (stock)
+  'BTCUSD', // Bitcoin/US Dollar (crypto)
+  'ETHUSD', // Ethereum/US Dollar (crypto)
+  'GLD', // SPDR Gold Trust (ETF)
+  'EURUSD', // Euro/US Dollar (forex)
+  'CL1', // Crude Oil Futures (commodity)
+  'GC1', // Gold Futures (commodity)
+  'ES1',
+];
 
 export const _domains = [
-   "example1.com",
-    "sample2.net",
-    "test3.org",
-    "demo4.io",
-    "random5.xyz",
-    "site6.com",
-    "domain7.net",
-    "mywebsite8.org",
-    "testsite9.io",
-  "yourdomain10.xyz",
-    "example1.com",
-    "sample2.net",
-    "test3.org",
-    "demo4.io",
-    "random5.xyz",
-    "site6.com",
-    "domain7.net",
-    "mywebsite8.org",
-    "testsite9.io",
-    "yourdomain10.xyz"
-]
+  'example1.com',
+  'sample2.net',
+  'test3.org',
+  'demo4.io',
+  'random5.xyz',
+  'site6.com',
+  'domain7.net',
+  'mywebsite8.org',
+  'testsite9.io',
+  'yourdomain10.xyz',
+  'example1.com',
+  'sample2.net',
+  'test3.org',
+  'demo4.io',
+  'random5.xyz',
+  'site6.com',
+  'domain7.net',
+  'mywebsite8.org',
+  'testsite9.io',
+  'yourdomain10.xyz',
+];
 
 // ----------------------------------------------------------------------
 
@@ -322,14 +348,14 @@ export const _phoneNumbers = [
 ];
 
 export const _tickValue = [
-   1,        // Tick value for stocks
-  10,       // Tick value for forex pairs
-  12.50,    // Tick value for futures contracts
-  10,       // Tick value for options
-  100,      // Tick value for gold
-  50,       // Tick value for cryptocurrencies (e.g., Bitcoin)
-  5,  
-]
+  1, // Tick value for stocks
+  10, // Tick value for forex pairs
+  12.5, // Tick value for futures contracts
+  10, // Tick value for options
+  100, // Tick value for gold
+  50, // Tick value for cryptocurrencies (e.g., Bitcoin)
+  5,
+];
 
 // ----------------------------------------------------------------------
 
@@ -390,61 +416,61 @@ export const _postTitles = [
 ];
 
 export const _exchange = [
-  "NYSE",
-  "NASDAQ",
-  "LSE",
-  "TSE",
-  "HKEX",
-  "SSE",
-  "Euronext",
-  "TSX",
-  "BSE",
-  "FWB",
-  "B3",
-  "ASX",
-  "KRX",
-  "TWSE",
-  "BMV",
-  "MOEX",
-  "JSE",
-  "BIST",
-  "SIX",
-  "BME"
-]
+  'NYSE',
+  'NASDAQ',
+  'LSE',
+  'TSE',
+  'HKEX',
+  'SSE',
+  'Euronext',
+  'TSX',
+  'BSE',
+  'FWB',
+  'B3',
+  'ASX',
+  'KRX',
+  'TWSE',
+  'BMV',
+  'MOEX',
+  'JSE',
+  'BIST',
+  'SIX',
+  'BME',
+];
 
 export const _tickSize = [
-  0.01,  // Common tick size for stocks
+  0.01, // Common tick size for stocks
   0.001, // Common tick size for forex pairs
-  0.25,  // Common tick size for futures contracts
-  0.1,   // Common tick size for options
-  1,     // Common tick size for commodities (e.g., gold, crude oil)
-  0.05,  // Common tick size for cryptocurrencies (e.g., Bitcoin)
+  0.25, // Common tick size for futures contracts
+  0.1, // Common tick size for options
+  1, // Common tick size for commodities (e.g., gold, crude oil)
+  0.05, // Common tick size for cryptocurrencies (e.g., Bitcoin)
   0.001, // Common tick size for cryptocurrencies (e.g., Ethereum)
   0.005,
-]
+];
 
 export const _currency = [
-  "USD",  // United States Dollar
-  "EUR",  // Euro
-  "JPY",  // Japanese Yen
-  "GBP",  // British Pound Sterling
-  "AUD",  // Australian Dollar
-  "CAD",  // Canadian Dollar
-  "CHF",  // Swiss Franc
-  "CNY",  // Chinese Yuan
-  "INR",  // Indian Rupee
-  "SGD",  // Singapore Dollar
-  "AED",  // United Arab Emirates Dirham
-  "ZAR",  // South African Rand
-  "MXN",  // Mexican Peso
-  "BRL",  // Brazilian Real
-  "RUB",  // Russian Ruble
-  "KRW",  // South Korean Won
-  "NZD",  // New Zealand Dollar
-  "HKD",  // Hong Kong Dollar
-  "SEK",  // Swedish Krona
-  "NOK",
-]
+  'USD', // United States Dollar
+  'EUR', // Euro
+  'JPY', // Japanese Yen
+  'GBP', // British Pound Sterling
+  'AUD', // Australian Dollar
+  'CAD', // Canadian Dollar
+  'CHF', // Swiss Franc
+  'CNY', // Chinese Yuan
+  'INR', // Indian Rupee
+  'SGD', // Singapore Dollar
+  'AED', // United Arab Emirates Dirham
+  'ZAR', // South African Rand
+  'MXN', // Mexican Peso
+  'BRL', // Brazilian Real
+  'RUB', // Russian Ruble
+  'KRW', // South Korean Won
+  'NZD', // New Zealand Dollar
+  'HKD', // Hong Kong Dollar
+  'SEK', // Swedish Krona
+  'NOK',
+];
 
 // ----------------------------------------------------------------------
 
@@ -475,10 +501,7 @@ export const _productNames = [
   'Run Star Hike Platform Sneaker',
 ];
 
-
-export const _contractSize = [
-  1, 5, 10, 20, 25, 30, 50, 100, 200, 500
-]
+export const _contractSize = [1, 5, 10, 20, 25, 30, 50, 100, 200, 500];
 // ----------------------------------------------------------------------
 
 export const _tourNames = [
@@ -625,27 +648,27 @@ export const _taskNames = [
 ];
 
 export const _userID = [
-   "ID001",
-  "ID002",
-  "ID003",
-  "ID004",
-  "ID005",
-  "ID006",
-  "ID007",
-  "ID008",
-  "ID009",
-  "ID010",
-  "ID011",
-  "ID012",
-  "ID013",
-  "ID014",
-  "ID015",
-  "ID016",
-  "ID017",
-  "ID018",
-  "ID019",
-  "ID020"
-]
+  'ID001',
+  'ID002',
+  'ID003',
+  'ID004',
+  'ID005',
+  'ID006',
+  'ID007',
+  'ID008',
+  'ID009',
+  'ID010',
+  'ID011',
+  'ID012',
+  'ID013',
+  'ID014',
+  'ID015',
+  'ID016',
+  'ID017',
+  'ID018',
+  'ID019',
+  'ID020',
+];
 
 // ----------------------------------------------------------------------
 

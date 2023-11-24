@@ -135,6 +135,12 @@ export function useNavData() {
           //   ],
           },
 
+          {
+            title: "Brokerage",
+            path: paths.dashboard.brokerage.root,
+            icon: ICONS.banking
+          }
+
           // INVOICE
           // {
           //   title: t('invoice'),

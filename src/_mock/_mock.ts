@@ -37,7 +37,11 @@ _companyNames,
 _contractSize,
 _descriptions,
 _phoneNumbers,
-_productNames
+_productNames,
+_brokerage_per,
+_brokerage_rate,
+brokerage_call_method,
+brokerage_call_option
 } from './assets';
 
 // ----------------------------------------------------------------------
@@ -74,7 +78,11 @@ export const _mock = {
   symbol: (index: number) => _symbol[index],
   exchangeId: (index: number) => _exchangeID[index],
   status: (index: number) => _status[index],
-dates: (index: number) => _dates[index],
+  dates: (index: number) => _dates[index],
+  bco: (index: number) => brokerage_call_option[index],
+  bcm: (index: number) => brokerage_call_method[index],
+brkg_rate: (index: number) => _brokerage_rate[index],
+brkg_per: (index: number) => _brokerage_per[index],
 
   // Number
   number: {

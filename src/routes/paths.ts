@@ -131,6 +131,9 @@ export const paths = {
         edit: `${ROOTS.DASHBOARD}/exchange/${MOCK_ID}/edit`,
       },
     },
+    brokerage: {
+      root: `${ROOTS.DASHBOARD}/brokerage`,
+    },
     invoice: {
       root: `${ROOTS.DASHBOARD}/invoice`,
       new: `${ROOTS.DASHBOARD}/invoice/new`,

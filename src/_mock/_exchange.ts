@@ -136,3 +136,12 @@ export const ExchangeStatus = [
   { value: true, label: 'Active' },
   { value: false, label: 'In Active' },
 ];
+
+export const ClientList = [
+  {value: 'KGB-0012', label: "KGB-0012"},
+  {value: 'KGB-0013', label: "KGB-0013"},
+  {value: 'KGB-0014', label: "KGB-0014"},
+  {value: 'KGB-0015', label: "KGB-0015"},
+  {value: 'KGB-0016', label: "KGB-0016"},
+  {value: 'KGB-0017', label: "KGB-0017"}
+]

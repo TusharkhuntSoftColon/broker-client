@@ -1,59 +1,60 @@
+import { useMutation } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
+import { isWithinInterval, parse } from 'date-fns';
 import isEqual from 'lodash/isEqual';
 import { useSnackbar } from 'notistack';
-import { useState, useCallback } from 'react';
-import { parse, isWithinInterval } from 'date-fns';
-import { useMutation } from '@tanstack/react-query';
+import { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Card from '@mui/material/Card';
-import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
+import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
-import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
-
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
-
-import { useBoolean } from 'src/hooks/use-boolean';
+import Tooltip from '@mui/material/Tooltip';
 
 import { PRODUCT_STOCK_OPTIONS } from 'src/_mock';
-import exchangeService from 'src/services/exchangeService';
-import { deleteExchange } from 'src/store/slices/exchange';
+import { _brokerageList } from 'src/_mock/_brokerage';
 
-import Iconify from 'src/components/iconify';
-import Scrollbar from 'src/components/scrollbar';
-import { ConfirmDialog } from 'src/components/custom-dialog';
-import { useSettingsContext } from 'src/components/settings';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import CustomBreadcrumbs from '../../../components/custom-breadcrumbs';
+import { ConfirmDialog } from '../../../components/custom-dialog';
+import Iconify from '../../../components/iconify';
+import Scrollbar from '../../../components/scrollbar';
+import { useSettingsContext } from '../../../components/settings';
 import {
-useTable,
 emptyRows,
 getComparator,
 TableEmptyRows,
 TableHeadCustom,
-TableSelectedAction,
 TablePaginationCustom,
-} from 'src/components/table';
-
-import { IProductItem, IProductTableFilters, IProductTableFilterValue } from 'src/types/exchange';
-
-import ExchangeTableRow from '../exchange-table-row';
-import ExchangeQuickEditForm from '../exchange-edit-form';
-import ProductTableToolbar from '../product-table-toolbar';
-import ProductTableFiltersResult from '../product-table-filters-result';
+TableSelectedAction,
+useTable,
+} from '../../../components/table';
+import { useBoolean } from '../../../hooks/use-boolean';
+import { useRouter } from '../../../routes/hooks';
+import { paths } from '../../../routes/paths';
+import exchangeService from '../../../services/exchangeService';
+import { deleteExchange } from '../../../store/slices/exchange';
+import { IProductItem, IProductTableFilters, IProductTableFilterValue } from '../../../types/exchange';
+import BrokerageQuickEditForm from '../brokerage-edit-form';
+import BrokerageTableFiltersResult from '../brokerage-table-filters-result';
+import BrokerageTableRow from '../brokerage-table-row';
+import BrokerageTableToolbar from '../brokerage-table-toolbar';
+// import ProductTableToolbar from '../product-table-toolbar';
+// import ProductTableFiltersResult from '../product-table-filters-result';
 
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'id', label: 'Id', width: 160 },
-  { id: 'name', label: 'Name', width: 160 },
-  { is: 'createdAt', label: 'Created At' },
-  { is: 'updatedAt', label: 'Updated At' },
-  { is: 'status', label: 'Status' },
+  { id: 'date', label: 'Date', width: 160 },
+  { id: 'exchangeCode', label: 'Exchange Code', width: 160 },
+  { is: 'symbol', label: 'Symbol' },
+  { is: 'brokerage_call_option', label: 'BCO' },
+  { is: 'brokerage_call_method', label: 'BCM' },
+  { is: 'brokerage_rate', label: 'BRKG Rate' },
+  { is: 'brokerage_per', label: 'BRKG Per' },
   // { id: 'createdAt', label: 'Create at', width: 160 },
   // { id: 'inventoryType', label: 'Stock', width: 160 },
   // { id: 'price', label: 'Price', width: 140 },
@@ -76,7 +77,7 @@ const defaultFilters: IProductTableFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function ExchangeListView() {
+export default function BrokerageListView() {
   const router = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -104,7 +105,7 @@ export default function ExchangeListView() {
   // }, [products]);
 
   const dataFiltered = applyFilter({
-    inputData: exchangeList,
+    inputData: _brokerageList,
     comparator: getComparator(table.order, table.orderBy),
     filters,
   });
@@ -198,26 +199,26 @@ export default function ExchangeListView() {
           links={[
             { name: 'Admstr', href: paths.dashboard.root },
             {
-              name: 'Exchange',
+              name: 'Brokerage',
               href: paths.dashboard.exchange.root,
             },
             { name: 'List' },
           ]}
-          action={
-            <Button
-              // component={RouterLink}
-              onClick={quickEdit.onTrue}
-              variant="contained"
-              startIcon={<Iconify icon="mingcute:add-line" />}
-            >
-              New Exchange
-            </Button>
-          }
+          // action={
+          //   <Button
+          //     // component={RouterLink}
+          //     onClick={quickEdit.onTrue}
+          //     variant="contained"
+          //     startIcon={<Iconify icon="mingcute:add-line" />}
+          //   >
+          //     Add New Date
+          //   </Button>
+          // }
           sx={{ mb: { xs: 3, md: 5 } }}
         />
 
         <Card>
-          <ProductTableToolbar
+          <BrokerageTableToolbar
             filters={filters}
             onFilters={handleFilters}
             //
@@ -226,7 +227,7 @@ export default function ExchangeListView() {
           />
 
           {canReset && (
-            <ProductTableFiltersResult
+            <BrokerageTableFiltersResult
               filters={filters}
               onFilters={handleFilters}
               //
@@ -281,7 +282,7 @@ export default function ExchangeListView() {
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
                     .map((row: any) => (
-                      <ExchangeTableRow
+                      <BrokerageTableRow
                         key={row?._id}
                         row={row}
                         selected={table.selected.includes(row?._id)}
@@ -316,7 +317,7 @@ export default function ExchangeListView() {
         </Card>
       </Container>
 
-      <ExchangeQuickEditForm
+      <BrokerageQuickEditForm
         getFunction={() => mutate()}
         open={quickEdit.value}
         onClose={quickEdit.onFalse}
