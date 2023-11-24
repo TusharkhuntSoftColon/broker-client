@@ -3,8 +3,8 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMemo, useEffect, useCallback } from 'react';
 
-import { Button } from '@mui/material';
 import Stack from '@mui/material/Stack';
+import { Box, Button } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import { DatePicker } from '@mui/x-date-pickers';
@@ -17,9 +17,9 @@ import { useBoolean } from 'src/hooks/use-boolean';
 import { ClientList } from 'src/_mock';
 
 import Iconify from 'src/components/iconify';
-import { RHFAutocomplete } from 'src/components/hook-form';
 import { useSettingsContext } from 'src/components/settings';
 import FormProvider from 'src/components/hook-form/form-provider';
+import { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import { useDateRangePicker } from 'src/components/custom-date-range-picker';
 
@@ -161,7 +161,7 @@ export default function BrokerageTableToolbar({
           }}
           sx={{
             p: 2.5,
-            pr: { xs: 2.5, md: 1 },
+            
           }}
         >
           <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
@@ -179,74 +179,12 @@ export default function BrokerageTableToolbar({
                 ),
               }}
             />
-
-            {/* <Stack spacing={1.5}>
-              <Button
-                style={{
-                  width: 'max-content',
-                  // height: '100%',
-                  backgroundColor: 'transparent',
-                  color: '#637381',
-                  padding: '0.9rem',
-                  fontWeight: 'normal',
-                }}
-                sx={{
-                  width: 'max-content',
-                  height: '100%',
-                  backgroundColor: 'transparent',
-                  border: '0.5px solid rgba(145, 158, 171, 0.2)',
-                  color: '#637381',
-                  '&:hover': {
-                    borderColor:
-                      settings.themeMode === 'dark' ? 'white !important' : 'black !important',
-                  },
-                }}
-                variant="contained"
-                onClick={rangeCalendarPicker.onOpen}
-              >
-                {fDate(rangeCalendarPicker.startDate)} - {fDate(rangeCalendarPicker.endDate)}
-              </Button>
-              <CustomDateRangePicker
-                // name="dateRange"
-                variant="calendar"
-                open={rangeCalendarPicker.open}
-                startDate={rangeCalendarPicker.startDate}
-                endDate={rangeCalendarPicker.endDate}
-                onChangeStartDate={rangeCalendarPicker.onChangeStartDate}
-                onChangeEndDate={rangeCalendarPicker.onChangeEndDate}
-                onClose={rangeCalendarPicker.onClose}
-                error={rangeCalendarPicker.error}
-                handleSelectedDate={handleSelectedDate}
-              />
-            </Stack> */}
             <FormControl
               sx={{
                 flexShrink: 0,
                 width: { xs: 1, md: 200 },
               }}
             >
-              {/* <InputLabel>Exchange</InputLabel> */}
-
-              {/* <Select
-              multiple
-              value={filters.stock}
-              onChange={handleFilterStock}
-              input={<OutlinedInput label="Exchange" />}
-              renderValue={(selected) => selected.map((value) => value).join(', ')}
-              sx={{ textTransform: 'capitalize' }}
-            >
-              {stockOptions.map((option) => (
-                <MenuItem key={option.value} value={option.value}>
-                  <Checkbox
-                    disableRipple
-                    size="small"
-                    checked={filters.stock.includes(option.value)}
-                  />
-                  {option.label}
-                </MenuItem>
-              ))}
-            </Select> */}
-
               <Stack spacing={1.5}>
                 <RHFAutocomplete
                   name="status"
@@ -262,18 +200,6 @@ export default function BrokerageTableToolbar({
                       {option.label}
                     </li>
                   )}
-                  // renderTags={(selected, getTagProps) =>
-                  //   selected.map((option, index) => (
-                  //     <Chip
-                  //       {...getTagProps({ index })}
-                  //       key={option}
-                  //       label={option}
-                  //       size="small"
-                  //       color="info"
-                  //       variant="soft"
-                  //     />
-                  //   ))
-                  // }
                 />
               </Stack>
             </FormControl>
@@ -301,37 +227,133 @@ export default function BrokerageTableToolbar({
               <Iconify icon="eva:more-vertical-fill" />
             </IconButton> */}
           </Stack>
-        </Stack>
-      </FormProvider>
-
-      {/* <FormControl
-          sx={{
-            flexShrink: 0,
-            width: { xs: 1, md: 200 },
-          }}
-          >
-          <InputLabel>Publish</InputLabel>
           
-          <Select
-          multiple
-          value={filters.publish}
-          onChange={handleFilterPublish}
-          input={<OutlinedInput label="Publish" />}
-          renderValue={(selected) => selected.map((value) => value).join(', ')}
-          sx={{ textTransform: 'capitalize' }}
-          >
-          {publishOptions.map((option) => (
-            <MenuItem key={option.value} value={option.value}>
-            <Checkbox
-            disableRipple
-            size="small"
-            checked={filters.publish.includes(option.value)}
-            />
-            {option.label}
-            </MenuItem>
-            ))}
-            </Select>
-          </FormControl> */}
+        </Stack>
+
+        <Stack
+          spacing={2}
+          alignItems={{ xs: 'flex-end', md: 'center' }}
+          direction={{
+            xs: 'column',
+            md: 'row',
+          }}
+          sx={{
+            p: 2.5,
+            pt: 0
+          }}
+        >
+          <Stack direction="row" alignItems="center" flexWrap="wrap" spacing={2} flexGrow={1} sx={{ width: 1 }}>
+         
+            <FormControl
+              sx={{
+                flexShrink: 0,
+                width: { xs: 1, md: 200 },
+              }}
+            >
+              <Stack spacing={1.5}>
+                <RHFAutocomplete
+                  name="status"
+                  label="Exchange Code"
+                  options={ClientList}
+                  isLabled={false}
+                  // value={ClientList.map((data) => data.value)}
+                  data={ClientList}
+                  isOptionEqualToValue={(option, value) => option.value === value.value}
+                  getOptionLabel={(option: any) => option.label}
+                  renderOption={(props, option) => (
+                    <li {...props} key={option.label}>
+                      {option.label}
+                    </li>
+                  )}
+                />
+              </Stack>
+            </FormControl>
+            <FormControl
+              sx={{
+                flexShrink: 0,
+                width: { xs: 1, md: 200 },
+              }}
+            >
+              <Stack spacing={1.5}>
+                <RHFAutocomplete
+                  name="status"
+                  label="Symbol"
+                  options={ClientList}
+                  isLabled={false}
+                  // value={ClientList.map((data) => data.value)}
+                  data={ClientList}
+                  isOptionEqualToValue={(option, value) => option.value === value.value}
+                  getOptionLabel={(option: any) => option.label}
+                  renderOption={(props, option) => (
+                    <li {...props} key={option.label}>
+                      {option.label}
+                    </li>
+                  )}
+                />
+              </Stack>
+            </FormControl>
+            <FormControl
+              sx={{
+                flexShrink: 0,
+                width: { xs: 1, md: 200 },
+              }}
+            >
+              <Stack spacing={1.5}>
+                <RHFAutocomplete
+                  name="status"
+                  label="BCO"
+                  options={ClientList}
+                  isLabled={false}
+                  // value={ClientList.map((data) => data.value)}
+                  data={ClientList}
+                  isOptionEqualToValue={(option, value) => option.value === value.value}
+                  getOptionLabel={(option: any) => option.label}
+                  renderOption={(props, option) => (
+                    <li {...props} key={option.label}>
+                      {option.label}
+                    </li>
+                  )}
+                />
+              </Stack>
+            </FormControl>
+            <FormControl
+              sx={{
+                flexShrink: 0,
+                width: { xs: 1, md: 200 },
+              }}
+            >
+              <Stack spacing={1.5}>
+                <RHFAutocomplete
+                  name="status"
+                  label="BCM"
+                  options={ClientList}
+                  isLabled={false}
+                  // value={ClientList.map((data) => data.value)}
+                  data={ClientList}
+                  isOptionEqualToValue={(option, value) => option.value === value.value}
+                  getOptionLabel={(option: any) => option.label}
+                  renderOption={(props, option) => (
+                    <li {...props} key={option.label}>
+                      {option.label}
+                    </li>
+                  )}
+                />
+              </Stack>
+            </FormControl>
+            <Box display="flex" gap={2}>
+              <RHFTextField sx={{width: "auto"}} name="fullName" label="BRKG Rate" />
+              <RHFTextField sx={{width: "auto"}} name="fullName" label="BRKG Per" />
+            </Box>
+       
+            {/* 
+            <IconButton onClick={popover.onOpen}>
+              <Iconify icon="eva:more-vertical-fill" />
+            </IconButton> */}
+          </Stack>
+          
+        </Stack>
+      
+      </FormProvider>
 
       <CustomPopover
         open={popover.open}
