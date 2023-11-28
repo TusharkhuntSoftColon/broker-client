@@ -242,12 +242,12 @@ export default function BrokerageTableToolbar({
             pt: 0
           }}
         >
-          <Stack direction="row" alignItems="center" flexWrap="wrap" spacing={2} flexGrow={1} sx={{ width: 1 }}>
+          <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
          
             <FormControl
               sx={{
                 flexShrink: 0,
-                width: { xs: 1, md: 200 },
+                width: { xs: 1, md: 160 },
               }}
             >
               <Stack spacing={1.5}>
@@ -271,7 +271,7 @@ export default function BrokerageTableToolbar({
             <FormControl
               sx={{
                 flexShrink: 0,
-                width: { xs: 1, md: 200 },
+                width: { xs: 1, md: 160 },
               }}
             >
               <Stack spacing={1.5}>
@@ -295,7 +295,7 @@ export default function BrokerageTableToolbar({
             <FormControl
               sx={{
                 flexShrink: 0,
-                width: { xs: 1, md: 200 },
+                width: { xs: 1, md: 120 },
               }}
             >
               <Stack spacing={1.5}>
@@ -319,7 +319,7 @@ export default function BrokerageTableToolbar({
             <FormControl
               sx={{
                 flexShrink: 0,
-                width: { xs: 1, md: 200 },
+                width: { xs: 1, md: 120 },
               }}
             >
               <Stack spacing={1.5}>
@@ -340,9 +340,9 @@ export default function BrokerageTableToolbar({
                 />
               </Stack>
             </FormControl>
-            <Box display="flex" gap={2}>
-              <RHFTextField sx={{width: "auto"}} name="fullName" label="BRKG Rate" />
-              <RHFTextField sx={{width: "auto"}} name="fullName" label="BRKG Per" />
+            <Box display="flex" gap={2} width="100%">
+              <RHFTextField sx={{width: "100%"}} name="fullName" label="BRKG Rate" />
+              <RHFTextField sx={{width: "100%"}} name="fullName" label="BRKG Per" />
             </Box>
        
             {/* 
