@@ -12,7 +12,7 @@ const ROOTS = {
   AUTH: '/auth',
   AUTH_DEMO: '/auth',
   DASHBOARD: '/admstr',
-  ADMIN: "/admin"
+  ADMIN: '/admin',
 };
 
 // ----------------------------------------------------------------------
@@ -199,5 +199,5 @@ export const paths = {
         edit: `${ROOTS.ADMIN}/user/${MOCK_ID}/edit`,
       },
     },
-  }
+  },
 };

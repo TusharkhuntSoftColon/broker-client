@@ -18,7 +18,12 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { TableHeadCustom } from 'src/components/table';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { _appInvoices, newSymbolTableData, symbolTableDashboard } from 'src/_mock';
+import {
+  _appInvoices,
+  newMarginCallTableData,
+  newSymbolTableData,
+  symbolTableDashboard,
+} from 'src/_mock';
 import React from 'react';
 import Typography from '@mui/material/Typography';
 import Tabs from '@mui/material/Tabs';
@@ -30,9 +35,8 @@ import SouthEastIcon from '@mui/icons-material/SouthEast';
 
 type RowProps = {
   id: any;
-  symbol: string;
-  bid: number;
-  ask: number;
+  login: string;
+  level: string;
 };
 
 interface Props extends CardProps {
@@ -87,7 +91,7 @@ function a11yProps(index: number) {
   };
 }
 
-export default function SymbolTableDashboard() {
+export default function MarginCallTableDashboard() {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -97,36 +101,13 @@ export default function SymbolTableDashboard() {
 
   const tabs = [
     {
-      label: 'Symbols',
+      label: 'Margin Call',
       value: 0,
-      title: 'Symbol Table',
-      tableDatas: newSymbolTableData,
+      title: 'Margin Calls Table',
+      tableDatas: newMarginCallTableData,
       tableLabel: [
-        { id: 'symbol', label: 'Symbol', align: 'left', border: '1px solid #dddddd !important' },
-        { id: 'bid', label: 'Bid', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'ask', label: 'Ask', align: 'right', border: '1px solid #dddddd !important' },
-      ],
-    },
-    {
-      label: 'Details',
-      value: 1,
-      title: 'Details Table',
-      tableDatas: newSymbolTableData,
-      tableLabel: [
-        { id: 'symbol', label: 'Symbol', align: 'left', border: '1px solid #dddddd !important' },
-        { id: 'bid', label: 'Bid', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'ask', label: 'Ask', align: 'right', border: '1px solid #dddddd !important' },
-      ],
-    },
-    {
-      label: 'Ticks',
-      value: 2,
-      title: 'Ticks Table',
-      tableDatas: newSymbolTableData,
-      tableLabel: [
-        { id: 'symbol', label: 'Symbol', align: 'left', border: '1px solid #dddddd !important' },
-        { id: 'bid', label: 'Bid', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'ask', label: 'Ask', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'login', label: 'Login', align: 'left', border: '1px solid #dddddd !important' },
+        { id: 'level', label: 'Level', align: 'right', border: '1px solid #dddddd !important' },
       ],
     },
   ];
@@ -161,7 +142,6 @@ export default function SymbolTableDashboard() {
                         sx={{ textAlign: 'right', border: '1px solid #dddddd' }}
                         headLabel={data.tableLabel}
                       />
-
                       <TableBody>
                         {data.tableDatas.map((row, index) => (
                           <SymbolNewRow key={row.id} row={row} index={index} value={value} />
@@ -194,7 +174,7 @@ export default function SymbolTableDashboard() {
                 {...a11yProps(data.value)}
                 sx={{
                   // ml: 2,
-                  width: '20%',
+                  width: '50%',
                   marginRight: '0px !important',
                   borderTop: value === data.value ? 'none' : '1px solid #d3d3d3',
                   borderLeft: value === data.value ? 'none' : '0.5px solid #d3d3d3',
@@ -258,33 +238,16 @@ function SymbolNewRow({ row, value, index }: SymbolNewRowProps) {
             borderLeft: 'none',
           }}
         >
-          {index % 2 === 0 ? (
-            <NorthEastIcon style={{ fontSize: '18px', color: 'green' }} />
-          ) : (
-            <SouthEastIcon style={{ fontSize: '18px', color: 'red' }} />
-          )}
-          {row.symbol}
+          {row.login}
         </StyledTableCell>
         <StyledTableCell
           style={{
-            color: index % 2 === 0 ? 'blue' : 'red',
             textAlign: 'right',
-            width: '40px',
-            padding: '9px',
-          }}
-        >
-          {row.bid}
-        </StyledTableCell>
-        <StyledTableCell
-          style={{
-            color: index % 2 === 0 ? 'blue' : 'red',
-            textAlign: 'right',
-            width: '40px',
             padding: '9px',
             borderRight: 'none',
           }}
         >
-          {row.ask}
+          {row.level}
         </StyledTableCell>
       </StyledTableRow>
 

@@ -1,24 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 
 import Container from '@mui/material/Container';
 import { useTheme } from '@mui/material/styles';
 
-import { useMockedUser } from 'src/hooks/use-mocked-user';
-
-import { _appRelated, _appInvoices } from 'src/_mock';
+import { _appRelated } from 'src/_mock';
 
 import { useSettingsContext } from 'src/components/settings';
 
-import AppNewInvoice from '../app-new-invoice';
-import AppTopRelated from '../app-top-related';
+import TabsTable from 'src/sections/dashboard/table';
 import AppAreaInstalled from '../app-area-installed';
 import AppCurrentDownload from '../app-current-download';
-import '/node_modules/react-resizable/css/styles.css';
-import '/node_modules/react-grid-layout/css/styles.css';
-import TabsTable from 'src/sections/dashboard/table';
-import SymbolTableDashboard from '../symbol-new-table';
+import AppNewInvoice from '../app-new-invoice';
+import AppTopRelated from '../app-top-related';
 import ClientTableDashboard from '../client-new-table';
+import MarginCallTableDashboard from '../margin-call-table';
+import SymbolTableDashboard from '../symbol-new-table';
+import '/node_modules/react-grid-layout/css/styles.css';
+import '/node_modules/react-resizable/css/styles.css';
 
 // ----------------------------------------------------------------------
 
@@ -111,7 +110,7 @@ export default function OverviewAppView() {
       component: <SymbolTableDashboard />,
       x: 0,
       y: 0,
-      w: 4,
+      w: 3,
       h: 13.7,
       minH: 13.7,
       maxH: 13.7,
@@ -129,9 +128,19 @@ export default function OverviewAppView() {
     {
       i: 'd',
       component: <ClientTableDashboard />,
-      x: 4,
+      x: 3,
       y: 0,
-      w: 8,
+      w: 6,
+      h: 13.7,
+      minH: 13.7,
+      maxH: 13.7,
+    },
+    {
+      i: 'e',
+      component: <MarginCallTableDashboard />,
+      x: 9,
+      y: 0,
+      w: 3,
       h: 13.7,
       minH: 13.7,
       maxH: 13.7,

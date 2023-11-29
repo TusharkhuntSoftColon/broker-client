@@ -3,32 +3,31 @@ import { Navigate } from 'react-router';
 
 import Box from '@mui/material/Box';
 
-import useAuth from 'src/hooks/useAuth';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useResponsive } from 'src/hooks/use-responsive';
+import useAuth from 'src/hooks/useAuth';
 
 import { useSettingsContext } from 'src/components/settings';
 
-import Main from './main';
+import { useAdminNav } from './dashboard/config-navigation';
 import Header from './dashboard/header';
+import NavHorizontal from './dashboard/nav-horizontal';
 import NavMini from './dashboard/nav-mini';
 import NavVertical from './dashboard/nav-vertical';
-import NavHorizontal from './dashboard/nav-horizontal';
-import { useAdminNav } from './dashboard/config-navigation';
+import Main from './main';
 
 type Props = {
   children: React.ReactNode;
 };
 
-const  AdminLayout = ({ children }: Props) => {
-const { role } = useAuth()
-  
-  const [manager, setmaneger] = useState(role === "ADMIN" ? true : null);
+const AdminLayout = ({ children }: Props) => {
+  const { role } = useAuth();
 
-  const adminNav = useAdminNav()
+  const [manager, setmaneger] = useState(false);
+
+  const adminNav = useAdminNav();
 
   const settings = useSettingsContext();
-
 
   const lgUp = useResponsive('up', 'lg');
 
@@ -38,11 +37,13 @@ const { role } = useAuth()
 
   const isMini = settings.themeLayout === 'mini';
 
-  const renderNavMini = <NavMini nav={adminNav}/>;
+  const renderNavMini = <NavMini nav={adminNav} />;
 
-  const renderHorizontal = <NavHorizontal nav={adminNav}/>;
+  const renderHorizontal = <NavHorizontal nav={adminNav} />;
 
-  const renderNavVertical = <NavVertical nav={adminNav} openNav={nav.value} onCloseNav={nav.onFalse} />;
+  const renderNavVertical = (
+    <NavVertical nav={adminNav} openNav={nav.value} onCloseNav={nav.onFalse} />
+  );
 
   if (isHorizontal) {
     return (
@@ -93,6 +94,6 @@ const { role } = useAuth()
       </Box>
     </>
   );
-}
+};
 
-  export default AdminLayout
+export default AdminLayout;

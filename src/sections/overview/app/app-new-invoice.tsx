@@ -18,7 +18,12 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { TableHeadCustom } from 'src/components/table';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { _appInvoices, newInvoiceData } from 'src/_mock';
+import {
+  _appInvoices,
+  newInvoiceData,
+  newInvoiceExposureData,
+  newInvoiceJournalData,
+} from 'src/_mock';
 import React from 'react';
 import Typography from '@mui/material/Typography';
 import Tabs from '@mui/material/Tabs';
@@ -38,6 +43,17 @@ type RowProps = {
   net_volume: any;
   profit: any;
   unCovered: any;
+  time: string;
+  server: string;
+  message: string;
+  asset: string;
+  clients: number;
+  coverage: number;
+  nettotal: number;
+  rate: number;
+  netTotal: number;
+  positive: number;
+  graph: string;
 };
 
 interface Props extends CardProps {
@@ -96,6 +112,7 @@ export default function AppNewInvoice() {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    console.log({ newValue });
     setValue(newValue);
   };
 
@@ -107,31 +124,105 @@ export default function AppNewInvoice() {
       tableDatas: newInvoiceData,
       tableLabel: [
         { id: 'symbol', label: 'Symbol', align: 'left', border: '1px solid #dddddd !important' },
-        { id: 'positions', label: 'Positions', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'buy_volume', label: 'Buy Volume', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'buy_price', label: 'Buy Price', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'sell_volume', label: 'Sell Volume', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'sell_price', label: 'Sell Price', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'net_volume', label: 'Net Volume', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'profit', label: 'Profit (INR)', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'unCovered', label: 'Uncovered (INR)', align: 'right', border: '1px solid #dddddd !important' },
+        {
+          id: 'positions',
+          label: 'Positions',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
+        {
+          id: 'buy_volume',
+          label: 'Buy Volume',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
+        {
+          id: 'buy_price',
+          label: 'Buy Price',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
+        {
+          id: 'sell_volume',
+          label: 'Sell Volume',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
+        {
+          id: 'sell_price',
+          label: 'Sell Price',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
+        {
+          id: 'net_volume',
+          label: 'Net Volume',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
+        {
+          id: 'profit',
+          label: 'Profit (INR)',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
+        {
+          id: 'unCovered',
+          label: 'Uncovered (INR)',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
       ],
     },
     {
       label: 'Exposure',
       value: 1,
       title: 'Exposure Table',
-      tableDatas: newInvoiceData,
+      tableDatas: newInvoiceExposureData,
       tableLabel: [
-        { id: 'symbol', label: 'Symbol', align: 'left', border: '1px solid #dddddd !important' },
-        { id: 'positions', label: 'Positions', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'buy_volume', label: 'Buy Volume', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'buy_price', label: 'Buy Price', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'sell_volume', label: 'Sell Volume', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'sell_price', label: 'Sell Price', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'net_volume', label: 'Net Volume', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'profit', label: 'Profit (INR)', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'unCovered', label: 'Uncovered (INR)', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'asset', label: 'Asset', align: 'left', border: '1px solid #dddddd !important' },
+        {
+          id: 'clients',
+          label: 'Clients',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
+        {
+          id: 'coverage',
+          label: 'Coverage',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
+        {
+          id: 'nettotal',
+          label: 'Net Total',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
+        {
+          id: 'rate',
+          label: 'Rate',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
+        {
+          id: 'netTotal',
+          label: 'Net Total  INR)',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
+        {
+          id: 'positive',
+          label: 'Positive (INR)',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
+        {
+          id: 'graph',
+          label: 'Graph',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
       ],
     },
     {
@@ -141,14 +232,65 @@ export default function AppNewInvoice() {
       tableDatas: newInvoiceData,
       tableLabel: [
         { id: 'symbol', label: 'Symbol', align: 'left', border: '1px solid #dddddd !important' },
-        { id: 'positions', label: 'Positions', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'buy_volume', label: 'Buy Volume', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'buy_price', label: 'Buy Price', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'sell_volume', label: 'Sell Volume', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'sell_price', label: 'Sell Price', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'net_volume', label: 'Net Volume', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'profit', label: 'Profit (INR)', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'unCovered', label: 'Uncovered (INR)', align: 'right', border: '1px solid #dddddd !important' },
+        {
+          id: 'positions',
+          label: 'Positions',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
+        {
+          id: 'buy_volume',
+          label: 'Buy Volume',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
+        {
+          id: 'buy_price',
+          label: 'Buy Price',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
+        {
+          id: 'sell_volume',
+          label: 'Sell Volume',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
+        {
+          id: 'sell_price',
+          label: 'Sell Price',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
+        {
+          id: 'net_volume',
+          label: 'Net Volume',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
+        {
+          id: 'profit',
+          label: 'Profit (INR)',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
+        {
+          id: 'unCovered',
+          label: 'Uncovered (INR)',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
+      ],
+    },
+    {
+      label: 'Journal',
+      value: 3,
+      title: 'Journal Table',
+      tableDatas: newInvoiceJournalData,
+      tableLabel: [
+        { id: 'time', label: 'Time', align: 'left', border: '1px solid #dddddd !important' },
+        { id: 'server', label: 'Server', align: 'left', border: '1px solid #dddddd !important' },
+        { id: 'message', label: 'Message', align: 'left', border: '1px solid #dddddd !important' },
       ],
     },
   ];
@@ -174,7 +316,12 @@ export default function AppNewInvoice() {
         <Box>
           {tabs.map((data) => {
             return (
-              <CustomTabPanel value={value} index={data.value} styles={{ overflow: 'hidden' }}>
+              <CustomTabPanel
+                value={value}
+                key={data.value}
+                index={data.value}
+                styles={{ overflow: 'hidden' }}
+              >
                 <CardHeader title={data.title} sx={{ mb: 4, mt: -1 }} />
                 <TableContainer sx={{ overflow: 'unset', height: '400px' }}>
                   <Scrollbar>
@@ -182,7 +329,7 @@ export default function AppNewInvoice() {
                       <TableHeadCustom headLabel={data.tableLabel} />
                       <TableBody>
                         {data.tableDatas.map((row) => (
-                          <AppNewInvoiceRow key={row.id} row={row} />
+                          <AppNewInvoiceRow key={row.id} row={row} value={value} />
                         ))}
                       </TableBody>
                     </Table>
@@ -234,9 +381,10 @@ export default function AppNewInvoice() {
 
 type AppNewInvoiceRowProps = {
   row: RowProps;
+  value: any;
 };
 
-function AppNewInvoiceRow({ row }: AppNewInvoiceRowProps) {
+function AppNewInvoiceRow({ row, value }: AppNewInvoiceRowProps) {
   const popover = usePopover();
 
   const handleDownload = () => {
@@ -261,33 +409,75 @@ function AppNewInvoiceRow({ row }: AppNewInvoiceRowProps) {
 
   return (
     <>
-      <StyledTableRow>
-        <StyledTableCell sx={{ textAlign: 'left', padding: '9px', borderLeft: 'none' }}>
-          {row.symbol}
-        </StyledTableCell>
-        <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
-          {row.positions}
-        </StyledTableCell>
-        <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
-          {row.buy_volume}
-        </StyledTableCell>
-        <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
-          {row.buy_price}
-        </StyledTableCell>
-        <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
-          {row.sell_volume}
-        </StyledTableCell>
-        <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
-          {row.sell_price}
-        </StyledTableCell>
-        <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
-          {row.net_volume}
-        </StyledTableCell>
-        <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.profit}</StyledTableCell>
-        <StyledTableCell sx={{ textAlign: 'right', padding: '9px', borderRight: 'none' }}>
-          {row.unCovered}
-        </StyledTableCell>
-      </StyledTableRow>
+      {value === 0 && (
+        <StyledTableRow>
+          <StyledTableCell sx={{ textAlign: 'left', padding: '9px', borderLeft: 'none' }}>
+            {row.symbol}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row.positions}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row.buy_volume}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row.buy_price}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row.sell_volume}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row.sell_price}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row.net_volume}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row.profit}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px', borderRight: 'none' }}>
+            {row.unCovered}
+          </StyledTableCell>
+        </StyledTableRow>
+      )}
+
+      {value === 1 && (
+        <StyledTableRow>
+          <StyledTableCell sx={{ textAlign: 'left', padding: '9px', borderLeft: 'none' }}>
+            {row.asset}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row.clients}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row.coverage}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row.nettotal}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.rate}</StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row.netTotal}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row.positive}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px', borderRight: 'none' }}>
+            {row.graph}
+          </StyledTableCell>
+        </StyledTableRow>
+      )}
+      {value === 3 && (
+        <StyledTableRow>
+          <StyledTableCell sx={{ textAlign: 'left', padding: '9px', borderLeft: 'none' }}>
+            {row.time}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'left', padding: '9px' }}>{row.server}</StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'left', padding: '9px', borderRight: 'none' }}>
+            {row.message}
+          </StyledTableCell>
+        </StyledTableRow>
+      )}
 
       <CustomPopover
         open={popover.open}

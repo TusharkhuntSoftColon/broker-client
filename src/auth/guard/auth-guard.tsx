@@ -41,7 +41,6 @@ function Container({ children }: Props) {
   const { token } = useAuth();
 
   // console.log({token});
-  
 
   const [checked, setChecked] = useState(false);
 
@@ -65,7 +64,7 @@ function Container({ children }: Props) {
       // navigate(-1);
       setChecked(true);
     }
-  }, [ router, token]);
+  }, [router, token]);
 
   useEffect(() => {
     check();

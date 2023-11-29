@@ -1,16 +1,16 @@
+import { Button, IconButton, Tooltip } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
-import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import { Button, Tooltip, IconButton } from '@mui/material';
+import TableRow from '@mui/material/TableRow';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import Iconify from 'src/components/iconify';
-import { usePopover } from 'src/components/custom-popover';
 import { ConfirmDialog } from 'src/components/custom-dialog';
+import { usePopover } from 'src/components/custom-popover';
+import Iconify from 'src/components/iconify';
 
-import { ISymbolItem } from 'src/types/symbol';
 import Label from 'src/components/label';
+import { ISymbolItem } from 'src/types/symbol';
 
 // ----------------------------------------------------------------------
 
@@ -91,7 +91,7 @@ export default function SymbolTableRow({
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{name}</TableCell>
         {/* <TableCell sx={{ whiteSpace: 'nowrap' }}>{currency}</TableCell> */}
-        <TableCell>{currency.label}</TableCell>
+        <TableCell>{currency}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{contractSize}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{tickSize}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{tickValue}</TableCell>
