@@ -21,6 +21,9 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import {
   _appInvoices,
   clientsTableDashboard,
+  newClientsAccountTableData,
+  newClientsOnlineTableData,
+  newClientsOrderTableData,
   newClientsTableData,
   symbolTableDashboard,
 } from 'src/_mock';
@@ -38,11 +41,25 @@ type RowProps = {
   position: number;
   symbol: string;
   type: string;
-  volume: string;
+  volume: any;
   price1: number;
   price2: number;
   reason: string;
   swap: number;
+  name: number;
+  group: string;
+  balance: number;
+  credit: number;
+  client: string;
+  version: number;
+  ip: string;
+  equity: number;
+  order:number;
+  time:string;
+  type:string;
+  volume:string;
+  sl:any;
+  tp:any;
 };
 
 interface Props extends CardProps {
@@ -101,6 +118,7 @@ export default function ClientTableDashboard() {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    console.log({ newValue });
     setValue(newValue);
   };
 
@@ -111,49 +129,67 @@ export default function ClientTableDashboard() {
       title: 'Users',
       tableDatas: newClientsTableData,
       tableLabel: [
-        { id: 'login', label: 'Login',align: 'left', border: '1px solid #dddddd !important' },
-        { id: 'position', label: 'Position',align: 'left', border: '1px solid #dddddd !important' },
-        { id: 'symbol', label: 'Symbol',align: 'left', border: '1px solid #dddddd !important' },
-        { id: 'type', label: 'Type',align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'volume', label: 'Volume',align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'price1', label: 'Price',align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'price2', label: 'Price',align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'reason', label: 'Reason',align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'swap', label: 'Swap',align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'login', label: 'Login', align: 'left', border: '1px solid #dddddd !important' },
+        {
+          id: 'position',
+          label: 'Position',
+          align: 'left',
+          border: '1px solid #dddddd !important',
+        },
+        { id: 'symbol', label: 'Symbol', align: 'left', border: '1px solid #dddddd !important' },
+        { id: 'type', label: 'Type', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'volume', label: 'Volume', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'price1', label: 'Price', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'price2', label: 'Price', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'reason', label: 'Reason', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'swap', label: 'Swap', align: 'right', border: '1px solid #dddddd !important' },
       ],
     },
     {
       label: 'Accounts',
       value: 1,
       title: 'Accounts Table',
-      tableDatas: newClientsTableData,
+      tableDatas: newClientsAccountTableData,
       tableLabel: [
-        { id: 'login', label: 'Login',align: 'left', border: '1px solid #dddddd !important'  },
-        { id: 'position', label: 'Position',align: 'left', border: '1px solid #dddddd !important'  },
-        { id: 'symbol', label: 'Symbol',align: 'left', border: '1px solid #dddddd !important'  },
-        { id: 'type', label: 'Type',align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'volume', label: 'Volume',align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'price1', label: 'Price',align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'price2', label: 'Price',align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'reason', label: 'Reason',align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'swap', label: 'Swap',align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'login', label: 'Login', align: 'left', border: '1px solid #dddddd !important' },
+        { id: 'name', label: 'Name', align: 'left', border: '1px solid #dddddd !important' },
+        { id: 'group', label: 'Group', align: 'Right', border: '1px solid #dddddd !important' },
+        { id: 'balance', label: 'Balance', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'credit', label: 'Credit', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'equity', label: 'Equity', align: 'right', border: '1px solid #dddddd !important' },
       ],
     },
     {
       label: 'Online',
       value: 2,
       title: 'Online Table',
-      tableDatas: newClientsTableData,
+      tableDatas: newClientsOnlineTableData,
       tableLabel: [
-        { id: 'login', label: 'Login',align: 'left', border: '1px solid #dddddd !important'  },
-        { id: 'position', label: 'Position',align: 'left', border: '1px solid #dddddd !important'  },
-        { id: 'symbol', label: 'Symbol',align: 'left', border: '1px solid #dddddd !important'  },
-        { id: 'type', label: 'Type',align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'volume', label: 'Volume',align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'price1', label: 'Price',align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'price2', label: 'Price',align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'reason', label: 'Reason',align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'swap', label: 'Swap',align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'login', label: 'Login', align: 'left', border: '1px solid #dddddd !important' },
+        { id: 'group', label: 'Group', align: 'left', border: '1px solid #dddddd !important' },
+        { id: 'name', label: 'Name', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'client', label: 'Client', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'version', label: 'Version', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'ip', label: 'IP', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'equity', label: 'Equity', align: 'right', border: '1px solid #dddddd !important' },
+      ],
+    },
+    {
+      label: 'Orders',
+      value: 3,
+      title: 'Orders Table',
+      tableDatas: newClientsOrderTableData,
+      tableLabel: [
+        { id: 'login', label: 'Login', align: 'left', border: '1px solid #dddddd !important' },
+        { id: 'order', label: 'Order', align: 'left', border: '1px solid #dddddd !important' },
+        { id: 'symbol', label: 'Symbol', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'time', label: 'Time', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'type', label: 'Type', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'volume', label: 'Volume', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'price1', label: 'Price', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'sl', label: 'S / L', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'tp', label: 'T /P', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'price2', label: 'Price', align: 'right', border: '1px solid #dddddd !important' },
       ],
     },
   ];
@@ -188,7 +224,7 @@ export default function ClientTableDashboard() {
 
                       <TableBody>
                         {data.tableDatas.map((row) => (
-                          <ClientNewRow key={row.id} row={row} />
+                          <ClientNewRow key={row.id} row={row} value={value} />
                         ))}
                       </TableBody>
                     </Table>
@@ -239,9 +275,10 @@ export default function ClientTableDashboard() {
 
 type ClientNewRowProps = {
   row: RowProps;
+  value?: any;
 };
 
-function ClientNewRow({ row }: ClientNewRowProps) {
+function ClientNewRow({ row, value }: ClientNewRowProps) {
   const popover = usePopover();
 
   const handleDownload = () => {
@@ -264,19 +301,99 @@ function ClientNewRow({ row }: ClientNewRowProps) {
     console.info('DELETE', row.id);
   };
 
+  console.log({ row });
+
   return (
     <>
-      <StyledTableRow>
-        <StyledTableCell sx={{ textAlign: 'left', padding: '9px', borderLeft: 'none', }}>{row.login}</StyledTableCell>
-        <StyledTableCell sx={{ textAlign: 'left', padding: '9px' }}>{row.position}</StyledTableCell>
-        <StyledTableCell sx={{ textAlign: 'left', padding: '9px' }}>{row.symbol}</StyledTableCell>
-        <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.type}</StyledTableCell>
-        <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.volume}</StyledTableCell>
-        <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.price1}</StyledTableCell>
-        <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.price2}</StyledTableCell>
-        <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.reason}</StyledTableCell>
-        <StyledTableCell sx={{ textAlign: 'right', padding: '9px', borderRight: 'none' }}>{row.swap}</StyledTableCell>
-      </StyledTableRow>
+      {value === 0 && (
+        <StyledTableRow>
+          <StyledTableCell sx={{ textAlign: 'left', padding: '9px', borderLeft: 'none' }}>
+            {row.login}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'left', padding: '9px' }}>
+            {row.position}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'left', padding: '9px' }}>{row.symbol}</StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.type}</StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row.volume}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row.price1}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row.price2}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row.reason}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px', borderRight: 'none' }}>
+            {row.swap}
+          </StyledTableCell>
+        </StyledTableRow>
+      )}
+
+      {value === 1 && (
+        <StyledTableRow>
+          <StyledTableCell sx={{ textAlign: 'left', padding: '9px', borderLeft: 'none' }}>
+            {row.login}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'left', padding: '9px' }}>{row.name}</StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'left', padding: '9px' }}>{row.group}</StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row.balance}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row.credit}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px', borderRight: 'none' }}>
+            {row.equity}
+          </StyledTableCell>
+        </StyledTableRow>
+      )}
+
+      {value === 2 && (
+        <StyledTableRow>
+          <StyledTableCell sx={{ textAlign: 'left', padding: '9px', borderLeft: 'none' }}>
+            {row.login}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.group}</StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.name}</StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row.client}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row.version}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.ip}</StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px', borderRight: 'none' }}>
+            {row.equity}
+          </StyledTableCell>
+        </StyledTableRow>
+      )}
+      
+      {value === 3 && (
+        <StyledTableRow>
+          <StyledTableCell sx={{ textAlign: 'left', padding: '9px', borderLeft: 'none' }}>
+            {row.login}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.order}</StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.symbol}</StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row.time}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row.type}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.volume}</StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.price1}</StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.sl}</StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.tp}</StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px', borderRight: 'none' }}>
+            {row.price2}
+          </StyledTableCell>
+        </StyledTableRow>
+      )}
 
       <CustomPopover
         open={popover.open}

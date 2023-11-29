@@ -1,13 +1,13 @@
 import { Navigate, useRoutes } from 'react-router-dom';
 
-import useAuth from 'src/hooks/useAuth';
 import { useMockedUser } from 'src/hooks/use-mocked-user';
+import useAuth from 'src/hooks/useAuth';
 
 import { paths } from '../paths';
-import { mainRoutes } from './main';
 import { authDemoRoutes } from './auth-demo';
-import { dashboardRoutes } from './dashboard';
 import { componentsRoutes } from './components';
+import { dashboardRoutes } from './dashboard';
+import { mainRoutes } from './main';
 
 // ----------------------------------------------------------------------
 

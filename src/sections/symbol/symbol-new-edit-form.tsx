@@ -1,29 +1,28 @@
-import * as Yup from 'yup';
-import { useMemo } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useMutation } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
+import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { useMutation } from '@tanstack/react-query';
-import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 
+import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
-import LoadingButton from '@mui/lab/LoadingButton';
 
-import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
 
 import { STOP_LOSS, SYMBOL_CURRENCY } from 'src/_mock/_symbol';
 import symbolService from 'src/services/symbolService';
-import { addSymbol, updateSymbol } from 'src/store/slices/symbol';
 
+import FormProvider, { RHFAutocomplete, RHFSwitch, RHFTextField } from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, { RHFTextField, RHFAutocomplete, RHFSwitch } from 'src/components/hook-form';
 
-import { ISymbolItem } from 'src/types/symbol';
 import { Typography } from '@mui/material';
+import { ISymbolItem } from 'src/types/symbol';
 
 // ----------------------------------------------------------------------
 
@@ -140,17 +139,17 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
   });
 
   // create symbol
-  // const { mutate: updateSymbol } = useMutation(symbolService.updateSymbol, {
-  //   onSuccess: (data) => {
-  //     enqueueSnackbar(data?.message, { variant: 'success' });
-  //     router.push(paths.dashboard.symbol.root);
-  //   },
-  //   onError: (error: any) => {
-  //     if (isAxiosError(error)) {
-  //       enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-  //     }
-  //   },
-  // });
+  const { mutate: updateSymbol } = useMutation(symbolService.updateSymbol, {
+    onSuccess: (data) => {
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      router.push(paths.dashboard.symbol.root);
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
 
   const onSubmit = handleSubmit(async (data: any) => {
     // console.log('Worked');
@@ -158,11 +157,11 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
       console.log({ data });
 
       if (currentUser) {
-        // await updateSymbol({ data, _id: currentUser._id });
-        dispatch(updateSymbol({ id: currentUser?.id, updatedData: data }));
+        await updateSymbol({ data, _id: currentUser._id });
+        // dispatch(updateSymbol({ id: currentUser?.id, updatedData: data }));
       } else {
-        // await createSymbol(data);
-        dispatch(addSymbol(data));
+        await createSymbol(data);
+        // dispatch(addSymbol(data));
       }
       router.push(paths.dashboard.symbol.root);
 

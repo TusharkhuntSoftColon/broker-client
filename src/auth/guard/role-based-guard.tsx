@@ -2,13 +2,13 @@ import { m } from 'framer-motion';
 
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
-import { Theme, SxProps } from '@mui/material/styles';
+import { SxProps, Theme } from '@mui/material/styles';
 
 import { useMockedUser } from 'src/hooks/use-mocked-user';
 
 import { ForbiddenIllustration } from 'src/assets/illustrations';
 
-import { varBounce, MotionContainer } from 'src/components/animate';
+import { MotionContainer, varBounce } from 'src/components/animate';
 
 // ----------------------------------------------------------------------
 
@@ -24,7 +24,7 @@ export default function RoleBasedGuard({ hasContent, roles, children, sx }: Role
   const { SUPER_ADMIN, ADMIN } = useMockedUser();
 
   // const currentRole = 'user';
-  const currentRole = ADMIN.role // admin;
+  const currentRole = ADMIN.role; // admin;
 
   if (typeof roles !== 'undefined' && !roles.includes(currentRole)) {
     return hasContent ? (
