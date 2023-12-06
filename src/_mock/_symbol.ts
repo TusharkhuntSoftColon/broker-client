@@ -183,5 +183,3 @@ export const _symbolList = [...Array(20)].map((_, index) => ({
   statusOfScripts: 'sdafsdf',
   stopLoss: 'asdas',
 }));
-
-

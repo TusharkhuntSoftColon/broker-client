@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 
 import client from 'src/lib/client';
 
-import { ADD_SYMBOL, DELETE_SYMBOL, UPDATE_SYMBOL, GET_SYMBOL_LIST } from '../utils/urls';
+import { ADD_SYMBOL, DELETE_SYMBOL, GET_SYMBOL_LIST, UPDATE_SYMBOL } from '../utils/urls';
 
 export interface symbolType {
   id: string;
@@ -46,7 +46,9 @@ const symbolService = {
       const response: AxiosResponse<any> = await client.post(ADD_SYMBOL, {
         ...symbolData,
         stAndTp: Boolean(symbolData.stAndTp),
+        currency: symbolData?.currency.value,
       });
+
       return response.data;
     } catch (error) {
       // You can log the error here for debugging purposes
@@ -70,6 +72,7 @@ const symbolService = {
       const response: AxiosResponse<any> = await client.put(`${UPDATE_SYMBOL}${symbolData._id}`, {
         ...symbolData.data,
         stAndTp: symbolData.data?.stAndTp === 'true',
+        currency: symbolData?.data?.currency.value,
       });
       return response.data;
     } catch (error) {

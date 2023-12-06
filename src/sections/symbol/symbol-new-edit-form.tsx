@@ -78,7 +78,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
       limitOfAddUser: currentUser?.limitOfAddUser || '',
       leverageX: currentUser?.leverageX || '',
       leverageY: currentUser?.leverageY || '',
-      isActiveSymbol: currentUser?.isActiveSymbol || true,
+      isActive: currentUser?.isActive || null,
     }),
     [currentUser]
   );
@@ -317,7 +317,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
                 isReadOnly={!!isView}
                 options={SYMBOL_CURRENCY}
                 isLabled={false}
-                // value={STOP_LOSS.find((data) => data.value === currentUser?.stAndTp)?.label}
+                value={SYMBOL_CURRENCY.find((data) => data.value === currentUser?.currency)}
                 // data={STOP_LOSS}
                 isOptionEqualToValue={(option, value) => option.value === value.value}
                 getOptionLabel={(option: any) => option.label}
@@ -531,7 +531,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
                 isReadOnly={!!isView}
                 options={STOP_LOSS}
                 isLabled={false}
-                // value={STOP_LOSS.find((data) => data.value === currentUser?.stAndTp)?.label}
+                // value={STOP_LOSS.find((data) => data.value === String(currentUser?.stAndTp))}
                 // data={STOP_LOSS}
                 isOptionEqualToValue={(option, value) => option.value === value.value}
                 getOptionLabel={(option: any) => option.label}
@@ -544,7 +544,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
 
               {currentUser && (
                 <RHFSwitch
-                  name="isActiveSymbol"
+                  name="isActive"
                   labelPlacement="start"
                   label={
                     <Typography variant="subtitle2" sx={{ mb: 0.5 }}>

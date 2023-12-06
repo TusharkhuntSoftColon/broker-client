@@ -31,7 +31,7 @@ export default function SymbolTableRow({
   onEditRow,
   onDeleteRow,
 }: Props) {
-  const { name, contractSize, currency, tickSize, tickValue, isActiveSymbol } = row;
+  const { name, contractSize, currency, tickSize, tickValue, isActive } = row;
 
   // console.log({ row });
 
@@ -97,8 +97,8 @@ export default function SymbolTableRow({
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{tickValue}</TableCell>
 
         <TableCell>
-          <Label variant="soft" color={isActiveSymbol ? 'success' : 'warning'}>
-            {isActiveSymbol === true ? 'Active' : 'In Active'}
+          <Label variant="soft" color={isActive ? 'success' : 'warning'}>
+            {isActive === true ? 'Active' : 'In Active'}
           </Label>
         </TableCell>
 

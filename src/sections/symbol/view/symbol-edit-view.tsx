@@ -1,7 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { useSnackbar } from 'notistack';
-import { memo, useEffect, useState } from 'react';
+import { memo, useEffect, useMemo, useState } from 'react';
 
 import Container from '@mui/material/Container';
 
@@ -9,6 +9,7 @@ import { paths } from 'src/routes/paths';
 
 import symbolService from 'src/services/symbolService';
 
+import { useSelector } from 'react-redux';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { useSettingsContext } from 'src/components/settings';
 import SymbolNewEditForm from '../symbol-new-edit-form';
@@ -19,15 +20,15 @@ function SymbolEditView({ id }: { id: any }) {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  // const symbolData = useSelector((data: any) => data?.symbol?.symbolList);
+  const symbolData = useSelector((data: any) => data?.symbol?.symbolList);
 
   console.log({ id });
   // console.log({ symbolData });
 
-  // const currentSymbol = useMemo(
-  //   () => symbolData?.filter((symbol: any) => symbol.id === id)[0],
-  //   [symbolData]
-  // );
+  const currentSymbol1 = useMemo(
+    () => symbolData?.filter((symbol: any) => symbol._id === id)[0],
+    [symbolData]
+  );
 
   // console.log({ currentSymbol });
 
@@ -71,7 +72,7 @@ function SymbolEditView({ id }: { id: any }) {
         }}
       />
 
-      <SymbolNewEditForm currentUser={currentSymbol} />
+      <SymbolNewEditForm currentUser={currentSymbol1} />
     </Container>
   );
 }

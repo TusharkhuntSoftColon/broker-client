@@ -44,6 +44,7 @@ import SymbolTableToolbar from '../symbol-table-toolbar';
 
 import { useDispatch } from 'react-redux';
 import symbolService from 'src/services/symbolService';
+import { addSymbol } from 'src/store/slices/symbol';
 
 // ----------------------------------------------------------------------
 
@@ -93,6 +94,7 @@ export default function SymbolListView() {
 
   const [tableData, setTableData] = useState([]);
 
+  console.log({ tableData });
   const [filters, setFilters] = useState(defaultFilters);
 
   const dateError =
@@ -194,6 +196,7 @@ export default function SymbolListView() {
   const { mutate } = useMutation(symbolService.getSymbolList, {
     onSuccess: (data) => {
       setTableData(data?.data?.rows);
+      dispatch(addSymbol(data?.data?.rows));
       enqueueSnackbar(data?.message, { variant: 'success' });
     },
     onError: (error: any) => {
@@ -345,7 +348,7 @@ export default function SymbolListView() {
                     )
                     .map((row: any) => (
                       <SymbolTableRow
-                        key={row.id}
+                        key={row._id}
                         row={row}
                         selected={table.selected.includes(row._id)}
                         onSelectRow={() => table.onSelectRow(row._id)}

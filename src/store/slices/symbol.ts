@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { createSlice } from '@reduxjs/toolkit';
 
-
 // Define a type for the slice state
 interface AuthState {
   symbolList: any;
@@ -30,13 +29,7 @@ const symbolSlice = createSlice({
       //   id: Math.random().toString(36).substr(2, 5),
       // });
 
-      state.symbolList = [
-        ...state.symbolList,
-        {
-          ...data,
-          id: Math.random().toString(36).substr(2, 5),
-        },
-      ];
+      state.symbolList = data;
     },
     updateSymbol: (state, action) => {
       const { id, updatedData } = action.payload;

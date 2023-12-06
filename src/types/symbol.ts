@@ -8,7 +8,7 @@ export type ISymbolTableFilters = {
   status: null | string | any;
   startDate: Date | null;
   endDate: Date | null;
-  tickSize:any;
+  tickSize: any;
 };
 
 // ----------------------------------------------------------------------
@@ -81,5 +81,5 @@ export type ISymbolItem = {
   orderNumber?: any;
   customer?: any;
   status?: any;
-  isActiveSymbol?: any;
+  isActive?: any;
 };
