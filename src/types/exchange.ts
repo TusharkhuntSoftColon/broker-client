@@ -39,15 +39,15 @@ export type IProductReview = {
 
 export type IExchangeItem = {
   name: string;
-  id: string;
+  id?: string;
   _id?: any;
   status: string;
-  createdAt: string;
-  updatedAt: string;
-  label: string;
-  statusOfExchange: string;
-  stAndTp: boolean;
-  isActiveExchange: any;
+  createdAt?: string;
+  updatedAt?: string;
+  label?: string;
+  statusOfExchange?: string;
+  stAndTp?: boolean;
+  isActiveExchange?: any;
 };
 
 export type IProductItem = {

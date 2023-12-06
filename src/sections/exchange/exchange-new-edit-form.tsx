@@ -16,6 +16,9 @@ import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 import { ExchangeProp, IUserItem } from 'src/types/user';
+import { useMutation } from '@tanstack/react-query';
+import exchangeService from 'src/services/exchangeService';
+import { isAxiosError } from 'axios';
 
 // ----------------------------------------------------------------------
 
@@ -43,8 +46,6 @@ export default function ExchangeNewEditForm({ currentExchange }: Props) {
     [currentExchange]
   );
 
-  console.log({ currentExchange });
-
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),
     defaultValues,
@@ -59,18 +60,28 @@ export default function ExchangeNewEditForm({ currentExchange }: Props) {
     formState: { isSubmitting },
   } = methods;
 
-  const values = watch();
+  // create exchang
+  const { mutate: createExchange } = useMutation(exchangeService.addExchange, {
+    onSuccess: (data) => {
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      router.push(paths.dashboard.exchange.root);
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log({ data });
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      reset();
-      enqueueSnackbar(currentExchange ? 'Update success!' : 'Create success!');
-      router.push(paths.dashboard.user.list);
-      console.info('DATA', data);
+      if (currentExchange) {
+        // await
+      } else {
+        await createExchange(data);
+      }
     } catch (error) {
-      console.error(error);
+      console.log({ error });
     }
   });
 

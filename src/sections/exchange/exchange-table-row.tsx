@@ -86,7 +86,7 @@ export default function ExchangeTableRow({
 
         <TableCell>
           <ListItemText
-            primary={<span>{createdAt || '-'}</span>}
+            primary={<span>{createdAt.substring(0, 10) || '-'}</span>}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               mt: 0.5,
@@ -98,7 +98,7 @@ export default function ExchangeTableRow({
 
         <TableCell>
           <ListItemText
-            primary={<span>{updatedAt || '-'}</span>}
+            primary={<span>{updatedAt?.substring(0, 10) || '-'}</span>}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               mt: 0.5,

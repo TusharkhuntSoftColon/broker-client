@@ -19,6 +19,7 @@ interface Props<
   control?: any;
   data?: any;
   multiple?: Multiple;
+  value?: any;
   isLabled?: any;
 }
 
@@ -36,6 +37,7 @@ export default function RHFAutocomplete<
   control,
   data,
   isLabled,
+  value,
   resetFunction,
   ...other
 }: Omit<Props<T, Multiple, DisableClearable, FreeSolo>, 'renderInput'>) {
@@ -51,6 +53,7 @@ export default function RHFAutocomplete<
             setValue(name, newValue, { shouldValidate: true });
           }}
           readOnly={!!isReadOnly}
+          value={value}
           renderInput={(params) => (
             <TextField
               label={label}

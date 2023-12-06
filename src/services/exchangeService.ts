@@ -43,7 +43,6 @@ const exchangeService = {
     try {
       const response: AxiosResponse<any> = await client.post(ADD_EXCHANGE, {
         ...exchangeData,
-        symbols: [],
       });
       return response.data;
     } catch (error) {

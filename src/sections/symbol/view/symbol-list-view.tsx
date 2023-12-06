@@ -93,8 +93,6 @@ export default function SymbolListView() {
 
   const [tableData, setTableData] = useState([]);
 
-  console.log({ tableData });
-
   const [filters, setFilters] = useState(defaultFilters);
 
   const dateError =
@@ -157,8 +155,6 @@ export default function SymbolListView() {
 
   const handleDeleteRows = useCallback(() => {
     const deleteRows = tableData.filter((row: any) => !table.selected.includes(row.id));
-
-    console.log({ deleteRows });
 
     setTableData(deleteRows);
 

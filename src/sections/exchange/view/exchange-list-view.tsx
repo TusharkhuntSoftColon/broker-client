@@ -1,7 +1,7 @@
 import { isAxiosError } from 'axios';
 import isEqual from 'lodash/isEqual';
 import { useSnackbar } from 'notistack';
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { parse, isWithinInterval } from 'date-fns';
 import { useMutation } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,13 +30,13 @@ import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
-useTable,
-emptyRows,
-getComparator,
-TableEmptyRows,
-TableHeadCustom,
-TableSelectedAction,
-TablePaginationCustom,
+  useTable,
+  emptyRows,
+  getComparator,
+  TableEmptyRows,
+  TableHeadCustom,
+  TableSelectedAction,
+  TablePaginationCustom,
 } from 'src/components/table';
 
 import { IProductItem, IProductTableFilters, IProductTableFilterValue } from 'src/types/exchange';
@@ -95,6 +95,8 @@ export default function ExchangeListView() {
 
   // const { products, productsLoading, productsEmpty } = useGetProducts();
 
+  const [tableData, setTableData] = useState([]);
+
   const confirm = useBoolean();
 
   // useEffect(() => {
@@ -104,7 +106,7 @@ export default function ExchangeListView() {
   // }, [products]);
 
   const dataFiltered = applyFilter({
-    inputData: exchangeList,
+    inputData: tableData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
   });
@@ -132,22 +134,24 @@ export default function ExchangeListView() {
   );
 
   const handleDeleteRow = (id: any) => {
-    // deleteExchange(id);
-    dispatch(deleteExchange(id));
-    enqueueSnackbar('Deleted Successfully', { variant: 'success' });
-    table.onUpdatePageDeleteRow(dataInPage.length);
+    console.log(id);
+
+    deleteTableRow(id);
+    // dispatch(deleteExchange(id));
+    // enqueueSnackbar('Deleted Successfully', { variant: 'success' });
+    // table.onUpdatePageDeleteRow(dataInPage.length);
   };
 
   const handleDeleteRows = useCallback(() => {
-    const deleteRows = exchangeList.filter((row: any) => !table.selected.includes(row.id));
+    const deleteRows = tableData.filter((row: any) => !table.selected.includes(row.id));
     // setTableData(deleteRows);
 
     table.onUpdatePageDeleteRows({
-      totalRows: exchangeList.length,
+      totalRows: tableData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, exchangeList]);
+  }, [dataFiltered.length, dataInPage.length, table, tableData]);
 
   const handleEditRow = useCallback(
     (id: string) => {
@@ -170,7 +174,7 @@ export default function ExchangeListView() {
   // get exchange list
   const { mutate } = useMutation(exchangeService.getExchangeList, {
     onSuccess: (data) => {
-      // setTableData(data?.data?.rows);
+      setTableData(data?.data?.rows);
       enqueueSnackbar(data?.message, { variant: 'success' });
     },
     onError: (error) => {
@@ -179,6 +183,20 @@ export default function ExchangeListView() {
       }
     },
   });
+
+  //delete row API
+  const { mutate: deleteTableRow } = useMutation(exchangeService.deleteExchange, {
+    onSuccess: (data) => {
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      mutate();
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+
   // const { mutate: deleteExchange } = useMutation(exchangeService.deleteExchange, {
   //   onSuccess: (data) => {
   //     enqueueSnackbar(data?.message, { variant: 'success' });
@@ -190,6 +208,10 @@ export default function ExchangeListView() {
   //     }
   //   },
   // });
+
+  useEffect(() => {
+    mutate();
+  }, []);
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -241,11 +263,11 @@ export default function ExchangeListView() {
             <TableSelectedAction
               dense={table.dense}
               numSelected={table.selected.length}
-              rowCount={exchangeList.length}
+              rowCount={tableData.length}
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  exchangeList.map((row: any) => row.id)
+                  tableData.map((row: any) => row.id)
                 )
               }
               action={
@@ -263,13 +285,13 @@ export default function ExchangeListView() {
                   order={table.order}
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={exchangeList.length}
+                  rowCount={tableData.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      exchangeList.map((row: any) => row.id)
+                      tableData.map((row: any) => row.id)
                     )
                   }
                 />
@@ -294,7 +316,7 @@ export default function ExchangeListView() {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, exchangeList.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
                   />
 
                   {/* <TableNoData notFound={notFound} /> */}
