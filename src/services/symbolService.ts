@@ -71,7 +71,7 @@ const symbolService = {
     try {
       const response: AxiosResponse<any> = await client.put(`${UPDATE_SYMBOL}${symbolData._id}`, {
         ...symbolData.data,
-        stAndTp: symbolData.data?.stAndTp === 'true',
+        stAndTp: symbolData.data?.stAndTp.value,
         currency: symbolData?.data?.currency.value,
       });
       return response.data;

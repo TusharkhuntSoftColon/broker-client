@@ -99,31 +99,6 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
     formState: { isSubmitting, errors },
   } = methods;
 
-  // const value = watch();
-
-  // useEffect(() => {
-  //   if (currentUser) {
-  //     setValue('name', currentUser?.name || '');
-  //     setValue('contractSize', currentUser?.contractSize || '');
-  //     setValue('currency', currentUser?.currency || '');
-  //     setValue('spread', currentUser?.spread || '');
-  //     setValue('stopLevel', currentUser?.stopLevel || '');
-  //     // setValue('calculation', currentUser?.calculation || '');
-  //     setValue('tickSize', currentUser?.tickSize || '');
-  //     setValue('tickValue', currentUser?.tickValue || '');
-  //     setValue('initialMargin', currentUser?.initialMargin || '');
-  //     setValue('maintenanceMargin', currentUser?.maintenanceMargin || '');
-  //     setValue('minVolume', currentUser?.minVolume || '');
-  //     setValue('maxVolume', currentUser?.maxVolume || '');
-  //     // setValue('startTradeSessions', currentUser?.startTradeSessions || '');
-  //     // setValue('endTradeSessions', currentUser?.endTradeSessions || '');
-  //     // setValue('startingHour', currentUser?.startingHour || '');
-  //     // setValue('endingHour', currentUser?.endingHour || '');
-  //     // setValue('statusOfScripts', currentUser?.statusOfScripts || '');
-  //     setValue('stAndTp', currentUser?.stAndTp || '');
-  //   }
-  // }, [currentUser]);
-
   // create symbol
   const { mutate: createSymbol } = useMutation(symbolService.addSymbol, {
     onSuccess: (data) => {
@@ -317,7 +292,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
                 isReadOnly={!!isView}
                 options={SYMBOL_CURRENCY}
                 isLabled={false}
-                value={SYMBOL_CURRENCY.find((data) => data.value === currentUser?.currency)}
+                defaultValue={SYMBOL_CURRENCY.find((data) => data.value === currentUser?.currency)}
                 // data={STOP_LOSS}
                 isOptionEqualToValue={(option, value) => option.value === value.value}
                 getOptionLabel={(option: any) => option.label}
@@ -396,134 +371,6 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
                 }}
               /> */}
 
-              {/* <RHFAutocomplete
-                name="startTradeSessions"
-                isReadOnly={!!isView}
-                label="Start Trade Sessions"
-                options={TRADE_SESSIONS_DAYS.map((data) => data.label)}
-                getOptionLabel={(option: any) => option}
-                renderOption={(props, option) => {
-                  const { label } = TRADE_SESSIONS_DAYS.filter((data) => data.label === option)[0];
-
-                  if (!label) {
-                    return null;
-                  }
-
-                  return (
-                    <li {...props} key={label}>
-                      {label}
-                    </li>
-                  );
-                }}
-              /> */}
-
-              {/* <RHFAutocomplete
-                name="startTradeSessions"
-                label="Start Trade Sessions"
-                control={control}
-                options={TRADE_SESSIONS_DAYS.map((data) => data.label)}
-                getOptionLabel={(option: any) => option}
-                renderOption={(props, option) => {
-                  const { value, label } = TRADE_SESSIONS_DAYS.filter(
-                    (data) => data.label === option
-                  )[0];
-                  if (!label) {
-                    return null;
-                  }
-
-                  return (
-                    <li {...props} key={value}>
-                      {label}
-                    </li>
-                  );
-                }}
-              />
-              <RHFAutocomplete
-                name="endTradeSessions"
-                label="End Trade Sessions"
-                control={control}
-                isReadOnly={isView ? true : false}
-                options={TRADE_SESSIONS_DAYS.map((data) => data.label)}
-                getOptionLabel={(option: any) => option}
-                renderOption={(props, option) => {
-                  const { label } = TRADE_SESSIONS_DAYS.filter((data) => data.label === option)[0];
-
-                  if (!label) {
-                    return null;
-                  }
-
-                  return (
-                    <li {...props} key={label}>
-                      {label}
-                    </li>
-                  );
-                }}
-              />
-
-              <RHFAutocomplete
-                name="startingHour"
-                label="Starting hour"
-                control={control}
-                isReadOnly={isView ? true : false}
-                options={TRADE_HOURS.map((data) => data.label)}
-                getOptionLabel={(option: any) => option}
-                renderOption={(props, option) => {
-                  const { label } = TRADE_HOURS.filter((data) => data.label === option)[0];
-
-                  return (
-                    <li {...props} key={label}>
-                      {label}
-                    </li>
-                  );
-                }}
-              />
-
-              <RHFAutocomplete
-                name="endingHour"
-                label="Ending Hour"
-                control={control}
-                isReadOnly={isView ? true : false}
-                options={TRADE_HOURS.map((data) => data.label)}
-                getOptionLabel={(option: any) => option}
-                renderOption={(props, option) => {
-                  const { label } = TRADE_HOURS.filter((data) => data.label === option)[0];
-
-                  if (!label) {
-                    return null;
-                  }
-
-                  return (
-                    <li {...props} key={label}>
-                      {label}
-                    </li>
-                  );
-                }}
-              />
-
-              <RHFAutocomplete
-                name="statusOfScripts"
-                control={control}
-                label="Status Of Scripts"
-                isReadOnly={isView ? true : false}
-                options={STATUS_OF_SCRIPTS.map((data) => data.label)}
-                getOptionLabel={(option: any) => option}
-                renderOption={(props, option) => {
-                  const { label } = STATUS_OF_SCRIPTS.filter(
-                    (country) => country.label === option
-                  )[0];
-
-                  if (!label) {
-                    return null;
-                  }
-
-                  return (
-                    <li {...props} key={label}>
-                      {label}
-                    </li>
-                  );
-                }}
-              /> */}
-
               <RHFAutocomplete
                 name="stAndTp"
                 label="Stop Loss"
@@ -531,7 +378,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
                 isReadOnly={!!isView}
                 options={STOP_LOSS}
                 isLabled={false}
-                // value={STOP_LOSS.find((data) => data.value === String(currentUser?.stAndTp))}
+                defaultValue={STOP_LOSS.find((data) => data.value === currentUser?.stAndTp)}
                 // data={STOP_LOSS}
                 isOptionEqualToValue={(option, value) => option.value === value.value}
                 getOptionLabel={(option: any) => option.label}

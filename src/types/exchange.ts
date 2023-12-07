@@ -41,13 +41,12 @@ export type IExchangeItem = {
   name: string;
   id?: string;
   _id?: any;
-  status: string;
   createdAt?: string;
   updatedAt?: string;
   label?: string;
-  statusOfExchange?: string;
-  stAndTp?: boolean;
-  isActiveExchange?: any;
+  status?: string;
+  stopLoss?: boolean;
+  isActive?: any;
 };
 
 export type IProductItem = {
@@ -74,7 +73,7 @@ export type IProductItem = {
   inventoryType: string;
   subDescription: string;
   priceSale: number | null;
-  isActiveExchange: any;
+  isActive: any;
   status: any;
   updatedAt: string;
   reviews: IProductReview[];

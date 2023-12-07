@@ -1,17 +1,17 @@
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
-import MenuItem from '@mui/material/MenuItem';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
+import MenuItem from '@mui/material/MenuItem';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import Iconify from 'src/components/iconify';
+import Label from 'src/components/label';
 
 import { IProductItem } from 'src/types/exchange';
 
@@ -36,7 +36,7 @@ export default function ExchangeTableRow({
   onEditRow,
   onViewRow,
 }: Props) {
-  const { name, _id, isActiveExchange, createdAt, updatedAt } = row;
+  const { name, _id, isActive, createdAt, updatedAt } = row;
 
   const confirm = useBoolean();
 
@@ -109,8 +109,8 @@ export default function ExchangeTableRow({
         </TableCell>
 
         <TableCell>
-          <Label variant="soft" color={isActiveExchange ? 'success' : 'warning'}>
-            {isActiveExchange === true ? 'Active' : 'In Active'}
+          <Label variant="soft" color={isActive ? 'success' : 'warning'}>
+            {isActive === true ? 'Active' : 'In Active'}
           </Label>
         </TableCell>
 

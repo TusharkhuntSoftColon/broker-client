@@ -41,8 +41,8 @@ export const STATUS_OF_SCRIPTS = [
 ];
 
 export const STOP_LOSS = [
-  { value: 'true', label: 'On' },
-  { value: 'false', label: 'Off' },
+  { value: true, label: 'On' },
+  { value: false, label: 'Off' },
 ];
 
 export const SYMBOL_CURRENCY = [

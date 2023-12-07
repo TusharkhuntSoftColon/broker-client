@@ -24,14 +24,14 @@ export const PRODUCT_COLOR_OPTIONS = [
 ];
 
 export const STATUS_OF_EXCHANGE = [
-  { value: 'Open', label: 'Open' },
-  { value: 'Close Only', label: 'Close Only' },
-  { value: 'Disabled', label: 'Disabled' },
+  { value: 'OPEN', label: 'Open' },
+  { value: 'CLOSE', label: 'Close Only' },
+  { value: 'DISABLE', label: 'Disabled' },
 ];
 
 export const STOP_LOSS = [
-  { value: 'true', label: 'On' },
-  { value: 'false', label: 'Off' },
+  { value: true, label: 'On' },
+  { value: false, label: 'Off' },
 ];
 
 export const PRODUCT_COLOR_NAME_OPTIONS = [
@@ -138,10 +138,10 @@ export const ExchangeStatus = [
 ];
 
 export const ClientList = [
-  {value: 'KGB-0012', label: "KGB-0012"},
-  {value: 'KGB-0013', label: "KGB-0013"},
-  {value: 'KGB-0014', label: "KGB-0014"},
-  {value: 'KGB-0015', label: "KGB-0015"},
-  {value: 'KGB-0016', label: "KGB-0016"},
-  {value: 'KGB-0017', label: "KGB-0017"}
-]
+  { value: 'KGB-0012', label: 'KGB-0012' },
+  { value: 'KGB-0013', label: 'KGB-0013' },
+  { value: 'KGB-0014', label: 'KGB-0014' },
+  { value: 'KGB-0015', label: 'KGB-0015' },
+  { value: 'KGB-0016', label: 'KGB-0016' },
+  { value: 'KGB-0017', label: 'KGB-0017' },
+];

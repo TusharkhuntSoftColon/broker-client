@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 
 import client from 'src/lib/client';
 
-import { ADD_EXCHANGE, DELETE_EXCHANGE, UPDATE_EXCHANGE, GET_EXCHANGE_LIST } from '../utils/urls';
+import { ADD_EXCHANGE, DELETE_EXCHANGE, GET_EXCHANGE_LIST, UPDATE_EXCHANGE } from '../utils/urls';
 
 export interface exchangeType {
   name: string;
@@ -66,7 +66,11 @@ const exchangeService = {
     try {
       const response: AxiosResponse<any> = await client.put(
         `${UPDATE_EXCHANGE}${exchangeData._id}`,
-        exchangeData?.data
+        {
+          ...exchangeData.data,
+          stopLoss: exchangeData.data?.stopLoss.value,
+          status: exchangeData?.data?.status.value,
+        }
       );
       // console.log({ response });
       return response.data;
