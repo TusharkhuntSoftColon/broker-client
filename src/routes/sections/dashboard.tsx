@@ -4,10 +4,12 @@ import { Outlet } from 'react-router-dom';
 import { AuthGuard } from 'src/auth/guard';
 import AdminLayout from 'src/layouts/AdminLayout';
 import DashboardLayout from 'src/layouts/dashboard';
+import SuperMasterDetailsPage from 'src/pages/dashboard/superMaster/details';
 import OrderEditPage from 'src/pages/dashboard/symbol/edit';
 import UserDetailsPage from 'src/pages/dashboard/user/details';
 
 import { LoadingScreen } from 'src/components/loading-screen';
+import MasterDetailsPage from 'src/pages/dashboard/master/details';
 
 // ----------------------------------------------------------------------
 
@@ -40,6 +42,14 @@ const UserListPage = lazy(() => import('src/pages/dashboard/user/list'));
 const UserAccountPage = lazy(() => import('src/pages/dashboard/user/account'));
 const UserCreatePage = lazy(() => import('src/pages/dashboard/user/new'));
 const UserEditPage = lazy(() => import('src/pages/dashboard/user/edit'));
+//SUPER_MASTER
+const SuperMasterListPage = lazy(() => import('src/pages/dashboard/superMaster/list'));
+const SuperMasterCreatePage = lazy(() => import('src/pages/dashboard/superMaster/new'));
+const SuperMasterEditPage = lazy(() => import('src/pages/dashboard/superMaster/edit'));
+//MASTER
+const MasterListPage = lazy(() => import('src/pages/dashboard/master/list'));
+const MasterCreatePage = lazy(() => import('src/pages/dashboard/master/new'));
+const MasterEditPage = lazy(() => import('src/pages/dashboard/master/edit'));
 // BLOG
 const BlogPostsPage = lazy(() => import('src/pages/dashboard/post/list'));
 const BlogPostPage = lazy(() => import('src/pages/dashboard/post/details'));
@@ -66,7 +76,7 @@ const KanbanPage = lazy(() => import('src/pages/dashboard/kanban'));
 const PermissionDeniedPage = lazy(() => import('src/pages/dashboard/permission'));
 // BLANK PAGE
 const BlankPage = lazy(() => import('src/pages/dashboard/blank'));
-const BrokeragePage  = lazy(() => import('src/pages/dashboard/brokerage/list'))
+const BrokeragePage = lazy(() => import('src/pages/dashboard/brokerage/list'));
 
 // ----------------------------------------------------------------------
 
@@ -103,10 +113,28 @@ export const dashboardRoutes = [
         ],
       },
       {
-        path: 'brokerage',
+        path: 'super-master',
         children: [
-          {element: <BrokeragePage />, index: true}
-        ]
+          { element: <SuperMasterListPage />, index: true },
+          { path: 'list', element: <SuperMasterListPage /> },
+          { path: 'new', element: <SuperMasterCreatePage /> },
+          { path: ':id', element: <SuperMasterDetailsPage /> },
+          { path: ':id/edit', element: <SuperMasterEditPage /> },
+        ],
+      },
+      {
+        path: 'master',
+        children: [
+          { element: <MasterListPage />, index: true },
+          { path: 'list', element: <MasterListPage /> },
+          { path: 'new', element: <MasterCreatePage /> },
+          { path: ':id', element: <MasterDetailsPage /> },
+          { path: ':id/edit', element: <MasterEditPage /> },
+        ],
+      },
+      {
+        path: 'brokerage',
+        children: [{ element: <BrokeragePage />, index: true }],
       },
       {
         path: 'exchange',

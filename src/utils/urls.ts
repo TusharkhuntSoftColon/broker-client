@@ -1,6 +1,10 @@
 // AUTH
-export const ADMIN_AUTH = '/auth/login';
+export const ADMIN_AUTH = '/auth/user/login';
 export const CREATE_ADMIN = '/auth/admin';
+
+// SUPER MASTER
+export const CREATE_SUPER_MASTER = '/auth/super/master';
+export const CREATE_MASTER = '/auth/master';
 
 // Exchange
 export const EXCHANGE_CREATE = '/exchange/create';

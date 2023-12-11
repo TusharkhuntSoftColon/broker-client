@@ -1,5 +1,5 @@
 import Container from '@mui/material/Container';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 
 import { paths } from 'src/routes/paths';
 
@@ -7,11 +7,9 @@ import { useSettingsContext } from 'src/components/settings';
 
 import { styled } from '@mui/material';
 import Typography from '@mui/material/Typography';
-import { useMutation } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
 import { useSnackbar } from 'notistack';
+import { useSelector } from 'react-redux';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
-import symbolService from 'src/services/symbolService';
 import SymbolNewEditForm from '../symbol-new-edit-form';
 
 // ----------------------------------------------------------------------
@@ -36,32 +34,34 @@ export default function SymbolDetailsView({ id }: Props) {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  // const symbolData = useSelector((data: any) => data?.symbol?.symbolList);
+  const symbolData1 = useSelector((data: any) => data?.symbol?.symbolList);
 
-  const [symbolData, setSymbolData] = useState<any>();
+  console.log({ symbolData1 });
 
-  const { mutate } = useMutation(symbolService.getSymbolList, {
-    onSuccess: (data) => {
-      console.log({ data });
-      setSymbolData(data?.data?.rows);
-      enqueueSnackbar(data?.message, { variant: 'success' });
-    },
-    onError: (error: any) => {
-      console.log({ error });
-      if (isAxiosError(error)) {
-        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-      }
-    },
-  });
-  useEffect(() => {
-    mutate();
-  }, []);
+  // const [symbolData, setSymbolData] = useState<any>();
 
-  console.log({ symbolData });
+  // const { mutate } = useMutation(symbolService.getSymbolList, {
+  //   onSuccess: (data) => {
+  //     console.log({ data });
+  //     setSymbolData(data?.data?.rows);
+  //     enqueueSnackbar(data?.message, { variant: 'success' });
+  //   },
+  //   onError: (error: any) => {
+  //     console.log({ error });
+  //     if (isAxiosError(error)) {
+  //       enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+  //     }
+  //   },
+  // });
+  // useEffect(() => {
+  //   mutate();
+  // }, []);
+
+  // console.log({ symbolData });
 
   const currentSymbol = useMemo(
-    () => symbolData?.filter((symbol: any) => symbol._id === id)[0],
-    [symbolData]
+    () => symbolData1?.filter((symbol: any) => symbol._id === id)[0],
+    [symbolData1]
   );
 
   console.log({ currentSymbol });

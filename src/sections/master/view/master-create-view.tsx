@@ -4,35 +4,34 @@ import { paths } from 'src/routes/paths';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { useSettingsContext } from 'src/components/settings';
-
-import UserNewEditForm from '../user-new-edit-form';
+import MasterNewEditForm from '../master-new-edit-form';
 
 // ----------------------------------------------------------------------
 
-export default function UserCreateView() {
+export default function MasterCreateView() {
   const settings = useSettingsContext();
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
-        heading="Create a new user"
+        heading="Create a new Master"
         links={[
           {
             name: 'Admin',
             href: paths.dashboard.root,
           },
           {
-            name: 'User',
+            name: 'Master',
             href: paths.dashboard.user.root,
           },
-          { name: 'New User' },
+          { name: 'New Master' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
       />
 
-      <UserNewEditForm isView={false} />
+      <MasterNewEditForm isView={false} />
     </Container>
   );
 }

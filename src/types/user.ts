@@ -101,6 +101,7 @@ export type IUserItem = {
   ID: string;
   exchangeGroup?: string;
   allowedExchange: string;
+  investerPassword: string;
   leverage?: string;
   status: string;
   role: string | any;

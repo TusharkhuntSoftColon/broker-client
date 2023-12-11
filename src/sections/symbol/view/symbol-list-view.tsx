@@ -425,6 +425,9 @@ function applyFilter({
 
   const stabilizedThis = inputData.map((el: any, index: any) => [el, index] as const);
 
+  console.log({ inputData });
+  console.log({ filters });
+
   stabilizedThis.sort((a: any, b: any) => {
     const symbol = comparator(a[0], b[0]);
     if (symbol !== 0) return symbol;
@@ -445,14 +448,13 @@ function applyFilter({
 
   if (currency !== null) {
     inputData = inputData.filter(
-      (symbol: any) =>
-        symbol.currency.label.toLowerCase().trim() === currency.label.toLowerCase().trim()
+      (symbol: any) => symbol.currency.toLowerCase().trim() === currency.label.toLowerCase().trim()
     );
   }
 
   if (status !== null) {
     inputData = inputData.filter((user: any) => {
-      return user?.isActiveSymbol === status?.value;
+      return user?.isActive === status?.value;
     });
   }
 

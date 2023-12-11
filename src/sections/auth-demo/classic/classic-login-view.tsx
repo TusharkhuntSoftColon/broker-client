@@ -1,26 +1,26 @@
-import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useMutation } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
-import { useMutation } from '@tanstack/react-query';
-import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 
-import Stack from '@mui/material/Stack';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
+import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 import { useRouter } from 'src/routes/hooks';
 
-import useAuth from 'src/hooks/useAuth';
 import { useBoolean } from 'src/hooks/use-boolean';
+import useAuth from 'src/hooks/useAuth';
 
 import { PATH_DASHBOARD } from 'src/config-global';
 import authService from 'src/services/authService';
 
-import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 

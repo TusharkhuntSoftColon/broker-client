@@ -23,7 +23,7 @@ type Props = {
 const AdminLayout = ({ children }: Props) => {
   const { role } = useAuth();
 
-  const [manager, setmaneger] = useState(false);
+  const [manager, setmaneger] = useState(true);
 
   const adminNav = useAdminNav();
 

@@ -1,9 +1,6 @@
-import { useMutation } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
-import { isWithinInterval, parse } from 'date-fns';
 import isEqual from 'lodash/isEqual';
 import { useSnackbar } from 'notistack';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Button from '@mui/material/Button';
@@ -15,13 +12,14 @@ import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 import Tooltip from '@mui/material/Tooltip';
 
+import { RouterLink } from 'src/routes/components';
 import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { PRODUCT_STOCK_OPTIONS } from 'src/_mock';
-import exchangeService from 'src/services/exchangeService';
+import { Exchanges, USER_STATUS_OPTIONS } from 'src/_mock';
+import { deleteAdmin } from 'src/store/slices/admin';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -33,96 +31,81 @@ import {
   getComparator,
   TableEmptyRows,
   TableHeadCustom,
+  TableNoData,
   TablePaginationCustom,
   TableSelectedAction,
   useTable,
 } from 'src/components/table';
 
-import { IProductItem, IProductTableFilters, IProductTableFilterValue } from 'src/types/exchange';
+import { IUserItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
 
-import ExchangeQuickEditForm from '../exchange-edit-form';
-import ExchangeTableRow from '../exchange-table-row';
-import ProductTableFiltersResult from '../product-table-filters-result';
-import ProductTableToolbar from '../product-table-toolbar';
+import { isWithinInterval, parse } from 'date-fns';
+import UserTableFiltersResult from '../user-table-filters-result';
+import UserTableRow from '../user-table-row';
+import UserTableToolbar from '../user-table-toolbar';
 
 // ----------------------------------------------------------------------
 
+const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
+
 const TABLE_HEAD = [
-  { id: 'id', label: 'Id', width: 160 },
-  { id: 'name', label: 'Name', width: 160 },
+  { id: 'name', label: 'Name' },
+  { id: 'userId', label: 'User Id' },
+  { id: 'domain', label: 'Domain' },
+  // { id: 'phoneNumber', label: 'Phone Number' },
+  // { id: 'company', label: 'Company' },
+  // { id: 'role', label: 'Role', width: 180 },
+  { id: 'exchange', label: 'Exchange' },
   { is: 'createdAt', label: 'Created At' },
-  { is: 'updatedAt', label: 'Updated At' },
   { is: 'status', label: 'Status' },
-  // { id: 'createdAt', label: 'Create at', width: 160 },
-  // { id: 'inventoryType', label: 'Stock', width: 160 },
-  // { id: 'price', label: 'Price', width: 140 },
-  // { id: 'publish', label: 'Publish', width: 110 },
   { id: '', width: 88 },
 ];
 
-const PUBLISH_OPTIONS = [
-  { value: 'published', label: 'Published' },
-  { value: 'draft', label: 'Draft' },
-];
-
-const defaultFilters: IProductTableFilters = {
+const defaultFilters: IUserTableFilters = {
   name: '',
-  publish: [],
-  stock: [],
+  exchange: [],
   status: null,
   dateRange: [],
 };
 
 // ----------------------------------------------------------------------
 
-export default function ExchangeListView() {
-  const router = useRouter();
-
-  const { enqueueSnackbar } = useSnackbar();
-
+export default function SuperMasterListView() {
   const table = useTable();
-
-  const quickEdit = useBoolean();
 
   const dispatch = useDispatch();
 
   const settings = useSettingsContext();
 
-  const exchangeList = useSelector((data: any) => data?.exchange?.exchangeList);
-
-  const [filters, setFilters] = useState(defaultFilters);
-
-  // const { products, productsLoading, productsEmpty } = useGetProducts();
-
-  const [tableData, setTableData] = useState([]);
+  const router = useRouter();
 
   const confirm = useBoolean();
 
-  // useEffect(() => {
-  //   if (products.length) {
-  //     setTableData(products);
-  //   }
-  // }, [products]);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const adminData = useSelector((data: any) => data?.admin?.adminList);
+
+  const [filters, setFilters] = useState(defaultFilters);
 
   const dataFiltered = applyFilter({
-    inputData: tableData,
+    inputData: adminData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
   });
 
-  const dataInPage = dataFiltered.slice(
+  const dataInPage = dataFiltered?.slice(
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
 
-  const denseHeight = table.dense ? 60 : 80;
+  const denseHeight = table.dense ? 52 : 72;
 
   const canReset = !isEqual(defaultFilters, filters);
 
-  // const notFound = (!dataFiltered.length && canReset) || productsEmpty;
+  const notFound = (!dataFiltered?.length && canReset) || !dataFiltered?.length;
 
   const handleFilters = useCallback(
-    (name: string, value: IProductTableFilterValue) => {
+    (name: string, value: IUserTableFilterValue) => {
       table.onResetPage();
       setFilters((prevState) => ({
         ...prevState,
@@ -132,122 +115,128 @@ export default function ExchangeListView() {
     [table]
   );
 
-  const handleDeleteRow = (id: any) => {
-    console.log(id);
-
-    deleteTableRow(id);
-    // dispatch(deleteExchange(id));
-    // enqueueSnackbar('Deleted Successfully', { variant: 'success' });
-    // table.onUpdatePageDeleteRow(dataInPage.length);
-  };
+  const handleDeleteRow = useCallback(
+    (id: string) => {
+      dispatch(deleteAdmin(id));
+      enqueueSnackbar('Deleted Successfully', { variant: 'success' });
+      table.onUpdatePageDeleteRow(dataInPage.length);
+    },
+    [dispatch, enqueueSnackbar, table, dataInPage.length]
+  );
 
   const handleDeleteRows = useCallback(() => {
-    const deleteRows = tableData.filter((row: any) => !table.selected.includes(row.id));
-    // setTableData(deleteRows);
+    const deleteRows = adminData.filter((row: any) => !table.selected.includes(row.id));
+    // setadminData(deleteRows);
 
     table.onUpdatePageDeleteRows({
-      totalRows: tableData.length,
+      totalRows: adminData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered.length, dataInPage.length, table, tableData]);
+  }, [dataFiltered?.length, dataInPage?.length, table, adminData]);
 
   const handleEditRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.exchange.edit(id));
+      router.push(paths.dashboard.user.edit(id));
     },
     [router]
   );
 
   const handleViewRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.exchange.details(id));
+      router.push(paths.dashboard.user.details(id));
     },
     [router]
+  );
+
+  const handleFilterStatus = useCallback(
+    (event: React.SyntheticEvent, newValue: string) => {
+      handleFilters('status', newValue);
+    },
+    [handleFilters]
   );
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
 
-  // get exchange list
-  const { mutate } = useMutation(exchangeService.getExchangeList, {
-    onSuccess: (data) => {
-      setTableData(data?.data?.rows);
-      enqueueSnackbar(data?.message, { variant: 'success' });
-    },
-    onError: (error) => {
-      if (isAxiosError(error)) {
-        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-      }
-    },
-  });
-
-  //delete row API
-  const { mutate: deleteTableRow } = useMutation(exchangeService.deleteExchange, {
-    onSuccess: (data) => {
-      enqueueSnackbar(data?.message, { variant: 'success' });
-      mutate();
-    },
-    onError: (error: any) => {
-      if (isAxiosError(error)) {
-        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-      }
-    },
-  });
-
-  // const { mutate: deleteExchange } = useMutation(exchangeService.deleteExchange, {
-  //   onSuccess: (data) => {
-  //     enqueueSnackbar(data?.message, { variant: 'success' });
-  //     mutate();
-  //   },
-  //   onError: (error) => {
-  //     if (isAxiosError(error)) {
-  //       enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-  //     }
-  //   },
-  // });
-
-  useEffect(() => {
-    mutate();
-  }, []);
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <CustomBreadcrumbs
           heading="List"
           links={[
-            { name: 'Admstr', href: paths.dashboard.root },
-            {
-              name: 'Exchange',
-              href: paths.dashboard.exchange.root,
-            },
+            { name: 'Admin', href: paths.dashboard.root },
+            { name: 'Super Master', href: paths.dashboard.user.root },
             { name: 'List' },
           ]}
           action={
             <Button
-              // component={RouterLink}
-              onClick={quickEdit.onTrue}
+              component={RouterLink}
+              href={paths.dashboard.superMaster.new}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              New Exchange
+              New Super Master
             </Button>
           }
-          sx={{ mb: { xs: 3, md: 5 } }}
+          sx={{
+            mb: { xs: 3, md: 5 },
+          }}
         />
 
         <Card>
-          <ProductTableToolbar
+          {/* <Tabs
+            value={filters.status}
+            onChange={handleFilterStatus}
+            sx={{
+              px: 2.5,
+              boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
+            }}
+          >
+            {STATUS_OPTIONS.map((tab) => (
+              <Tab
+                key={tab.value}
+                iconPosition="end"
+                value={tab.value}
+                label={tab.label}
+                icon={
+                  <Label
+                    variant={
+                      ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
+                    }
+                    color={
+                      (tab.value === 'active' && 'success') ||
+                      (tab.value === 'pending' && 'warning') ||
+                      (tab.value === 'banned' && 'error') ||
+                      'default'
+                    }
+                  >
+                    {tab.value === 'all' && _userList.length}
+                    {tab.value === 'active' &&
+                      _userList.filter((user) => user.status === 'active').length}
+
+                    {tab.value === 'pending' &&
+                      _userList.filter((user) => user.status === 'pending').length}
+                    {tab.value === 'banned' &&
+                      _userList.filter((user) => user.status === 'banned').length}
+                    {tab.value === 'rejected' &&
+                      _userList.filter((user) => user.status === 'rejected').length}
+                  </Label>
+                }
+              />
+            ))}
+          </Tabs> */}
+
+          <UserTableToolbar
             filters={filters}
             onFilters={handleFilters}
             //
-            stockOptions={PRODUCT_STOCK_OPTIONS}
-            publishOptions={PUBLISH_OPTIONS}
+            roleOptions={Exchanges}
           />
 
           {canReset && (
-            <ProductTableFiltersResult
+            <UserTableFiltersResult
               filters={filters}
               onFilters={handleFilters}
               //
@@ -262,11 +251,11 @@ export default function ExchangeListView() {
             <TableSelectedAction
               dense={table.dense}
               numSelected={table.selected.length}
-              rowCount={tableData.length}
+              rowCount={adminData?.length}
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  tableData.map((row: any) => row.id)
+                  adminData.map((row: any) => row.id)
                 )
               }
               action={
@@ -284,13 +273,13 @@ export default function ExchangeListView() {
                   order={table.order}
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={tableData.length}
+                  rowCount={adminData?.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      tableData.map((row: any) => row.id)
+                      adminData.map((row: any) => row.id)
                     )
                   }
                 />
@@ -301,24 +290,26 @@ export default function ExchangeListView() {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row: any) => (
-                      <ExchangeTableRow
-                        key={row?._id}
-                        row={row}
-                        selected={table.selected.includes(row?._id)}
-                        onSelectRow={() => table.onSelectRow(row?._id)}
-                        onDeleteRow={() => handleDeleteRow(row?._id)}
-                        onEditRow={() => handleEditRow(row?._id)}
-                        onViewRow={() => handleViewRow(row?._id)}
-                      />
-                    ))}
+                    .map((row: any) => {
+                      return (
+                        <UserTableRow
+                          key={row.id}
+                          row={row}
+                          selected={table.selected.includes(row.id)}
+                          onSelectRow={() => table.onSelectRow(row.id)}
+                          onDeleteRow={() => handleDeleteRow(row.id)}
+                          onEditRow={() => handleEditRow(row.id)}
+                          onViewRow={() => handleViewRow(row.id)}
+                        />
+                      );
+                    })}
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, tableData.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, adminData.length)}
                   />
 
-                  {/* <TableNoData notFound={notFound} /> */}
+                  <TableNoData notFound={notFound} />
                 </TableBody>
               </Table>
             </Scrollbar>
@@ -336,12 +327,6 @@ export default function ExchangeListView() {
           />
         </Card>
       </Container>
-
-      <ExchangeQuickEditForm
-        getFunction={() => mutate()}
-        open={quickEdit.value}
-        onClose={quickEdit.onFalse}
-      />
 
       <ConfirmDialog
         open={confirm.value}
@@ -376,38 +361,38 @@ function applyFilter({
   comparator,
   filters,
 }: {
-  inputData: IProductItem | any;
+  inputData: IUserItem[] | any;
   comparator: (a: any, b: any) => number;
-  filters: IProductTableFilters;
+  filters: IUserTableFilters;
 }) {
-  const { name, stock, publish, status, dateRange } = filters;
+  const { name, status, exchange, dateRange } = filters;
 
-  const stabilizedThis = inputData.map((el: any, index: any) => [el, index] as const);
+  const stabilizedThis = inputData?.map((el: any, index: any) => [el, index] as const);
 
-  stabilizedThis.sort((a: any, b: any) => {
+  stabilizedThis?.sort((a: any, b: any) => {
     const order = comparator(a[0], b[0]);
     if (order !== 0) return order;
     return a[1] - b[1];
   });
 
-  inputData = stabilizedThis.map((el: any) => el[0]);
+  inputData = stabilizedThis?.map((el: any) => el[0]);
 
   if (name) {
-    inputData = inputData.filter(
-      (product: any) => product.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
-    );
-  }
-
-  if (stock.length) {
-    inputData = inputData.filter((product: any) => stock.includes(product.inventoryType));
-  }
-
-  if (publish.length) {
-    inputData = inputData.filter((product: any) => publish.includes(product.publish));
+    inputData = inputData.filter((user: any) => {
+      return user.name.toLowerCase().indexOf(name.toLowerCase()) !== -1;
+    });
   }
 
   if (status) {
-    inputData = inputData.filter((_el: any) => status.value === _el?.isActive);
+    inputData = inputData.filter((user: any) => {
+      return user?.isActiveAdmin === status?.value;
+    });
+  }
+
+  if (exchange.length) {
+    inputData = inputData.filter((user: any) => {
+      return user.allowedExchange.some((data: any) => exchange.includes(data));
+    });
   }
 
   if (dateRange.length > 0) {

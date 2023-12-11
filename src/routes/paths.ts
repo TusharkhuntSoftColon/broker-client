@@ -76,7 +76,7 @@ export const paths = {
   // },
   auth: {
     // classic: {
-    login: `${ROOTS.AUTH_DEMO}/login`,
+    login: `${ROOTS.AUTH_DEMO}/user/login`,
     register: `${ROOTS.AUTH_DEMO}/register`,
     forgotPassword: `${ROOTS.AUTH_DEMO}/forgot-password`,
     newPassword: `${ROOTS.AUTH_DEMO}/new-password`,
@@ -120,6 +120,20 @@ export const paths = {
       demo: {
         edit: `${ROOTS.DASHBOARD}/user/${MOCK_ID}/edit`,
       },
+    },
+    superMaster: {
+      root: `${ROOTS.DASHBOARD}/super-master`,
+      new: `${ROOTS.DASHBOARD}/super-master/new`,
+      list: `${ROOTS.DASHBOARD}/super-master/list`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/super-master/${id}`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/super-master/${id}/edit`,
+    },
+    master: {
+      root: `${ROOTS.DASHBOARD}/master`,
+      new: `${ROOTS.DASHBOARD}/master/new`,
+      list: `${ROOTS.DASHBOARD}/master/list`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/master/${id}`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/master/${id}/edit`,
     },
     exchange: {
       root: `${ROOTS.DASHBOARD}/exchange`,

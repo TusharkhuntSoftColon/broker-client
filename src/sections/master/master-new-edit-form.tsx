@@ -18,13 +18,19 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
 
-import { EXCHANGE_GROUP, USER_ROLE } from 'src/_mock';
-import adminService from 'src/services/adminService';
+import { EXCHANGE_GROUP } from 'src/_mock';
 import exchangeService from 'src/services/exchangeService';
 
-import FormProvider, { RHFAutocomplete, RHFSwitch, RHFTextField } from 'src/components/hook-form';
+import FormProvider, {
+  RHFAutocomplete,
+  RHFCheckbox,
+  RHFSwitch,
+  RHFTextField,
+} from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
 
+import { MASTER_ROLE } from 'src/_mock/_master';
+import MasterService from 'src/services/masterService';
 import { IUserItem } from 'src/types/user';
 
 // ----------------------------------------------------------------------
@@ -34,7 +40,7 @@ type Props = {
   isView?: any;
 };
 
-export default function UserNewEditForm({ currentUser, isView }: Props) {
+export default function MasterNewEditForm({ currentUser, isView }: Props) {
   const router = useRouter();
 
   const [exchangeData, setExchangeData] = useState<any>();
@@ -47,24 +53,16 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const NewUserSchema = Yup.object().shape({
+  const NewMasterSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     ID: Yup.string().required('User Id is required'),
     password: Yup.string().required('Password is required'),
     role: Yup.string().required('Role is required'),
     exchangeGroup: Yup.string().required('Leverage Y is required'),
     allowedExchange: Yup.array().min(1, 'Must have at least 1 exchange'),
-    // Domain: Yup.string().required('Domain is required'),
-    // insertCustomBet: Yup.string().required('Insert Custom Bet is required'),
-    // editBet: Yup.string().required('Edit Bet is required'),
-    // deleteBet: Yup.string().required('Delete Bet is required'),
-    // limitOfAddSuperMaster: Yup.number().required('Limit Of Add Super Master Bet is required'),
-    // limitOfAddMaster: Yup.number().required('Limit Of Add Master is required'),
-    // limitOfAddUser: Yup.number().required('Limit Of Add User is required'),
+    limitOfAddUser: Yup.number().required('Limit Of Add User is required'),
     leverageX: Yup.number().required('Leverage X is required'),
     leverageY: Yup.number().required('Leverage Y is required'),
-    brokerage: Yup.number().required('Brokerage is required'),
-    investorPassword: Yup.number().required('Invester Password is required'),
   });
 
   const defaultValues = useMemo(
@@ -74,25 +72,20 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
       ID: currentUser?.ID || '',
       exchangeGroup: currentUser?.exchangeGroup || '',
       allowedExchange: currentUser?.allowedExchange || [],
-      // Domain: currentUser?.Domain || '',
-      // insertCustomBet: currentUser?.insertCustomBet || false,
-      // editBet: currentUser?.editBet || false,
+      insertCustomBet: currentUser?.insertCustomBet || false,
+      editBet: currentUser?.editBet || false,
       role: currentUser?.role || '',
-      // deleteBet: currentUser?.deleteBet || false,
-      // limitOfAddSuperMaster: currentUser?.limitOfAddSuperMaster || null,
-      // limitOfAddMaster: currentUser?.limitOfAddMaster || null,
-      // limitOfAddUser: currentUser?.limitOfAddUser || null,
+      deleteBet: currentUser?.deleteBet || false,
+      limitOfAddUser: currentUser?.limitOfAddUser || null,
       leverageX: currentUser?.leverageX || null,
       leverageY: currentUser?.leverageY || null,
-      brokerage: currentUser?.brokerage || null,
-      investorPassword: currentUser?.investorPassword || null,
-      // isActiveAdmin: currentUser?.isActiveAdmin || true,
+      isActiveAdmin: currentUser?.isActiveAdmin || true,
     }),
     [currentUser]
   );
 
   const methods = useForm({
-    resolver: yupResolver(NewUserSchema),
+    resolver: yupResolver(NewMasterSchema),
     defaultValues,
   });
 
@@ -106,10 +99,11 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
   } = methods;
 
   // create ADMIN
-  const { mutate: createAdmin } = useMutation(adminService.createAdmin, {
+  const { mutate: createMaster } = useMutation(MasterService.createMaster, {
     onSuccess: (data) => {
+      console.log({ data });
       enqueueSnackbar(data?.message, { variant: 'success' });
-      router.push(paths.dashboard.user.root);
+      router.push(paths.dashboard.master.root);
     },
     onError: (error: any) => {
       if (isAxiosError(error)) {
@@ -132,6 +126,7 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
   });
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log({ data });
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
@@ -142,6 +137,7 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
         // dispatch(updateAdmin({ id: adminID, updatedData: data }));
       } else {
         // dispatch(addAdmin(data));
+        createMaster(data);
       }
       router.push(paths.dashboard.user.list);
       console.info('DATA', data);
@@ -206,102 +202,6 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Grid container spacing={3}>
-        {/* <Grid xs={12} md={4}>
-          <Card sx={{ pt: 10, pb: 5, px: 3 }}>
-            {currentUser && (
-              <Label
-                color={
-                  (values.status === 'active' && 'success') ||
-                  (values.status === 'banned' && 'error') ||
-                  'warning'
-                }
-                sx={{ position: 'absolute', top: 24, right: 24 }}
-              >
-                {values.status}
-              </Label>
-            )}
-
-            <Box sx={{ mb: 5 }}>
-              <RHFUploadAvatar
-                name="avatarUrl"
-                maxSize={3145728}
-                onDrop={handleDrop}
-                helperText={
-                  <Typography
-                    variant="caption"
-                    sx={{
-                      mt: 3,
-                      mx: 'auto',
-                      display: 'block',
-                      textAlign: 'center',
-                      color: 'text.disabled',
-                    }}
-                  >
-                    Allowed *.jpeg, *.jpg, *.png, *.gif
-                    <br /> max size of {fData(3145728)}
-                  </Typography>
-                }
-              />
-            </Box>
-
-            {currentUser && (
-              <FormControlLabel
-                labelPlacement="start"
-                control={
-                  <Controller
-                    name="status"
-                    control={control}
-                    render={({ field }) => (
-                      <Switch
-                        {...field}
-                        checked={field.value !== 'active'}
-                        onChange={(event) =>
-                          field.onChange(event.target.checked ? 'banned' : 'active')
-                        }
-                      />
-                    )}
-                  />
-                }
-                label={
-                  <>
-                    <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                      Banned
-                    </Typography>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                      Apply disable account
-                    </Typography>
-                  </>
-                }
-                sx={{ mx: 0, mb: 3, width: 1, justifyContent: 'space-between' }}
-              />
-            )}
-
-            <RHFSwitch
-              name="isVerified"
-              labelPlacement="start"
-              label={
-                <>
-                  <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                    Email Verified
-                  </Typography>
-                  <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-                    Disabling this will automatically send the user a verification email
-                  </Typography>
-                </>
-              }
-              sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
-            />
-
-            {currentUser && (
-              <Stack justifyContent="center" alignItems="center" sx={{ mt: 3 }}>
-                <Button variant="soft" color="error">
-                  Delete User
-                </Button>
-              </Stack>
-            )}
-          </Card>
-        </Grid> */}
-
         <Grid xs={12} md={8}>
           <Card sx={{ p: 3 }}>
             <Box
@@ -323,10 +223,11 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
               />
               <RHFTextField
                 isReadOnly={!!isView}
-                name="investorPassword"
+                name="limitOfAddUser"
                 type="number"
-                label="Investor Password"
+                label="Limit Of Add User"
               />
+
               <RHFTextField
                 isReadOnly={!!isView}
                 name="leverageX"
@@ -339,12 +240,6 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
                 name="leverageY"
                 type="number"
                 label="Leverage Y"
-              />
-              <RHFTextField
-                isReadOnly={!!isView}
-                name="brokerage"
-                type="number"
-                label="Brokerage"
               />
 
               <RHFAutocomplete
@@ -402,80 +297,16 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
                 }}
               />
 
-              {/* <FormControl
-                sx={{
-                  flexShrink: 0,
-                  width: { xs: 1, md: 200 },
-                }}
-              >
-                <InputLabel>Exchange</InputLabel>
-
-                <Select
-                  multiple
-                  name="allowedExchange"
-                  value={currentUser ? currentUser.allowedExchange : []}
-                  onChange={(e) => handleFilterRole(e)}
-                  input={<OutlinedInput label="Exchange" />}
-                  renderValue={(selected) => selected?.map((value: any) => value).join(', ')}
-                  MenuProps={{
-                    PaperProps: {
-                      sx: { maxHeight: 240 },
-                    },
-                  }}
-                >
-                  {Exchanges.map((option: any) => (
-                    <MenuItem key={option.label} value={option.label}>
-                      <Checkbox
-                        disableRipple
-                        size="small"
-                        checked={Exchanges.includes(option.label)}
-                      />
-                      {option.label}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl> */}
-
-              {/* <RHFAutocomplete
-                name="leverage"
-                label="Leverage"
-                isReadOnly={isView ? true : false}
-                options={[].map((country) => country)}
-                getOptionLabel={(option) => option}
-                isOptionEqualToValue={(option, value) => option === value}
-                renderOption={(props, option) => {
-                  const { code, label, phone } = countries.filter(
-                    (country) => country.label === option
-                  )[0];
-
-                  if (!label) {
-                    return null;
-                  }
-
-                  return (
-                    <li {...props} key={label}>
-                      <Iconify
-                        key={label}
-                        icon={`circle-flags:${code.toLowerCase()}`}
-                        width={28}
-                        sx={{ mr: 1 }}
-                      />
-                      {label} ({code}) +{phone}
-                    </li>
-                  );
-                }}
-              /> */}
-
               <RHFAutocomplete
                 name="role"
                 label="Role"
-                options={USER_ROLE.map((data) => data.label)}
-                data={USER_ROLE}
+                options={MASTER_ROLE.map((data) => data.label)}
+                data={MASTER_ROLE}
                 isReadOnly={!!isView}
                 getOptionLabel={(option: any) => option}
                 isOptionEqualToValue={(option, value) => option === value}
                 renderOption={(props, option) => {
-                  const { label } = USER_ROLE.filter((data) => data.label === option)[0];
+                  const { label } = MASTER_ROLE.filter((data) => data.label === option)[0];
 
                   if (!label) {
                     return null;
@@ -488,13 +319,17 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
                   );
                 }}
               />
+              <RHFCheckbox isReadOnly={!!isView} name="insertCustomBet" label="Insert Custom Bet" />
+              <RHFCheckbox isReadOnly={!!isView} name="editBet" label="Edit Bet" />
+              <RHFCheckbox isReadOnly={!!isView} name="deleteBet" label="Delete Bet" />
+
               {currentUser && (
                 <RHFSwitch
                   name="isActiveAdmin"
                   labelPlacement="start"
                   label={
                     <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                      Active or In Active Admin
+                      Active or In Active Super Master
                     </Typography>
                   }
                   sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
@@ -505,7 +340,7 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
             {!isView && (
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                  {!currentUser ? 'Create User' : 'Save Changes'}
+                  {!currentUser ? 'Create Master' : 'Save Changes'}
                 </LoadingButton>
               </Stack>
             )}

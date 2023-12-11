@@ -60,31 +60,31 @@ export function useNavData() {
             path: paths.dashboard.root,
             icon: ICONS.dashboard,
           },
-      //     {
-      //       title: t('ecommerce'),
-      //       path: paths.dashboard.general.ecommerce,
-      //       icon: ICONS.ecommerce,
-      //     },
-      //     {
-      //       title: t('analytics'),
-      //       path: paths.dashboard.general.analytics,
-      //       icon: ICONS.analytics,
-      //     },
-      //     {
-      //       title: t('banking'),
-      //       path: paths.dashboard.general.banking,
-      //       icon: ICONS.banking,
-      //     },
-      //     {
-      //       title: t('booking'),
-      //       path: paths.dashboard.general.booking,
-      //       icon: ICONS.booking,
-      //     },
-      //     {
-      //       title: t('file'),
-      //       path: paths.dashboard.general.file,
-      //       icon: ICONS.file,
-      //     },
+          //     {
+          //       title: t('ecommerce'),
+          //       path: paths.dashboard.general.ecommerce,
+          //       icon: ICONS.ecommerce,
+          //     },
+          //     {
+          //       title: t('analytics'),
+          //       path: paths.dashboard.general.analytics,
+          //       icon: ICONS.analytics,
+          //     },
+          //     {
+          //       title: t('banking'),
+          //       path: paths.dashboard.general.banking,
+          //       icon: ICONS.banking,
+          //     },
+          //     {
+          //       title: t('booking'),
+          //       path: paths.dashboard.general.booking,
+          //       icon: ICONS.booking,
+          //     },
+          //     {
+          //       title: t('file'),
+          //       path: paths.dashboard.general.file,
+          //       icon: ICONS.file,
+          //     },
         ],
       },
 
@@ -93,9 +93,51 @@ export function useNavData() {
       {
         // subheader: t('management'),
         items: [
+          // PRODUCT
+          // {
+          //   title: t('exchange'),
+          //   path: paths.dashboard.exchange.root,
+          //   icon: ICONS.external,
+          //   //   children: [
+          //   //     { title: t('list'), path: paths.dashboard.product.root },
+          //   //     {
+          //   //       title: t('details'),
+          //   //       path: paths.dashboard.product.demo.details,
+          //   //     },
+          //   //     { title: t('create'), path: paths.dashboard.product.new },
+          //   //     { title: t('edit'), path: paths.dashboard.product.demo.edit },
+          //   //   ],
+          // },
+
+          // ORDER
+          // {
+          //   title: t('symbol'),
+          //   path: paths.dashboard.symbol.root,
+          //   icon: ICONS.disabled,
+          //   //   children: [
+          //   //     { title: t('list'), path: paths.dashboard.order.root },
+          //   //     { title: t('details'), path: paths.dashboard.order.demo.details },
+          //   //   ],
+          // },
+
+          // {
+          //   title: 'Brokerage',
+          //   path: paths.dashboard.brokerage.root,
+          //   icon: ICONS.banking,
+          // },
+          {
+            title: 'Super Master',
+            path: paths.dashboard.superMaster.root,
+            icon: ICONS.user,
+          },
+          {
+            title: 'Master',
+            path: paths.dashboard.master.root,
+            icon: ICONS.user,
+          },
           // USER
           {
-            title: t('admin'),
+            title: 'User',
             path: paths.dashboard.user.root,
             icon: ICONS.user,
             // children: [
@@ -107,39 +149,6 @@ export function useNavData() {
             //   { title: t('account'), path: paths.dashboard.user.account },
             // ],
           },
-
-          // PRODUCT
-          {
-            title: t('exchange'),
-            path: paths.dashboard.exchange.root,
-            icon: ICONS.external,
-          //   children: [
-          //     { title: t('list'), path: paths.dashboard.product.root },
-          //     {
-          //       title: t('details'),
-          //       path: paths.dashboard.product.demo.details,
-          //     },
-          //     { title: t('create'), path: paths.dashboard.product.new },
-          //     { title: t('edit'), path: paths.dashboard.product.demo.edit },
-          //   ],
-          },
-
-          // ORDER
-          {
-            title: t('symbol'),
-            path: paths.dashboard.symbol.root,
-            icon: ICONS.disabled,
-          //   children: [
-          //     { title: t('list'), path: paths.dashboard.order.root },
-          //     { title: t('details'), path: paths.dashboard.order.demo.details },
-          //   ],
-          },
-
-          {
-            title: "Brokerage",
-            path: paths.dashboard.brokerage.root,
-            icon: ICONS.banking
-          }
 
           // INVOICE
           // {
@@ -324,7 +333,6 @@ export function useNavData() {
     [t]
   );
 
-  
   return data;
 }
 
@@ -345,5 +353,5 @@ export function useAdminNav() {
     ],
     [t]
   );
-  return adminData
+  return adminData;
 }

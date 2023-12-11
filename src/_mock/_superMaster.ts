@@ -11,7 +11,7 @@ export const USER_STATUS_OPTIONS = [
   { value: 'rejected', label: 'Rejected' },
 ];
 
-export const USER_ROLE = [{ value: 'USER', label: 'USER' }];
+export const SUPER_MASTER_ROLE = [{ value: 'SUPERMASTER', label: 'SUPER MASTER' }];
 
 export const EXCHANGE_GROUP = [
   { value: '1', label: '1' },
