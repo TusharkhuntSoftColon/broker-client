@@ -1,35 +1,35 @@
 import { useEffect } from 'react';
 
 import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
+import Stack from '@mui/material/Stack';
 
 import { usePathname } from 'src/routes/hooks';
 
-import { useResponsive } from 'src/hooks/use-responsive';
 import { useMockedUser } from 'src/hooks/use-mocked-user';
+import { useResponsive } from 'src/hooks/use-responsive';
 
 import Logo from 'src/components/logo';
-import Scrollbar from 'src/components/scrollbar';
 import { NavSectionVertical } from 'src/components/nav-section';
+import Scrollbar from 'src/components/scrollbar';
 
-import { NAV } from '../config-layout';
-import { useNavData } from './config-navigation';
-import { NavItemBaseProps } from '../main/nav/types';
 import NavToggleButton from '../common/nav-toggle-button';
+import { NAV } from '../config-layout';
+import { NavItemBaseProps } from '../main/nav/types';
+import { useNavData } from './config-navigation';
 
 // ----------------------------------------------------------------------
 
 type Props = {
   openNav: boolean;
   onCloseNav: VoidFunction;
-    nav: {
+  nav: {
     items: NavItemBaseProps[];
   }[];
 };
 
-export default function NavVertical({ openNav, onCloseNav,nav }: Props) {
-  const { ADMIN } = useMockedUser();
+export default function NavVertical({ openNav, onCloseNav, nav }: Props) {
+  const { SUPER_MASTER } = useMockedUser();
 
   const pathname = usePathname();
 
@@ -60,7 +60,7 @@ export default function NavVertical({ openNav, onCloseNav,nav }: Props) {
       <NavSectionVertical
         data={nav}
         slotProps={{
-          currentRole: ADMIN?.role,
+          currentRole: SUPER_MASTER?.role,
         }}
       />
 

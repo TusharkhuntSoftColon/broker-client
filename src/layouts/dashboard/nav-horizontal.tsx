@@ -8,24 +8,23 @@ import { useMockedUser } from 'src/hooks/use-mocked-user';
 
 import { bgBlur } from 'src/theme/css';
 
-import Scrollbar from 'src/components/scrollbar';
 import { NavSectionHorizontal } from 'src/components/nav-section';
+import Scrollbar from 'src/components/scrollbar';
 
-import { HEADER } from '../config-layout';
-import { useNavData } from './config-navigation';
 import HeaderShadow from '../common/header-shadow';
+import { HEADER } from '../config-layout';
 import { NavItemBaseProps } from '../main/nav/types';
+import { useNavData } from './config-navigation';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-    nav: {
+  nav: {
     items: NavItemBaseProps[];
   }[];
 };
 
-
-function NavHorizontal({nav}: Props) {
+function NavHorizontal({ nav }: Props) {
   const theme = useTheme();
 
   const { ADMIN } = useMockedUser();

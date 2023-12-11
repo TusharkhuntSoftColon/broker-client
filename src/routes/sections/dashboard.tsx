@@ -82,7 +82,7 @@ const BrokeragePage = lazy(() => import('src/pages/dashboard/brokerage/list'));
 
 export const dashboardRoutes = [
   {
-    path: '/admstr',
+    path: '/admin',
     element: (
       <AuthGuard>
         <DashboardLayout>
@@ -206,7 +206,44 @@ export const dashboardRoutes = [
     ],
   },
   {
-    path: '/admin',
+    path: '/super-master',
+    element: (
+      <AuthGuard>
+        <AdminLayout>
+          <Suspense fallback={<LoadingScreen />}>
+            <Outlet />
+          </Suspense>
+        </AdminLayout>
+      </AuthGuard>
+    ),
+    children: [
+      {
+        path: 'user',
+        children: [
+          { element: <UserListPage />, index: true },
+          { path: 'profile', element: <UserProfilePage /> },
+          { path: 'cards', element: <UserCardsPage /> },
+          { path: 'list', element: <UserListPage /> },
+          { path: 'new', element: <UserCreatePage /> },
+          { path: ':id', element: <UserDetailsPage /> },
+          { path: ':id/edit', element: <UserEditPage /> },
+          { path: 'account', element: <UserAccountPage /> },
+        ],
+      },
+      {
+        path: 'master',
+        children: [
+          { element: <MasterListPage />, index: true },
+          { path: 'list', element: <MasterListPage /> },
+          { path: 'new', element: <MasterCreatePage /> },
+          { path: ':id', element: <MasterDetailsPage /> },
+          { path: ':id/edit', element: <MasterEditPage /> },
+        ],
+      },
+    ],
+  },
+  {
+    path: '/master',
     element: (
       <AuthGuard>
         <AdminLayout>

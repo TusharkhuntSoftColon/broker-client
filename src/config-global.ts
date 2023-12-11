@@ -1,6 +1,5 @@
 import { paths } from 'src/routes/paths';
 
-
 // API
 // ----------------------------------------------------------------------
 
@@ -34,4 +33,6 @@ export const MAPBOX_API = import.meta.env.VITE_MAPBOX_API;
 // ROOT PATH AFTER LOGIN SUCCESSFUL
 export const PATH_AFTER_LOGIN = paths.auth.login; // as '/login'
 export const PATH_DASHBOARD = paths.dashboard.root; // as '/login'
-export const PATH_ADMIN = paths.admin.root
+export const PATH_SUPER_MASTER = paths.superMaster.root;
+export const PATH_MASTER = paths.master.root;
+export const PATH_USER = paths.user.root;

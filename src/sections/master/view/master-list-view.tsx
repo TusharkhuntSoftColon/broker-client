@@ -70,7 +70,8 @@ const defaultFilters: IUserTableFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function MasterListView() {
+export default function MasterListView({ path }: { path: any }) {
+  console.log({ path });
   const table = useTable();
 
   const dispatch = useDispatch();
@@ -166,14 +167,14 @@ export default function MasterListView() {
         <CustomBreadcrumbs
           heading="List"
           links={[
-            { name: 'Admin', href: paths.dashboard.root },
-            { name: 'Master', href: paths.dashboard.user.root },
+            { name: 'Admin', href: path.root },
+            { name: 'Master', href: path.root },
             { name: 'List' },
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.dashboard.master.new}
+              href={path.new}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >

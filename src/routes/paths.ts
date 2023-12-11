@@ -11,8 +11,10 @@ const MOCK_TITLE = _postTitles[2];
 const ROOTS = {
   AUTH: '/auth',
   AUTH_DEMO: '/auth',
-  DASHBOARD: '/admstr',
-  ADMIN: '/admin',
+  DASHBOARD: '/admin',
+  SUPER_MASTER: '/super-master',
+  MASTER: '/master',
+  USER: '/user',
 };
 
 // ----------------------------------------------------------------------
@@ -112,14 +114,8 @@ export const paths = {
       root: `${ROOTS.DASHBOARD}/user`,
       new: `${ROOTS.DASHBOARD}/user/new`,
       list: `${ROOTS.DASHBOARD}/user/list`,
-      cards: `${ROOTS.DASHBOARD}/user/cards`,
-      profile: `${ROOTS.DASHBOARD}/user/profile`,
-      account: `${ROOTS.DASHBOARD}/user/account`,
       details: (id: string) => `${ROOTS.DASHBOARD}/user/${id}`,
       edit: (id: string) => `${ROOTS.DASHBOARD}/user/${id}/edit`,
-      demo: {
-        edit: `${ROOTS.DASHBOARD}/user/${MOCK_ID}/edit`,
-      },
     },
     superMaster: {
       root: `${ROOTS.DASHBOARD}/super-master`,
@@ -198,19 +194,52 @@ export const paths = {
       },
     },
   },
-  admin: {
-    root: `${ROOTS.ADMIN}/user`,
+  superMaster: {
+    root: `${ROOTS.SUPER_MASTER}`,
+    master: {
+      root: `${ROOTS.SUPER_MASTER}/master`,
+      new: `${ROOTS.SUPER_MASTER}/master/new`,
+      list: `${ROOTS.SUPER_MASTER}/master/list`,
+      details: (id: string) => `${ROOTS.SUPER_MASTER}/master/${id}`,
+      edit: (id: string) => `${ROOTS.SUPER_MASTER}/master/${id}/edit`,
+    },
     user: {
-      root: `${ROOTS.ADMIN}/user`,
-      new: `${ROOTS.ADMIN}/user/new`,
-      list: `${ROOTS.ADMIN}/user/list`,
-      cards: `${ROOTS.ADMIN}/user/cards`,
-      profile: `${ROOTS.ADMIN}/user/profile`,
-      account: `${ROOTS.ADMIN}/user/account`,
-      details: (id: string) => `${ROOTS.ADMIN}/user/${id}`,
-      edit: (id: string) => `${ROOTS.ADMIN}/user/${id}/edit`,
+      root: `${ROOTS.SUPER_MASTER}/user`,
+      new: `${ROOTS.SUPER_MASTER}/user/new`,
+      list: `${ROOTS.SUPER_MASTER}/user/list`,
+      details: (id: string) => `${ROOTS.SUPER_MASTER}/user/${id}`,
+      edit: (id: string) => `${ROOTS.SUPER_MASTER}/user/${id}/edit`,
+    },
+  },
+  master: {
+    root: `${ROOTS.MASTER}`,
+    user: {
+      root: `${ROOTS.MASTER}/user`,
+      new: `${ROOTS.MASTER}/user/new`,
+      list: `${ROOTS.MASTER}/user/list`,
+      cards: `${ROOTS.MASTER}/user/cards`,
+      profile: `${ROOTS.MASTER}/user/profile`,
+      account: `${ROOTS.MASTER}/user/account`,
+      details: (id: string) => `${ROOTS.MASTER}/user/${id}`,
+      edit: (id: string) => `${ROOTS.MASTER}/user/${id}/edit`,
       demo: {
-        edit: `${ROOTS.ADMIN}/user/${MOCK_ID}/edit`,
+        edit: `${ROOTS.MASTER}/user/${MOCK_ID}/edit`,
+      },
+    },
+  },
+  user: {
+    root: `${ROOTS.USER}`,
+    user: {
+      root: `${ROOTS.USER}/user`,
+      new: `${ROOTS.USER}/user/new`,
+      list: `${ROOTS.USER}/user/list`,
+      cards: `${ROOTS.USER}/user/cards`,
+      profile: `${ROOTS.USER}/user/profile`,
+      account: `${ROOTS.USER}/user/account`,
+      details: (id: string) => `${ROOTS.USER}/user/${id}`,
+      edit: (id: string) => `${ROOTS.USER}/user/${id}/edit`,
+      demo: {
+        edit: `${ROOTS.USER}/user/${MOCK_ID}/edit`,
       },
     },
   },

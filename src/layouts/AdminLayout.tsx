@@ -9,7 +9,7 @@ import useAuth from 'src/hooks/useAuth';
 
 import { useSettingsContext } from 'src/components/settings';
 
-import { useAdminNav } from './dashboard/config-navigation';
+import { useNavData, useSuperMasterNav } from './dashboard/config-navigation';
 import Header from './dashboard/header';
 import NavHorizontal from './dashboard/nav-horizontal';
 import NavMini from './dashboard/nav-mini';
@@ -25,7 +25,8 @@ const AdminLayout = ({ children }: Props) => {
 
   const [manager, setmaneger] = useState(true);
 
-  const adminNav = useAdminNav();
+  const adminNav = useNavData();
+  const superMasterNav = useSuperMasterNav();
 
   const settings = useSettingsContext();
 
@@ -37,12 +38,12 @@ const AdminLayout = ({ children }: Props) => {
 
   const isMini = settings.themeLayout === 'mini';
 
-  const renderNavMini = <NavMini nav={adminNav} />;
+  const renderNavMini = <NavMini nav={superMasterNav} />;
 
-  const renderHorizontal = <NavHorizontal nav={adminNav} />;
+  const renderHorizontal = <NavHorizontal nav={superMasterNav} />;
 
   const renderNavVertical = (
-    <NavVertical nav={adminNav} openNav={nav.value} onCloseNav={nav.onFalse} />
+    <NavVertical nav={superMasterNav} openNav={nav.value} onCloseNav={nav.onFalse} />
   );
 
   if (isHorizontal) {

@@ -21,10 +21,10 @@ type RoleBasedGuardProp = {
 
 export default function RoleBasedGuard({ hasContent, roles, children, sx }: RoleBasedGuardProp) {
   // Logic here to get current user role
-  const { SUPER_ADMIN, ADMIN } = useMockedUser();
+  const { SUPER_MASTER, MASTER, USER } = useMockedUser();
 
   // const currentRole = 'user';
-  const currentRole = ADMIN.role; // admin;
+  const currentRole = MASTER.role; // admin;
 
   if (typeof roles !== 'undefined' && !roles.includes(currentRole)) {
     return hasContent ? (

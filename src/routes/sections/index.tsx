@@ -12,14 +12,14 @@ import { mainRoutes } from './main';
 // ----------------------------------------------------------------------
 
 export default function Router() {
-  const { SUPER_ADMIN, ADMIN } = useMockedUser();
+  const { ADMIN, SUPER_MASTER, MASTER, USER } = useMockedUser();
   const { active } = useAuth();
 
   return useRoutes([
     // SET INDEX PAGE WITH SKIP HOME PAGE
     {
       path: '/',
-      element: <Navigate to={paths[SUPER_ADMIN.r as keyof typeof paths]?.root} replace />,
+      element: <Navigate to={paths[ADMIN.r as keyof typeof paths]?.root} replace />,
     },
 
     // ----------------------------------------------------------------------
