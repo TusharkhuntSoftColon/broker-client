@@ -110,6 +110,13 @@ export const paths = {
       booking: `${ROOTS.DASHBOARD}/booking`,
       file: `${ROOTS.DASHBOARD}/file`,
     },
+    person: {
+      root: `${ROOTS.DASHBOARD}/person`,
+      new: `${ROOTS.DASHBOARD}/person/new`,
+      list: `${ROOTS.DASHBOARD}/person/list`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/person/${id}`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/person/${id}/edit`,
+    },
     user: {
       root: `${ROOTS.DASHBOARD}/user`,
       new: `${ROOTS.DASHBOARD}/user/new`,
@@ -209,6 +216,13 @@ export const paths = {
       list: `${ROOTS.SUPER_MASTER}/user/list`,
       details: (id: string) => `${ROOTS.SUPER_MASTER}/user/${id}`,
       edit: (id: string) => `${ROOTS.SUPER_MASTER}/user/${id}/edit`,
+    },
+    person: {
+      root: `${ROOTS.SUPER_MASTER}/person`,
+      new: `${ROOTS.SUPER_MASTER}/person/new`,
+      list: `${ROOTS.SUPER_MASTER}/person/list`,
+      details: (id: string) => `${ROOTS.SUPER_MASTER}/person/${id}`,
+      edit: (id: string) => `${ROOTS.SUPER_MASTER}/person/${id}/edit`,
     },
   },
   master: {

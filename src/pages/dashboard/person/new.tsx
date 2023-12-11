@@ -1,21 +1,20 @@
 import { Helmet } from 'react-helmet-async';
 import { useSelector } from 'react-redux';
 import { paths } from 'src/routes/paths';
-
-import { UserListView } from 'src/sections/user/view';
+import { PersonCreateView } from 'src/sections/person/view';
 
 // ----------------------------------------------------------------------
 
-export default function UserListPage() {
+export default function PersonCreatePage() {
   const role = useSelector((data: any) => data.auth.role);
   // const path = paths.dashboard;
 
   const getPath = (role: any) => {
     switch (role) {
       case 'ADMIN':
-        return paths.dashboard.user;
+        return paths.dashboard.master;
       case 'SUPER MASTER':
-        return paths.superMaster.user;
+        return paths.superMaster.master;
       // Add other cases for different roles with their respective paths
       default:
         return paths; // Return a default path if role doesn't match
@@ -24,10 +23,10 @@ export default function UserListPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Admin List</title>
+        <title> Dashboard: Create a new Master</title>
       </Helmet>
 
-      <UserListView path={getPath('SUPER MASTER')} />
+      <PersonCreateView />
     </>
   );
 }

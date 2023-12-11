@@ -10,6 +10,10 @@ import UserDetailsPage from 'src/pages/dashboard/user/details';
 
 import { LoadingScreen } from 'src/components/loading-screen';
 import MasterDetailsPage from 'src/pages/dashboard/master/details';
+import PersonDetailsPage from 'src/pages/dashboard/person/details';
+import PersonEditPage from 'src/pages/dashboard/person/edit';
+import PersonListPage from 'src/pages/dashboard/person/list';
+import PersonCreatePage from 'src/pages/dashboard/person/new';
 
 // ----------------------------------------------------------------------
 
@@ -110,6 +114,16 @@ export const dashboardRoutes = [
           { path: ':id', element: <UserDetailsPage /> },
           { path: ':id/edit', element: <UserEditPage /> },
           { path: 'account', element: <UserAccountPage /> },
+        ],
+      },
+      {
+        path: 'person',
+        children: [
+          { element: <PersonListPage />, index: true },
+          { path: 'list', element: <PersonListPage /> },
+          { path: 'new', element: <PersonCreatePage /> },
+          { path: ':id', element: <PersonDetailsPage /> },
+          { path: ':id/edit', element: <PersonEditPage /> },
         ],
       },
       {
@@ -217,6 +231,7 @@ export const dashboardRoutes = [
       </AuthGuard>
     ),
     children: [
+      { element: <IndexPage />, index: true },
       {
         path: 'user',
         children: [
@@ -238,6 +253,16 @@ export const dashboardRoutes = [
           { path: 'new', element: <MasterCreatePage /> },
           { path: ':id', element: <MasterDetailsPage /> },
           { path: ':id/edit', element: <MasterEditPage /> },
+        ],
+      },
+      {
+        path: 'person',
+        children: [
+          { element: <PersonListPage />, index: true },
+          { path: 'list', element: <PersonListPage /> },
+          { path: 'new', element: <PersonCreatePage /> },
+          { path: ':id', element: <PersonDetailsPage /> },
+          { path: ':id/edit', element: <PersonEditPage /> },
         ],
       },
     ],

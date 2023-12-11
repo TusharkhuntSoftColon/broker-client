@@ -68,20 +68,25 @@ export function useNavData() {
       {
         // subheader: t('management'),
         items: [
+          // {
+          //   title: 'Super Master',
+          //   path: paths.dashboard.superMaster.root,
+          //   icon: ICONS.user,
+          // },
+          // {
+          //   title: 'Master',
+          //   path: paths.dashboard.master.root,
+          //   icon: ICONS.user,
+          // },
+          // // USER
+          // {
+          //   title: 'User',
+          //   path: paths.dashboard.user.root,
+          //   icon: ICONS.user,
+          // },
           {
-            title: 'Super Master',
-            path: paths.dashboard.superMaster.root,
-            icon: ICONS.user,
-          },
-          {
-            title: 'Master',
-            path: paths.dashboard.master.root,
-            icon: ICONS.user,
-          },
-          // USER
-          {
-            title: 'User',
-            path: paths.dashboard.user.root,
+            title: 'Person',
+            path: paths.dashboard.person.root,
             icon: ICONS.user,
           },
 
@@ -150,15 +155,20 @@ export function useSuperMasterNav() {
       {
         // subheader: t('management'),
         items: [
+          // {
+          //   title: 'Master',
+          //   path: paths.superMaster.master.root,
+          //   icon: ICONS.user,
+          // },
+          // // USER
+          // {
+          //   title: 'User',
+          //   path: paths.superMaster.user.root,
+          //   icon: ICONS.user,
+          // },
           {
-            title: 'Master',
-            path: paths.superMaster.master.root,
-            icon: ICONS.user,
-          },
-          // USER
-          {
-            title: 'User',
-            path: paths.superMaster.user.root,
+            title: 'Person',
+            path: paths.superMaster.person.root,
             icon: ICONS.user,
           },
 

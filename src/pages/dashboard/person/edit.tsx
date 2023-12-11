@@ -1,11 +1,11 @@
 import { Helmet } from 'react-helmet-async';
 
 import { useParams } from 'src/routes/hooks';
-import SuperMasterDetailsView from 'src/sections/super-master/view/super-master-details-view';
+import { PersonEditView } from 'src/sections/person/view';
 
 // ----------------------------------------------------------------------
 
-export default function SuperMasterDetailsPage() {
+export default function PersonEditPage() {
   const params = useParams();
 
   const { id } = params;
@@ -13,10 +13,10 @@ export default function SuperMasterDetailsPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Super Master Detail</title>
+        <title> Dashboard: Master Edit</title>
       </Helmet>
 
-      <SuperMasterDetailsView id={`${id}`} />
+      <PersonEditView id={`${id}`} />
     </>
   );
 }

@@ -70,7 +70,8 @@ const defaultFilters: IUserTableFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function UserListView() {
+export default function UserListView({ path }: { path: any }) {
+  console.log({ path });
   const table = useTable();
 
   const dispatch = useDispatch();
@@ -173,7 +174,7 @@ export default function UserListView() {
           action={
             <Button
               component={RouterLink}
-              href={paths.dashboard.user.new}
+              href={path.new}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >

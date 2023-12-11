@@ -19,7 +19,7 @@ export default function Router() {
     // SET INDEX PAGE WITH SKIP HOME PAGE
     {
       path: '/',
-      element: <Navigate to={paths[ADMIN.r as keyof typeof paths]?.root} replace />,
+      element: <Navigate to={paths[SUPER_MASTER.r as keyof typeof paths]?.root} replace />,
     },
 
     // ----------------------------------------------------------------------
