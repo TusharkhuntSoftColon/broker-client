@@ -12,6 +12,7 @@ import {
 } from '../utils/urls';
 
 export interface adminType {
+  role: any;
   allowedExchange: any;
   deleteBet: any;
   editBet: any;
@@ -31,6 +32,7 @@ const adminService = {
         deleteBet: Boolean(adminData?.deleteBet),
         exchangeGroup: adminData?.exchangeGroup?.map((option: any) => option.value),
         allowedExchange: adminData?.allowedExchange?.map((option: any) => option.value),
+        role: adminData?.role?.value,
       });
       return response.data;
     } catch (error) {

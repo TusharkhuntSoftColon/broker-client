@@ -61,7 +61,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     name: Yup.string().required('Name is required'),
     ID: Yup.string().required('User Id is required'),
     password: Yup.string().required('Password is required'),
-    role: Yup.string().required('Role is required'),
+    role: Yup.mixed<any>().nullable().required('Role is required'),
     exchangeGroup: Yup.array().min(1, 'Must have at least 1 exchange'),
     allowedExchange: Yup.array().min(1, 'Must have at least 1 exchange'),
     limitOfAddMaster: Yup.number().required('Limit Of Add Master is required'),
@@ -73,7 +73,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     name: Yup.string().required('Name is required'),
     ID: Yup.string().required('User Id is required'),
     password: Yup.string().required('Password is required'),
-    role: Yup.string().required('Role is required'),
+    role: Yup.mixed<any>().nullable().required('Role is required'),
     exchangeGroup: Yup.array().min(1, 'Must have at least 1 exchange'),
     allowedExchange: Yup.array().min(1, 'Must have at least 1 exchange'),
     limitOfAddUser: Yup.number().required('Limit Of Add User is required'),
@@ -84,7 +84,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     name: Yup.string().required('Name is required'),
     ID: Yup.string().required('User Id is required'),
     password: Yup.string().required('Password is required'),
-    role: Yup.string().required('Role is required'),
+    role: Yup.mixed<any>().nullable().required('Role is required'),
     exchangeGroup: Yup.array().min(1, 'Must have at least 1 exchange'),
     allowedExchange: Yup.array().min(1, 'Must have at least 1 exchange'),
     leverageX: Yup.number().required('Leverage X is required'),
@@ -158,20 +158,20 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       }
     });
 
-    setRoleOption(value.role);
+    setRoleOption(value.role.value);
 
-    if (value.role === 'SUPER_MASTER') {
+    if (value.role.value === 'SUPER_MASTER') {
       setValue('limitOfAddMaster', currentUser?.limitOfAddMaster || '');
       setValue('limitOfAddUser', currentUser?.limitOfAddUser || '');
     }
-    if (value.role === 'MASTER') {
+    if (value.role.value === 'MASTER') {
       setValue('limitOfAddUser', currentUser?.limitOfAddUser || '');
     }
-    if (value.role === 'USER') {
+    if (value.role.value === 'USER') {
       setValue('brokerage', currentUser?.brokerage || '');
       setValue('investorPassword', currentUser?.investorPassword || '');
     }
-  }, [defaultValues, setValue, value.role]);
+  }, [defaultValues, setValue, value.role.value]);
 
   console.log({ value });
 
@@ -247,16 +247,17 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
 
   const onSubmit = handleSubmit(async (data) => {
     console.log({ data });
+    console.log({ value });
     try {
-      if (value?.role === 'SUPER_MASTER') {
+      if (value?.role.value === 'SUPER_MASTER') {
         createSuperMaster(data);
       }
 
-      if (value?.role === 'MASTER') {
+      if (value?.role.value === 'MASTER') {
         createMaster(data);
       }
 
-      if (value?.role === 'USER') {
+      if (value?.role.value === 'USER') {
         createUser(data);
       }
     } catch (error) {
@@ -345,21 +346,17 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
               <RHFAutocomplete
                 name="role"
                 label="Role"
-                options={Role.map((data: any) => data.label)}
-                data={Role}
+                // control={control}
                 isReadOnly={!!isView}
-                getOptionLabel={(option: any) => option}
-                isOptionEqualToValue={(option, value) => option === value}
+                options={Role}
+                data={Role}
+                isLabled={false}
+                isOptionEqualToValue={(option, value) => option.value === value.value}
+                getOptionLabel={(option: any) => option.label}
                 renderOption={(props, option) => {
-                  const { label } = Role.filter((data: any) => data.label === option)[0];
-
-                  if (!label) {
-                    return null;
-                  }
-
                   return (
-                    <li {...props} key={label}>
-                      {label}
+                    <li {...props} key={option.value}>
+                      {option.label}
                     </li>
                   );
                 }}
@@ -372,7 +369,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                 type="password"
                 label="Password"
               />
-              {value.role === 'USER' && (
+              {value.role.value === 'USER' && (
                 <>
                   {' '}
                   <RHFTextField
@@ -389,7 +386,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                   />
                 </>
               )}
-              {value.role === 'SUPER_MASTER' && (
+              {value.role.value === 'SUPER_MASTER' && (
                 <RHFTextField
                   isReadOnly={!!isView}
                   name="limitOfAddMaster"
@@ -398,7 +395,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                 />
               )}
 
-              {value.role !== 'USER' && (
+              {value.role.value !== 'USER' && (
                 <RHFTextField
                   isReadOnly={!!isView}
                   name="limitOfAddUser"
@@ -475,7 +472,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                 }}
               />
 
-              {value.role !== 'USER' && (
+              {value.role.value !== 'USER' && (
                 <>
                   {' '}
                   <RHFCheckbox
