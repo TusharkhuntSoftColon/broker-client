@@ -16,9 +16,9 @@ import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 
 import { useRouter } from 'src/routes/hooks';
-import { paths } from 'src/routes/paths';
 
 import { EXCHANGE_GROUP } from 'src/_mock';
+import exchangeService from 'src/services/exchangeService';
 
 import FormProvider, {
   RHFAutocomplete,
@@ -28,8 +28,8 @@ import FormProvider, {
 } from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
 
-import { ADMIN_ROLE, MASTER_ROLE, SUPER_MASTER_ROLE } from 'src/_mock/_person';
-import adminService from 'src/services/adminService';
+import { SUPER_MASTER_ROLE } from 'src/_mock/_superMaster';
+import superMasterService from 'src/services/superMasterService';
 import { IUserItem } from 'src/types/user';
 
 // ----------------------------------------------------------------------
@@ -37,19 +37,14 @@ import { IUserItem } from 'src/types/user';
 type Props = {
   currentUser?: IUserItem | any;
   isView?: any;
-  path?: any;
 };
 
-export default function PersonNewEditForm({ currentUser, isView, path }: Props) {
-  console.log({ path });
-
-  const role = useSelector((data: any) => data.auth.role);
-  console.log({ role });
+export default function SuperMasterNewEditForm({ currentUser, isView }: Props) {
   const router = useRouter();
 
   const [exchangeData, setExchangeData] = useState<any>();
 
-  const [roleOption, setRoleOption] = useState<any>('');
+  const [role, setRole] = useState<any>('');
 
   const adminData = useSelector((data: any) => data?.admin?.adminList);
 
@@ -62,7 +57,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     ID: Yup.string().required('User Id is required'),
     password: Yup.string().required('Password is required'),
     role: Yup.string().required('Role is required'),
-    exchangeGroup: Yup.array().min(1, 'Must have at least 1 exchange'),
+    exchangeGroup: Yup.string().required('Leverage Y is required'),
     allowedExchange: Yup.array().min(1, 'Must have at least 1 exchange'),
     limitOfAddMaster: Yup.number().required('Limit Of Add Master is required'),
     limitOfAddUser: Yup.number().required('Limit Of Add User is required'),
@@ -74,7 +69,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     ID: Yup.string().required('User Id is required'),
     password: Yup.string().required('Password is required'),
     role: Yup.string().required('Role is required'),
-    exchangeGroup: Yup.array().min(1, 'Must have at least 1 exchange'),
+    exchangeGroup: Yup.string().required('Leverage Y is required'),
     allowedExchange: Yup.array().min(1, 'Must have at least 1 exchange'),
     limitOfAddUser: Yup.number().required('Limit Of Add User is required'),
     leverageX: Yup.number().required('Leverage X is required'),
@@ -85,7 +80,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     ID: Yup.string().required('User Id is required'),
     password: Yup.string().required('Password is required'),
     role: Yup.string().required('Role is required'),
-    exchangeGroup: Yup.array().min(1, 'Must have at least 1 exchange'),
+    exchangeGroup: Yup.string().required('Leverage Y is required'),
     allowedExchange: Yup.array().min(1, 'Must have at least 1 exchange'),
     leverageX: Yup.number().required('Leverage X is required'),
     leverageY: Yup.number().required('Leverage Y is required'),
@@ -98,8 +93,8 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       name: currentUser?.name || '',
       password: currentUser?.password || '',
       ID: currentUser?.ID || '',
-      exchangeGroup: currentUser?.exchangeGroup || [],
-      allowedExchange: currentUser?.allowedExchange || [],
+      exchangeGroup: currentUser?.exchangeGroup || '',
+      allowedExchange: currentUser?.allowedExchange || '',
       insertCustomBet: currentUser?.insertCustomBet || false,
       editBet: currentUser?.editBet || false,
       role: currentUser?.role || '',
@@ -124,7 +119,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   };
 
   const methods = useForm({
-    resolver: yupResolver(getValidationSchema(roleOption)),
+    resolver: yupResolver(getValidationSchema(role)),
     defaultValues,
   });
   const {
@@ -158,7 +153,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       }
     });
 
-    setRoleOption(value.role);
+    setRole(value.role);
 
     if (value.role === 'SUPER_MASTER') {
       setValue('limitOfAddMaster', currentUser?.limitOfAddMaster || '');
@@ -173,24 +168,8 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     }
   }, [defaultValues, setValue, value.role]);
 
-  console.log({ value });
-
-  const getExchangeListForPerson = (role: any) => {
-    switch (role) {
-      case 'ADMIN':
-        return adminService.getExchangeListForSuperMaster;
-      case 'SUPER_MASTER':
-        return adminService.getExchangeListForMaster;
-      case 'MASTER':
-        return adminService.getExchangeListForUser;
-      // Add other cases for different roles with their respective paths
-      default:
-        return paths; // Return a default path if role doesn't match
-    }
-  };
-
-  // create SUPER_MASTER
-  const { mutate: createSuperMaster } = useMutation(adminService.createSuperMaster, {
+  // create ADMIN
+  const { mutate: createSuperMaster } = useMutation(superMasterService.createSuperMaster, {
     onSuccess: (data) => {
       console.log({ data });
       enqueueSnackbar(data?.message, { variant: 'success' });
@@ -204,7 +183,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   });
 
   //create MASTER
-  const { mutate: createMaster } = useMutation(adminService.createMaster, {
+  const { mutate: createMaster } = useMutation(superMasterService.createMaster, {
     onSuccess: (data) => {
       console.log({ data });
       enqueueSnackbar(data?.message, { variant: 'success' });
@@ -218,7 +197,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   });
 
   //create USER
-  const { mutate: createUser } = useMutation(adminService.createUser, {
+  const { mutate: createUser } = useMutation(superMasterService.createUser, {
     onSuccess: (data) => {
       console.log({ data });
       enqueueSnackbar(data?.message, { variant: 'success' });
@@ -232,10 +211,9 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   });
 
   // get exchange list
-  const { mutate } = useMutation(getExchangeListForPerson(role), {
+  const { mutate } = useMutation(exchangeService.getExchangeList, {
     onSuccess: (data) => {
-      console.log({ data });
-      setExchangeData(data?.data?.allowedExchange);
+      setExchangeData(data?.data?.rows);
       enqueueSnackbar(data?.message, { variant: 'success' });
     },
     onError: (error) => {
@@ -246,7 +224,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log({ data });
     try {
       if (value?.role === 'SUPER_MASTER') {
         createSuperMaster(data);
@@ -263,8 +240,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       console.log(error);
     }
 
-    router.push(path.person.list);
-
     // try {
     //   await new Promise((resolve) => setTimeout(resolve, 500));
     //   reset();
@@ -277,6 +252,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     //     // dispatch(addAdmin(data));
     //     createSuperMaster(data);
     //   }
+    //   router.push(paths.dashboard.user.list);
     //   console.info('DATA', data);
     // } catch (error) {
     //   console.error(error);
@@ -296,8 +272,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     });
   }
 
-  console.log({ ExchangeOptions });
-
   const ExchangeOption = [
     { label: 'NYSE', value: 'abcdefg' },
     { label: 'NASDAQ', value: 'abcdef' },
@@ -310,23 +284,33 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     { label: 'BIST', value: 'absdfefg' },
   ];
 
-  const RolesOptions = (role: any) => {
-    switch (role) {
-      case 'ADMIN':
-        return ADMIN_ROLE;
-      case 'SUPER_MASTER':
-        return SUPER_MASTER_ROLE;
-      case 'MASTER':
-        return MASTER_ROLE;
-      // Add other cases for different roles with their respective paths
-      default:
-        return paths; // Return a default path if role doesn't match
-    }
-  };
+  // const handleDrop = useCallback(
+  //   (acceptedFiles: File[]) => {
+  //     const file = acceptedFiles[0];
 
-  const Role = RolesOptions(role);
+  //     const newFile = Object.assign(file, {
+  //       preview: URL.createObjectURL(file),
+  //     });
 
-  console.log({ Role });
+  //     if (file) {
+  //       setValue('avatarUrl', newFile, { shouldValidate: true });
+  //     }
+  //   },
+  //   [setValue]
+  // );
+
+  // const handleFilterRole = useCallback(
+  //   (event: SelectChangeEvent<string[]>) => {
+  //     onFilters(
+  //       'role',
+  //       typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
+  //     );
+  //   },
+  //   [onFilters]
+  // );
+
+  // const Data = ExchangeOptions.find((data: any) => data.value === currentUser?.allowedExchange)
+  //   ?.value;
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
@@ -345,13 +329,13 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
               <RHFAutocomplete
                 name="role"
                 label="Role"
-                options={Role.map((data: any) => data.label)}
-                data={Role}
+                options={SUPER_MASTER_ROLE.map((data) => data.label)}
+                data={SUPER_MASTER_ROLE}
                 isReadOnly={!!isView}
                 getOptionLabel={(option: any) => option}
                 isOptionEqualToValue={(option, value) => option === value}
                 renderOption={(props, option) => {
-                  const { label } = Role.filter((data: any) => data.label === option)[0];
+                  const { label } = SUPER_MASTER_ROLE.filter((data) => data.label === option)[0];
 
                   if (!label) {
                     return null;
@@ -424,25 +408,21 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
               <RHFAutocomplete
                 name="exchangeGroup"
                 label="Exchange Group"
-                // control={control}
-                isReadOnly={!!isView}
-                options={EXCHANGE_GROUP}
-                freeSolo
+                options={EXCHANGE_GROUP.map((data) => data.label)}
                 data={EXCHANGE_GROUP}
-                isLabled={false}
-                multiple
-                isOptionEqualToValue={(option, value) => option.value === value.value}
-                getOptionLabel={(option: any) => option.label}
-                renderOption={(props, option, { selected }) => {
+                isReadOnly={!!isView}
+                getOptionLabel={(option: any) => option}
+                isOptionEqualToValue={(option, value) => option === value}
+                renderOption={(props, option) => {
+                  const { label } = EXCHANGE_GROUP.filter((data) => data.label === option)[0];
+
+                  if (!label) {
+                    return null;
+                  }
+
                   return (
-                    <li {...props} key={option.value}>
-                      <Checkbox
-                        icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
-                        checkedIcon={<CheckBoxIcon fontSize="small" />}
-                        style={{ marginRight: 8 }}
-                        checked={selected}
-                      />
-                      {option.label}
+                    <li {...props} key={label}>
+                      {label}
                     </li>
                   );
                 }}
@@ -453,23 +433,28 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                 label="Allowed Exchange"
                 // control={control}
                 isReadOnly={!!isView}
-                options={ExchangeOptions}
+                options={ExchangeOption.map((data: any) => data.label)}
                 freeSolo
-                data={ExchangeOptions}
+                data={ExchangeOption}
                 isLabled={false}
                 multiple
-                isOptionEqualToValue={(option, value) => option.value === value.value}
-                getOptionLabel={(option: any) => option.label}
+                getOptionLabel={(option: any) => option}
                 renderOption={(props, option, { selected }) => {
+                  const { label } = ExchangeOption.filter((data: any) => data.label === option)[0];
+
+                  if (!label) {
+                    return null;
+                  }
+
                   return (
-                    <li {...props} key={option.value}>
+                    <li {...props} key={label}>
                       <Checkbox
                         icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
                         checkedIcon={<CheckBoxIcon fontSize="small" />}
                         style={{ marginRight: 8 }}
                         checked={selected}
                       />
-                      {option.label}
+                      {label}
                     </li>
                   );
                 }}
@@ -501,11 +486,18 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                 />
               )}
             </Box>
-
             {!isView && (
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                  {!currentUser ? 'Create Super Master' : 'Save Changes'}
+                  {value?.role == 'SUPER_MASTER'
+                    ? 'Create Super Master'
+                    : value?.role == 'MASTER'
+                    ? 'Create Master'
+                    : value?.role == 'USER'
+                    ? 'Create User'
+                    : !currentUser
+                    ? 'Create'
+                    : 'Save Changes'}
                 </LoadingButton>
               </Stack>
             )}

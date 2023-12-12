@@ -45,7 +45,7 @@ export default function SuperMasterNewEditForm({ currentUser, isView }: Props) {
 
   const [exchangeData, setExchangeData] = useState<any>();
 
-  const [role, setRole] = useState<any>('');
+  const [exchange, setExchange] = useState<any>([]);
 
   const adminData = useSelector((data: any) => data?.admin?.adminList);
 
@@ -65,64 +65,32 @@ export default function SuperMasterNewEditForm({ currentUser, isView }: Props) {
     leverageX: Yup.number().required('Leverage X is required'),
     leverageY: Yup.number().required('Leverage Y is required'),
   });
-  const NewMasterSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    ID: Yup.string().required('User Id is required'),
-    password: Yup.string().required('Password is required'),
-    role: Yup.string().required('Role is required'),
-    exchangeGroup: Yup.string().required('Leverage Y is required'),
-    allowedExchange: Yup.array().min(1, 'Must have at least 1 exchange'),
-    limitOfAddUser: Yup.number().required('Limit Of Add User is required'),
-    leverageX: Yup.number().required('Leverage X is required'),
-    leverageY: Yup.number().required('Leverage Y is required'),
-  });
-  const NewUserSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    ID: Yup.string().required('User Id is required'),
-    password: Yup.string().required('Password is required'),
-    role: Yup.string().required('Role is required'),
-    exchangeGroup: Yup.string().required('Leverage Y is required'),
-    allowedExchange: Yup.array().min(1, 'Must have at least 1 exchange'),
-    leverageX: Yup.number().required('Leverage X is required'),
-    leverageY: Yup.number().required('Leverage Y is required'),
-    brokerage: Yup.number().required('Brokerage is required'),
-    investorPassword: Yup.number().required('Invester Password is required'),
-  });
 
-  const defaultValues: any = useMemo(
+  const defaultValues = useMemo(
     () => ({
       name: currentUser?.name || '',
       password: currentUser?.password || '',
       ID: currentUser?.ID || '',
       exchangeGroup: currentUser?.exchangeGroup || '',
-      allowedExchange: currentUser?.allowedExchange || '',
+      allowedExchange: currentUser?.allowedExchange || [],
       insertCustomBet: currentUser?.insertCustomBet || false,
       editBet: currentUser?.editBet || false,
       role: currentUser?.role || '',
       deleteBet: currentUser?.deleteBet || false,
-      leverageX: currentUser?.leverageX || '',
-      leverageY: currentUser?.leverageY || '',
+      limitOfAddMaster: currentUser?.limitOfAddMaster || null,
+      limitOfAddUser: currentUser?.limitOfAddUser || null,
+      leverageX: currentUser?.leverageX || null,
+      leverageY: currentUser?.leverageY || null,
       isActiveAdmin: currentUser?.isActiveAdmin || true,
     }),
     [currentUser]
   );
-  const getValidationSchema = (role: any) => {
-    switch (role) {
-      case 'SUPER_MASTER':
-        return NewSuperMasterSchema;
-      case 'MASTER':
-        return NewMasterSchema;
-      case 'USER':
-        return NewUserSchema;
-      default:
-        return Yup.object().shape({});
-    }
-  };
 
   const methods = useForm({
-    resolver: yupResolver(getValidationSchema(role)),
+    resolver: yupResolver(NewSuperMasterSchema),
     defaultValues,
   });
+
   const {
     reset,
     watch,
@@ -132,44 +100,6 @@ export default function SuperMasterNewEditForm({ currentUser, isView }: Props) {
     formState: { isSubmitting, errors },
   } = methods;
 
-  const value = watch();
-
-  useEffect(() => {
-    const fieldsToReset: any = [
-      'name',
-      'ID',
-      'password',
-      'exchangeGroup',
-      'allowedExchange',
-      'insertCustomBet',
-      'editBet',
-      'deleteBet',
-      'leverageX',
-      'leverageY',
-    ];
-
-    fieldsToReset.forEach((field: any) => {
-      if (field !== 'role') {
-        setValue(field, defaultValues[field]);
-      }
-    });
-
-    setRole(value.role);
-
-    if (value.role === 'SUPER_MASTER') {
-      setValue('limitOfAddMaster', currentUser?.limitOfAddMaster || '');
-      setValue('limitOfAddUser', currentUser?.limitOfAddUser || '');
-    }
-    if (value.role === 'MASTER') {
-      setValue('limitOfAddUser', currentUser?.limitOfAddUser || '');
-    }
-    if (value.role === 'USER') {
-      setValue('brokerage', currentUser?.brokerage || '');
-      setValue('investorPassword', currentUser?.investorPassword || '');
-    }
-  }, [defaultValues, setValue, value.role]);
-
-  console.log({ value });
   // create ADMIN
   const { mutate: createSuperMaster } = useMutation(superMasterService.createSuperMaster, {
     onSuccess: (data) => {
@@ -199,23 +129,23 @@ export default function SuperMasterNewEditForm({ currentUser, isView }: Props) {
 
   const onSubmit = handleSubmit(async (data) => {
     console.log({ data });
-    // try {
-    //   await new Promise((resolve) => setTimeout(resolve, 500));
-    //   reset();
-    //   enqueueSnackbar(currentUser ? 'Update success!' : 'Create success!');
-    //   // await createAdmin(data);
-    //   if (currentUser) {
-    //     const adminID = currentUser.id;
-    //     // dispatch(updateAdmin({ id: adminID, updatedData: data }));
-    //   } else {
-    //     // dispatch(addAdmin(data));
-    //     createSuperMaster(data);
-    //   }
-    //   router.push(paths.dashboard.user.list);
-    //   console.info('DATA', data);
-    // } catch (error) {
-    //   console.error(error);
-    // }
+    try {
+      await new Promise((resolve) => setTimeout(resolve, 500));
+      reset();
+      enqueueSnackbar(currentUser ? 'Update success!' : 'Create success!');
+      // await createAdmin(data);
+      if (currentUser) {
+        const adminID = currentUser.id;
+        // dispatch(updateAdmin({ id: adminID, updatedData: data }));
+      } else {
+        // dispatch(addAdmin(data));
+        createSuperMaster(data);
+      }
+      router.push(paths.dashboard.user.list);
+      console.info('DATA', data);
+    } catch (error) {
+      console.error(error);
+    }
   });
 
   useEffect(() => {
@@ -285,28 +215,6 @@ export default function SuperMasterNewEditForm({ currentUser, isView }: Props) {
                 sm: 'repeat(2, 1fr)',
               }}
             >
-              <RHFAutocomplete
-                name="role"
-                label="Role"
-                options={SUPER_MASTER_ROLE.map((data) => data.label)}
-                data={SUPER_MASTER_ROLE}
-                isReadOnly={!!isView}
-                getOptionLabel={(option: any) => option}
-                isOptionEqualToValue={(option, value) => option === value}
-                renderOption={(props, option) => {
-                  const { label } = SUPER_MASTER_ROLE.filter((data) => data.label === option)[0];
-
-                  if (!label) {
-                    return null;
-                  }
-
-                  return (
-                    <li {...props} key={label}>
-                      {label}
-                    </li>
-                  );
-                }}
-              />
               <RHFTextField isReadOnly={!!isView} name="name" label="Full Name" />
               <RHFTextField isReadOnly={!!isView} name="ID" label="User Id" />
               <RHFTextField
@@ -315,40 +223,19 @@ export default function SuperMasterNewEditForm({ currentUser, isView }: Props) {
                 type="password"
                 label="Password"
               />
-              {value.role === 'USER' && (
-                <>
-                  {' '}
-                  <RHFTextField
-                    isReadOnly={!!isView}
-                    name="investorPassword"
-                    type="number"
-                    label="Investor Password"
-                  />
-                  <RHFTextField
-                    isReadOnly={!!isView}
-                    name="brokerage"
-                    type="number"
-                    label="Brokerage"
-                  />
-                </>
-              )}
-              {value.role === 'SUPER_MASTER' && (
-                <RHFTextField
-                  isReadOnly={!!isView}
-                  name="limitOfAddMaster"
-                  type="number"
-                  label="Limit Of Add Master"
-                />
-              )}
+              <RHFTextField
+                isReadOnly={!!isView}
+                name="limitOfAddMaster"
+                type="number"
+                label="Limit Of Add Master"
+              />
 
-              {value.role !== 'USER' && (
-                <RHFTextField
-                  isReadOnly={!!isView}
-                  name="limitOfAddUser"
-                  type="number"
-                  label="Limit Of Add User"
-                />
-              )}
+              <RHFTextField
+                isReadOnly={!!isView}
+                name="limitOfAddUser"
+                type="number"
+                label="Limit Of Add User"
+              />
 
               <RHFTextField
                 isReadOnly={!!isView}
@@ -419,18 +306,31 @@ export default function SuperMasterNewEditForm({ currentUser, isView }: Props) {
                 }}
               />
 
-              {value.role !== 'USER' && (
-                <>
-                  {' '}
-                  <RHFCheckbox
-                    isReadOnly={!!isView}
-                    name="insertCustomBet"
-                    label="Insert Custom Bet"
-                  />
-                  <RHFCheckbox isReadOnly={!!isView} name="editBet" label="Edit Bet" />
-                  <RHFCheckbox isReadOnly={!!isView} name="deleteBet" label="Delete Bet" />
-                </>
-              )}
+              <RHFAutocomplete
+                name="role"
+                label="Role"
+                options={SUPER_MASTER_ROLE.map((data) => data.label)}
+                data={SUPER_MASTER_ROLE}
+                isReadOnly={!!isView}
+                getOptionLabel={(option: any) => option}
+                isOptionEqualToValue={(option, value) => option === value}
+                renderOption={(props, option) => {
+                  const { label } = SUPER_MASTER_ROLE.filter((data) => data.label === option)[0];
+
+                  if (!label) {
+                    return null;
+                  }
+
+                  return (
+                    <li {...props} key={label}>
+                      {label}
+                    </li>
+                  );
+                }}
+              />
+              <RHFCheckbox isReadOnly={!!isView} name="insertCustomBet" label="Insert Custom Bet" />
+              <RHFCheckbox isReadOnly={!!isView} name="editBet" label="Edit Bet" />
+              <RHFCheckbox isReadOnly={!!isView} name="deleteBet" label="Delete Bet" />
 
               {currentUser && (
                 <RHFSwitch

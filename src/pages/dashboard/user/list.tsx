@@ -14,7 +14,7 @@ export default function UserListPage() {
     switch (role) {
       case 'ADMIN':
         return paths.dashboard.user;
-      case 'SUPER MASTER':
+      case 'SUPER_MASTER':
         return paths.superMaster.user;
       // Add other cases for different roles with their respective paths
       default:
@@ -27,7 +27,7 @@ export default function UserListPage() {
         <title> Dashboard: Admin List</title>
       </Helmet>
 
-      <UserListView path={getPath('SUPER MASTER')} />
+      <UserListView path={getPath('SUPER_MASTER')} />
     </>
   );
 }

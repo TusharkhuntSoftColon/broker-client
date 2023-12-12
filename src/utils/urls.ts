@@ -1,10 +1,14 @@
 // AUTH
-export const ADMIN_AUTH = '/auth/user/login';
+export const ADMIN_AUTH = '/auth/login';
 export const CREATE_ADMIN = '/auth/admin';
 
-// SUPER MASTER
-export const CREATE_SUPER_MASTER = '/auth/super/master';
-export const CREATE_MASTER = '/auth/master';
+// ADMIN
+export const CREATE_SUPER_MASTER = '/admin/super-master';
+export const CREATE_MASTER = '/admin/master';
+export const CREATE_USER = '/admin/user';
+export const GET_EXCHANGE_FOR_SUPERMASTER = '/admin/all-exchanges';
+export const GET_EXCHANGE_FOR_MASTER = '/super-master/all-exchanges';
+export const GET_EXCHANGE_FOR_USER = '/master/all-exchanges';
 
 // Exchange
 export const EXCHANGE_CREATE = '/exchange/create';

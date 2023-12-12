@@ -13,17 +13,21 @@ export default function PersonCreateView() {
   const settings = useSettingsContext();
 
   const role = useSelector((data: any) => data.auth.role);
+  // console.log('Role in person create view : ', role);
+
   // const path = paths.dashboard;
 
   const getPath = (role: any) => {
     switch (role) {
       case 'ADMIN':
-        return paths.dashboard.person;
-      case 'SUPER MASTER':
-        return paths.superMaster.person;
+        return paths.dashboard;
+      case 'SUPER_MASTER':
+        return paths.superMaster;
+      case 'MASTER':
+        return paths.master;
       // Add other cases for different roles with their respective paths
       default:
-        return paths; // Return a default path if role doesn't match
+        return paths.dashboard.person; // Return a default path if role doesn't match
     }
   };
 
@@ -38,7 +42,7 @@ export default function PersonCreateView() {
           },
           {
             name: 'Person',
-            href: paths.dashboard.user.root,
+            href: paths.dashboard.root,
           },
           { name: 'New Person' },
         ]}
@@ -47,7 +51,7 @@ export default function PersonCreateView() {
         }}
       />
 
-      <PersonNewEditForm isView={false} path={getPath('SUPER MASTER')} />
+      <PersonNewEditForm isView={false} path={getPath(role)} />
     </Container>
   );
 }

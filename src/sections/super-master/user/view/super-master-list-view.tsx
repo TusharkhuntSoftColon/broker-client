@@ -14,6 +14,7 @@ import Tooltip from '@mui/material/Tooltip';
 
 import { RouterLink } from 'src/routes/components';
 import { useRouter } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -69,8 +70,7 @@ const defaultFilters: IUserTableFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function PersonListView({ path }: { path: any }) {
-  console.log({ path });
+export default function SuperMasterListView() {
   const table = useTable();
 
   const dispatch = useDispatch();
@@ -137,14 +137,14 @@ export default function PersonListView({ path }: { path: any }) {
 
   const handleEditRow = useCallback(
     (id: string) => {
-      router.push(path.edit(id));
+      router.push(paths.dashboard.user.edit(id));
     },
     [router]
   );
 
   const handleViewRow = useCallback(
     (id: string) => {
-      router.push(path.details(id));
+      router.push(paths.dashboard.user.details(id));
     },
     [router]
   );
@@ -166,18 +166,18 @@ export default function PersonListView({ path }: { path: any }) {
         <CustomBreadcrumbs
           heading="List"
           links={[
-            { name: 'Admin', href: path.root },
-            { name: 'Person', href: path.root },
+            { name: 'Admin', href: paths.dashboard.root },
+            { name: 'Super Master', href: paths.dashboard.user.root },
             { name: 'List' },
           ]}
           action={
             <Button
               component={RouterLink}
-              href={path.person.new}
+              href={paths.dashboard.superMaster.new}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              New Person
+              New Super Master
             </Button>
           }
           sx={{

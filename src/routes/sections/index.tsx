@@ -15,6 +15,8 @@ export default function Router() {
   const { ADMIN, SUPER_MASTER, MASTER, USER } = useMockedUser();
   const { active } = useAuth();
 
+  console.log('Routes Working');
+
   return useRoutes([
     // SET INDEX PAGE WITH SKIP HOME PAGE
     {

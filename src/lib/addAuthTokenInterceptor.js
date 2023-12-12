@@ -15,7 +15,7 @@ export default function addAuthTokenInterceptor(store) {
   client.interceptors.request.use((req) => {
     const { token } = store.getState().auth;
 
-    // console.log(token);
+    console.log(token);
     if (!token) return req;
     req.headers.Authorization = `Bearer ${token}`;
     return req;
@@ -25,6 +25,8 @@ export default function addAuthTokenInterceptor(store) {
     async (error) => {
       const originalConfig = error?.config;
       const { refreshToken } = store.getState().auth;
+
+      // console.log({ refreshToken });
       const { token } = store.getState().auth;
       // originalConfig._retry = true;
 
@@ -55,13 +57,17 @@ export default function addAuthTokenInterceptor(store) {
             };
 
             const result = await axios.request(config);
+            console.log({ result });
             isRefreshTokenUpdating = false;
             store.dispatch(setRefreshToken(result.data.data));
             return await client(originalConfig);
           } catch (error) {
+            console.log(
+              'This Line Working!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+            );
             isRefreshTokenUpdating = false;
             store.dispatch(resetState());
-            return (window.location = '/login');
+            return (window.location = '/auth/login');
           }
         } else if (isRefreshTokenUpdating) {
           // If refresh token is updating
@@ -69,7 +75,7 @@ export default function addAuthTokenInterceptor(store) {
           return client(originalConfig);
         } else if (token && token.length === 0) {
           store.dispatch(resetState());
-          window.location = '/login';
+          window.location = '/auth/login';
           return Promise.reject(error.response.data);
         } else {
           return Promise.reject(error.response.data);

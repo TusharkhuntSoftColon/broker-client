@@ -102,14 +102,6 @@ export const paths = {
     calendar: `${ROOTS.DASHBOARD}/calendar`,
     fileManager: `${ROOTS.DASHBOARD}/file-manager`,
     permission: `${ROOTS.DASHBOARD}/permission`,
-    general: {
-      app: `${ROOTS.DASHBOARD}/app`,
-      ecommerce: `${ROOTS.DASHBOARD}/ecommerce`,
-      analytics: `${ROOTS.DASHBOARD}/analytics`,
-      banking: `${ROOTS.DASHBOARD}/banking`,
-      booking: `${ROOTS.DASHBOARD}/booking`,
-      file: `${ROOTS.DASHBOARD}/file`,
-    },
     person: {
       root: `${ROOTS.DASHBOARD}/person`,
       new: `${ROOTS.DASHBOARD}/person/new`,
@@ -117,106 +109,9 @@ export const paths = {
       details: (id: string) => `${ROOTS.DASHBOARD}/person/${id}`,
       edit: (id: string) => `${ROOTS.DASHBOARD}/person/${id}/edit`,
     },
-    user: {
-      root: `${ROOTS.DASHBOARD}/user`,
-      new: `${ROOTS.DASHBOARD}/user/new`,
-      list: `${ROOTS.DASHBOARD}/user/list`,
-      details: (id: string) => `${ROOTS.DASHBOARD}/user/${id}`,
-      edit: (id: string) => `${ROOTS.DASHBOARD}/user/${id}/edit`,
-    },
-    superMaster: {
-      root: `${ROOTS.DASHBOARD}/super-master`,
-      new: `${ROOTS.DASHBOARD}/super-master/new`,
-      list: `${ROOTS.DASHBOARD}/super-master/list`,
-      details: (id: string) => `${ROOTS.DASHBOARD}/super-master/${id}`,
-      edit: (id: string) => `${ROOTS.DASHBOARD}/super-master/${id}/edit`,
-    },
-    master: {
-      root: `${ROOTS.DASHBOARD}/master`,
-      new: `${ROOTS.DASHBOARD}/master/new`,
-      list: `${ROOTS.DASHBOARD}/master/list`,
-      details: (id: string) => `${ROOTS.DASHBOARD}/master/${id}`,
-      edit: (id: string) => `${ROOTS.DASHBOARD}/master/${id}/edit`,
-    },
-    exchange: {
-      root: `${ROOTS.DASHBOARD}/exchange`,
-      new: `${ROOTS.DASHBOARD}/exchange/new`,
-      details: (id: string) => `${ROOTS.DASHBOARD}/exchange/${id}`,
-      edit: (id: string) => `${ROOTS.DASHBOARD}/exchange/${id}/edit`,
-      demo: {
-        details: `${ROOTS.DASHBOARD}/exchange/${MOCK_ID}`,
-        edit: `${ROOTS.DASHBOARD}/exchange/${MOCK_ID}/edit`,
-      },
-    },
-    brokerage: {
-      root: `${ROOTS.DASHBOARD}/brokerage`,
-    },
-    invoice: {
-      root: `${ROOTS.DASHBOARD}/invoice`,
-      new: `${ROOTS.DASHBOARD}/invoice/new`,
-      details: (id: string) => `${ROOTS.DASHBOARD}/invoice/${id}`,
-      edit: (id: string) => `${ROOTS.DASHBOARD}/invoice/${id}/edit`,
-      demo: {
-        details: `${ROOTS.DASHBOARD}/invoice/${MOCK_ID}`,
-        edit: `${ROOTS.DASHBOARD}/invoice/${MOCK_ID}/edit`,
-      },
-    },
-    post: {
-      root: `${ROOTS.DASHBOARD}/post`,
-      new: `${ROOTS.DASHBOARD}/post/new`,
-      details: (title: string) => `${ROOTS.DASHBOARD}/post/${paramCase(title)}`,
-      edit: (title: string) => `${ROOTS.DASHBOARD}/post/${paramCase(title)}/edit`,
-      demo: {
-        details: `${ROOTS.DASHBOARD}/post/${paramCase(MOCK_TITLE)}`,
-        edit: `${ROOTS.DASHBOARD}/post/${paramCase(MOCK_TITLE)}/edit`,
-      },
-    },
-    symbol: {
-      root: `${ROOTS.DASHBOARD}/symbol`,
-      new: `${ROOTS.DASHBOARD}/symbol/new`,
-      details: (id: string) => `${ROOTS.DASHBOARD}/symbol/${id}`,
-      edit: (id: string) => `${ROOTS.DASHBOARD}/symbol/${id}/edit`,
-      demo: {
-        details: `${ROOTS.DASHBOARD}/symbol/${MOCK_ID}`,
-      },
-    },
-    job: {
-      root: `${ROOTS.DASHBOARD}/job`,
-      new: `${ROOTS.DASHBOARD}/job/new`,
-      details: (id: string) => `${ROOTS.DASHBOARD}/job/${id}`,
-      edit: (id: string) => `${ROOTS.DASHBOARD}/job/${id}/edit`,
-      demo: {
-        details: `${ROOTS.DASHBOARD}/job/${MOCK_ID}`,
-        edit: `${ROOTS.DASHBOARD}/job/${MOCK_ID}/edit`,
-      },
-    },
-    tour: {
-      root: `${ROOTS.DASHBOARD}/tour`,
-      new: `${ROOTS.DASHBOARD}/tour/new`,
-      details: (id: string) => `${ROOTS.DASHBOARD}/tour/${id}`,
-      edit: (id: string) => `${ROOTS.DASHBOARD}/tour/${id}/edit`,
-      demo: {
-        details: `${ROOTS.DASHBOARD}/tour/${MOCK_ID}`,
-        edit: `${ROOTS.DASHBOARD}/tour/${MOCK_ID}/edit`,
-      },
-    },
   },
   superMaster: {
     root: `${ROOTS.SUPER_MASTER}`,
-    master: {
-      root: `${ROOTS.SUPER_MASTER}/master`,
-      new: `${ROOTS.SUPER_MASTER}/master/new`,
-      list: `${ROOTS.SUPER_MASTER}/master/list`,
-      details: (id: string) => `${ROOTS.SUPER_MASTER}/master/${id}`,
-      edit: (id: string) => `${ROOTS.SUPER_MASTER}/master/${id}/edit`,
-    },
-    user: {
-      root: `${ROOTS.SUPER_MASTER}/user`,
-      new: `${ROOTS.SUPER_MASTER}/user/new`,
-      list: `${ROOTS.SUPER_MASTER}/user/list`,
-      details: (id: string) => `${ROOTS.SUPER_MASTER}/user/${id}`,
-      edit: (id: string) => `${ROOTS.SUPER_MASTER}/user/${id}/edit`,
-    },
     person: {
       root: `${ROOTS.SUPER_MASTER}/person`,
       new: `${ROOTS.SUPER_MASTER}/person/new`,
@@ -239,6 +134,13 @@ export const paths = {
       demo: {
         edit: `${ROOTS.MASTER}/user/${MOCK_ID}/edit`,
       },
+    },
+    person: {
+      root: `${ROOTS.MASTER}/person`,
+      new: `${ROOTS.MASTER}/person/new`,
+      list: `${ROOTS.MASTER}/person/list`,
+      details: (id: string) => `${ROOTS.MASTER}/person/${id}`,
+      edit: (id: string) => `${ROOTS.MASTER}/person/${id}/edit`,
     },
   },
   user: {

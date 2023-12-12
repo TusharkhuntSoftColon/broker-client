@@ -3,17 +3,9 @@ import { Outlet } from 'react-router-dom';
 
 import { AuthGuard } from 'src/auth/guard';
 import AdminLayout from 'src/layouts/AdminLayout';
-import DashboardLayout from 'src/layouts/dashboard';
-import SuperMasterDetailsPage from 'src/pages/dashboard/superMaster/details';
-import OrderEditPage from 'src/pages/dashboard/symbol/edit';
-import UserDetailsPage from 'src/pages/dashboard/user/details';
 
 import { LoadingScreen } from 'src/components/loading-screen';
-import MasterDetailsPage from 'src/pages/dashboard/master/details';
 import PersonDetailsPage from 'src/pages/dashboard/person/details';
-import PersonEditPage from 'src/pages/dashboard/person/edit';
-import PersonListPage from 'src/pages/dashboard/person/list';
-import PersonCreatePage from 'src/pages/dashboard/person/new';
 
 // ----------------------------------------------------------------------
 
@@ -33,6 +25,10 @@ const ExchangeEditPage = lazy(() => import('src/pages/dashboard/exchange/edit'))
 const OrderListPage = lazy(() => import('src/pages/dashboard/symbol/list'));
 const OrderDetailsPage = lazy(() => import('src/pages/dashboard/symbol/details'));
 const OrderCreatePage = lazy(() => import('src/pages/dashboard/symbol/new'));
+// PERSON
+const PersonListPage = lazy(() => import('src/pages/dashboard/person/list'));
+const PersonEditPage = lazy(() => import('src/pages/dashboard/person/edit'));
+const PersonCreatePage = lazy(() => import('src/pages/dashboard/person/new'));
 
 // INVOICE
 const InvoiceListPage = lazy(() => import('src/pages/dashboard/invoice/list'));
@@ -89,33 +85,15 @@ export const dashboardRoutes = [
     path: '/admin',
     element: (
       <AuthGuard>
-        <DashboardLayout>
+        <AdminLayout>
           <Suspense fallback={<LoadingScreen />}>
             <Outlet />
           </Suspense>
-        </DashboardLayout>
+        </AdminLayout>
       </AuthGuard>
     ),
     children: [
       { element: <IndexPage />, index: true },
-      { path: 'ecommerce', element: <OverviewEcommercePage /> },
-      { path: 'analytics', element: <OverviewAnalyticsPage /> },
-      { path: 'banking', element: <OverviewBankingPage /> },
-      { path: 'booking', element: <OverviewBookingPage /> },
-      { path: 'file', element: <OverviewFilePage /> },
-      {
-        path: 'user',
-        children: [
-          { element: <UserListPage />, index: true },
-          { path: 'profile', element: <UserProfilePage /> },
-          { path: 'cards', element: <UserCardsPage /> },
-          { path: 'list', element: <UserListPage /> },
-          { path: 'new', element: <UserCreatePage /> },
-          { path: ':id', element: <UserDetailsPage /> },
-          { path: ':id/edit', element: <UserEditPage /> },
-          { path: 'account', element: <UserAccountPage /> },
-        ],
-      },
       {
         path: 'person',
         children: [
@@ -124,90 +102,6 @@ export const dashboardRoutes = [
           { path: 'new', element: <PersonCreatePage /> },
           { path: ':id', element: <PersonDetailsPage /> },
           { path: ':id/edit', element: <PersonEditPage /> },
-        ],
-      },
-      {
-        path: 'super-master',
-        children: [
-          { element: <SuperMasterListPage />, index: true },
-          { path: 'list', element: <SuperMasterListPage /> },
-          { path: 'new', element: <SuperMasterCreatePage /> },
-          { path: ':id', element: <SuperMasterDetailsPage /> },
-          { path: ':id/edit', element: <SuperMasterEditPage /> },
-        ],
-      },
-      {
-        path: 'master',
-        children: [
-          { element: <MasterListPage />, index: true },
-          { path: 'list', element: <MasterListPage /> },
-          { path: 'new', element: <MasterCreatePage /> },
-          { path: ':id', element: <MasterDetailsPage /> },
-          { path: ':id/edit', element: <MasterEditPage /> },
-        ],
-      },
-      {
-        path: 'brokerage',
-        children: [{ element: <BrokeragePage />, index: true }],
-      },
-      {
-        path: 'exchange',
-        children: [
-          { element: <ExchangeListPage />, index: true },
-          { path: 'list', element: <ExchangeListPage /> },
-          { path: ':id', element: <ExchangeDetailsPage /> },
-          { path: 'new', element: <ExchangeCreatePage /> },
-          { path: ':id/edit', element: <ExchangeEditPage /> },
-        ],
-      },
-      {
-        path: 'symbol',
-        children: [
-          { element: <OrderListPage />, index: true },
-          { path: 'list', element: <OrderListPage /> },
-          { path: 'new', element: <OrderCreatePage /> },
-          { path: ':id', element: <OrderDetailsPage /> },
-          { path: ':id/edit', element: <OrderEditPage /> },
-        ],
-      },
-      {
-        path: 'invoice',
-        children: [
-          { element: <InvoiceListPage />, index: true },
-          { path: 'list', element: <InvoiceListPage /> },
-          { path: ':id', element: <InvoiceDetailsPage /> },
-          { path: ':id/edit', element: <InvoiceEditPage /> },
-          { path: 'new', element: <InvoiceCreatePage /> },
-        ],
-      },
-      {
-        path: 'post',
-        children: [
-          { element: <BlogPostsPage />, index: true },
-          { path: 'list', element: <BlogPostsPage /> },
-          { path: ':title', element: <BlogPostPage /> },
-          { path: ':title/edit', element: <BlogEditPostPage /> },
-          { path: 'new', element: <BlogNewPostPage /> },
-        ],
-      },
-      {
-        path: 'job',
-        children: [
-          { element: <JobListPage />, index: true },
-          { path: 'list', element: <JobListPage /> },
-          { path: ':id', element: <JobDetailsPage /> },
-          { path: 'new', element: <JobCreatePage /> },
-          { path: ':id/edit', element: <JobEditPage /> },
-        ],
-      },
-      {
-        path: 'tour',
-        children: [
-          { element: <TourListPage />, index: true },
-          { path: 'list', element: <TourListPage /> },
-          { path: ':id', element: <TourDetailsPage /> },
-          { path: 'new', element: <TourCreatePage /> },
-          { path: ':id/edit', element: <TourEditPage /> },
         ],
       },
       { path: 'file-manager', element: <FileManagerPage /> },
@@ -233,29 +127,6 @@ export const dashboardRoutes = [
     children: [
       { element: <IndexPage />, index: true },
       {
-        path: 'user',
-        children: [
-          { element: <UserListPage />, index: true },
-          { path: 'profile', element: <UserProfilePage /> },
-          { path: 'cards', element: <UserCardsPage /> },
-          { path: 'list', element: <UserListPage /> },
-          { path: 'new', element: <UserCreatePage /> },
-          { path: ':id', element: <UserDetailsPage /> },
-          { path: ':id/edit', element: <UserEditPage /> },
-          { path: 'account', element: <UserAccountPage /> },
-        ],
-      },
-      {
-        path: 'master',
-        children: [
-          { element: <MasterListPage />, index: true },
-          { path: 'list', element: <MasterListPage /> },
-          { path: 'new', element: <MasterCreatePage /> },
-          { path: ':id', element: <MasterDetailsPage /> },
-          { path: ':id/edit', element: <MasterEditPage /> },
-        ],
-      },
-      {
         path: 'person',
         children: [
           { element: <PersonListPage />, index: true },
@@ -280,16 +151,13 @@ export const dashboardRoutes = [
     ),
     children: [
       {
-        path: 'user',
+        path: 'person',
         children: [
-          { element: <UserListPage />, index: true },
-          { path: 'profile', element: <UserProfilePage /> },
-          { path: 'cards', element: <UserCardsPage /> },
-          { path: 'list', element: <UserListPage /> },
-          { path: 'new', element: <UserCreatePage /> },
-          { path: ':id', element: <UserDetailsPage /> },
-          { path: ':id/edit', element: <UserEditPage /> },
-          { path: 'account', element: <UserAccountPage /> },
+          { element: <PersonListPage />, index: true },
+          { path: 'list', element: <PersonListPage /> },
+          { path: 'new', element: <PersonCreatePage /> },
+          { path: ':id', element: <PersonDetailsPage /> },
+          { path: ':id/edit', element: <PersonEditPage /> },
         ],
       },
     ],

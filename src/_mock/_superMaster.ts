@@ -12,7 +12,7 @@ export const USER_STATUS_OPTIONS = [
 ];
 
 export const SUPER_MASTER_ROLE = [
-  { value: 'SUPERMASTER', label: 'SUPER MASTER' },
+  { value: 'SUPERMASTER', label: 'SUPER_MASTER' },
   { value: 'MASTER', label: 'MASTER' },
   { value: 'USER', label: 'USER' },
 ];

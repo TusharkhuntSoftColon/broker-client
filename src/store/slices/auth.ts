@@ -31,11 +31,6 @@ const authSlice = createSlice({
 
       state.token = accessToken;
       state.refreshToken = refreshToken;
-      if (role === 'SUPER_ADMIN') {
-        state.active = 'dashboard';
-      } else {
-        state.active = 'admin';
-      }
       state.role = role;
     },
     setRefreshToken: (state, action) => {

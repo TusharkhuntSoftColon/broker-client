@@ -128,6 +128,27 @@ export function useMasterNav() {
           },
         ],
       },
+      {
+        // subheader: t('management'),
+        items: [
+          // {
+          //   title: 'Master',
+          //   path: paths.superMaster.master.root,
+          //   icon: ICONS.user,
+          // },
+          // // USER
+          // {
+          //   title: 'User',
+          //   path: paths.superMaster.user.root,
+          //   icon: ICONS.user,
+          // },
+          {
+            title: 'Person',
+            path: paths.master.person.root,
+            icon: ICONS.user,
+          },
+        ],
+      },
     ],
     [t]
   );
@@ -171,22 +192,6 @@ export function useSuperMasterNav() {
             path: paths.superMaster.person.root,
             icon: ICONS.user,
           },
-
-          // INVOICE
-          // {
-          //   title: t('invoice'),
-          //   path: paths.dashboard.invoice.root,
-          //   icon: ICONS.invoice,
-          //   children: [
-          //     { title: t('list'), path: paths.dashboard.invoice.root },
-          //     {
-          //       title: t('details'),
-          //       path: paths.dashboard.invoice.demo.details,
-          //     },
-          //     { title: t('create'), path: paths.dashboard.invoice.new },
-          //     { title: t('edit'), path: paths.dashboard.invoice.demo.edit },
-          //   ],
-          // },
         ],
       },
     ],

@@ -16,7 +16,7 @@ import { useRouter } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 import useAuth from 'src/hooks/useAuth';
 
-import { PATH_DASHBOARD } from 'src/config-global';
+import { PATH_DASHBOARD, PATH_MASTER, PATH_SUPER_MASTER, PATH_USER } from 'src/config-global';
 import authService from 'src/services/authService';
 
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
@@ -29,6 +29,22 @@ export default function ClassicLoginView() {
   const router = useRouter();
   const { setCredentialsAction } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
+
+  const getAfterLoginPath = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return PATH_DASHBOARD;
+      case 'SUPER_MASTER':
+        return PATH_SUPER_MASTER;
+      case 'MASTER':
+        return PATH_MASTER;
+      case 'USER':
+        return PATH_USER;
+      // Add other cases for different roles with their respective paths
+      default:
+        return PATH_USER; // Return a default path if role doesn't match
+    }
+  };
 
   const LoginSchema = Yup.object().shape({
     id: Yup.string().required('Id is required'),
@@ -56,7 +72,7 @@ export default function ClassicLoginView() {
       setCredentialsAction(data?.data);
       console.log({ data });
       enqueueSnackbar(data?.message, { variant: 'success' });
-      router.push(PATH_DASHBOARD);
+      router.push(getAfterLoginPath(data?.data?.role));
     },
     onError: (error: any) => {
       if (isAxiosError(error)) {

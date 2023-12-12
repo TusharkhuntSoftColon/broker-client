@@ -5,11 +5,11 @@ import Box from '@mui/material/Box';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useResponsive } from 'src/hooks/use-responsive';
-import useAuth from 'src/hooks/useAuth';
 
 import { useSettingsContext } from 'src/components/settings';
 
-import { useNavData, useSuperMasterNav } from './dashboard/config-navigation';
+import { useSelector } from 'react-redux';
+import { useMasterNav, useNavData, useSuperMasterNav } from './dashboard/config-navigation';
 import Header from './dashboard/header';
 import NavHorizontal from './dashboard/nav-horizontal';
 import NavMini from './dashboard/nav-mini';
@@ -21,12 +21,30 @@ type Props = {
 };
 
 const AdminLayout = ({ children }: Props) => {
-  const { role } = useAuth();
+  // const { role } = useAuth();
+  const role = useSelector((data: any) => data.auth.role);
+
+  // console.log({ role });
 
   const [manager, setmaneger] = useState(true);
 
   const adminNav = useNavData();
   const superMasterNav = useSuperMasterNav();
+  const masterNav = useMasterNav();
+
+  const getNavByRole = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminNav;
+      case 'SUPER_MASTER':
+        return superMasterNav;
+      case 'MASTER':
+        return masterNav;
+      // Add other cases for different roles with their respective paths
+      default:
+        return masterNav; // Return a default path if role doesn't match
+    }
+  };
 
   const settings = useSettingsContext();
 
@@ -38,12 +56,12 @@ const AdminLayout = ({ children }: Props) => {
 
   const isMini = settings.themeLayout === 'mini';
 
-  const renderNavMini = <NavMini nav={superMasterNav} />;
+  const renderNavMini = <NavMini nav={getNavByRole(role)} />;
 
-  const renderHorizontal = <NavHorizontal nav={superMasterNav} />;
+  const renderHorizontal = <NavHorizontal nav={getNavByRole(role)} />;
 
   const renderNavVertical = (
-    <NavVertical nav={superMasterNav} openNav={nav.value} onCloseNav={nav.onFalse} />
+    <NavVertical nav={getNavByRole(role)} openNav={nav.value} onCloseNav={nav.onFalse} />
   );
 
   if (isHorizontal) {
