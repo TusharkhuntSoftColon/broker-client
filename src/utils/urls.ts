@@ -3,12 +3,37 @@ export const ADMIN_AUTH = '/auth/login';
 export const CREATE_ADMIN = '/auth/admin';
 
 // ADMIN
-export const CREATE_SUPER_MASTER = '/admin/super-master';
-export const CREATE_MASTER = '/admin/master';
-export const CREATE_USER = '/admin/user';
+export const CREATE_SUPER_MASTER_BY_ADMIN = '/admin/super-master';
+export const CREATE_MASTER_BY_ADMIN = '/admin/master';
+export const CREATE_USER_BY_ADMIN = '/admin/user';
+
+export const GET_ALL_PERSONS_BY_ADMIN = '/admin/person';
 export const GET_EXCHANGE_FOR_SUPERMASTER = '/admin/all-exchanges';
 export const GET_EXCHANGE_FOR_MASTER = '/super-master/all-exchanges';
 export const GET_EXCHANGE_FOR_USER = '/master/all-exchanges';
+
+export const UPDATE_SUPER_MASTER_BY_ADMIN = '/admin/super-master/update';
+export const UPDATE_MASTER_BY_ADMIN = '/admin/master/update';
+export const UPDATE_USER_BY_ADMIN = '/admin/user/update';
+
+// SUPER MASTER
+export const CREATE_MASTER_BY_SUPER_MASTER = '/super-master/master';
+export const CREATE_USER_BY_SUPER_MASTER = '/super-master/user';
+
+export const GET_ALL_PERSONS_BY_SUPER_MASTER = '/super-master/person';
+export const GET_EXCHANGE_FOR_MASTER_BY_SUPER_MASTER = '/super-master/all-exchanges';
+export const GET_EXCHANGE_FOR_USER_BY_SUPER_MASTER = '/master/all-exchanges';
+
+export const UPDATE_MASTER_BY_SUPER_MASTER = '/admin/master/update';
+export const UPDATE_USER_BY_SUPER_MASTER = '/admin/user/update';
+
+// MASTER
+export const CREATE_USER_BY_MASTER = '/master/user';
+export const GET_ALL_PERSONS_BY_MASTER = '/master/person';
+
+export const GET_EXCHANGE_FOR_USER_BY_MASTER = '/master/all-exchanges';
+
+export const UPDATE_USER_BY_MASTER = '/admin/user/update';
 
 // Exchange
 export const EXCHANGE_CREATE = '/exchange/create';

@@ -1,18 +1,18 @@
 import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import Checkbox from '@mui/material/Checkbox';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import Tooltip from '@mui/material/Tooltip';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
-import { usePopover } from 'src/components/custom-popover';
 import { ConfirmDialog } from 'src/components/custom-dialog';
+import { usePopover } from 'src/components/custom-popover';
+import Iconify from 'src/components/iconify';
+import Label from 'src/components/label';
 
 import { IUserItem } from 'src/types/user';
 
@@ -22,36 +22,30 @@ type Props = {
   selected: boolean;
   onEditRow: VoidFunction;
   row: IUserItem;
+  exchangeData: any;
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
   onViewRow: VoidFunction;
 };
 
-export default function UserTableRow({
+export default function PersonTableRow({
   row,
+  exchangeData,
   selected,
   onEditRow,
   onSelectRow,
   onDeleteRow,
   onViewRow,
 }: Props) {
-  const {
-    name,
-    role,
-    exchange,
-    phoneNumber,
-    allowedExchange,
-    ID,
-    Domain,
-    isActiveAdmin,
-    createdAt,
-  } = row;
+  const { name, role, exchange, phoneNumber, allowedExchange, ID, isActiveAdmin, createdAt } = row;
 
   const confirm = useBoolean();
 
   const quickEdit = useBoolean();
 
   const popover = usePopover();
+
+  console.log({ exchangeData });
 
   return (
     <>
@@ -76,7 +70,6 @@ export default function UserTableRow({
         </TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{ID}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{Domain}</TableCell>
 
         {/* <TableCell sx={{ whiteSpace: 'nowrap' }}>{company}</TableCell> */}
 
@@ -84,11 +77,15 @@ export default function UserTableRow({
 
         <TableCell>
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-            {allowedExchange.map((_el: any) => (
-              <Label variant="soft" color="default">
-                {_el}
-              </Label>
-            ))}
+            {allowedExchange.map((_el: any) => {
+              const data = exchangeData?.filter((el: any) => el._id === _el);
+              console.log({ data });
+              return (
+                <Label variant="soft" color="default">
+                  {data[0]?.name}
+                </Label>
+              );
+            })}
           </Box>
         </TableCell>
 

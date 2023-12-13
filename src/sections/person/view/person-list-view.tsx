@@ -1,6 +1,6 @@
 import isEqual from 'lodash/isEqual';
 import { useSnackbar } from 'notistack';
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import Button from '@mui/material/Button';
@@ -18,7 +18,7 @@ import { useRouter } from 'src/routes/hooks';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { Exchanges, USER_STATUS_OPTIONS } from 'src/_mock';
-import { deleteAdmin } from 'src/store/slices/admin';
+import { addExchanges, addPerson, deleteAdmin } from 'src/store/slices/admin';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -38,9 +38,14 @@ import {
 
 import { IUserItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
 
+import { useMutation } from '@tanstack/react-query';
+import { isAxiosError } from 'axios';
 import { isWithinInterval, parse } from 'date-fns';
+import adminService from 'src/services/adminService';
+import masterService from 'src/services/masterService';
+import superMasterService from 'src/services/superMasterService';
+import PersonTableRow from '../person-table-row';
 import UserTableFiltersResult from '../user-table-filters-result';
-import UserTableRow from '../user-table-row';
 import UserTableToolbar from '../user-table-toolbar';
 
 // ----------------------------------------------------------------------
@@ -50,7 +55,6 @@ const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
 const TABLE_HEAD = [
   { id: 'name', label: 'Name' },
   { id: 'userId', label: 'User Id' },
-  { id: 'domain', label: 'Domain' },
   // { id: 'phoneNumber', label: 'Phone Number' },
   // { id: 'company', label: 'Company' },
   // { id: 'role', label: 'Role', width: 180 },
@@ -72,6 +76,7 @@ const defaultFilters: IUserTableFilters = {
 export default function PersonListView({ path }: { path: any }) {
   console.log({ path });
   const table = useTable();
+  const role = useSelector((data: any) => data.auth.role);
 
   const dispatch = useDispatch();
 
@@ -83,12 +88,17 @@ export default function PersonListView({ path }: { path: any }) {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const adminData = useSelector((data: any) => data?.admin?.adminList);
+  const personData = useSelector((data: any) => data?.admin?.adminList);
+
+  const [tableData, setTableData] = useState([]);
+  const [exchangeData, setExchangeData] = useState<any>();
+
+  console.log({ tableData });
 
   const [filters, setFilters] = useState(defaultFilters);
 
   const dataFiltered = applyFilter({
-    inputData: adminData,
+    inputData: tableData,
     comparator: getComparator(table.order, table.orderBy),
     filters,
   });
@@ -97,6 +107,20 @@ export default function PersonListView({ path }: { path: any }) {
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
+
+  const getExchangeListForPerson: any = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.getExchangeListForSuperMaster;
+      case 'SUPER_MASTER':
+        return adminService.getExchangeListForMaster;
+      case 'MASTER':
+        return adminService.getExchangeListForUser;
+      // Add other cases for different roles with their respective paths
+      default:
+        return adminService.getExchangeListForSuperMaster; // Return a default path if role doesn't match
+    }
+  };
 
   const denseHeight = table.dense ? 52 : 72;
 
@@ -115,6 +139,53 @@ export default function PersonListView({ path }: { path: any }) {
     [table]
   );
 
+  const getAllPersonSByRole = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.getAllPersons;
+      case 'SUPER_MASTER':
+        return superMasterService.getAllPersons;
+      case 'MASTER':
+        return masterService.getAllPersons;
+      // Add other cases for different roles with their respective paths
+      default:
+        return masterService.getAllPersons; // Return a default path if role doesn't match
+    }
+  };
+
+  // GET ALL PERSONS
+
+  const { mutate } = useMutation(getAllPersonSByRole(role), {
+    onSuccess: (data) => {
+      setTableData(data?.data?.rows);
+      dispatch(addPerson(data?.data?.rows));
+      enqueueSnackbar(data?.message, { variant: 'success' });
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+
+  const { mutate: getAllExchanges } = useMutation(getExchangeListForPerson(role), {
+    onSuccess: (data: any) => {
+      setExchangeData(data?.data?.allowedExchange);
+      dispatch(addExchanges(data?.data?.allowedExchange));
+      enqueueSnackbar(data?.message, { variant: 'success' });
+    },
+    onError: (error) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+
+  useEffect(() => {
+    mutate();
+    getAllExchanges();
+  }, []);
+
   const handleDeleteRow = useCallback(
     (id: string) => {
       dispatch(deleteAdmin(id));
@@ -125,26 +196,28 @@ export default function PersonListView({ path }: { path: any }) {
   );
 
   const handleDeleteRows = useCallback(() => {
-    const deleteRows = adminData.filter((row: any) => !table.selected.includes(row.id));
-    // setadminData(deleteRows);
+    const deleteRows = personData.filter((row: any) => !table.selected.includes(row.id));
+    // setpersonData(deleteRows);
 
     table.onUpdatePageDeleteRows({
-      totalRows: adminData.length,
+      totalRows: personData.length,
       totalRowsInPage: dataInPage.length,
       totalRowsFiltered: dataFiltered.length,
     });
-  }, [dataFiltered?.length, dataInPage?.length, table, adminData]);
+  }, [dataFiltered?.length, dataInPage?.length, table, personData]);
 
   const handleEditRow = useCallback(
     (id: string) => {
-      router.push(path.edit(id));
+      // console.log('Edit Clicked');
+      console.log({ path });
+      router.push(path.person.edit(id));
     },
     [router]
   );
 
   const handleViewRow = useCallback(
     (id: string) => {
-      router.push(path.details(id));
+      router.push(path.person.details(id));
     },
     [router]
   );
@@ -251,11 +324,11 @@ export default function PersonListView({ path }: { path: any }) {
             <TableSelectedAction
               dense={table.dense}
               numSelected={table.selected.length}
-              rowCount={adminData?.length}
+              rowCount={personData?.length}
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  adminData.map((row: any) => row.id)
+                  personData.map((row: any) => row.id)
                 )
               }
               action={
@@ -273,13 +346,13 @@ export default function PersonListView({ path }: { path: any }) {
                   order={table.order}
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={adminData?.length}
+                  rowCount={personData?.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      adminData.map((row: any) => row.id)
+                      personData.map((row: any) => row.id)
                     )
                   }
                 />
@@ -292,21 +365,22 @@ export default function PersonListView({ path }: { path: any }) {
                     )
                     .map((row: any) => {
                       return (
-                        <UserTableRow
-                          key={row.id}
+                        <PersonTableRow
+                          key={row._id}
                           row={row}
-                          selected={table.selected.includes(row.id)}
-                          onSelectRow={() => table.onSelectRow(row.id)}
-                          onDeleteRow={() => handleDeleteRow(row.id)}
-                          onEditRow={() => handleEditRow(row.id)}
-                          onViewRow={() => handleViewRow(row.id)}
+                          exchangeData={exchangeData}
+                          selected={table.selected.includes(row._id)}
+                          onSelectRow={() => table.onSelectRow(row._id)}
+                          onDeleteRow={() => handleDeleteRow(row._id)}
+                          onEditRow={() => handleEditRow(row._id)}
+                          onViewRow={() => handleViewRow(row._id)}
                         />
                       );
                     })}
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, adminData.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, personData.length)}
                   />
 
                   <TableNoData notFound={notFound} />

@@ -30,6 +30,9 @@ import { useSnackbar } from 'src/components/snackbar';
 
 import { ADMIN_ROLE, MASTER_ROLE, SUPER_MASTER_ROLE } from 'src/_mock/_person';
 import adminService from 'src/services/adminService';
+import masterService from 'src/services/masterService';
+import superMasterService from 'src/services/superMasterService';
+import { addExchanges } from 'src/store/slices/admin';
 import { IUserItem } from 'src/types/user';
 
 // ----------------------------------------------------------------------
@@ -41,10 +44,10 @@ type Props = {
 };
 
 export default function PersonNewEditForm({ currentUser, isView, path }: Props) {
-  console.log({ path });
+  // console.log({ path });
 
   const role = useSelector((data: any) => data.auth.role);
-  console.log({ role });
+  // console.log({ role });
   const router = useRouter();
 
   const [exchangeData, setExchangeData] = useState<any>();
@@ -90,7 +93,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     leverageX: Yup.number().required('Leverage X is required'),
     leverageY: Yup.number().required('Leverage Y is required'),
     brokerage: Yup.number().required('Brokerage is required'),
-    investorPassword: Yup.number().required('Invester Password is required'),
+    investorPassword: Yup.string().required('Invester Password is required'),
   });
 
   const defaultValues: any = useMemo(
@@ -107,6 +110,8 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       leverageX: currentUser?.leverageX || '',
       leverageY: currentUser?.leverageY || '',
       isActiveAdmin: currentUser?.isActiveAdmin || true,
+      limitOfAddUser: currentUser?.limitOfAddUser || null,
+      limitOfAddMaster: currentUser?.limitOfAddMaster || null,
     }),
     [currentUser]
   );
@@ -123,6 +128,8 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     }
   };
 
+  console.log({ roleOption });
+
   const methods = useForm({
     resolver: yupResolver(getValidationSchema(roleOption)),
     defaultValues,
@@ -137,6 +144,8 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   } = methods;
 
   const value = watch();
+
+  console.log({ value });
 
   useEffect(() => {
     const fieldsToReset: any = [
@@ -157,9 +166,11 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
         setValue(field, defaultValues[field]);
       }
     });
-
-    setRoleOption(value.role.value);
-
+    if (currentUser) {
+      setRoleOption(value.role);
+    } else {
+      setRoleOption(value.role.value);
+    }
     if (value.role.value === 'SUPER_MASTER') {
       setValue('limitOfAddMaster', currentUser?.limitOfAddMaster || '');
       setValue('limitOfAddUser', currentUser?.limitOfAddUser || '');
@@ -173,9 +184,9 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     }
   }, [defaultValues, setValue, value.role.value]);
 
-  console.log({ value });
+  // console.log({ value });
 
-  const getExchangeListForPerson = (role: any) => {
+  const getExchangeListForPerson: any = (role: any) => {
     switch (role) {
       case 'ADMIN':
         return adminService.getExchangeListForSuperMaster;
@@ -184,6 +195,54 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       case 'MASTER':
         return adminService.getExchangeListForUser;
       // Add other cases for different roles with their respective paths
+      default:
+        return paths; // Return a default path if role doesn't match
+    }
+  };
+
+  const createMasterByRole: any = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.createMaster;
+      case 'SUPER_MASTER':
+        return superMasterService.createMaster;
+      default:
+        return paths; // Return a default path if role doesn't match
+    }
+  };
+
+  const updateMasterByRole: any = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.updateMaster;
+      case 'SUPER_MASTER':
+        return superMasterService.updateMaster;
+      default:
+        return paths; // Return a default path if role doesn't match
+    }
+  };
+
+  const updateUserByRole: any = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.updateUser;
+      case 'SUPER_MASTER':
+        return superMasterService.updateUser;
+      case 'USER':
+        return masterService.updateUser;
+      default:
+        return paths; // Return a default path if role doesn't match
+    }
+  };
+
+  const createUserByRole: any = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.createUser;
+      case 'SUPER_MASTER':
+        return superMasterService.createUser;
+      case 'MASTER':
+        return masterService.createUser;
       default:
         return paths; // Return a default path if role doesn't match
     }
@@ -204,8 +263,8 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   });
 
   //create MASTER
-  const { mutate: createMaster } = useMutation(adminService.createMaster, {
-    onSuccess: (data) => {
+  const { mutate: createMaster } = useMutation(createMasterByRole(role), {
+    onSuccess: (data: any) => {
       console.log({ data });
       enqueueSnackbar(data?.message, { variant: 'success' });
       // router.push(paths.dashboard.superMaster.list);
@@ -218,8 +277,8 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   });
 
   //create USER
-  const { mutate: createUser } = useMutation(adminService.createUser, {
-    onSuccess: (data) => {
+  const { mutate: createUser } = useMutation(createUserByRole(role), {
+    onSuccess: (data: any) => {
       console.log({ data });
       enqueueSnackbar(data?.message, { variant: 'success' });
       // router.push(paths.dashboard.superMaster.list);
@@ -231,11 +290,46 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     },
   });
 
+  const { mutate: updateUser } = useMutation(updateUserByRole(role), {
+    onSuccess: (data) => {
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      // router.push(paths.dashboard.symbol.root);
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+  const { mutate: updateMaster } = useMutation(updateMasterByRole(role), {
+    onSuccess: (data) => {
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      // router.push(paths.dashboard.symbol.root);
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+
+  const { mutate: updateSuperMaster } = useMutation(adminService.updateSuperMaster, {
+    onSuccess: (data) => {
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      // router.push(paths.dashboard.symbol.root);
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+
   // get exchange list
   const { mutate } = useMutation(getExchangeListForPerson(role), {
-    onSuccess: (data) => {
-      console.log({ data });
+    onSuccess: (data: any) => {
       setExchangeData(data?.data?.allowedExchange);
+      dispatch(addExchanges(data?.data?.allowedExchange));
       enqueueSnackbar(data?.message, { variant: 'success' });
     },
     onError: (error) => {
@@ -247,18 +341,30 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
 
   const onSubmit = handleSubmit(async (data) => {
     console.log({ data });
-    console.log({ value });
+    // console.log({ value });
     try {
-      if (value?.role.value === 'SUPER_MASTER') {
-        createSuperMaster(data);
+      if (currentUser ? value?.role : value?.role.value === 'SUPER_MASTER') {
+        if (currentUser) {
+          await updateSuperMaster({ data, _id: currentUser._id });
+        } else {
+          await createSuperMaster(data);
+        }
       }
 
-      if (value?.role.value === 'MASTER') {
-        createMaster(data);
+      if (currentUser ? value?.role : value?.role.value === 'MASTER') {
+        if (currentUser) {
+          await updateMaster({ data, _id: currentUser._id });
+        } else {
+          await createMaster(data);
+        }
       }
 
-      if (value?.role.value === 'USER') {
-        createUser(data);
+      if (currentUser ? value?.role : value?.role.value === 'USER') {
+        if (currentUser) {
+          await updateUser({ data, _id: currentUser._id });
+        } else {
+          await createUser(data);
+        }
       }
     } catch (error) {
       console.log(error);
@@ -296,20 +402,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       value: exchangeData[i]?._id,
     });
   }
-
   console.log({ ExchangeOptions });
-
-  const ExchangeOption = [
-    { label: 'NYSE', value: 'abcdefg' },
-    { label: 'NASDAQ', value: 'abcdef' },
-    { label: 'LSE', value: 'abcdeased' },
-    { label: 'TSE', value: 'abcdefgh' },
-    { label: 'HKEX', value: 'absdffg' },
-    { label: 'SSE', value: 'absdfefg' },
-    { label: 'TSX', value: 'absdfefg' },
-    { label: 'BSE', value: 'absdfefg' },
-    { label: 'BIST', value: 'absdfefg' },
-  ];
 
   const RolesOptions = (role: any) => {
     switch (role) {
@@ -327,7 +420,12 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
 
   const Role = RolesOptions(role);
 
-  console.log({ Role });
+  // console.log({ Role });
+
+  const exchangeGroupTest = ExchangeOptions.filter(
+    (data: any) => currentUser?.allowedExchange.includes(data.value)
+  );
+  console.log({ exchangeGroupTest });
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
@@ -347,8 +445,9 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                 name="role"
                 label="Role"
                 // control={control}
-                isReadOnly={!!isView}
+                isReadOnly={!!isView || currentUser}
                 options={Role}
+                defaultValue={Role.find((data: any) => data.value === currentUser?.role)}
                 data={Role}
                 isLabled={false}
                 isOptionEqualToValue={(option, value) => option.value === value.value}
@@ -362,20 +461,20 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                 }}
               />
               <RHFTextField isReadOnly={!!isView} name="name" label="Full Name" />
-              <RHFTextField isReadOnly={!!isView} name="ID" label="User Id" />
+              <RHFTextField isReadOnly={!!isView || currentUser} name="ID" label="User Id" />
               <RHFTextField
-                isReadOnly={!!isView}
+                isReadOnly={!!isView || currentUser}
                 name="password"
                 type="password"
                 label="Password"
               />
-              {value.role.value === 'USER' && (
+              {roleOption === 'USER' && (
                 <>
                   {' '}
                   <RHFTextField
                     isReadOnly={!!isView}
                     name="investorPassword"
-                    type="number"
+                    type="password"
                     label="Investor Password"
                   />
                   <RHFTextField
@@ -386,7 +485,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                   />
                 </>
               )}
-              {value.role.value === 'SUPER_MASTER' && (
+              {roleOption === 'SUPER_MASTER' && (
                 <RHFTextField
                   isReadOnly={!!isView}
                   name="limitOfAddMaster"
@@ -395,7 +494,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                 />
               )}
 
-              {value.role.value !== 'USER' && (
+              {roleOption !== 'USER' && (
                 <RHFTextField
                   isReadOnly={!!isView}
                   name="limitOfAddUser"
@@ -425,6 +524,9 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                 isReadOnly={!!isView}
                 options={EXCHANGE_GROUP}
                 freeSolo
+                defaultValue={EXCHANGE_GROUP.filter(
+                  (data: any) => currentUser?.exchangeGroup.includes(data.value)
+                )}
                 data={EXCHANGE_GROUP}
                 isLabled={false}
                 multiple
@@ -453,6 +555,9 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                 options={ExchangeOptions}
                 freeSolo
                 data={ExchangeOptions}
+                defaultValue={ExchangeOptions.filter(
+                  (data: any) => currentUser?.allowedExchange.includes(data.value)
+                )}
                 isLabled={false}
                 multiple
                 isOptionEqualToValue={(option, value) => option.value === value.value}
@@ -472,7 +577,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                 }}
               />
 
-              {value.role.value !== 'USER' && (
+              {roleOption !== 'USER' && (
                 <>
                   {' '}
                   <RHFCheckbox
@@ -501,8 +606,18 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
 
             {!isView && (
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-                <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-                  {!currentUser ? 'Create Super Master' : 'Save Changes'}
+                <LoadingButton type="submit" variant="contained">
+                  {!currentUser
+                    ? `Create ${
+                        roleOption === 'SUPER_MASTER'
+                          ? 'Super Master'
+                          : roleOption === 'MASTER'
+                          ? 'Master'
+                          : roleOption === 'USER'
+                          ? 'User'
+                          : 'Person'
+                      }`
+                    : 'Save Changes'}
                 </LoadingButton>
               </Stack>
             )}

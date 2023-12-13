@@ -2,20 +2,20 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { createSlice } from '@reduxjs/toolkit';
 
-import type { RootState } from '../index';
-
 // Define a type for the slice state
 interface AuthState {
-  adminList: any;
+  personList: any;
   refreshToken: null | string;
   role: string | null;
+  exchangeList: any;
 }
 
 // Define the initial state using that type
 const initialState: AuthState = {
-  adminList: [],
+  personList: [],
   refreshToken: null,
   role: null,
+  exchangeList: [],
 };
 
 const adminSlice = createSlice({
@@ -23,25 +23,18 @@ const adminSlice = createSlice({
   initialState,
   reducers: {
     resetState: () => initialState,
-    addAdmin: (state, action) => {
+    addPerson: (state, action) => {
       // console.log('Action in slice', action.payload);
       const data = action.payload;
       console.log({ data });
-      // state.adminList = state.adminList.concat({
+      // state.personList = state.personList.concat({
       //   data,
       //   id: Math.random().toString(36).substr(2, 5),
       // });
 
-      state.adminList = [
-        ...state.adminList,
-        {
-          ...data,
-          id: Math.random().toString(36).substr(2, 5),
-          createdAt: new Date().toDateString(),
-        },
-      ];
-      // state.adminList = [
-      //   ...state.adminList,
+      state.personList = data;
+      // state.personList = [
+      //   ...state.personList,
       //   {
       //     ...data,
       //     _id: Math.random().toString(36).substr(2, 5),
@@ -59,11 +52,11 @@ const adminSlice = createSlice({
         id: id,
         createdAt: new Date().toDateString(),
       };
-      const dataIndex = state.adminList.findIndex((item: any) => item.id === id);
+      const dataIndex = state.personList.findIndex((item: any) => item.id === id);
 
       console.log({ dataIndex });
       if (dataIndex !== -1) {
-        state.adminList[dataIndex] = data;
+        state.personList[dataIndex] = data;
       }
 
       // console.log({ data });
@@ -71,12 +64,16 @@ const adminSlice = createSlice({
     deleteAdmin: (state, action) => {
       const id = action.payload;
       console.log({ id });
-      state.adminList = state.adminList.filter((data: any) => data.id !== id);
-      // console.log(state.adminList);
+      state.personList = state.personList.filter((data: any) => data.id !== id);
+      // console.log(state.personList);
+    },
+    addExchanges: (state, action) => {
+      state.exchangeList = action.payload;
+      // console.log(state.personList);
     },
   },
 });
 
-export const { addAdmin, resetState, updateAdmin, deleteAdmin } = adminSlice.actions;
+export const { addPerson, resetState, updateAdmin, deleteAdmin, addExchanges } = adminSlice.actions;
 
 export default adminSlice.reducer;

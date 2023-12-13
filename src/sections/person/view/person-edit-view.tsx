@@ -16,9 +16,11 @@ type Props = {
 
 export default function PersonEditView({ id }: Props) {
   const settings = useSettingsContext();
-  const adminData = useSelector((data: any) => data?.admin?.adminList);
-  const currentUser = adminData.find((user: any) => user.id === id);
+  const adminData = useSelector((data: any) => data?.admin?.personList);
+  const currentUser = adminData.find((user: any) => user._id === id);
 
+  // console.log({ adminData });
+  console.log({ currentUser });
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
@@ -30,7 +32,7 @@ export default function PersonEditView({ id }: Props) {
           },
           {
             name: 'Admin',
-            href: paths.dashboard.user.root,
+            href: paths.dashboard.root,
           },
           { name: currentUser?.name },
         ]}
