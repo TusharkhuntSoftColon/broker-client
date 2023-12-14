@@ -14,6 +14,7 @@ import { usePopover } from 'src/components/custom-popover';
 import Iconify from 'src/components/iconify';
 import Label from 'src/components/label';
 
+import { useSelector } from 'react-redux';
 import { IUserItem } from 'src/types/user';
 
 // ----------------------------------------------------------------------
@@ -30,7 +31,6 @@ type Props = {
 
 export default function PersonTableRow({
   row,
-  exchangeData,
   selected,
   onEditRow,
   onSelectRow,
@@ -44,6 +44,8 @@ export default function PersonTableRow({
   const quickEdit = useBoolean();
 
   const popover = usePopover();
+
+  const exchangeData = useSelector((data: any) => data?.admin?.exchangeList);
 
   console.log({ exchangeData });
 
@@ -79,6 +81,8 @@ export default function PersonTableRow({
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
             {allowedExchange.map((_el: any) => {
               const data = exchangeData?.filter((el: any) => el._id === _el);
+              console.log({ allowedExchange });
+              console.log({ exchangeData });
               console.log({ data });
               return (
                 <Label variant="soft" color="default">

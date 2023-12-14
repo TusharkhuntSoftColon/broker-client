@@ -45,7 +45,8 @@ type Props = {
 
 export default function PersonNewEditForm({ currentUser, isView, path }: Props) {
   // console.log({ path });
-
+  const ExchangeOptions: any = [];
+  console.log({ ExchangeOptions });
   const role = useSelector((data: any) => data.auth.role);
   // console.log({ role });
   const router = useRouter();
@@ -53,6 +54,13 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   const [exchangeData, setExchangeData] = useState<any>();
 
   const [roleOption, setRoleOption] = useState<any>('');
+
+  for (let i = 0; i < exchangeData?.length; i++) {
+    ExchangeOptions.push({
+      label: exchangeData[i]?.name,
+      value: exchangeData[i]?._id,
+    });
+  }
 
   const adminData = useSelector((data: any) => data?.admin?.adminList);
 
@@ -102,7 +110,10 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       password: currentUser?.password || '',
       ID: currentUser?.ID || '',
       exchangeGroup: currentUser?.exchangeGroup || [],
-      allowedExchange: currentUser?.allowedExchange || [],
+      allowedExchange: ExchangeOptions?.filter((item: any) => {
+        console.log({ item });
+        return currentUser?.allowedExchange.includes(item.value);
+      }),
       insertCustomBet: currentUser?.insertCustomBet || false,
       editBet: currentUser?.editBet || false,
       role: currentUser?.role || '',
@@ -112,6 +123,8 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       isActiveAdmin: currentUser?.isActiveAdmin || true,
       limitOfAddUser: currentUser?.limitOfAddUser || null,
       limitOfAddMaster: currentUser?.limitOfAddMaster || null,
+      brokerage: currentUser?.brokerage || null,
+      investorPassword: currentUser?.investorPassword || null,
     }),
     [currentUser]
   );
@@ -128,7 +141,15 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     }
   };
 
-  console.log({ roleOption });
+  console.log({ currentUser });
+
+  // console.log(ExchangeOptions);
+
+  const demo = ExchangeOptions?.filter((item: any) => {
+    return currentUser?.allowedExchange.includes(item.value);
+  });
+
+  console.log({ demo });
 
   const methods = useForm({
     resolver: yupResolver(getValidationSchema(roleOption)),
@@ -146,6 +167,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   const value = watch();
 
   console.log({ value });
+  console.log({ currentUser });
 
   useEffect(() => {
     const fieldsToReset: any = [
@@ -182,9 +204,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       setValue('brokerage', currentUser?.brokerage || '');
       setValue('investorPassword', currentUser?.investorPassword || '');
     }
-  }, [defaultValues, setValue, value.role.value]);
-
-  // console.log({ value });
+  }, [defaultValues, setValue, value.role]);
 
   const getExchangeListForPerson: any = (role: any) => {
     switch (role) {
@@ -228,7 +248,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
         return adminService.updateUser;
       case 'SUPER_MASTER':
         return superMasterService.updateUser;
-      case 'USER':
+      case 'MASTER':
         return masterService.updateUser;
       default:
         return paths; // Return a default path if role doesn't match
@@ -291,7 +311,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   });
 
   const { mutate: updateUser } = useMutation(updateUserByRole(role), {
-    onSuccess: (data) => {
+    onSuccess: (data: any) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
       // router.push(paths.dashboard.symbol.root);
     },
@@ -302,7 +322,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     },
   });
   const { mutate: updateMaster } = useMutation(updateMasterByRole(role), {
-    onSuccess: (data) => {
+    onSuccess: (data: any) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
       // router.push(paths.dashboard.symbol.root);
     },
@@ -340,30 +360,28 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log({ data });
-    // console.log({ value });
     try {
-      if (currentUser ? value?.role : value?.role.value === 'SUPER_MASTER') {
+      if (roleOption === 'SUPER_MASTER') {
         if (currentUser) {
-          await updateSuperMaster({ data, _id: currentUser._id });
+          updateSuperMaster({ data, _id: currentUser._id });
         } else {
-          await createSuperMaster(data);
+          createSuperMaster(data);
         }
       }
 
-      if (currentUser ? value?.role : value?.role.value === 'MASTER') {
+      if (roleOption === 'MASTER') {
         if (currentUser) {
-          await updateMaster({ data, _id: currentUser._id });
+          updateMaster({ data, _id: currentUser._id });
         } else {
-          await createMaster(data);
+          createMaster(data);
         }
       }
 
-      if (currentUser ? value?.role : value?.role.value === 'USER') {
+      if (roleOption === 'USER') {
         if (currentUser) {
-          await updateUser({ data, _id: currentUser._id });
+          updateUser({ data, _id: currentUser._id });
         } else {
-          await createUser(data);
+          createUser(data);
         }
       }
     } catch (error) {
@@ -394,16 +412,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     mutate();
   }, []);
 
-  const ExchangeOptions: any = [];
-
-  for (let i = 0; i < exchangeData?.length; i++) {
-    ExchangeOptions.push({
-      label: exchangeData[i]?.name,
-      value: exchangeData[i]?._id,
-    });
-  }
-  console.log({ ExchangeOptions });
-
   const RolesOptions = (role: any) => {
     switch (role) {
       case 'ADMIN':
@@ -419,13 +427,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   };
 
   const Role = RolesOptions(role);
-
-  // console.log({ Role });
-
-  const exchangeGroupTest = ExchangeOptions.filter(
-    (data: any) => currentUser?.allowedExchange.includes(data.value)
-  );
-  console.log({ exchangeGroupTest });
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
@@ -462,17 +463,19 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
               />
               <RHFTextField isReadOnly={!!isView} name="name" label="Full Name" />
               <RHFTextField isReadOnly={!!isView || currentUser} name="ID" label="User Id" />
-              <RHFTextField
-                isReadOnly={!!isView || currentUser}
-                name="password"
-                type="password"
-                label="Password"
-              />
+              {!currentUser && (
+                <RHFTextField
+                  isReadOnly={!!isView || currentUser}
+                  name="password"
+                  type="password"
+                  label="Password"
+                />
+              )}
               {roleOption === 'USER' && (
                 <>
                   {' '}
                   <RHFTextField
-                    isReadOnly={!!isView}
+                    isReadOnly={!!isView || currentUser}
                     name="investorPassword"
                     type="password"
                     label="Investor Password"

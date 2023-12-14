@@ -6,6 +6,9 @@ import {
   CREATE_MASTER_BY_ADMIN,
   CREATE_SUPER_MASTER_BY_ADMIN,
   CREATE_USER_BY_ADMIN,
+  DELETE_MASTER_BY_ADMIN,
+  DELETE_SUPER_MASTER_BY_ADMIN,
+  DELETE_USER_BY_ADMIN,
   GET_ALL_PERSONS_BY_ADMIN,
   GET_EXCHANGE_FOR_MASTER,
   GET_EXCHANGE_FOR_SUPERMASTER,
@@ -181,15 +184,59 @@ const adminService = {
     }
   },
   updateUser: async (UserData: any): Promise<any> => {
+    console.log({ UserData });
     try {
       const response: AxiosResponse<any> = await client.put(
         `${UPDATE_USER_BY_ADMIN}/${UserData._id}`,
-        UserData?.data
+        {
+          ID: UserData?.data?.ID,
+          name: UserData?.data?.name,
+          password: UserData?.data?.password,
+          role: UserData?.data?.role?.value,
+          exchangeGroup: UserData?.data?.exchangeGroup?.map((option: any) => option.value),
+          allowedExchange: UserData?.data?.allowedExchange?.map((option: any) => option.value),
+          leverageX: UserData?.data?.leverageX,
+          leverageY: UserData?.data?.leverageY,
+          brokerage: UserData?.data?.brokerage,
+          investorPassword: UserData?.data?.investorPassword,
+        }
       );
       return response.data;
     } catch (error) {
       // You can log the error here for debugging purposes
       console.error('Error in exchangeService.getExchangeList:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  deleteSuperMaster: async (id: string): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.delete(
+        `${DELETE_SUPER_MASTER_BY_ADMIN}${id}`
+      );
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in symbolService.deleteSymbol:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  deleteMaster: async (id: string): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.delete(`${DELETE_MASTER_BY_ADMIN}${id}`);
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in symbolService.deleteSymbol:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  deleteUser: async (id: String): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.delete(`${DELETE_USER_BY_ADMIN}${id}`);
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in symbolService.deleteSymbol:', error);
       throw error; // Re-throw the error to be caught by the caller
     }
   },

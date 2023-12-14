@@ -1,31 +1,31 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import * as Yup from 'yup';
 
-import Stack from '@mui/material/Stack';
-import Checkbox from '@mui/material/Checkbox';
 import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
-import InputLabel from '@mui/material/InputLabel';
+import Checkbox from '@mui/material/Checkbox';
 import FormControl from '@mui/material/FormControl';
-import OutlinedInput from '@mui/material/OutlinedInput';
+import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import OutlinedInput from '@mui/material/OutlinedInput';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
 
-import Iconify from 'src/components/iconify';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import Iconify from 'src/components/iconify';
 
-import { IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
-import { RHFAutocomplete } from 'src/components/hook-form';
-import { ExchangeStatus } from 'src/_mock';
 import { yupResolver } from '@hookform/resolvers/yup';
-import FormProvider from 'src/components/hook-form/form-provider';
 import { useForm } from 'react-hook-form';
-import { useSettingsContext } from 'src/components/settings';
+import { ExchangeStatus } from 'src/_mock';
 import { useDateRangePicker } from 'src/components/custom-date-range-picker';
-import { fDate } from 'src/utils/format-time';
 import CustomDateRangePicker from 'src/components/custom-date-range-picker/custom-date-range-picker';
+import { RHFAutocomplete } from 'src/components/hook-form';
+import FormProvider from 'src/components/hook-form/form-provider';
+import { useSettingsContext } from 'src/components/settings';
+import { IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
+import { fDate } from 'src/utils/format-time';
 
 // ----------------------------------------------------------------------
 
@@ -72,6 +72,8 @@ export default function UserTableToolbar({
 
   const value = watch();
 
+  console.log({ roleOptions });
+
   useEffect(() => {
     handleStatusChange();
   }, [value?.status]);
@@ -98,10 +100,14 @@ export default function UserTableToolbar({
 
   const handleFilterRole = useCallback(
     (event: SelectChangeEvent<string[]>) => {
-      onFilters(
-        'exchange',
-        typeof event.target.value === 'string' ? event.target.value.split(',') : event.target.value
-      );
+      // console.log(event.target.value);
+      const selectedLabels = event.target.value;
+      const selectedValues = selectedLabels.map((label) => {
+        const selectedOption = roleOptions.find((option) => option.label === label);
+        return selectedOption ? selectedOption.value : null;
+      });
+      console.log({ selectedValues });
+      onFilters('exchange', selectedValues);
     },
     [onFilters]
   );
@@ -150,7 +156,13 @@ export default function UserTableToolbar({
               value={filters.exchange}
               onChange={handleFilterRole}
               input={<OutlinedInput label="Exchange" />}
-              renderValue={(selected) => selected.map((value) => value).join(', ')}
+              renderValue={(selected) => {
+                const selectedLabels = selected.map((value) => {
+                  const selectedOption = roleOptions.find((option) => option.value === value);
+                  return selectedOption ? selectedOption.label : '';
+                });
+                return selectedLabels.join(', ');
+              }}
               MenuProps={{
                 PaperProps: {
                   sx: { maxHeight: 240 },

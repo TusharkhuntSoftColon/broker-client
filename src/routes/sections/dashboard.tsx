@@ -162,4 +162,16 @@ export const dashboardRoutes = [
       },
     ],
   },
+  {
+    path: '/user',
+    element: (
+      <AuthGuard>
+        <AdminLayout>
+          <Suspense fallback={<LoadingScreen />}>
+            <Outlet />
+          </Suspense>
+        </AdminLayout>
+      </AuthGuard>
+    ),
+  },
 ];

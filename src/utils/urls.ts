@@ -16,6 +16,10 @@ export const UPDATE_SUPER_MASTER_BY_ADMIN = '/admin/super-master/update';
 export const UPDATE_MASTER_BY_ADMIN = '/admin/master/update';
 export const UPDATE_USER_BY_ADMIN = '/admin/user/update';
 
+export const DELETE_SUPER_MASTER_BY_ADMIN = '/admin/super-master/remove/';
+export const DELETE_MASTER_BY_ADMIN = '/admin/master/remove/';
+export const DELETE_USER_BY_ADMIN = '/admin/user/remove/';
+
 // SUPER MASTER
 export const CREATE_MASTER_BY_SUPER_MASTER = '/super-master/master';
 export const CREATE_USER_BY_SUPER_MASTER = '/super-master/user';
@@ -24,8 +28,11 @@ export const GET_ALL_PERSONS_BY_SUPER_MASTER = '/super-master/person';
 export const GET_EXCHANGE_FOR_MASTER_BY_SUPER_MASTER = '/super-master/all-exchanges';
 export const GET_EXCHANGE_FOR_USER_BY_SUPER_MASTER = '/master/all-exchanges';
 
-export const UPDATE_MASTER_BY_SUPER_MASTER = '/admin/master/update';
-export const UPDATE_USER_BY_SUPER_MASTER = '/admin/user/update';
+export const UPDATE_MASTER_BY_SUPER_MASTER = '/super-master/master/update';
+export const UPDATE_USER_BY_SUPER_MASTER = '/super-master/user/update';
+
+export const DELETE_MASTER_BY_SUPER_MASTER = '/super-master/master/remove/';
+export const DELETE_USER_BY_SUPER_MASTER = '/super-master/user/remove/';
 
 // MASTER
 export const CREATE_USER_BY_MASTER = '/master/user';
@@ -33,7 +40,9 @@ export const GET_ALL_PERSONS_BY_MASTER = '/master/person';
 
 export const GET_EXCHANGE_FOR_USER_BY_MASTER = '/master/all-exchanges';
 
-export const UPDATE_USER_BY_MASTER = '/admin/user/update';
+export const UPDATE_USER_BY_MASTER = '/master/user/update';
+
+export const DELETE_USER_BY_MASTER = '/master/user/remove/';
 
 // Exchange
 export const EXCHANGE_CREATE = '/exchange/create';

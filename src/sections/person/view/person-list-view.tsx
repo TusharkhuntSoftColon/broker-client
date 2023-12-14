@@ -17,8 +17,8 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { Exchanges, USER_STATUS_OPTIONS } from 'src/_mock';
-import { addExchanges, addPerson, deleteAdmin } from 'src/store/slices/admin';
+import { USER_STATUS_OPTIONS } from 'src/_mock';
+import { addExchanges, addPerson } from 'src/store/slices/admin';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { ConfirmDialog } from 'src/components/custom-dialog';
@@ -44,9 +44,9 @@ import { isWithinInterval, parse } from 'date-fns';
 import adminService from 'src/services/adminService';
 import masterService from 'src/services/masterService';
 import superMasterService from 'src/services/superMasterService';
+import UserTableFiltersResult from '../person-table-filters-result';
 import PersonTableRow from '../person-table-row';
-import UserTableFiltersResult from '../user-table-filters-result';
-import UserTableToolbar from '../user-table-toolbar';
+import UserTableToolbar from '../person-table-toolbar';
 
 // ----------------------------------------------------------------------
 
@@ -93,7 +93,7 @@ export default function PersonListView({ path }: { path: any }) {
   const [tableData, setTableData] = useState([]);
   const [exchangeData, setExchangeData] = useState<any>();
 
-  console.log({ tableData });
+  console.log({ exchangeData });
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -107,6 +107,15 @@ export default function PersonListView({ path }: { path: any }) {
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
   );
+
+  const ExchangeOptions: any = [];
+
+  for (let i = 0; i < exchangeData?.length; i++) {
+    ExchangeOptions.push({
+      label: exchangeData[i]?.name,
+      value: exchangeData[i]?._id,
+    });
+  }
 
   const getExchangeListForPerson: any = (role: any) => {
     switch (role) {
@@ -153,6 +162,32 @@ export default function PersonListView({ path }: { path: any }) {
     }
   };
 
+  const deleteMasterByRole = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.deleteMaster;
+      case 'SUPER_MASTER':
+        return superMasterService.deleteMaster;
+      // Add other cases for different roles with their respective paths
+      default:
+        return masterService.deleteUser; // Return a default path if role doesn't match
+    }
+  };
+
+  const deleteUserByRole = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.deleteUser;
+      case 'SUPER_MASTER':
+        return superMasterService.deleteUser;
+      case 'MASTER':
+        return masterService.deleteUser;
+      // Add other cases for different roles with their respective paths
+      default:
+        return masterService.deleteUser; // Return a default path if role doesn't match
+    }
+  };
+
   // GET ALL PERSONS
 
   const { mutate } = useMutation(getAllPersonSByRole(role), {
@@ -181,15 +216,60 @@ export default function PersonListView({ path }: { path: any }) {
     },
   });
 
+  const { mutate: deleteSuperMaster } = useMutation(adminService.deleteSuperMaster, {
+    onSuccess: (data) => {
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      mutate();
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+
+  const { mutate: deleteMaster } = useMutation(deleteMasterByRole(role), {
+    onSuccess: (data) => {
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      mutate();
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+
+  const { mutate: deleteUser } = useMutation(deleteUserByRole(role), {
+    onSuccess: (data) => {
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      mutate();
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+
   useEffect(() => {
     mutate();
     getAllExchanges();
   }, []);
 
   const handleDeleteRow = useCallback(
-    (id: string) => {
-      dispatch(deleteAdmin(id));
-      enqueueSnackbar('Deleted Successfully', { variant: 'success' });
+    (id: string, role: string) => {
+      console.log({ id });
+      // dispatch(deleteAdmin(id));
+      if (role === 'SUPER_MASTER') {
+        deleteSuperMaster(id);
+      } else if (role === 'MASTER') {
+        deleteMaster(id);
+      } else if (role === 'USER') {
+        deleteUser(id);
+      }
+
+      // enqueueSnackbar(`${role} Deleted Successfully`, { variant: 'success' });
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
     [dispatch, enqueueSnackbar, table, dataInPage.length]
@@ -305,7 +385,7 @@ export default function PersonListView({ path }: { path: any }) {
             filters={filters}
             onFilters={handleFilters}
             //
-            roleOptions={Exchanges}
+            roleOptions={ExchangeOptions}
           />
 
           {canReset && (
@@ -371,7 +451,7 @@ export default function PersonListView({ path }: { path: any }) {
                           exchangeData={exchangeData}
                           selected={table.selected.includes(row._id)}
                           onSelectRow={() => table.onSelectRow(row._id)}
-                          onDeleteRow={() => handleDeleteRow(row._id)}
+                          onDeleteRow={() => handleDeleteRow(row._id, row.role)}
                           onEditRow={() => handleEditRow(row._id)}
                           onViewRow={() => handleViewRow(row._id)}
                         />
@@ -440,6 +520,8 @@ function applyFilter({
   filters: IUserTableFilters;
 }) {
   const { name, status, exchange, dateRange } = filters;
+
+  console.log({ inputData });
 
   const stabilizedThis = inputData?.map((el: any, index: any) => [el, index] as const);
 

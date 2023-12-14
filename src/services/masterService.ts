@@ -4,6 +4,7 @@ import client from 'src/lib/client';
 
 import {
   CREATE_USER_BY_MASTER,
+  DELETE_USER_BY_MASTER,
   GET_ALL_PERSONS_BY_MASTER,
   UPDATE_USER_BY_MASTER,
 } from '../utils/urls';
@@ -50,12 +51,34 @@ const masterService = {
   updateUser: async (UserData: any): Promise<any> => {
     try {
       const response: AxiosResponse<any> = await client.put(
-        `${UPDATE_USER_BY_MASTER}/${UserData._id}`
+        `${UPDATE_USER_BY_MASTER}/${UserData._id}`,
+        {
+          ID: UserData?.data?.ID,
+          name: UserData?.data?.name,
+          password: UserData?.data?.password,
+          role: UserData?.data?.role?.value,
+          exchangeGroup: UserData?.data?.exchangeGroup?.map((option: any) => option.value),
+          allowedExchange: UserData?.data?.allowedExchange?.map((option: any) => option.value),
+          leverageX: UserData?.data?.leverageX,
+          leverageY: UserData?.data?.leverageY,
+          brokerage: UserData?.data?.brokerage,
+          investorPassword: UserData?.data?.investorPassword,
+        }
       );
       return response.data;
     } catch (error) {
       // You can log the error here for debugging purposes
       console.error('Error in exchangeService.getExchangeList:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  deleteUser: async (id: String): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.delete(`${DELETE_USER_BY_MASTER}${id}`);
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in symbolService.deleteSymbol:', error);
       throw error; // Re-throw the error to be caught by the caller
     }
   },

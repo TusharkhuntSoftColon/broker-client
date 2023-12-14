@@ -114,46 +114,6 @@ export function useNavData() {
   return data;
 }
 
-export function useMasterNav() {
-  const { t } = useTranslate();
-  const adminData = useMemo(
-    () => [
-      {
-        items: [
-          // USER
-          {
-            title: 'Dashboard',
-            path: paths.master.root,
-            icon: ICONS.user,
-          },
-        ],
-      },
-      {
-        // subheader: t('management'),
-        items: [
-          // {
-          //   title: 'Master',
-          //   path: paths.superMaster.master.root,
-          //   icon: ICONS.user,
-          // },
-          // // USER
-          // {
-          //   title: 'User',
-          //   path: paths.superMaster.user.root,
-          //   icon: ICONS.user,
-          // },
-          {
-            title: 'Person',
-            path: paths.master.person.root,
-            icon: ICONS.user,
-          },
-        ],
-      },
-    ],
-    [t]
-  );
-  return adminData;
-}
 export function useSuperMasterNav() {
   const { t } = useTranslate();
   const data = useMemo(
@@ -199,4 +159,86 @@ export function useSuperMasterNav() {
   );
 
   return data;
+}
+
+export function useMasterNav() {
+  const { t } = useTranslate();
+  const adminData = useMemo(
+    () => [
+      {
+        items: [
+          // USER
+          {
+            title: 'Dashboard',
+            path: paths.master.root,
+            icon: ICONS.user,
+          },
+        ],
+      },
+      {
+        // subheader: t('management'),
+        items: [
+          // {
+          //   title: 'Master',
+          //   path: paths.superMaster.master.root,
+          //   icon: ICONS.user,
+          // },
+          // // USER
+          // {
+          //   title: 'User',
+          //   path: paths.superMaster.user.root,
+          //   icon: ICONS.user,
+          // },
+          {
+            title: 'Person',
+            path: paths.master.person.root,
+            icon: ICONS.user,
+          },
+        ],
+      },
+    ],
+    [t]
+  );
+  return adminData;
+}
+
+export function useUserNav() {
+  const { t } = useTranslate();
+  const adminData = useMemo(
+    () => [
+      {
+        items: [
+          // USER
+          {
+            title: 'Dashboard',
+            path: paths.master.root,
+            icon: ICONS.user,
+          },
+        ],
+      },
+      {
+        // subheader: t('management'),
+        items: [
+          // {
+          //   title: 'Master',
+          //   path: paths.superMaster.master.root,
+          //   icon: ICONS.user,
+          // },
+          // // USER
+          // {
+          //   title: 'User',
+          //   path: paths.superMaster.user.root,
+          //   icon: ICONS.user,
+          // },
+          {
+            title: 'Person',
+            path: paths.master.person.root,
+            icon: ICONS.user,
+          },
+        ],
+      },
+    ],
+    [t]
+  );
+  return adminData;
 }
