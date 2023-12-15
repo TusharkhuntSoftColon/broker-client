@@ -15,10 +15,14 @@ type Props = {
 };
 
 export default function PersonDetailsView({ id }: Props) {
-  const adminData = useSelector((data: any) => data?.admin?.adminList);
+  const adminData = useSelector((data: any) => data?.admin?.personList);
   const settings = useSettingsContext();
 
-  const currentUser = adminData.filter((user: any) => user.id === id)[0];
+  console.log({ adminData });
+
+  const currentUser = adminData.filter((user: any) => user._id === id)[0];
+
+  console.log({ currentUser });
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>

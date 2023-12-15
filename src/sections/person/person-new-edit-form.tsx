@@ -184,7 +184,8 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   const value = watch();
 
   console.log({ value });
-  console.log({ currentUser });
+  console.log({ isSubmitting });
+  console.log({ errors });
 
   useEffect(() => {
     const fieldsToReset: any = [
@@ -330,7 +331,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   const { mutate: updateUser } = useMutation(updateUserByRole(role), {
     onSuccess: (data: any) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
-      // router.push(paths.dashboard.symbol.root);
     },
     onError: (error: any) => {
       if (isAxiosError(error)) {
@@ -377,52 +377,36 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   });
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log({ data, path });
     try {
       if (roleOption === 'SUPER_MASTER') {
         if (currentUser) {
-          updateSuperMaster({ data, _id: currentUser._id });
+          await updateSuperMaster({ data, _id: currentUser._id });
         } else {
-          createSuperMaster(data);
+          await createSuperMaster(data);
         }
       }
 
       if (roleOption === 'MASTER') {
         if (currentUser) {
-          updateMaster({ data, _id: currentUser._id });
+          await updateMaster({ data, _id: currentUser._id });
         } else {
-          createMaster(data);
+          await createMaster(data);
         }
       }
 
       if (roleOption === 'USER') {
         if (currentUser) {
-          updateUser({ data, _id: currentUser._id });
+          await updateUser({ data, _id: currentUser._id });
         } else {
-          createUser(data);
+          await createUser(data);
         }
       }
+      // console.log({ path });
+      router.push(path.person.list);
     } catch (error) {
       console.log(error);
     }
-
-    router.push(path.person.list);
-
-    // try {
-    //   await new Promise((resolve) => setTimeout(resolve, 500));
-    //   reset();
-    //   enqueueSnackbar(currentUser ? 'Update success!' : 'Create success!');
-    //   // await createAdmin(data);
-    //   if (currentUser) {
-    //     const adminID = currentUser.id;
-    //     // dispatch(updateAdmin({ id: adminID, updatedData: data }));
-    //   } else {
-    //     // dispatch(addAdmin(data));
-    //     createSuperMaster(data);
-    //   }
-    //   console.info('DATA', data);
-    // } catch (error) {
-    //   console.error(error);
-    // }
   });
 
   useEffect(() => {
@@ -622,7 +606,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
 
             {!isView && (
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>
-                <LoadingButton type="submit" variant="contained">
+                <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
                   {!currentUser
                     ? `Create ${
                         roleOption === 'SUPER_MASTER'

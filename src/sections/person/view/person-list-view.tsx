@@ -88,12 +88,13 @@ export default function PersonListView({ path }: { path: any }) {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const personData = useSelector((data: any) => data?.admin?.adminList);
+  const personData = useSelector((data: any) => data?.admin?.personList);
 
   const [tableData, setTableData] = useState([]);
   const [exchangeData, setExchangeData] = useState<any>();
 
-  console.log({ exchangeData });
+  console.log({ personData });
+  console.log({ tableData });
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -192,7 +193,9 @@ export default function PersonListView({ path }: { path: any }) {
 
   const { mutate } = useMutation(getAllPersonSByRole(role), {
     onSuccess: (data) => {
+      console.log({ data });
       setTableData(data?.data?.rows);
+      // dispatch(addExchanges(data?.data?.allowedExchange));
       dispatch(addPerson(data?.data?.rows));
       enqueueSnackbar(data?.message, { variant: 'success' });
     },
@@ -253,6 +256,7 @@ export default function PersonListView({ path }: { path: any }) {
   });
 
   useEffect(() => {
+    console.log('USe Effect Runs');
     mutate();
     getAllExchanges();
   }, []);
@@ -460,7 +464,7 @@ export default function PersonListView({ path }: { path: any }) {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, personData.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, personData?.length)}
                   />
 
                   <TableNoData notFound={notFound} />

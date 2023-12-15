@@ -51,7 +51,7 @@ export default function PersonTableRow({
 
   return (
     <>
-      <TableRow hover selected={selected} onClick={() => onViewRow()} sx={{ cursor: 'pointer' }}>
+      <TableRow hover selected={selected} sx={{ cursor: 'pointer' }}>
         <TableCell padding="checkbox">
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
@@ -86,7 +86,7 @@ export default function PersonTableRow({
               console.log({ data });
               return (
                 <Label variant="soft" color="default">
-                  {data[0]?.name}
+                  {data && data[0]?.name}
                 </Label>
               );
             })}

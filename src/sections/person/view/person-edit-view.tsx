@@ -19,6 +19,25 @@ export default function PersonEditView({ id }: Props) {
   const adminData = useSelector((data: any) => data?.admin?.personList);
   const currentUser = adminData.find((user: any) => user._id === id);
 
+  const role = useSelector((data: any) => data.auth.role);
+  // console.log('Role in person create view : ', role);
+
+  // const path = paths.dashboard;
+
+  const getPath = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return paths.dashboard;
+      case 'SUPER_MASTER':
+        return paths.superMaster;
+      case 'MASTER':
+        return paths.master;
+      // Add other cases for different roles with their respective paths
+      default:
+        return paths.dashboard.person; // Return a default path if role doesn't match
+    }
+  };
+
   // console.log({ adminData });
   console.log({ currentUser });
   return (
@@ -41,7 +60,7 @@ export default function PersonEditView({ id }: Props) {
         }}
       />
 
-      <PersonNewEditForm currentUser={currentUser} />
+      <PersonNewEditForm currentUser={currentUser} path={getPath(role)} />
     </Container>
   );
 }

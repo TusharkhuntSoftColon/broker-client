@@ -150,6 +150,7 @@ const adminService = {
           ),
         }
       );
+
       return response.data;
     } catch (error) {
       // You can log the error here for debugging purposes
