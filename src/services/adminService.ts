@@ -174,6 +174,7 @@ const adminService = {
           insertCustomBet: Boolean(MasterData.data?.insertCustomBet),
           editBet: Boolean(MasterData.data?.editBet),
           deleteBet: Boolean(MasterData.data?.deleteBet),
+          isActive: MasterData?.data?.isActive,
         }
       );
       return response.data;
@@ -199,6 +200,7 @@ const adminService = {
           leverageY: UserData?.data?.leverageY,
           brokerage: UserData?.data?.brokerage,
           investorPassword: UserData?.data?.investorPassword,
+          isActive: UserData?.data?.isActive,
         }
       );
       return response.data;

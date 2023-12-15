@@ -44,14 +44,34 @@ type Props = {
 };
 
 export default function PersonNewEditForm({ currentUser, isView, path }: Props) {
-  // console.log({ path });
   const ExchangeOptions: any = [];
-  console.log({ ExchangeOptions });
   const role = useSelector((data: any) => data.auth.role);
-  // console.log({ role });
+  const ExchangeList = useSelector((data) => data?.admin?.exchangeList);
   const router = useRouter();
 
   const [exchangeData, setExchangeData] = useState<any>();
+
+  const Exchange: { label: any; value: any }[] = [];
+  for (let i = 0; i < ExchangeList?.length; i++) {
+    Exchange.push({
+      label: ExchangeList[i]?.name,
+      value: ExchangeList[i]?._id,
+    });
+  }
+
+  const defaultAllowedExchange = useMemo(() => {
+    if (!currentUser) return [];
+    return Exchange.filter((option: any) => currentUser?.allowedExchange?.includes(option.value));
+  }, [currentUser]);
+
+  const defaultExchangeOptions = useMemo(() => {
+    if (!currentUser) return [];
+    return EXCHANGE_GROUP.filter(
+      (option: any) => currentUser?.exchangeGroup?.includes(option.value)
+    );
+  }, [currentUser]);
+
+  console.log({ currentUser });
 
   const [roleOption, setRoleOption] = useState<any>('');
 
@@ -109,24 +129,21 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       name: currentUser?.name || '',
       password: currentUser?.password || '',
       ID: currentUser?.ID || '',
-      exchangeGroup: currentUser?.exchangeGroup || [],
-      allowedExchange: ExchangeOptions?.filter((item: any) => {
-        console.log({ item });
-        return currentUser?.allowedExchange.includes(item.value);
-      }),
+      exchangeGroup: defaultExchangeOptions || [],
+      allowedExchange: defaultAllowedExchange || [],
       insertCustomBet: currentUser?.insertCustomBet || false,
       editBet: currentUser?.editBet || false,
       role: currentUser?.role || '',
       deleteBet: currentUser?.deleteBet || false,
       leverageX: currentUser?.leverageX || '',
       leverageY: currentUser?.leverageY || '',
-      isActiveAdmin: currentUser?.isActiveAdmin || true,
+      isActive: currentUser?.isActive || null,
       limitOfAddUser: currentUser?.limitOfAddUser || null,
       limitOfAddMaster: currentUser?.limitOfAddMaster || null,
       brokerage: currentUser?.brokerage || null,
       investorPassword: currentUser?.investorPassword || null,
     }),
-    [currentUser]
+    [defaultAllowedExchange, defaultExchangeOptions]
   );
   const getValidationSchema = (role: any) => {
     switch (role) {
@@ -527,9 +544,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                 isReadOnly={!!isView}
                 options={EXCHANGE_GROUP}
                 freeSolo
-                defaultValue={EXCHANGE_GROUP.filter(
-                  (data: any) => currentUser?.exchangeGroup.includes(data.value)
-                )}
+                defaultValue={defaultExchangeOptions}
                 data={EXCHANGE_GROUP}
                 isLabled={false}
                 multiple
@@ -558,9 +573,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                 options={ExchangeOptions}
                 freeSolo
                 data={ExchangeOptions}
-                defaultValue={ExchangeOptions.filter(
-                  (data: any) => currentUser?.allowedExchange.includes(data.value)
-                )}
+                defaultValue={defaultAllowedExchange}
                 isLabled={false}
                 multiple
                 isOptionEqualToValue={(option, value) => option.value === value.value}
@@ -595,7 +608,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
 
               {currentUser && (
                 <RHFSwitch
-                  name="isActiveAdmin"
+                  name="isActive"
                   labelPlacement="start"
                   label={
                     <Typography variant="subtitle2" sx={{ mb: 0.5 }}>

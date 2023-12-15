@@ -9,6 +9,7 @@ export type IUserTableFilters = {
   exchange: string[];
   status: any;
   dateRange: any;
+  role?: any;
 };
 
 // ----------------------------------------------------------------------

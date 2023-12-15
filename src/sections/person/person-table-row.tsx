@@ -37,7 +37,7 @@ export default function PersonTableRow({
   onDeleteRow,
   onViewRow,
 }: Props) {
-  const { name, role, exchange, phoneNumber, allowedExchange, ID, isActiveAdmin, createdAt } = row;
+  const { name, role, exchange, phoneNumber, allowedExchange, ID, isActive, createdAt } = row;
 
   const confirm = useBoolean();
 
@@ -106,8 +106,8 @@ export default function PersonTableRow({
         </TableCell>
 
         <TableCell>
-          <Label variant="soft" color={isActiveAdmin ? 'success' : 'warning'}>
-            {isActiveAdmin === true ? 'Active' : 'In Active'}
+          <Label variant="soft" color={isActive ? 'success' : 'warning'}>
+            {isActive === true ? 'Active' : 'In Active'}
           </Label>
         </TableCell>
 

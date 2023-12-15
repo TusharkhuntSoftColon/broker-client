@@ -63,6 +63,7 @@ const masterService = {
           leverageY: UserData?.data?.leverageY,
           brokerage: UserData?.data?.brokerage,
           investorPassword: UserData?.data?.investorPassword,
+          isActive: UserData?.data?.isActive,
         }
       );
       return response.data;

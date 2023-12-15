@@ -5,6 +5,7 @@ import { AuthGuard } from 'src/auth/guard';
 import AdminLayout from 'src/layouts/AdminLayout';
 
 import { LoadingScreen } from 'src/components/loading-screen';
+import UserLayout from 'src/layouts/UserLayout';
 import PersonDetailsPage from 'src/pages/dashboard/person/details';
 
 // ----------------------------------------------------------------------
@@ -166,11 +167,11 @@ export const dashboardRoutes = [
     path: '/user',
     element: (
       <AuthGuard>
-        <AdminLayout>
+        <UserLayout>
           <Suspense fallback={<LoadingScreen />}>
             <Outlet />
           </Suspense>
-        </AdminLayout>
+        </UserLayout>
       </AuthGuard>
     ),
   },
