@@ -16,7 +16,6 @@ import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 
 import { useRouter } from 'src/routes/hooks';
-import { paths } from 'src/routes/paths';
 
 import { EXCHANGE_GROUP } from 'src/_mock';
 import exchangeService from 'src/services/exchangeService';
@@ -30,7 +29,6 @@ import FormProvider, {
 import { useSnackbar } from 'src/components/snackbar';
 
 import { SUPER_MASTER_ROLE } from 'src/_mock/_superMaster';
-import superMasterService from 'src/services/superMasterService';
 import { IUserItem } from 'src/types/user';
 
 // ----------------------------------------------------------------------
@@ -171,18 +169,18 @@ export default function SuperMasterNewEditForm({ currentUser, isView }: Props) {
 
   console.log({ value });
   // create ADMIN
-  const { mutate: createSuperMaster } = useMutation(superMasterService.createSuperMaster, {
-    onSuccess: (data) => {
-      console.log({ data });
-      enqueueSnackbar(data?.message, { variant: 'success' });
-      router.push(paths.dashboard.superMaster.list);
-    },
-    onError: (error: any) => {
-      if (isAxiosError(error)) {
-        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-      }
-    },
-  });
+  // const { mutate: createSuperMaster } = useMutation(superMasterService.createSuperMaster, {
+  //   onSuccess: (data) => {
+  //     console.log({ data });
+  //     enqueueSnackbar(data?.message, { variant: 'success' });
+  //     router.push(paths.dashboard.superMaster.list);
+  //   },
+  //   onError: (error: any) => {
+  //     if (isAxiosError(error)) {
+  //       enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+  //     }
+  //   },
+  // });
 
   // get exchange list
   const { mutate } = useMutation(exchangeService.getExchangeList, {

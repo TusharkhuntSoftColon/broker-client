@@ -13,7 +13,6 @@ import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 
 import { useRouter } from 'src/routes/hooks';
-import { paths } from 'src/routes/paths';
 
 import { STOP_LOSS, SYMBOL_CURRENCY } from 'src/_mock/_symbol';
 import symbolService from 'src/services/symbolService';
@@ -85,7 +84,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
 
   const dispatch = useDispatch();
 
-  const methods = useForm({
+  const methods = useForm<any>({
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
@@ -103,7 +102,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
   const { mutate: createSymbol } = useMutation(symbolService.addSymbol, {
     onSuccess: (data) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
-      router.push(paths.dashboard.symbol.root);
+      // router.push(paths.dashboard.symbol.root);
     },
     onError: (error: any) => {
       console.log({ error });
@@ -117,7 +116,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
   const { mutate: updateSymbol } = useMutation(symbolService.updateSymbol, {
     onSuccess: (data) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
-      router.push(paths.dashboard.symbol.root);
+      // router.push(paths.dashboard.symbol.root);
     },
     onError: (error: any) => {
       if (isAxiosError(error)) {
@@ -138,7 +137,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
         await createSymbol(data);
         // dispatch(addSymbol(data));
       }
-      router.push(paths.dashboard.symbol.root);
+      // router.push(paths.dashboard.symbol.root);
 
       // currentUser == undefined ? await createSymbol(data) : await updateSymbol(data);
     } catch (error) {
@@ -383,7 +382,7 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
                 isOptionEqualToValue={(option, value) => option.value === value.value}
                 getOptionLabel={(option: any) => option.label}
                 renderOption={(props, option) => (
-                  <li {...props} key={option.value}>
+                  <li {...props} key={option.label}>
                     {option.label}
                   </li>
                 )}

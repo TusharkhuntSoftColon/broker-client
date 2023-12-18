@@ -40,6 +40,8 @@ const defaultFilters: IUserTableFilters = {
   name: '',
   role: [],
   status: 'all',
+  exchange: [],
+  dateRange: undefined,
 };
 
 // ----------------------------------------------------------------------
@@ -164,21 +166,21 @@ export default function xxSymbolLiveList() {
     });
   }, [dataFiltered?.length, dataInPage?.length, table, symbolTableDashboard]);
 
-  // const handleEditRow = useCallback(
-  //   (id: string) => {
-  //     console.log({ id });
-  //     router.push(paths.dashboard.user.edit(id));
-  //   },
-  //   [router]
-  // );
+  const handleEditRow = useCallback(
+    (id: string) => {
+      console.log({ id });
+      // router.push(paths.dashboard.user.edit(id));
+    },
+    [router]
+  );
 
-  // const handleViewRow = useCallback(
-  //   (id: string) => {
-  //     console.log({ id });
-  //     router.push(paths.dashboard.user.details(id));
-  //   },
-  //   [router]
-  // );
+  const handleViewRow = useCallback(
+    (id: string) => {
+      console.log({ id });
+      // router.push(paths.dashboard.user.details(id));
+    },
+    [router]
+  );
 
   const handleFilterStatus = useCallback(
     (event: React.SyntheticEvent, newValue: string) => {

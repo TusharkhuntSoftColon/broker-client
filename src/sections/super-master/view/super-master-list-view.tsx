@@ -137,14 +137,14 @@ export default function SuperMasterListView() {
 
   const handleEditRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.user.edit(id));
+      // router.push(paths.dashboard.user.edit(id));
     },
     [router]
   );
 
   const handleViewRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.user.details(id));
+      // router.push(paths.dashboard.user.details(id));
     },
     [router]
   );
@@ -167,13 +167,13 @@ export default function SuperMasterListView() {
           heading="List"
           links={[
             { name: 'Admin', href: paths.dashboard.root },
-            { name: 'Super Master', href: paths.dashboard.user.root },
+            // { name: 'Super Master', href: paths.dashboard.user.root },
             { name: 'List' },
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.dashboard.superMaster.new}
+              // href={paths.dashboard.superMaster.new}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >

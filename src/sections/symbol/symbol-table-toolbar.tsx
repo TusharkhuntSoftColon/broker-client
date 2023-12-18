@@ -1,21 +1,20 @@
 import { useCallback, useEffect, useMemo } from 'react';
 import * as Yup from 'yup';
 
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
+import MenuItem from '@mui/material/MenuItem';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
 
-import Iconify from 'src/components/iconify';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { ISymbolTableFilterValue, ISymbolTableFilters } from 'src/types/symbol';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import { ExchangeStatus, SYMBOL_CURRENCY, SYMBOL_TICK_SIZE } from 'src/_mock';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import { RHFAutocomplete } from 'src/components/hook-form';
 import FormProvider from 'src/components/hook-form/form-provider';
+import Iconify from 'src/components/iconify';
+import { ISymbolTableFilterValue, ISymbolTableFilters } from 'src/types/symbol';
 
 // ----------------------------------------------------------------------
 
@@ -58,7 +57,7 @@ export default function SymbolTableToolbar({
     formState: { isSubmitting },
   } = methods;
 
-  const value = watch();
+  const value: any = watch();
 
   useEffect(() => {
     handleStatusChange();

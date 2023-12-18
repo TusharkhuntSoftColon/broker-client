@@ -70,7 +70,7 @@ export default function UserTableToolbar({
     formState: { isSubmitting },
   } = methods;
 
-  const value = watch();
+  const value: any = watch();
 
   console.log({ roleOptions });
 
@@ -101,9 +101,9 @@ export default function UserTableToolbar({
   const handleFilterRole = useCallback(
     (event: SelectChangeEvent<string[]>) => {
       // console.log(event.target.value);
-      const selectedLabels = event.target.value;
-      const selectedValues = selectedLabels.map((label) => {
-        const selectedOption = roleOptions.find((option) => option.label === label);
+      const selectedLabels: any = event.target.value;
+      const selectedValues = selectedLabels.map((label: any) => {
+        const selectedOption = roleOptions.find((option: any) => option.label === label);
         return selectedOption ? selectedOption.value : null;
       });
       console.log({ selectedValues });
@@ -158,7 +158,7 @@ export default function UserTableToolbar({
               input={<OutlinedInput label="Exchange" />}
               renderValue={(selected) => {
                 const selectedLabels = selected.map((value) => {
-                  const selectedOption = roleOptions.find((option) => option.value === value);
+                  const selectedOption = roleOptions.find((option: any) => option.value === value);
                   return selectedOption ? selectedOption.label : '';
                 });
                 return selectedLabels.join(', ');

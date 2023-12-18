@@ -23,7 +23,7 @@ export default function UserCreateView() {
           },
           {
             name: 'User',
-            href: paths.dashboard.user.root,
+            // href: paths.dashboard.user.root,
           },
           { name: 'New User' },
         ]}

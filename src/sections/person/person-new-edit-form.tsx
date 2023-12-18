@@ -46,7 +46,7 @@ type Props = {
 export default function PersonNewEditForm({ currentUser, isView, path }: Props) {
   const ExchangeOptions: any = [];
   const role = useSelector((data: any) => data.auth.role);
-  const ExchangeList = useSelector((data) => data?.admin?.exchangeList);
+  const ExchangeList = useSelector((data: any) => data?.admin?.exchangeList);
   const router = useRouter();
 
   const [exchangeData, setExchangeData] = useState<any>();
@@ -427,7 +427,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     }
   };
 
-  const Role = RolesOptions(role);
+  const Role: any = RolesOptions(role);
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>

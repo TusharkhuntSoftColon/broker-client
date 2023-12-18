@@ -173,14 +173,14 @@ export default function SymbolListView() {
 
   const handleViewRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.symbol.details(id));
+      // router.push(paths.dashboard.symbol.details(id));
     },
     [router]
   );
 
   const handleEditRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.symbol.edit(id));
+      // router.push(paths.dashboard.symbol.edit(id));
     },
     [router]
   );
@@ -221,14 +221,14 @@ export default function SymbolListView() {
             },
             {
               name: 'Symbol',
-              href: paths.dashboard.symbol.root,
+              // href: paths.dashboard.symbol.root,
             },
             { name: 'List' },
           ]}
           action={
             <Button
               component={RouterLink}
-              href={paths.dashboard.symbol.new}
+              // href={paths.dashboard.symbol.new}
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >

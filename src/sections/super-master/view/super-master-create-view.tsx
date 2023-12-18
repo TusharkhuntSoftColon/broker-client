@@ -22,7 +22,7 @@ export default function SuperMasterCreateView() {
           },
           {
             name: 'Super Master',
-            href: paths.dashboard.user.root,
+            // href: paths.dashboard.user.root,
           },
           { name: 'New Super Master' },
         ]}

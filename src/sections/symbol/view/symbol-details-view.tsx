@@ -76,14 +76,14 @@ export default function SymbolDetailsView({ id }: Props) {
           },
           {
             name: 'Symbol',
-            href: paths.dashboard.symbol.root,
+            // href: paths.dashboard.symbol.root,
           },
           { name: 'Symbol Details' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
-        path={paths.dashboard.symbol.edit(id)}
+        // path={paths.dashboard.symbol.edit(id)}
         isView={true}
         id={currentSymbol?.id}
       />
