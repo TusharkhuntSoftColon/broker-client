@@ -1,19 +1,19 @@
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
-import { alpha } from '@mui/material/styles';
 import Stack, { StackProps } from '@mui/material/Stack';
+import { alpha } from '@mui/material/styles';
 
 import Iconify from 'src/components/iconify';
 
-import { IProductFilters, IProductFilterValue } from 'src/types/product';
+// import { IProductFilters, IProductFilterValue } from 'src/types/product';
 
 // ----------------------------------------------------------------------
 
 type Props = StackProps & {
-  filters: IProductFilters;
-  onFilters: (name: string, value: IProductFilterValue) => void;
+  filters: any;
+  onFilters: (name: string, value: any) => void;
   //
   canReset: boolean;
   onResetFilters: VoidFunction;
@@ -32,7 +32,7 @@ export default function ProductFiltersResult({
   ...other
 }: Props) {
   const handleRemoveGender = (inputValue: string) => {
-    const newValue = filters.gender.filter((item) => item !== inputValue);
+    const newValue = filters.gender.filter((item: any) => item !== inputValue);
     onFilters('gender', newValue);
   };
 
@@ -67,7 +67,7 @@ export default function ProductFiltersResult({
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
         {!!filters.gender.length && (
           <Block label="Gender:">
-            {filters.gender.map((item) => (
+            {filters.gender.map((item: any) => (
               <Chip
                 key={item}
                 label={item}
@@ -86,7 +86,7 @@ export default function ProductFiltersResult({
 
         {!!filters.colors.length && (
           <Block label="Colors:">
-            {filters.colors.map((item) => (
+            {filters.colors.map((item: any) => (
               <Chip
                 key={item}
                 size="small"
@@ -123,8 +123,6 @@ export default function ProductFiltersResult({
             <Chip size="small" label={filters.rating} onDelete={handleRemoveRating} />
           </Block>
         )}
-
-        
 
         {canReset && (
           <Button

@@ -1,32 +1,32 @@
-import * as Yup from 'yup';
-import { useForm } from 'react-hook-form';
-import { useMemo, useCallback, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useCallback, useEffect, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import * as Yup from 'yup';
 
 import { Button } from '@mui/material';
-import Stack from '@mui/material/Stack';
-import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
 import FormControl from '@mui/material/FormControl';
-import { SelectChangeEvent } from '@mui/material/Select';
+import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
+import MenuItem from '@mui/material/MenuItem';
+import { SelectChangeEvent } from '@mui/material/Select';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fDate } from 'src/utils/format-time';
 
-import { Exchanges, ExchangeStatus } from 'src/_mock';
+import { ExchangeStatus } from 'src/_mock';
 
-import Iconify from 'src/components/iconify';
-import { RHFAutocomplete } from 'src/components/hook-form';
-import FormProvider from 'src/components/hook-form/form-provider';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import { useDateRangePicker } from 'src/components/custom-date-range-picker';
 import CustomDateRangePicker from 'src/components/custom-date-range-picker/custom-date-range-picker';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { RHFAutocomplete } from 'src/components/hook-form';
+import FormProvider from 'src/components/hook-form/form-provider';
+import Iconify from 'src/components/iconify';
 
-import { IProductTableFilters, IProductTableFilterValue } from 'src/types/exchange';
 import { useSettingsContext } from 'src/components/settings';
+import { IProductTableFilters, IProductTableFilterValue } from 'src/types/exchange';
 
 // ----------------------------------------------------------------------
 
@@ -116,7 +116,7 @@ export default function ProductTableToolbar({
     formState: { isSubmitting },
   } = methods;
 
-  const value = watch();
+  const value: any = watch();
 
   useEffect(() => {
     handleStatusChange();

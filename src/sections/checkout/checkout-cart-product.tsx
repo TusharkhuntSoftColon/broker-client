@@ -1,21 +1,21 @@
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
 import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
+import Stack from '@mui/material/Stack';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 
 import { fCurrency } from 'src/utils/format-number';
 
-import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
 import { ColorPreview } from 'src/components/color-utils';
+import Iconify from 'src/components/iconify';
+import Label from 'src/components/label';
 
 import { ICheckoutItem } from 'src/types/checkout';
 
-import IncrementerButton from '../product/common/incrementer-button';
+// import IncrementerButton from '../product/common/incrementer-button';
 
 // ----------------------------------------------------------------------
 
@@ -55,13 +55,13 @@ export default function CheckoutCartProduct({ row, onDelete, onDecrease, onIncre
 
       <TableCell>
         <Box sx={{ width: 88, textAlign: 'right' }}>
-          <IncrementerButton
+          {/* <IncrementerButton
             quantity={quantity}
             onDecrease={onDecrease}
             onIncrease={onIncrease}
             disabledDecrease={quantity <= 1}
             disabledIncrease={quantity >= available}
-          />
+          /> */}
 
           <Typography variant="caption" component="div" sx={{ color: 'text.secondary', mt: 1 }}>
             available: {available}

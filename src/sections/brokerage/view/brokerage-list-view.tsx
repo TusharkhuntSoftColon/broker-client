@@ -24,20 +24,24 @@ import Iconify from '../../../components/iconify';
 import Scrollbar from '../../../components/scrollbar';
 import { useSettingsContext } from '../../../components/settings';
 import {
-emptyRows,
-getComparator,
-TableEmptyRows,
-TableHeadCustom,
-TablePaginationCustom,
-TableSelectedAction,
-useTable,
+  emptyRows,
+  getComparator,
+  TableEmptyRows,
+  TableHeadCustom,
+  TablePaginationCustom,
+  TableSelectedAction,
+  useTable,
 } from '../../../components/table';
 import { useBoolean } from '../../../hooks/use-boolean';
 import { useRouter } from '../../../routes/hooks';
 import { paths } from '../../../routes/paths';
 import exchangeService from '../../../services/exchangeService';
 import { deleteExchange } from '../../../store/slices/exchange';
-import { IProductItem, IProductTableFilters, IProductTableFilterValue } from '../../../types/exchange';
+import {
+  IProductItem,
+  IProductTableFilters,
+  IProductTableFilterValue,
+} from '../../../types/exchange';
 import BrokerageQuickEditForm from '../brokerage-edit-form';
 import BrokerageTableFiltersResult from '../brokerage-table-filters-result';
 import BrokerageTableRow from '../brokerage-table-row';
@@ -152,14 +156,14 @@ export default function BrokerageListView() {
 
   const handleEditRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.exchange.edit(id));
+      // router.push(paths.dashboard.exchange.edit(id));
     },
     [router]
   );
 
   const handleViewRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.exchange.details(id));
+      // router.push(paths.dashboard.exchange.details(id));
     },
     [router]
   );
@@ -200,7 +204,7 @@ export default function BrokerageListView() {
             { name: 'Admstr', href: paths.dashboard.root },
             {
               name: 'Brokerage',
-              href: paths.dashboard.exchange.root,
+              // href: paths.dashboard.exchange.root,
             },
             { name: 'List' },
           ]}

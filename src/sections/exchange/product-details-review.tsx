@@ -1,12 +1,12 @@
 import sumBy from 'lodash/sumBy';
 
 import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-import Typography from '@mui/material/Typography';
 import LinearProgress from '@mui/material/LinearProgress';
+import Rating from '@mui/material/Rating';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -14,9 +14,8 @@ import { fShortenNumber } from 'src/utils/format-number';
 
 import Iconify from 'src/components/iconify';
 
-import { IProductReview } from 'src/types/product';
+// import { IProductReview } from 'src/types/product';
 
-import ProductReviewList from './product-review-list';
 import ProductReviewNewForm from './product-review-new-form';
 
 // ----------------------------------------------------------------------
@@ -29,7 +28,7 @@ type Props = {
     starCount: number;
     reviewCount: number;
   }[];
-  reviews: IProductReview[];
+  reviews: any[];
 };
 
 export default function ProductDetailsReview({
@@ -139,7 +138,7 @@ export default function ProductDetailsReview({
 
       <Divider sx={{ borderStyle: 'dashed' }} />
 
-      <ProductReviewList reviews={reviews} />
+      {/* <ProductReviewList reviews={reviews} /> */}
 
       <ProductReviewNewForm open={review.value} onClose={review.onFalse} />
     </>

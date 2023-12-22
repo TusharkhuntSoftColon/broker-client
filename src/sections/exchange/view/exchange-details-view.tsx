@@ -11,9 +11,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { alpha } from '@mui/material/styles';
 
 import { RouterLink } from 'src/routes/components';
-import { paths } from 'src/routes/paths';
 
-import { PRODUCT_PUBLISH_OPTIONS } from 'src/_mock';
 import { useGetProduct } from 'src/api/product';
 
 import EmptyContent from 'src/components/empty-content';
@@ -22,9 +20,7 @@ import { useSettingsContext } from 'src/components/settings';
 
 import ProductDetailsCarousel from '../product-details-carousel';
 import ProductDetailsDescription from '../product-details-description';
-import ProductDetailsReview from '../product-details-review';
 import ProductDetailsSummary from '../product-details-summary';
-import ProductDetailsToolbar from '../product-details-toolbar';
 import { ProductDetailsSkeleton } from '../product-skeleton';
 
 // ----------------------------------------------------------------------
@@ -85,7 +81,7 @@ export default function ExchangeDetailsView({ id }: Props) {
       action={
         <Button
           component={RouterLink}
-          href={paths.dashboard.exchange.root}
+          // href={paths.dashboard.exchange.root}
           startIcon={<Iconify icon="eva:arrow-ios-back-fill" width={16} />}
           sx={{ mt: 3 }}
         >
@@ -98,14 +94,14 @@ export default function ExchangeDetailsView({ id }: Props) {
 
   const renderProduct = product && (
     <>
-      <ProductDetailsToolbar
+      {/* <ProductDetailsToolbar
         backLink={paths.dashboard.exchange.root}
         editLink={paths.dashboard.exchange.edit(`${product?.id}`)}
         liveLink={paths.product.details(`${product?.id}`)}
         publish={publish || ''}
         onChangePublish={handleChangePublish}
         publishOptions={PRODUCT_PUBLISH_OPTIONS}
-      />
+      /> */}
 
       <Grid container spacing={{ xs: 3, md: 5, lg: 8 }}>
         <Grid xs={12} md={6} lg={7}>
@@ -168,14 +164,14 @@ export default function ExchangeDetailsView({ id }: Props) {
           <ProductDetailsDescription description={product?.description} />
         )}
 
-        {currentTab === 'reviews' && (
+        {/* {currentTab === 'reviews' && (
           <ProductDetailsReview
             ratings={product.ratings}
             reviews={product.reviews}
             totalRatings={product.totalRatings}
             totalReviews={product.totalReviews}
           />
-        )}
+        )} */}
       </Card>
     </>
   );

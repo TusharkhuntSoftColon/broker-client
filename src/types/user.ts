@@ -116,7 +116,7 @@ export type IUserItem = {
   limitOfAddUser: number;
   leverageX: number;
   leverageY: number;
-  isActiveAdmin?: any;
+  isActive?: any;
   createdAt?: any;
 };
 export type ExchangeProp = {

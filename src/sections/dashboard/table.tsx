@@ -1,13 +1,9 @@
-import * as React from 'react';
-import Tabs from '@mui/material/Tabs';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import * as React from 'react';
 import { _appInvoices } from 'src/_mock';
-import AppNewInvoice from '../overview/app/app-new-invoice';
 
-
-
-function CustomTabPanel(props: TabPanelProps) {
+function CustomTabPanel(props: any) {
   const { children, value, index, ...other } = props;
 
   return (
@@ -84,10 +80,7 @@ export default function TabsTable() {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-        
-      </Box>
-      
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}></Box>
     </Box>
   );
 }

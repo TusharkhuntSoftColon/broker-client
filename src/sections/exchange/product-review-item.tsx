@@ -1,20 +1,20 @@
-import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import Rating from '@mui/material/Rating';
 import Avatar from '@mui/material/Avatar';
-import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 import ListItemText from '@mui/material/ListItemText';
+import Rating from '@mui/material/Rating';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 import { fDate } from 'src/utils/format-time';
 
 import Iconify from 'src/components/iconify';
 
-import { IProductReview } from 'src/types/product';
+// import { IProductReview } from 'src/types/product';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-  review: IProductReview;
+  review: any;
 };
 
 export default function ProductReviewItem({ review }: Props) {
@@ -80,7 +80,7 @@ export default function ProductReviewItem({ review }: Props) {
 
       {!!attachments?.length && (
         <Stack direction="row" flexWrap="wrap" spacing={1} sx={{ pt: 1 }}>
-          {attachments.map((attachment) => (
+          {attachments.map((attachment: any) => (
             <Box
               component="img"
               key={attachment}

@@ -1,27 +1,27 @@
-import { useEffect, useCallback } from 'react';
-import { useForm, Controller } from 'react-hook-form';
+import { useCallback, useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
-import Stack from '@mui/material/Stack';
-import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
-import MenuItem from '@mui/material/MenuItem';
-import Typography from '@mui/material/Typography';
 import { formHelperTextClasses } from '@mui/material/FormHelperText';
+import Link from '@mui/material/Link';
+import MenuItem from '@mui/material/MenuItem';
+import Rating from '@mui/material/Rating';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
-import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
 
 import { fCurrency, fShortenNumber } from 'src/utils/format-number';
 
-import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
 import { ColorPicker } from 'src/components/color-utils';
 import FormProvider, { RHFSelect } from 'src/components/hook-form';
+import Iconify from 'src/components/iconify';
+import Label from 'src/components/label';
 
-import { IProductItem } from 'src/types/product';
+// import { IProductItem } from 'src/types/product';
 import { ICheckoutItem } from 'src/types/checkout';
 
 import IncrementerButton from './common/incrementer-button';
@@ -29,7 +29,7 @@ import IncrementerButton from './common/incrementer-button';
 // ----------------------------------------------------------------------
 
 type Props = {
-  product: IProductItem;
+  product: any;
   items?: ICheckoutItem[];
   disabledActions?: boolean;
   onGotoStep?: (step: number) => void;
@@ -226,7 +226,7 @@ export default function ProductDetailsSummary({
           },
         }}
       >
-        {sizes.map((size) => (
+        {sizes.map((size: any) => (
           <MenuItem key={size} value={size}>
             {size}
           </MenuItem>

@@ -15,8 +15,6 @@ import Label from 'src/components/label';
 
 import { IProductItem } from 'src/types/exchange';
 
-import ExchangeQuickEditForm from './exchange-edit-form';
-
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -154,7 +152,7 @@ export default function ExchangeTableRow({
         </TableCell>
       </TableRow>
 
-      <ExchangeQuickEditForm currentUser={row} open={quickEdit.value} onClose={quickEdit.onFalse} />
+      {/* <ExchangeQuickEditForm currentUser={row} open={quickEdit.value} onClose={quickEdit.onFalse} /> */}
 
       <CustomPopover
         open={popover.open}

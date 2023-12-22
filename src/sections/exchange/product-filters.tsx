@@ -1,26 +1,26 @@
 import { useCallback } from 'react';
 
-import Radio from '@mui/material/Radio';
-import Stack from '@mui/material/Stack';
 import Badge from '@mui/material/Badge';
-import Drawer from '@mui/material/Drawer';
-import Rating from '@mui/material/Rating';
 import Button from '@mui/material/Button';
-import Slider from '@mui/material/Slider';
-import Divider from '@mui/material/Divider';
-import Tooltip from '@mui/material/Tooltip';
-import { alpha } from '@mui/material/styles';
 import Checkbox from '@mui/material/Checkbox';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import IconButton from '@mui/material/IconButton';
 import InputBase, { inputBaseClasses } from '@mui/material/InputBase';
+import Radio from '@mui/material/Radio';
+import Rating from '@mui/material/Rating';
+import Slider from '@mui/material/Slider';
+import Stack from '@mui/material/Stack';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import { alpha } from '@mui/material/styles';
 
+import { ColorPicker } from 'src/components/color-utils';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { ColorPicker } from 'src/components/color-utils';
 
-import { IProductFilters, IProductFilterValue } from 'src/types/product';
+// import { IProductFilters, IProductFilterValue } from 'src/types/product';
 
 // ----------------------------------------------------------------------
 
@@ -29,8 +29,8 @@ type Props = {
   onOpen: VoidFunction;
   onClose: VoidFunction;
   //
-  filters: IProductFilters;
-  onFilters: (name: string, value: IProductFilterValue) => void;
+  filters: any;
+  onFilters: (name: string, value: any) => void;
   //
   canReset: boolean;
   onResetFilters: VoidFunction;
@@ -74,7 +74,7 @@ export default function ProductFilters({
   const handleFilterGender = useCallback(
     (newValue: string) => {
       const checked = filters.gender.includes(newValue)
-        ? filters.gender.filter((value) => value !== newValue)
+        ? filters.gender.filter((value: any) => value !== newValue)
         : [...filters.gender, newValue];
       onFilters('gender', checked);
     },
@@ -302,7 +302,7 @@ export default function ProductFilters({
 type InputRangeProps = {
   type: 'min' | 'max';
   value: number[];
-  onFilters: (name: string, value: IProductFilterValue) => void;
+  onFilters: (name: string, value: any) => void;
 };
 
 function InputRange({ type, value, onFilters }: InputRangeProps) {

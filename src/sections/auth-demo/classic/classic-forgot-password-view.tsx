@@ -1,18 +1,13 @@
-import * as Yup from 'yup';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm } from 'react-hook-form';
+import * as Yup from 'yup';
 
-import Link from '@mui/material/Link';
+import LoadingButton from '@mui/lab/LoadingButton';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import LoadingButton from '@mui/lab/LoadingButton';
-
-import { paths } from 'src/routes/paths';
-import { RouterLink } from 'src/routes/components';
 
 import { PasswordIcon } from 'src/assets/icons';
 
-import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
@@ -59,7 +54,7 @@ export default function ClassicForgotPasswordView() {
         Send Request
       </LoadingButton>
 
-      <Link
+      {/* <Link
         component={RouterLink}
         href={paths.authDemo.classic.login}
         color="inherit"
@@ -71,7 +66,7 @@ export default function ClassicForgotPasswordView() {
       >
         <Iconify icon="eva:arrow-ios-back-fill" width={16} />
         Return to sign in
-      </Link>
+      </Link> */}
     </Stack>
   );
 

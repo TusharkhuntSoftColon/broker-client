@@ -1,16 +1,16 @@
 import { useRef } from 'react';
 
-import Fab from '@mui/material/Fab';
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
-import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import { alpha } from '@mui/material/styles';
-import InputBase from '@mui/material/InputBase';
-import Grid from '@mui/material/Unstable_Grid2';
+import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
+import Divider from '@mui/material/Divider';
+import Fab from '@mui/material/Fab';
+import InputBase from '@mui/material/InputBase';
+import Link from '@mui/material/Link';
+import Stack from '@mui/material/Stack';
+import Grid from '@mui/material/Unstable_Grid2';
+import { alpha } from '@mui/material/styles';
 
 import { fNumber } from 'src/utils/format-number';
 
@@ -20,7 +20,7 @@ import Iconify from 'src/components/iconify';
 
 import { IUserProfile, IUserProfilePost } from 'src/types/user';
 
-import ProfilePostItem from './profile-post-item';
+// import ProfilePostItem from './profile-post-item';
 
 // ----------------------------------------------------------------------
 
@@ -192,9 +192,9 @@ export default function ProfileHome({ info, posts }: Props) {
         <Stack spacing={3}>
           {renderPostInput}
 
-          {posts.map((post) => (
+          {/* {posts.map((post) => (
             <ProfilePostItem key={post.id} post={post} />
-          ))}
+          ))} */}
         </Stack>
       </Grid>
     </Grid>

@@ -79,7 +79,7 @@ export default function ExchangeQuickEditForm({
   } = methods;
 
   // create exhange
-  const { mutate: createExchange } = useMutation(exchangeService.addExchange, {
+  const { mutate: createExchange }: any = useMutation(exchangeService.addExchange, {
     onSuccess: (data) => {
       getFunction();
       enqueueSnackbar(data?.message, { variant: 'success' });
@@ -225,7 +225,7 @@ export default function ExchangeQuickEditForm({
               isOptionEqualToValue={(option, value) => option.value === value.value}
               getOptionLabel={(option: any) => option.label}
               renderOption={(props, option) => (
-                <li {...props} key={option.value}>
+                <li {...props} key={option.label}>
                   {option.label}
                 </li>
               )}

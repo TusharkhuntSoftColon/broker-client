@@ -1,27 +1,27 @@
-import * as Yup from 'yup';
-import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMemo, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
+import * as Yup from 'yup';
 
-import Stack from '@mui/material/Stack';
 import { Box, Button } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
+import { SelectChangeEvent } from '@mui/material/Select';
+import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { DatePicker } from '@mui/x-date-pickers';
-import FormControl from '@mui/material/FormControl';
-import { SelectChangeEvent } from '@mui/material/Select';
-import InputAdornment from '@mui/material/InputAdornment';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { ClientList } from 'src/_mock';
 
+import { useDateRangePicker } from 'src/components/custom-date-range-picker';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { RHFAutocomplete, RHFTextField } from 'src/components/hook-form';
+import FormProvider from 'src/components/hook-form/form-provider';
 import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
-import FormProvider from 'src/components/hook-form/form-provider';
-import { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { useDateRangePicker } from 'src/components/custom-date-range-picker';
 
 import { IProductTableFilters, IProductTableFilterValue } from 'src/types/exchange';
 
@@ -113,7 +113,7 @@ export default function BrokerageTableToolbar({
     formState: { isSubmitting },
   } = methods;
 
-  const value = watch();
+  const value: any = watch();
 
   useEffect(() => {
     handleStatusChange();
@@ -161,7 +161,6 @@ export default function BrokerageTableToolbar({
           }}
           sx={{
             p: 2.5,
-            
           }}
         >
           <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
@@ -227,7 +226,6 @@ export default function BrokerageTableToolbar({
               <Iconify icon="eva:more-vertical-fill" />
             </IconButton> */}
           </Stack>
-          
         </Stack>
 
         <Stack
@@ -239,11 +237,10 @@ export default function BrokerageTableToolbar({
           }}
           sx={{
             p: 2.5,
-            pt: 0
+            pt: 0,
           }}
         >
           <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
-         
             <FormControl
               sx={{
                 flexShrink: 0,
@@ -341,18 +338,16 @@ export default function BrokerageTableToolbar({
               </Stack>
             </FormControl>
             <Box display="flex" gap={2} width="100%">
-              <RHFTextField sx={{width: "100%"}} name="fullName" label="BRKG Rate" />
-              <RHFTextField sx={{width: "100%"}} name="fullName" label="BRKG Per" />
+              <RHFTextField sx={{ width: '100%' }} name="fullName" label="BRKG Rate" />
+              <RHFTextField sx={{ width: '100%' }} name="fullName" label="BRKG Per" />
             </Box>
-       
+
             {/* 
             <IconButton onClick={popover.onOpen}>
               <Iconify icon="eva:more-vertical-fill" />
             </IconButton> */}
           </Stack>
-          
         </Stack>
-      
       </FormProvider>
 
       <CustomPopover

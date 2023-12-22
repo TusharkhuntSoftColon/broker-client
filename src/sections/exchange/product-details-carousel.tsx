@@ -1,16 +1,16 @@
 import { useEffect } from 'react';
 
-import Box from '@mui/material/Box';
 import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
 import { alpha, styled, useTheme } from '@mui/material/styles';
 
 import { bgGradient } from 'src/theme/css';
 
+import Carousel, { CarouselArrowIndex, useCarousel } from 'src/components/carousel';
 import Image from 'src/components/image';
 import Lightbox, { useLightBox } from 'src/components/lightbox';
-import Carousel, { useCarousel, CarouselArrowIndex } from 'src/components/carousel';
 
-import { IProductItem } from 'src/types/product';
+// import { IProductItem } from 'src/types/product';
 
 // ----------------------------------------------------------------------
 
@@ -63,13 +63,13 @@ const StyledThumbnailsContainer = styled('div')<{ length: number }>(({ length, t
 // ----------------------------------------------------------------------
 
 type Props = {
-  product: IProductItem;
+  product: any;
 };
 
 export default function ProductDetailsCarousel({ product }: Props) {
   const theme = useTheme();
 
-  const slides = product.images.map((img) => ({
+  const slides = product.images.map((img: any) => ({
     src: img,
   }));
 
@@ -116,7 +116,7 @@ export default function ProductDetailsCarousel({ product }: Props) {
         asNavFor={carouselThumb.nav}
         ref={carouselLarge.carouselRef}
       >
-        {slides.map((slide) => (
+        {slides.map((slide: any) => (
           <Image
             key={slide.src}
             alt={slide.src}
@@ -144,7 +144,7 @@ export default function ProductDetailsCarousel({ product }: Props) {
         asNavFor={carouselLarge.nav}
         ref={carouselThumb.carouselRef}
       >
-        {slides.map((item, index) => (
+        {slides.map((item: any, index: any) => (
           <Box key={item.src} sx={{ px: 0.5 }}>
             <Avatar
               key={item.src}

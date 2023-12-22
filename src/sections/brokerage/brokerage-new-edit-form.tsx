@@ -12,7 +12,6 @@ import Grid from '@mui/material/Unstable_Grid2';
 import FormProvider, { RHFTextField } from '../../components/hook-form';
 import { useSnackbar } from '../../components/snackbar';
 import { useRouter } from '../../routes/hooks';
-import { paths } from '../../routes/paths';
 import { ExchangeProp } from '../../types/user';
 
 // ----------------------------------------------------------------------
@@ -65,7 +64,7 @@ export default function BrokerageNewEditForm({ currentExchange }: Props) {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
       enqueueSnackbar(currentExchange ? 'Update success!' : 'Create success!');
-      router.push(paths.dashboard.user.list);
+      // router.push(paths.dashboard.user.list);
       console.info('DATA', data);
     } catch (error) {
       console.error(error);

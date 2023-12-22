@@ -14,7 +14,6 @@ import Tooltip from '@mui/material/Tooltip';
 
 import { RouterLink } from 'src/routes/components';
 import { useRouter } from 'src/routes/hooks';
-import { paths } from 'src/routes/paths';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -138,14 +137,14 @@ export default function MasterListView({ path }: { path: any }) {
 
   const handleEditRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.user.edit(id));
+      // router.push(paths.dashboard.user.edit(id));
     },
     [router]
   );
 
   const handleViewRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.user.details(id));
+      // router.push(paths.dashboard.user.details(id));
     },
     [router]
   );

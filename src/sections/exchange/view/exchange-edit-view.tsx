@@ -2,17 +2,15 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-import { useGetProduct } from 'src/api/product';
-
-import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import { useSettingsContext } from 'src/components/settings';
 
-import ExchangeNewEditForm from '../exchange-new-edit-form';
 import { useMutation } from '@tanstack/react-query';
-import exchangeService from 'src/services/exchangeService';
 import { isAxiosError } from 'axios';
 import { useSnackbar } from 'notistack';
 import { useState } from 'react';
+import exchangeService from 'src/services/exchangeService';
+import ExchangeNewEditForm from '../exchange-new-edit-form';
 
 // ----------------------------------------------------------------------
 
@@ -42,7 +40,7 @@ export default function ExchangeEditView({ id }: Props) {
           { name: 'Dashboard', href: paths.dashboard.root },
           {
             name: 'Exchange',
-            href: paths.dashboard.exchange.root,
+            // href: paths.dashboard.exchange.root,
           },
           // { name: currentProduct?.name },
         ]}
@@ -51,7 +49,7 @@ export default function ExchangeEditView({ id }: Props) {
         }}
       />
 
-      <ExchangeNewEditForm currentExchange={{ }} />
+      <ExchangeNewEditForm currentExchange={{}} />
     </Container>
   );
 }

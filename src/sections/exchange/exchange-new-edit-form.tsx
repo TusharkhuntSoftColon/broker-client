@@ -1,24 +1,23 @@
-import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 
+import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
-import LoadingButton from '@mui/lab/LoadingButton';
 
-import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
-import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import { useSnackbar } from 'src/components/snackbar';
 
-import { ExchangeProp, IUserItem } from 'src/types/user';
 import { useMutation } from '@tanstack/react-query';
-import exchangeService from 'src/services/exchangeService';
 import { isAxiosError } from 'axios';
+import exchangeService from 'src/services/exchangeService';
+import { ExchangeProp } from 'src/types/user';
 
 // ----------------------------------------------------------------------
 
@@ -64,7 +63,7 @@ export default function ExchangeNewEditForm({ currentExchange }: Props) {
   const { mutate: createExchange } = useMutation(exchangeService.addExchange, {
     onSuccess: (data) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
-      router.push(paths.dashboard.exchange.root);
+      // router.push(paths.dashboard.exchange.root);
     },
     onError: (error: any) => {
       if (isAxiosError(error)) {

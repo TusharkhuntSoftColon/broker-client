@@ -154,14 +154,14 @@ export default function ExchangeListView() {
 
   const handleEditRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.exchange.edit(id));
+      // router.push(paths.dashboard.exchange.edit(id));
     },
     [router]
   );
 
   const handleViewRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.exchange.details(id));
+      // router.push(paths.dashboard.exchange.details(id));
     },
     [router]
   );
@@ -220,7 +220,7 @@ export default function ExchangeListView() {
             { name: 'Admstr', href: paths.dashboard.root },
             {
               name: 'Exchange',
-              href: paths.dashboard.exchange.root,
+              // href: paths.dashboard.exchange.root,
             },
             { name: 'List' },
           ]}

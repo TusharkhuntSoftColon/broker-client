@@ -31,7 +31,7 @@ export default function MasterDetailsView({ id }: Props) {
           },
           {
             name: 'Admin',
-            href: paths.dashboard.user.root,
+            // href: paths.dashboard.user.root,
           },
           { name: 'Admin Details' },
         ]}
@@ -39,7 +39,7 @@ export default function MasterDetailsView({ id }: Props) {
           mb: { xs: 3, md: 5 },
         }}
         isView={true}
-        path={paths.dashboard.user.edit(id)}
+        // path={paths.dashboard.user.edit(id)}
         id={currentUser?.id}
       />
       <MasterNewEditForm currentUser={currentUser} isView={true} />

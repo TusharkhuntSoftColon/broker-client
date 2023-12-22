@@ -328,7 +328,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     },
   });
 
-  const { mutate: updateUser } = useMutation(updateUserByRole(role), {
+  const { mutate: updateUser }: any = useMutation(updateUserByRole(role), {
     onSuccess: (data: any) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
     },
@@ -338,7 +338,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       }
     },
   });
-  const { mutate: updateMaster } = useMutation(updateMasterByRole(role), {
+  const { mutate: updateMaster }: any = useMutation(updateMasterByRole(role), {
     onSuccess: (data: any) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
       // router.push(paths.dashboard.symbol.root);
@@ -612,10 +612,10 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                         roleOption === 'SUPER_MASTER'
                           ? 'Super Master'
                           : roleOption === 'MASTER'
-                          ? 'Master'
-                          : roleOption === 'USER'
-                          ? 'User'
-                          : 'Person'
+                            ? 'Master'
+                            : roleOption === 'USER'
+                              ? 'User'
+                              : 'Person'
                       }`
                     : 'Save Changes'}
                 </LoadingButton>
