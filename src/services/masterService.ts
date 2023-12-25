@@ -5,8 +5,8 @@ import client from 'src/lib/client';
 import {
   CREATE_USER_BY_MASTER,
   DELETE_USER_BY_MASTER,
-  GET_ALL_PERSONS_BY_MASTER,
   UPDATE_USER_BY_MASTER,
+  GET_ALL_PERSONS_BY_MASTER,
 } from '../utils/urls';
 
 export interface adminType {
@@ -32,6 +32,7 @@ const masterService = {
         brokerage: data?.brokerage,
         investorPassword: data?.investorPassword,
       });
+      return response.data;
     } catch (error) {
       // You can log the error here for debugging purposes
       console.error('Error in adminService.createMaster:', error);

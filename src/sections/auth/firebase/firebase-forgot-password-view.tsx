@@ -1,16 +1,20 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-import LoadingButton from '@mui/lab/LoadingButton';
+import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import LoadingButton from '@mui/lab/LoadingButton';
 
+import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
 
-import { PasswordIcon } from 'src/assets/icons';
 import { useAuthContext } from 'src/auth/hooks';
+import { PasswordIcon } from 'src/assets/icons';
 
+import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
@@ -46,8 +50,8 @@ export default function FirebaseForgotPasswordView() {
         email: data.email,
       }).toString();
 
-      // const href = `${paths.auth.firebase.verify}?${searchParams}`;
-      // router.push(href);
+      const href = `${paths.auth.firebase.verify}?${searchParams}`;
+      router.push(href);
     } catch (error) {
       console.error(error);
     }
@@ -67,7 +71,7 @@ export default function FirebaseForgotPasswordView() {
         Send Request
       </LoadingButton>
 
-      {/* <Link
+      <Link
         component={RouterLink}
         href={paths.auth.firebase.login}
         color="inherit"
@@ -79,7 +83,7 @@ export default function FirebaseForgotPasswordView() {
       >
         <Iconify icon="eva:arrow-ios-back-fill" width={16} />
         Return to sign in
-      </Link> */}
+      </Link>
     </Stack>
   );
 

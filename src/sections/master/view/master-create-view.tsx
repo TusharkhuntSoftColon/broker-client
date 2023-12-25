@@ -22,7 +22,7 @@ export default function MasterCreateView() {
           },
           {
             name: 'Master',
-            // href: paths.dashboard.user.root,
+            href: paths.dashboard.user.root,
           },
           { name: 'New Master' },
         ]}

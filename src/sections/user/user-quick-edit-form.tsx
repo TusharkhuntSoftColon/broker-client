@@ -1,19 +1,22 @@
-import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-import LoadingButton from '@mui/lab/LoadingButton';
-import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
+import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
+import LoadingButton from '@mui/lab/LoadingButton';
+import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 
-import FormProvider, { RHFTextField } from 'src/components/hook-form';
+import { countries } from 'src/assets/data';
+
+import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
+import FormProvider, { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
 
 import { IUserItem } from 'src/types/user';
 
@@ -43,21 +46,21 @@ export default function UserQuickEditForm({ currentUser, open, onClose }: Props)
   const defaultValues = useMemo(
     () => ({
       name: currentUser?.name || '',
-      // email: currentUser?.email || '',
-      // phoneNumber: currentUser?.phoneNumber || '',
-      // address: currentUser?.address || '',
-      // country: currentUser?.country || '',
-      // state: currentUser?.state || '',
-      // city: currentUser?.city || '',
-      // zipCode: currentUser?.zipCode || '',
-      // status: currentUser?.status,
-      // company: currentUser?.company || '',
-      // role: currentUser?.role || '',
+      email: currentUser?.email || '',
+      phoneNumber: currentUser?.phoneNumber || '',
+      address: currentUser?.address || '',
+      country: currentUser?.country || '',
+      state: currentUser?.state || '',
+      city: currentUser?.city || '',
+      zipCode: currentUser?.zipCode || '',
+      status: currentUser?.status,
+      company: currentUser?.company || '',
+      role: currentUser?.role || '',
     }),
     [currentUser]
   );
 
-  const methods = useForm<any>({
+  const methods = useForm({
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });

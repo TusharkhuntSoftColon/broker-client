@@ -1,12 +1,15 @@
+import { useState, useCallback } from 'react';
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
+import { _symbolList, _userList } from 'src/_mock';
+
 import { useSettingsContext } from 'src/components/settings';
 
-import { useSelector } from 'react-redux';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
 import UserNewEditForm from '../user-new-edit-form';
+import { useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
@@ -31,7 +34,7 @@ export default function UserDetailsView({ id }: Props) {
           },
           {
             name: 'Admin',
-            // href: paths.dashboard.user.root,
+            href: paths.dashboard.user.root,
           },
           { name: 'Admin Details' },
         ]}
@@ -39,7 +42,7 @@ export default function UserDetailsView({ id }: Props) {
           mb: { xs: 3, md: 5 },
         }}
         isView={true}
-        // path={paths.dashboard.user.edit(id)}
+        path={paths.dashboard.user.edit(id)}
         id={currentUser?.id}
       />
       <UserNewEditForm currentUser={currentUser} isView={true} />

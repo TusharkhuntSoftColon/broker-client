@@ -1,15 +1,17 @@
-import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
-import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-import LoadingButton from '@mui/lab/LoadingButton';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import LoadingButton from '@mui/lab/LoadingButton';
+import InputAdornment from '@mui/material/InputAdornment';
 
+import { paths } from 'src/routes/paths';
+import { RouterLink } from 'src/routes/components';
 import { useRouter, useSearchParams } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
@@ -18,8 +20,8 @@ import { useCountdownSeconds } from 'src/hooks/use-countdown';
 import { SentIcon } from 'src/assets/icons';
 import { useAuthContext } from 'src/auth/hooks';
 
-import FormProvider, { RHFCode, RHFTextField } from 'src/components/hook-form';
 import Iconify from 'src/components/iconify';
+import FormProvider, { RHFCode, RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -72,7 +74,7 @@ export default function AmplifyNewPasswordView() {
     try {
       await newPassword?.(data.email, data.code, data.password);
 
-      // router.push(paths.auth.amplify.login);
+      router.push(paths.auth.amplify.login);
     } catch (error) {
       console.error(error);
     }
@@ -155,7 +157,7 @@ export default function AmplifyNewPasswordView() {
         </Link>
       </Typography>
 
-      {/* <Link
+      <Link
         component={RouterLink}
         href={paths.auth.amplify.login}
         color="inherit"
@@ -167,7 +169,7 @@ export default function AmplifyNewPasswordView() {
       >
         <Iconify icon="eva:arrow-ios-back-fill" width={16} />
         Return to sign in
-      </Link> */}
+      </Link>
     </Stack>
   );
 

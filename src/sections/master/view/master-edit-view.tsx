@@ -30,7 +30,7 @@ export default function MasterEditView({ id }: Props) {
           },
           {
             name: 'Admin',
-            // href: paths.dashboard.user.root,
+            href: paths.dashboard.user.root,
           },
           { name: currentUser?.name },
         ]}

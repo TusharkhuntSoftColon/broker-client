@@ -19,6 +19,11 @@ import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
 
 import { EXCHANGE_GROUP } from 'src/_mock';
+import { ADMIN_ROLE, MASTER_ROLE, SUPER_MASTER_ROLE } from 'src/_mock/_person';
+import adminService from 'src/services/adminService';
+import masterService from 'src/services/masterService';
+import superMasterService from 'src/services/superMasterService';
+import { addExchanges } from 'src/store/slices/admin';
 
 import FormProvider, {
   RHFAutocomplete,
@@ -28,11 +33,6 @@ import FormProvider, {
 } from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
 
-import { ADMIN_ROLE, MASTER_ROLE, SUPER_MASTER_ROLE } from 'src/_mock/_person';
-import adminService from 'src/services/adminService';
-import masterService from 'src/services/masterService';
-import superMasterService from 'src/services/superMasterService';
-import { addExchanges } from 'src/store/slices/admin';
 import { IUserItem } from 'src/types/user';
 
 // ----------------------------------------------------------------------
@@ -51,6 +51,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
 
   const [exchangeData, setExchangeData] = useState<any>();
 
+  console.log('Workd1');
   const Exchange: { label: any; value: any }[] = [];
   for (let i = 0; i < ExchangeList?.length; i++) {
     Exchange.push({
@@ -58,11 +59,12 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       value: ExchangeList[i]?._id,
     });
   }
+  console.log(Exchange);
 
   const defaultAllowedExchange = useMemo(() => {
     if (!currentUser) return [];
     return Exchange.filter((option: any) => currentUser?.allowedExchange?.includes(option.value));
-  }, [currentUser]);
+  }, [currentUser, Exchange]);
 
   const defaultExchangeOptions = useMemo(() => {
     if (!currentUser) return [];
@@ -162,12 +164,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
 
   // console.log(ExchangeOptions);
 
-  const demo = ExchangeOptions?.filter((item: any) => {
-    return currentUser?.allowedExchange.includes(item.value);
-  });
-
-  console.log({ demo });
-
   const methods = useForm({
     resolver: yupResolver(getValidationSchema(roleOption)),
     defaultValues,
@@ -222,7 +218,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       setValue('brokerage', currentUser?.brokerage || '');
       setValue('investorPassword', currentUser?.investorPassword || '');
     }
-  }, [defaultValues, setValue, value.role]);
+  }, [setValue, value.role]);
 
   const getExchangeListForPerson: any = (role: any) => {
     switch (role) {
@@ -300,7 +296,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     },
   });
 
-  //create MASTER
+  // create MASTER
   const { mutate: createMaster } = useMutation(createMasterByRole(role), {
     onSuccess: (data: any) => {
       console.log({ data });
@@ -314,7 +310,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     },
   });
 
-  //create USER
+  // create USER
   const { mutate: createUser } = useMutation(createUserByRole(role), {
     onSuccess: (data: any) => {
       console.log({ data });
@@ -365,8 +361,9 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   // get exchange list
   const { mutate } = useMutation(getExchangeListForPerson(role), {
     onSuccess: (data: any) => {
-      setExchangeData(data?.data?.allowedExchange);
-      dispatch(addExchanges(data?.data?.allowedExchange));
+      // console.log(data);
+      setExchangeData(data?.data?.rows);
+      dispatch(addExchanges(data?.data?.rows));
       enqueueSnackbar(data?.message, { variant: 'success' });
     },
     onError: (error) => {
@@ -454,13 +451,11 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                 isLabled={false}
                 isOptionEqualToValue={(option, value) => option.value === value.value}
                 getOptionLabel={(option: any) => option.label}
-                renderOption={(props, option) => {
-                  return (
-                    <li {...props} key={option.value}>
-                      {option.label}
-                    </li>
-                  );
-                }}
+                renderOption={(props, option) => (
+                  <li {...props} key={option.value}>
+                    {option.label}
+                  </li>
+                )}
               />
               <RHFTextField isReadOnly={!!isView} name="name" label="Full Name" />
               <RHFTextField isReadOnly={!!isView || currentUser} name="ID" label="User Id" />
@@ -534,19 +529,17 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                 multiple
                 isOptionEqualToValue={(option, value) => option.value === value.value}
                 getOptionLabel={(option: any) => option.label}
-                renderOption={(props, option, { selected }) => {
-                  return (
-                    <li {...props} key={option.value}>
-                      <Checkbox
-                        icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
-                        checkedIcon={<CheckBoxIcon fontSize="small" />}
-                        style={{ marginRight: 8 }}
-                        checked={selected}
-                      />
-                      {option.label}
-                    </li>
-                  );
-                }}
+                renderOption={(props, option, { selected }) => (
+                  <li {...props} key={option.value}>
+                    <Checkbox
+                      icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+                      checkedIcon={<CheckBoxIcon fontSize="small" />}
+                      style={{ marginRight: 8 }}
+                      checked={selected}
+                    />
+                    {option.label}
+                  </li>
+                )}
               />
 
               <RHFAutocomplete
@@ -562,19 +555,17 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                 multiple
                 isOptionEqualToValue={(option, value) => option.value === value.value}
                 getOptionLabel={(option: any) => option.label}
-                renderOption={(props, option, { selected }) => {
-                  return (
-                    <li {...props} key={option.value}>
-                      <Checkbox
-                        icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
-                        checkedIcon={<CheckBoxIcon fontSize="small" />}
-                        style={{ marginRight: 8 }}
-                        checked={selected}
-                      />
-                      {option.label}
-                    </li>
-                  );
-                }}
+                renderOption={(props, option, { selected }) => (
+                  <li {...props} key={option.value}>
+                    <Checkbox
+                      icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+                      checkedIcon={<CheckBoxIcon fontSize="small" />}
+                      style={{ marginRight: 8 }}
+                      checked={selected}
+                    />
+                    {option.label}
+                  </li>
+                )}
               />
 
               {roleOption !== 'USER' && (

@@ -15,6 +15,7 @@ import EmptyContent from '../../../components/empty-content';
 import Iconify from '../../../components/iconify';
 import { useSettingsContext } from '../../../components/settings';
 import { RouterLink } from '../../../routes/components';
+import { paths } from '../../../routes/paths';
 
 // import ProductDetailsReview from '../product-details-review';
 // import { ProductDetailsSkeleton } from '../product-skeleton';
@@ -81,7 +82,7 @@ export default function BrokerageDetailsView({ id }: Props) {
       action={
         <Button
           component={RouterLink}
-          // href={paths.dashboard.exchange.root}
+          href={paths.dashboard.exchange.root}
           startIcon={<Iconify icon="eva:arrow-ios-back-fill" width={16} />}
           sx={{ mt: 3 }}
         >

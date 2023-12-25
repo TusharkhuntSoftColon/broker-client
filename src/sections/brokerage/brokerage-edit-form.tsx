@@ -1,27 +1,27 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation } from '@tanstack/react-query';
+import * as Yup from 'yup';
 import { isAxiosError } from 'axios';
-import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import * as Yup from 'yup';
+import { useMutation } from '@tanstack/react-query';
+import { useMemo, useState, useEffect } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
+import Typography from '@mui/material/Typography';
+import LoadingButton from '@mui/lab/LoadingButton';
+import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Typography from '@mui/material/Typography';
 
-import { STATUS_OF_EXCHANGE, STOP_LOSS } from '../../_mock/_exchange';
-import FormProvider, { RHFAutocomplete, RHFSwitch, RHFTextField } from '../../components/hook-form';
-import { useSnackbar } from '../../components/snackbar';
-import exchangeService from '../../services/exchangeService';
-import symbolService from '../../services/symbolService';
-import { addExchange, updateExchange } from '../../store/slices/exchange';
 import { IExchangeItem } from '../../types/exchange';
+import { useSnackbar } from '../../components/snackbar';
+import symbolService from '../../services/symbolService';
+import exchangeService from '../../services/exchangeService';
+import { STOP_LOSS, STATUS_OF_EXCHANGE } from '../../_mock/_exchange';
+import { addExchange, updateExchange } from '../../store/slices/exchange';
+import FormProvider, { RHFSwitch, RHFTextField, RHFAutocomplete } from '../../components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -29,7 +29,7 @@ type Props = {
   open: boolean;
   onClose: VoidFunction;
   isView?: any;
-  currentUser?: IExchangeItem | any;
+  currentUser?: IExchangeItem;
   getFunction?: any;
 };
 
@@ -46,6 +46,7 @@ export default function BrokerageQuickEditForm({
 
   const [symbolData, setSymbolData] = useState<any>([]);
 
+
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     statusOfExchange: Yup.mixed<any>().nullable().required('Status Of Exchange is required'),
@@ -55,9 +56,9 @@ export default function BrokerageQuickEditForm({
   const defaultValues = useMemo(
     () => ({
       name: currentUser?.name || '',
-      // statusOfExchange: currentUser?.statusOfExchange || null,
-      // stAndTp: currentUser?.stAndTp || null,
-      // isActiveExchange: currentUser?.isActiveExchange || null,
+      statusOfExchange: currentUser?.statusOfExchange || null,
+      stAndTp: currentUser?.stAndTp || null,
+      isActiveExchange: currentUser?.isActiveExchange || null,
     }),
     [currentUser]
   );
@@ -150,12 +151,12 @@ export default function BrokerageQuickEditForm({
   }
 
   const symbols = [
-    { label: 'Tata', value: '12345' },
-    { label: 'Adani', value: '12345' },
-    { label: 'Infosys', value: '12345' },
-    { label: 'TCS', value: '12345' },
-    { label: 'Adani Energy', value: '12345' },
-  ];
+    {label:"Tata",value:"12345"},
+    {label:"Adani",value:"12345"},
+    {label:"Infosys",value:"12345"},
+    {label:"TCS",value:"12345"},
+    {label:"Adani Energy",value:"12345"},
+  ]
 
   // console.log({ SymbolOption });
   return (
@@ -225,7 +226,7 @@ export default function BrokerageQuickEditForm({
               isOptionEqualToValue={(option, value) => option.value === value.value}
               getOptionLabel={(option: any) => option.label}
               renderOption={(props, option) => (
-                <li {...props} key={option.label}>
+                <li {...props} key={option.value}>
                   {option.label}
                 </li>
               )}

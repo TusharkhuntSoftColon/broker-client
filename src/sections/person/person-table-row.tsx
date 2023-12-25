@@ -1,20 +1,21 @@
+import { useSelector } from 'react-redux';
+
 import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
+import Tooltip from '@mui/material/Tooltip';
 import Checkbox from '@mui/material/Checkbox';
+import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
-import TableCell from '@mui/material/TableCell';
-import TableRow from '@mui/material/TableRow';
-import Tooltip from '@mui/material/Tooltip';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { ConfirmDialog } from 'src/components/custom-dialog';
-import { usePopover } from 'src/components/custom-popover';
-import Iconify from 'src/components/iconify';
 import Label from 'src/components/label';
+import Iconify from 'src/components/iconify';
+import { usePopover } from 'src/components/custom-popover';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 
-import { useSelector } from 'react-redux';
 import { IUserItem } from 'src/types/user';
 
 // ----------------------------------------------------------------------
@@ -23,7 +24,6 @@ type Props = {
   selected: boolean;
   onEditRow: VoidFunction;
   row: IUserItem;
-  exchangeData: any;
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
   onViewRow: VoidFunction;
@@ -37,7 +37,7 @@ export default function PersonTableRow({
   onDeleteRow,
   onViewRow,
 }: Props) {
-  const { name, role, exchange, phoneNumber, allowedExchange, ID, isActive, createdAt } = row;
+  const { name, allowedExchange, ID, isActive, createdAt } = row;
 
   const confirm = useBoolean();
 

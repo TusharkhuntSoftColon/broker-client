@@ -5,9 +5,8 @@ import storage from 'redux-persist/lib/storage';
 
 import authSlice from './auth';
 import adminSlice from './admin';
-import exchangeSlice from './exchange';
 import symbolSlice from './symbol';
-
+import exchangeSlice from './exchange';
 import { REDUX_SECRET_KEY } from '../../utils/environments';
 
 const encryptor = encryptTransform({

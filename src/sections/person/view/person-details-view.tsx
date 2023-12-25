@@ -1,11 +1,12 @@
+import { useSelector } from 'react-redux';
+
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
 import { useSettingsContext } from 'src/components/settings';
-
-import { useSelector } from 'react-redux';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
+
 import PersonNewEditForm from '../person-new-edit-form';
 
 // ----------------------------------------------------------------------
@@ -42,11 +43,11 @@ export default function PersonDetailsView({ id }: Props) {
         sx={{
           mb: { xs: 3, md: 5 },
         }}
-        isView={true}
+        isView
         // path={paths.dashboard.user.edit(id)}
         id={currentUser?.id}
       />
-      <PersonNewEditForm currentUser={currentUser} isView={true} />
+      <PersonNewEditForm currentUser={currentUser} isView />
     </Container>
   );
 }

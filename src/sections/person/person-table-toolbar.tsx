@@ -1,4 +1,6 @@
+import { yupResolver } from '@hookform/resolvers/yup';
 import { useCallback, useEffect, useMemo } from 'react';
+import { useForm } from 'react-hook-form';
 import * as Yup from 'yup';
 
 import Button from '@mui/material/Button';
@@ -13,19 +15,19 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import Iconify from 'src/components/iconify';
+import { fDate } from 'src/utils/format-time';
 
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
 import { ExchangeStatus } from 'src/_mock';
+
 import { useDateRangePicker } from 'src/components/custom-date-range-picker';
 import CustomDateRangePicker from 'src/components/custom-date-range-picker/custom-date-range-picker';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import { RHFAutocomplete } from 'src/components/hook-form';
 import FormProvider from 'src/components/hook-form/form-provider';
+import Iconify from 'src/components/iconify';
 import { useSettingsContext } from 'src/components/settings';
+
 import { IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
-import { fDate } from 'src/utils/format-time';
 
 // ----------------------------------------------------------------------
 
@@ -62,13 +64,7 @@ export default function UserTableToolbar({
     defaultValues,
   });
 
-  const {
-    watch,
-    reset,
-    control,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = methods;
+  const { watch, reset, handleSubmit } = methods;
 
   const value: any = watch();
 

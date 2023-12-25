@@ -2,8 +2,8 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import SymbolNewEditForm from '../symbol-new-edit-form';
 
@@ -23,13 +23,14 @@ export default function SymbolCreateView() {
           },
           {
             name: 'Symbol',
-            // href: paths.dashboard.symbol.root,
+            href: paths.dashboard.symbol.root,
           },
           { name: 'New Symbol' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
+        
       />
 
       <SymbolNewEditForm />

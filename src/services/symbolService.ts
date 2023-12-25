@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 
 import client from 'src/lib/client';
 
-import { ADD_SYMBOL, DELETE_SYMBOL, GET_SYMBOL_LIST, UPDATE_SYMBOL } from '../utils/urls';
+import { ADD_SYMBOL, DELETE_SYMBOL, UPDATE_SYMBOL, GET_SYMBOL_LIST } from '../utils/urls';
 
 export interface symbolType {
   id: string;

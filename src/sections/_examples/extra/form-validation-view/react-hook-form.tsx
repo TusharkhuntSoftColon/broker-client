@@ -1,35 +1,35 @@
-import { yupResolver } from '@hookform/resolvers/yup';
 import { useCallback } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useForm, Controller } from 'react-hook-form';
 
-import LoadingButton from '@mui/lab/LoadingButton';
-import Backdrop from '@mui/material/Backdrop';
 import Box from '@mui/material/Box';
-import CircularProgress from '@mui/material/CircularProgress';
 import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
 import MenuItem from '@mui/material/MenuItem';
-import Stack, { StackProps } from '@mui/material/Stack';
+import Backdrop from '@mui/material/Backdrop';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import LoadingButton from '@mui/lab/LoadingButton';
+import Stack, { StackProps } from '@mui/material/Stack';
+import InputAdornment from '@mui/material/InputAdornment';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import FormProvider, {
-  RHFAutocomplete,
-  RHFCheckbox,
-  RHFEditor,
-  RHFMultiCheckbox,
-  RHFMultiSelect,
-  RHFRadioGroup,
-  RHFSelect,
-  RHFSlider,
-  RHFSwitch,
-  RHFTextField,
-  RHFUpload,
-} from 'src/components/hook-form';
 import Iconify from 'src/components/iconify';
+import FormProvider, {
+  RHFEditor,
+  RHFSelect,
+  RHFUpload,
+  RHFSwitch,
+  RHFSlider,
+  RHFCheckbox,
+  RHFTextField,
+  RHFRadioGroup,
+  RHFMultiSelect,
+  RHFAutocomplete,
+  RHFMultiCheckbox,
+} from 'src/components/hook-form';
 
 import { FormSchema } from './schema';
 import ValuesPreview from './values-preview';
@@ -327,7 +327,7 @@ export default function ReactHookForm({ debug }: Props) {
               />
             </Block>
 
-            <RHFCheckbox name="checkbox" label="RHFCheckbox" isReadOnly={undefined} />
+            <RHFCheckbox name="checkbox" label="RHFCheckbox" />
 
             <RHFSwitch name="switch" label="RHFSwitch" />
 

@@ -1,17 +1,18 @@
-import { useCallback, useState } from 'react';
+import { useState, useCallback } from 'react';
 
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
+import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
 import PickerDate from './picker-date';
-import PickerDateTime from './picker-date-time';
 import PickerTime from './picker-time';
+import PickerDateTime from './picker-date-time';
+import PickerDateRange from './picker-date-range';
 
 // ----------------------------------------------------------------------
 
@@ -19,6 +20,7 @@ const TABS = [
   { value: 'date', label: 'Date', component: <PickerDate /> },
   { value: 'datetime', label: 'DateTime', component: <PickerDateTime /> },
   { value: 'time', label: 'Time', component: <PickerTime /> },
+  { value: 'range', label: 'Range', component: <PickerDateRange /> },
 ];
 
 // ----------------------------------------------------------------------

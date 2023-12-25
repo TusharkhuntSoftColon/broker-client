@@ -2,11 +2,13 @@ import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
+import { _userList } from 'src/_mock';
+
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { useSettingsContext } from 'src/components/settings';
 
-import { useSelector } from 'react-redux';
 import UserNewEditForm from '../user-new-edit-form';
+import { useSelector } from 'react-redux';
 
 // ----------------------------------------------------------------------
 
@@ -30,7 +32,7 @@ export default function UserEditView({ id }: Props) {
           },
           {
             name: 'Admin',
-            // href: paths.dashboard.user.root,
+            href: paths.dashboard.user.root,
           },
           { name: currentUser?.name },
         ]}

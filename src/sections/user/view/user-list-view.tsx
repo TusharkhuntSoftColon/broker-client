@@ -138,14 +138,14 @@ export default function UserListView({ path }: { path: any }) {
 
   const handleEditRow = useCallback(
     (id: string) => {
-      // router.push(paths.dashboard.user.edit(id));
+      router.push(paths.dashboard.user.edit(id));
     },
     [router]
   );
 
   const handleViewRow = useCallback(
     (id: string) => {
-      // router.push(paths.dashboard.user.details(id));
+      router.push(paths.dashboard.user.details(id));
     },
     [router]
   );
@@ -168,7 +168,7 @@ export default function UserListView({ path }: { path: any }) {
           heading="List"
           links={[
             { name: 'Admin', href: paths.dashboard.root },
-            { name: 'User', href: path.root },
+            { name: 'User', href: paths.dashboard.user.root },
             { name: 'List' },
           ]}
           action={

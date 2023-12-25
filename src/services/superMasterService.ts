@@ -3,13 +3,13 @@ import { AxiosResponse } from 'axios';
 import client from 'src/lib/client';
 
 import {
-  CREATE_MASTER_BY_SUPER_MASTER,
   CREATE_USER_BY_SUPER_MASTER,
-  DELETE_MASTER_BY_SUPER_MASTER,
   DELETE_USER_BY_SUPER_MASTER,
-  GET_ALL_PERSONS_BY_SUPER_MASTER,
-  UPDATE_MASTER_BY_SUPER_MASTER,
   UPDATE_USER_BY_SUPER_MASTER,
+  CREATE_MASTER_BY_SUPER_MASTER,
+  DELETE_MASTER_BY_SUPER_MASTER,
+  UPDATE_MASTER_BY_SUPER_MASTER,
+  GET_ALL_PERSONS_BY_SUPER_MASTER,
 } from '../utils/urls';
 
 export interface adminType {
@@ -37,6 +37,7 @@ const superMasterService = {
         editBet: Boolean(data?.editBet),
         deleteBet: Boolean(data?.deleteBet),
       });
+      return response.data;
     } catch (error) {
       // You can log the error here for debugging purposes
       console.error('Error in adminService.createMaster:', error);
@@ -57,6 +58,7 @@ const superMasterService = {
         brokerage: data?.brokerage,
         investorPassword: data?.investorPassword,
       });
+      return response.data;
     } catch (error) {
       // You can log the error here for debugging purposes
       console.error('Error in adminService.createMaster:', error);

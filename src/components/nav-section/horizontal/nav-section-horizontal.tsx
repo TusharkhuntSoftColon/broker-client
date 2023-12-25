@@ -2,8 +2,8 @@ import { memo } from 'react';
 
 import Stack from '@mui/material/Stack';
 
-import { NavGroupProps, NavProps } from '../types';
 import NavList from './nav-list';
+import { NavProps, NavGroupProps } from '../types';
 
 // ----------------------------------------------------------------------
 
@@ -21,7 +21,7 @@ function NavSectionHorizontal({ data, slotProps, sx, ...other }: NavProps) {
       }}
       {...other}
     >
-      {data.map((group: any, index) => (
+      {data.map((group, index) => (
         <Group key={group.subheader || index} items={group.items} slotProps={slotProps} />
       ))}
     </Stack>

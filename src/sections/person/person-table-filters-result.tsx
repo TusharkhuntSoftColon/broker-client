@@ -74,16 +74,14 @@ export default function UserTableFiltersResult({
 
         {!!filters.dateRange.length && (
           <Block label="Selected Range:">
-            {filters.dateRange.map((item: any) => {
-              return (
+            {filters.dateRange.map((item: any) => (
                 <Chip
                   key={item}
                   label={item.toDateString()}
                   size="small"
                   onDelete={() => handleRemoveDate()}
                 />
-              );
-            })}
+              ))}
           </Block>
         )}
 

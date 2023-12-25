@@ -1,11 +1,12 @@
+import { useSelector } from 'react-redux';
+
 import Container from '@mui/material/Container';
 
 import { paths } from 'src/routes/paths';
 
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import { useSelector } from 'react-redux';
 import PersonNewEditForm from '../person-new-edit-form';
 
 // ----------------------------------------------------------------------
@@ -24,8 +25,8 @@ export default function PersonEditView({ id }: Props) {
 
   // const path = paths.dashboard;
 
-  const getPath = (role: any) => {
-    switch (role) {
+  const getPath = (roleOfPerson: any) => {
+    switch (roleOfPerson) {
       case 'ADMIN':
         return paths.dashboard;
       case 'SUPER_MASTER':

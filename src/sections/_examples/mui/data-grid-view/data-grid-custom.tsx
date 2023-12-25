@@ -1,26 +1,26 @@
-import { useCallback, useState } from 'react';
+import { useState, useCallback } from 'react';
 
-import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import IconButton from '@mui/material/IconButton';
-import LinearProgress from '@mui/material/LinearProgress';
-import Rating from '@mui/material/Rating';
 import Stack from '@mui/material/Stack';
+import Rating from '@mui/material/Rating';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import LinearProgress from '@mui/material/LinearProgress';
 import {
   DataGrid,
   GridColDef,
-  GridColumnVisibilityModel,
-  GridFilterInputValueProps,
-  GridRowSelectionModel,
   GridToolbar,
+  GridRowSelectionModel,
   getGridNumericOperators,
+  GridFilterInputValueProps,
+  GridColumnVisibilityModel,
 } from '@mui/x-data-grid';
 
 import { fPercent } from 'src/utils/format-number';
 
-import Iconify from 'src/components/iconify';
 import Label from 'src/components/label';
+import Iconify from 'src/components/iconify';
 
 // ----------------------------------------------------------------------
 
@@ -239,6 +239,7 @@ function RatingInputValue({ item, applyValue }: GridFilterInputValueProps) {
       <Rating
         size="small"
         precision={0.5}
+        placeholder="Filter value"
         value={Number(item.value)}
         onChange={(event, newValue) => {
           applyValue({ ...item, value: newValue });

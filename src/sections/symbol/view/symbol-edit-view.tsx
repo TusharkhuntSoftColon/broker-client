@@ -63,7 +63,7 @@ function SymbolEditView({ id }: { id: any }) {
           },
           {
             name: 'Symbol',
-            // href: paths.dashboard.symbol.root,
+            href: paths.dashboard.symbol.root,
           },
           { name: 'New Symbol' },
         ]}

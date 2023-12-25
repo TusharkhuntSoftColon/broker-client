@@ -1,7 +1,7 @@
 import { Controller, useFormContext } from 'react-hook-form';
 
-import Autocomplete, { AutocompleteProps } from '@mui/material/Autocomplete';
 import TextField from '@mui/material/TextField';
+import Autocomplete, { AutocompleteProps } from '@mui/material/Autocomplete';
 
 // ----------------------------------------------------------------------
 
@@ -21,7 +21,6 @@ interface Props<
   multiple?: Multiple;
   value?: any;
   isLabled?: any;
-  resetFunction?: any;
 }
 
 export default function RHFAutocomplete<

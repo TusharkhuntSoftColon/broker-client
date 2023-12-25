@@ -1,5 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-import { SuperMasterListView } from 'src/sections/super-master/view';
+import SuperMasterListView from 'src/sections/super-master/user/view/super-master-list-view';
 
 // ----------------------------------------------------------------------
 

@@ -1,3 +1,6 @@
+import { useMutation } from '@tanstack/react-query';
+import { isAxiosError } from 'axios';
+import { isWithinInterval, parse } from 'date-fns';
 import isEqual from 'lodash/isEqual';
 import { useSnackbar } from 'notistack';
 import { useCallback, useEffect, useState } from 'react';
@@ -17,7 +20,9 @@ import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { USER_STATUS_OPTIONS } from 'src/_mock';
+import adminService from 'src/services/adminService';
+import masterService from 'src/services/masterService';
+import superMasterService from 'src/services/superMasterService';
 import { addExchanges, addPerson } from 'src/store/slices/admin';
 
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
@@ -38,19 +43,11 @@ import {
 
 import { IUserItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
 
-import { useMutation } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
-import { isWithinInterval, parse } from 'date-fns';
-import adminService from 'src/services/adminService';
-import masterService from 'src/services/masterService';
-import superMasterService from 'src/services/superMasterService';
 import UserTableFiltersResult from '../person-table-filters-result';
 import PersonTableRow from '../person-table-row';
 import UserTableToolbar from '../person-table-toolbar';
 
 // ----------------------------------------------------------------------
-
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
   { id: 'name', label: 'Name' },
@@ -78,6 +75,8 @@ export default function PersonListView({ path }: { path: any }) {
   const table = useTable();
   const role = useSelector((data: any) => data.auth.role);
 
+  console.log({ role });
+
   const dispatch = useDispatch();
 
   const settings = useSettingsContext();
@@ -89,6 +88,8 @@ export default function PersonListView({ path }: { path: any }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const personData = useSelector((data: any) => data?.admin?.personList);
+  const exchangeList = useSelector((data: any) => data?.admin?.exchangeList);
+  console.log({ exchangeList });
 
   const [tableData, setTableData] = useState([]);
   const [exchangeData, setExchangeData] = useState<any>();
@@ -208,8 +209,8 @@ export default function PersonListView({ path }: { path: any }) {
 
   const { mutate: getAllExchanges } = useMutation(getExchangeListForPerson(role), {
     onSuccess: (data: any) => {
-      setExchangeData(data?.data?.allowedExchange);
-      dispatch(addExchanges(data?.data?.allowedExchange));
+      setExchangeData(data?.data?.rows);
+      dispatch(addExchanges(data?.data?.rows));
       enqueueSnackbar(data?.message, { variant: 'success' });
     },
     onError: (error) => {
@@ -447,20 +448,17 @@ export default function PersonListView({ path }: { path: any }) {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row: any) => {
-                      return (
-                        <PersonTableRow
-                          key={row._id}
-                          row={row}
-                          exchangeData={exchangeData}
-                          selected={table.selected.includes(row._id)}
-                          onSelectRow={() => table.onSelectRow(row._id)}
-                          onDeleteRow={() => handleDeleteRow(row._id, row.role)}
-                          onEditRow={() => handleEditRow(row._id)}
-                          onViewRow={() => handleViewRow(row._id)}
-                        />
-                      );
-                    })}
+                    .map((row: any) => (
+                      <PersonTableRow
+                        key={row._id}
+                        row={row}
+                        selected={table.selected.includes(row._id)}
+                        onSelectRow={() => table.onSelectRow(row._id)}
+                        onDeleteRow={() => handleDeleteRow(row._id, row.role)}
+                        onEditRow={() => handleEditRow(row._id)}
+                        onViewRow={() => handleViewRow(row._id)}
+                      />
+                    ))}
 
                   <TableEmptyRows
                     height={denseHeight}
@@ -538,21 +536,19 @@ function applyFilter({
   inputData = stabilizedThis?.map((el: any) => el[0]);
 
   if (name) {
-    inputData = inputData.filter((user: any) => {
-      return user.name.toLowerCase().indexOf(name.toLowerCase()) !== -1;
-    });
+    inputData = inputData.filter(
+      (user: any) => user.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+    );
   }
 
   if (status) {
-    inputData = inputData.filter((user: any) => {
-      return user?.isActiveAdmin === status?.value;
-    });
+    inputData = inputData.filter((user: any) => user?.isActiveAdmin === status?.value);
   }
 
   if (exchange.length) {
-    inputData = inputData.filter((user: any) => {
-      return user.allowedExchange.some((data: any) => exchange.includes(data));
-    });
+    inputData = inputData.filter((user: any) =>
+      user.allowedExchange.some((data: any) => exchange.includes(data))
+    );
   }
 
   if (dateRange.length > 0) {

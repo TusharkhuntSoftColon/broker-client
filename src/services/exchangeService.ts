@@ -2,7 +2,7 @@ import { AxiosResponse } from 'axios';
 
 import client from 'src/lib/client';
 
-import { ADD_EXCHANGE, DELETE_EXCHANGE, GET_EXCHANGE_LIST, UPDATE_EXCHANGE } from '../utils/urls';
+import { ADD_EXCHANGE, DELETE_EXCHANGE, UPDATE_EXCHANGE, GET_EXCHANGE_LIST } from '../utils/urls';
 
 export interface exchangeType {
   name: string;

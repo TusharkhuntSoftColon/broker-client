@@ -49,7 +49,7 @@ const adminSlice = createSlice({
       console.log({ updatedData });
       const data = {
         ...updatedData,
-        id: id,
+        id,
         createdAt: new Date().toDateString(),
       };
       const dataIndex = state.personList.findIndex((item: any) => item.id === id);
