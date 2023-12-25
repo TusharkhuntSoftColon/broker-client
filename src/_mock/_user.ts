@@ -11,6 +11,14 @@ export const USER_STATUS_OPTIONS = [
   { value: 'rejected', label: 'Rejected' },
 ];
 
+export const LEVERAGE_OPTIONS = [
+  { value: '1:1', label: '1:1' },
+  { value: '1:10', label: '1:10' },
+  { value: '1:100', label: '1:100' },
+  { value: '1:1000', label: '1:1000' },
+  { value: '1:10000', label: '1:10000' },
+];
+
 export const USER_ROLE = [{ value: 'USER', label: 'USER' }];
 
 export const EXCHANGE_GROUP = [

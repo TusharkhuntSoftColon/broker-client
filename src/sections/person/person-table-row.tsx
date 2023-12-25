@@ -1,6 +1,5 @@
 import { useSelector } from 'react-redux';
 
-import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import Checkbox from '@mui/material/Checkbox';
@@ -77,9 +76,9 @@ export default function PersonTableRow({
 
         {/* <TableCell sx={{ whiteSpace: 'nowrap' }}>{role}</TableCell> */}
 
-        <TableCell>
+        {/* <TableCell>
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-            {allowedExchange.map((_el: any) => {
+            {allowedExchange?.map((_el: any) => {
               const data = exchangeData?.filter((el: any) => el._id === _el);
               console.log({ allowedExchange });
               console.log({ exchangeData });
@@ -91,7 +90,7 @@ export default function PersonTableRow({
               );
             })}
           </Box>
-        </TableCell>
+        </TableCell> */}
 
         <TableCell>
           <ListItemText

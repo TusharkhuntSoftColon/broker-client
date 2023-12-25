@@ -12,10 +12,10 @@ import {
   UPDATE_MASTER_BY_ADMIN,
   GET_EXCHANGE_FOR_MASTER,
   GET_ALL_PERSONS_BY_ADMIN,
-  CREATE_SUPER_MASTER_BY_ADMIN,
   DELETE_SUPER_MASTER_BY_ADMIN,
   GET_EXCHANGE_FOR_SUPERMASTER,
   UPDATE_SUPER_MASTER_BY_ADMIN,
+  CREATE_SUPER_MASTER_BY_ADMIN,
 } from '../utils/urls';
 
 export interface adminType {
@@ -26,20 +26,39 @@ export interface adminType {
   insertCustomBet: any;
   name: string;
   exchangeGroup: any;
+  exchangeList: any;
 }
 
 const adminService = {
   createSuperMaster: async (adminData: adminType): Promise<any> => {
     console.log({ adminData });
+    const newExchangeList = [
+      ...adminData.exchangeList,
+      {
+        allowedExchange: adminData.allowedExchange.value,
+        exchangeGroup: adminData.exchangeGroup?.value,
+      },
+    ];
+    const exchangeList =
+      adminData.allowedExchange.value && adminData.exchangeGroup.value
+        ? newExchangeList
+        : adminData?.exchangeList;
+
+    console.log({ exchangeList });
+
     try {
       const response: AxiosResponse<any> = await client.post(CREATE_SUPER_MASTER_BY_ADMIN, {
-        ...adminData,
-        insertCustomBet: Boolean(adminData?.insertCustomBet),
-        editBet: Boolean(adminData?.editBet),
-        deleteBet: Boolean(adminData?.deleteBet),
-        exchangeGroup: adminData?.exchangeGroup?.map((option: any) => option.value),
-        allowedExchange: adminData?.allowedExchange?.map((option: any) => option.value),
+        ID: adminData?.ID,
+        name: adminData?.name,
+        password: adminData?.password,
+        limitOfAddMaster: adminData?.limitOfAddMaster,
+        limitOfAddUser: adminData?.limitOfAddUser,
+        insertCustomBet: adminData?.insertCustomBet,
+        editBet: adminData?.editBet,
+        deleteBet: adminData?.deleteBet,
+        leverageXY: `[${adminData?.leverage.value}]`,
         role: adminData?.role?.value,
+        exchangeList,
       });
       return response.data;
     } catch (error) {

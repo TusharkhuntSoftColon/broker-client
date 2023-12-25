@@ -1,37 +1,40 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
-import { useEffect, useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-unsafe-optional-chaining */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable @typescript-eslint/no-shadow */
 import * as Yup from 'yup';
+import { isAxiosError } from 'axios';
+import { useMutation } from '@tanstack/react-query';
+import { useMemo, useState, useEffect } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useDispatch, useSelector } from 'react-redux';
+import { useForm, useFieldArray } from 'react-hook-form';
 
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
-import LoadingButton from '@mui/lab/LoadingButton';
-import { Checkbox, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
+import LoadingButton from '@mui/lab/LoadingButton';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { Accordion, Typography, AccordionDetails, AccordionSummary } from '@mui/material';
 
-import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 
-import { EXCHANGE_GROUP } from 'src/_mock';
-import { ADMIN_ROLE, MASTER_ROLE, SUPER_MASTER_ROLE } from 'src/_mock/_person';
 import adminService from 'src/services/adminService';
-import masterService from 'src/services/masterService';
-import superMasterService from 'src/services/superMasterService';
 import { addExchanges } from 'src/store/slices/admin';
+import masterService from 'src/services/masterService';
+import { EXCHANGE_GROUP, LEVERAGE_OPTIONS } from 'src/_mock';
+import superMasterService from 'src/services/superMasterService';
+import { ADMIN_ROLE, MASTER_ROLE, SUPER_MASTER_ROLE } from 'src/_mock/_person';
 
-import FormProvider, {
-  RHFAutocomplete,
-  RHFCheckbox,
-  RHFSwitch,
-  RHFTextField,
-} from 'src/components/hook-form';
 import { useSnackbar } from 'src/components/snackbar';
+import FormProvider, {
+  RHFSwitch,
+  RHFCheckbox,
+  RHFTextField,
+  RHFAutocomplete,
+} from 'src/components/hook-form';
 
 import { IUserItem } from 'src/types/user';
 
@@ -73,6 +76,13 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     );
   }, [currentUser]);
 
+  const defaultLeverageOptions = useMemo(() => {
+    if (!currentUser) return [];
+    return LEVERAGE_OPTIONS.filter(
+      (option: any) => currentUser?.leverageXY.slice(1, -1) === option.value
+    )[0];
+  }, [currentUser]);
+
   console.log({ currentUser });
 
   const [roleOption, setRoleOption] = useState<any>('');
@@ -95,20 +105,19 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     ID: Yup.string().required('User Id is required'),
     password: Yup.string().required('Password is required'),
     role: Yup.mixed<any>().nullable().required('Role is required'),
-    exchangeGroup: Yup.array().min(1, 'Must have at least 1 exchange'),
-    allowedExchange: Yup.array().min(1, 'Must have at least 1 exchange'),
+    exchangeGroup: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
+    allowedExchange: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
     limitOfAddMaster: Yup.number().required('Limit Of Add Master is required'),
     limitOfAddUser: Yup.number().required('Limit Of Add User is required'),
-    leverageX: Yup.number().required('Leverage X is required'),
-    leverageY: Yup.number().required('Leverage Y is required'),
+    leverageXY: Yup.mixed<any>().nullable().required('Leverage  is required'),
   });
   const NewMasterSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     ID: Yup.string().required('User Id is required'),
     password: Yup.string().required('Password is required'),
     role: Yup.mixed<any>().nullable().required('Role is required'),
-    exchangeGroup: Yup.array().min(1, 'Must have at least 1 exchange'),
-    allowedExchange: Yup.array().min(1, 'Must have at least 1 exchange'),
+    exchangeGroup: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
+    allowedExchange: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
     limitOfAddUser: Yup.number().required('Limit Of Add User is required'),
     leverageX: Yup.number().required('Leverage X is required'),
     leverageY: Yup.number().required('Leverage Y is required'),
@@ -118,8 +127,8 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     ID: Yup.string().required('User Id is required'),
     password: Yup.string().required('Password is required'),
     role: Yup.mixed<any>().nullable().required('Role is required'),
-    exchangeGroup: Yup.array().min(1, 'Must have at least 1 exchange'),
-    allowedExchange: Yup.array().min(1, 'Must have at least 1 exchange'),
+    exchangeGroup: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
+    allowedExchange: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
     leverageX: Yup.number().required('Leverage X is required'),
     leverageY: Yup.number().required('Leverage Y is required'),
     brokerage: Yup.number().required('Brokerage is required'),
@@ -147,6 +156,50 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     }),
     [defaultAllowedExchange, defaultExchangeOptions]
   );
+
+  const allowedExchangeComponent = (index: any) => (
+    <Box sx={{ display: 'flex', gap: 2, width: '100%' }}>
+      <RHFAutocomplete
+        sx={{ width: '100%' }}
+        name="allowedExchange"
+        label="Allowed Exchange"
+        // control={control}
+        isReadOnly={!!isView}
+        options={ExchangeOptions}
+        freeSolo
+        data={ExchangeOptions}
+        defaultValue={currentUser && defaultAllowedExchange}
+        isLabled={false}
+        isOptionEqualToValue={(option, value) => option.value === value.value}
+        getOptionLabel={(option: any) => option.label}
+        renderOption={(props, option, { selected }) => (
+          <li {...props} key={option.value}>
+            {option.label}
+          </li>
+        )}
+      />
+      <RHFAutocomplete
+        sx={{ width: '100%' }}
+        name="exchangeGroup"
+        label="Exchange Group"
+        // control={control}
+        isReadOnly={!!isView}
+        options={EXCHANGE_GROUP}
+        freeSolo
+        defaultValue={currentUser && defaultExchangeOptions}
+        data={EXCHANGE_GROUP}
+        isLabled={false}
+        isOptionEqualToValue={(option, value) => option.value === value.value}
+        getOptionLabel={(option: any) => option.label}
+        renderOption={(props, option, { selected }) => (
+          <li {...props} key={option.value}>
+            {option.label}
+          </li>
+        )}
+      />
+    </Box>
+  );
+
   const getValidationSchema = (role: any) => {
     switch (role) {
       case 'SUPER_MASTER':
@@ -178,6 +231,64 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   } = methods;
 
   const value = watch();
+
+  useEffect(() => {
+    if (currentUser) {
+      setValue('exchangeList', currentUser?.exchangeList);
+    }
+  }, []);
+
+  const { append, remove } = useFieldArray({
+    name: 'exchangeList',
+    control,
+  });
+
+  const [components, setComponents] = useState([]); // State to hold components
+
+  const addNewComponent = () => {
+    // const newComponents: any = [...components, allowedExchangeComponent()];
+    if (value.allowedExchange?.label && value?.exchangeGroup.label) {
+      append({
+        allowedExchange: value?.allowedExchange?.value,
+        exchangeGroup: value?.exchangeGroup?.value,
+      });
+      setValue('allowedExchange', {});
+      setValue('exchangeGroup', {});
+      // setComponents(newComponents);
+    }
+  };
+
+  const removeComponent = () => {
+    console.log({ value });
+
+    const lastPos = value?.exchangeList[value?.exchangeList.length - 1];
+
+    console.log({ lastPos });
+    const lastValueOfAllowedExchange = Exchange.filter(
+      (data) => data.value === lastPos.allowedExchange
+    )[0];
+    const lastValueOfExchangeGroup = Exchange.filter(
+      (data) => data.value === lastPos.exchangeGroup
+    )[0];
+
+    console.log({ lastValueOfAllowedExchange, lastPos });
+
+    if (value.exchangeList?.length >= 1) {
+      // const newComponents = components.slice(0, -1);
+      // setComponents(newComponents);
+
+      if (
+        !(value.exchangeList.length < components.length) ||
+        value.exchangeList.length === components.length
+      ) {
+        setValue('allowedExchange', lastValueOfAllowedExchange);
+        setValue('exchangeGroup', lastValueOfExchangeGroup);
+        remove(value.exchangeList.length - 1);
+      }
+    } else {
+      alert('At least one component must remain!');
+    }
+  };
 
   console.log({ value });
   console.log({ isSubmitting });
@@ -288,6 +399,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       console.log({ data });
       enqueueSnackbar(data?.message, { variant: 'success' });
       // router.push(paths.dashboard.superMaster.list);
+      router.push(path.person.list);
     },
     onError: (error: any) => {
       if (isAxiosError(error)) {
@@ -302,6 +414,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       console.log({ data });
       enqueueSnackbar(data?.message, { variant: 'success' });
       // router.push(paths.dashboard.superMaster.list);
+      router.push(path.person.list);
     },
     onError: (error: any) => {
       if (isAxiosError(error)) {
@@ -316,6 +429,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       console.log({ data });
       enqueueSnackbar(data?.message, { variant: 'success' });
       // router.push(paths.dashboard.superMaster.list);
+      router.push(path.person.list);
     },
     onError: (error: any) => {
       if (isAxiosError(error)) {
@@ -327,6 +441,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   const { mutate: updateUser }: any = useMutation(updateUserByRole(role), {
     onSuccess: (data: any) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
+      router.push(path.person.list);
     },
     onError: (error: any) => {
       if (isAxiosError(error)) {
@@ -338,6 +453,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     onSuccess: (data: any) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
       // router.push(paths.dashboard.symbol.root);
+      router.push(path.person.list);
     },
     onError: (error: any) => {
       if (isAxiosError(error)) {
@@ -350,6 +466,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     onSuccess: (data) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
       // router.push(paths.dashboard.symbol.root);
+      router.push(path.person.list);
     },
     onError: (error: any) => {
       if (isAxiosError(error)) {
@@ -400,7 +517,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
         }
       }
       // console.log({ path });
-      router.push(path.person.list);
+      // router.push(path.person.list);
     } catch (error) {
       console.log(error);
     }
@@ -501,22 +618,25 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                   label="Limit Of Add User"
                 />
               )}
-
-              <RHFTextField
-                isReadOnly={!!isView}
-                name="leverageX"
-                type="number"
-                label="Leverage X"
-              />
-
-              <RHFTextField
-                isReadOnly={!!isView}
-                name="leverageY"
-                type="number"
-                label="Leverage Y"
-              />
-
               <RHFAutocomplete
+                name="leverageXY"
+                label="Leverage"
+                // control={control}
+                isReadOnly={!!isView}
+                options={LEVERAGE_OPTIONS}
+                defaultValue={currentUser && defaultLeverageOptions}
+                data={LEVERAGE_OPTIONS}
+                isLabled={false}
+                isOptionEqualToValue={(option, value) => option.value === value.value}
+                getOptionLabel={(option: any) => option.label}
+                renderOption={(props, option) => (
+                  <li {...props} key={option.value}>
+                    {option.label}
+                  </li>
+                )}
+              />
+
+              {/* <RHFAutocomplete
                 name="exchangeGroup"
                 label="Exchange Group"
                 // control={control}
@@ -566,11 +686,10 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                     {option.label}
                   </li>
                 )}
-              />
+              /> */}
 
               {roleOption !== 'USER' && (
                 <>
-                  {' '}
                   <RHFCheckbox
                     isReadOnly={!!isView}
                     name="insertCustomBet"
@@ -594,6 +713,53 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                 />
               )}
             </Box>
+
+            <Stack sx={{ mt: 3 }}>
+              <Accordion>
+                <AccordionSummary
+                  expandIcon={<ExpandMoreIcon />}
+                  aria-controls="panel1a-content"
+                  id="panel1a-header"
+                >
+                  <Typography sx={{ marginBottom: 1 }}>Allow Exchanges</Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Grid container spacing={1}>
+                    <Box sx={{ display: 'flex', gap: 2, width: '100%', flexWrap: 'wrap' }}>
+                      {allowedExchangeComponent(0)}
+                      {value?.exchangeList?.map((data: any, index: any) =>
+                        allowedExchangeComponent(index + 1)
+                      )}
+                    </Box>
+                    <Grid xs={6}>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          width: '100%',
+                          mt: 1,
+                        }}
+                      >
+                        <LoadingButton
+                          variant="contained"
+                          disabled={!(Exchange.length - 1 > value.exchangeList?.length)}
+                          onClick={() => addNewComponent()}
+                        >
+                          ADD EXCHANGE
+                        </LoadingButton>
+                        <LoadingButton
+                          disabled={!(value.exchangeList?.length >= 1)}
+                          variant="contained"
+                          onClick={() => removeComponent()}
+                        >
+                          REMOVE EXCHANGE
+                        </LoadingButton>
+                      </Box>
+                    </Grid>
+                  </Grid>
+                </AccordionDetails>
+              </Accordion>
+            </Stack>
 
             {!isView && (
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>
