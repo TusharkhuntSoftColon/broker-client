@@ -1,13 +1,14 @@
-import { Helmet } from 'react-helmet-async';
 import { useSelector } from 'react-redux';
+import { Helmet } from 'react-helmet-async';
+
 import { paths } from 'src/routes/paths';
+
 import { PersonListView } from 'src/sections/person/view';
 
 // ----------------------------------------------------------------------
 
 export default function PersonListPage() {
   const role = useSelector((data: any) => data.auth.role);
-  console.log({ role });
   // const path = paths.dashboard;
 
   const getPath = (role: any) => {

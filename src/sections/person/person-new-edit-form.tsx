@@ -54,7 +54,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
 
   const [exchangeData, setExchangeData] = useState<any>();
 
-  console.log('Workd1');
   const Exchange: { label: any; value: any }[] = [];
   for (let i = 0; i < ExchangeList?.length; i++) {
     Exchange.push({
@@ -62,21 +61,24 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       value: ExchangeList[i]?._id,
     });
   }
-  console.log(Exchange);
 
-  const defaultAllowedExchange = useMemo(() => {
+  const defaultAllowedExchange = (index: number) => {
     if (!currentUser) return [];
-    return Exchange.filter((option: any) => currentUser?.allowedExchange?.includes(option.value));
-  }, [currentUser, Exchange]);
+    return Exchange.filter(
+      (option: any) => currentUser?.exchangeList[index]?.allowedExchange === option.value
+    )[0];
+  };
 
-  const defaultExchangeOptions = useMemo(() => {
+  const defaultExchangeOptions = (index: number) => {
+    console.log({ index });
     if (!currentUser) return [];
     return EXCHANGE_GROUP.filter(
-      (option: any) => currentUser?.exchangeGroup?.includes(option.value)
-    );
-  }, [currentUser]);
+      (option: any) => currentUser?.exchangeList[index]?.exchangeGroup === option.value
+    )[0];
+  };
 
   const defaultLeverageOptions = useMemo(() => {
+    console.log({ currentUser });
     if (!currentUser) return [];
     return LEVERAGE_OPTIONS.filter(
       (option: any) => currentUser?.leverageXY.slice(1, -1) === option.value
@@ -103,7 +105,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   const NewSuperMasterSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     ID: Yup.string().required('User Id is required'),
-    password: Yup.string().required('Password is required'),
     role: Yup.mixed<any>().nullable().required('Role is required'),
     exchangeGroup: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
     allowedExchange: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
@@ -114,23 +115,19 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   const NewMasterSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     ID: Yup.string().required('User Id is required'),
-    password: Yup.string().required('Password is required'),
     role: Yup.mixed<any>().nullable().required('Role is required'),
     exchangeGroup: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
     allowedExchange: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
     limitOfAddUser: Yup.number().required('Limit Of Add User is required'),
-    leverageX: Yup.number().required('Leverage X is required'),
-    leverageY: Yup.number().required('Leverage Y is required'),
+    leverageXY: Yup.mixed<any>().nullable().required('Leverage  is required'),
   });
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     ID: Yup.string().required('User Id is required'),
-    password: Yup.string().required('Password is required'),
     role: Yup.mixed<any>().nullable().required('Role is required'),
     exchangeGroup: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
     allowedExchange: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
-    leverageX: Yup.number().required('Leverage X is required'),
-    leverageY: Yup.number().required('Leverage Y is required'),
+    leverageXY: Yup.mixed<any>().nullable().required('Leverage  is required'),
     brokerage: Yup.number().required('Brokerage is required'),
     investorPassword: Yup.string().required('Invester Password is required'),
   });
@@ -138,16 +135,15 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   const defaultValues: any = useMemo(
     () => ({
       name: currentUser?.name || '',
-      password: currentUser?.password || '',
       ID: currentUser?.ID || '',
       exchangeGroup: defaultExchangeOptions || [],
       allowedExchange: defaultAllowedExchange || [],
       insertCustomBet: currentUser?.insertCustomBet || false,
+      exchangeList: [],
       editBet: currentUser?.editBet || false,
       role: currentUser?.role || '',
       deleteBet: currentUser?.deleteBet || false,
-      leverageX: currentUser?.leverageX || '',
-      leverageY: currentUser?.leverageY || '',
+      leverageXY: defaultLeverageOptions || '',
       isActive: currentUser?.isActive || null,
       limitOfAddUser: currentUser?.limitOfAddUser || null,
       limitOfAddMaster: currentUser?.limitOfAddMaster || null,
@@ -168,7 +164,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
         options={ExchangeOptions}
         freeSolo
         data={ExchangeOptions}
-        defaultValue={currentUser && defaultAllowedExchange}
+        defaultValue={currentUser && defaultAllowedExchange(index)}
         isLabled={false}
         isOptionEqualToValue={(option, value) => option.value === value.value}
         getOptionLabel={(option: any) => option.label}
@@ -186,7 +182,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
         isReadOnly={!!isView}
         options={EXCHANGE_GROUP}
         freeSolo
-        defaultValue={currentUser && defaultExchangeOptions}
+        defaultValue={currentUser && defaultExchangeOptions(index)}
         data={EXCHANGE_GROUP}
         isLabled={false}
         isOptionEqualToValue={(option, value) => option.value === value.value}
@@ -231,6 +227,8 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   } = methods;
 
   const value = watch();
+  console.log({ errors });
+  console.log({ value });
 
   useEffect(() => {
     if (currentUser) {
@@ -263,15 +261,12 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
 
     const lastPos = value?.exchangeList[value?.exchangeList.length - 1];
 
-    console.log({ lastPos });
     const lastValueOfAllowedExchange = Exchange.filter(
       (data) => data.value === lastPos.allowedExchange
     )[0];
     const lastValueOfExchangeGroup = Exchange.filter(
       (data) => data.value === lastPos.exchangeGroup
     )[0];
-
-    console.log({ lastValueOfAllowedExchange, lastPos });
 
     if (value.exchangeList?.length >= 1) {
       // const newComponents = components.slice(0, -1);
@@ -289,10 +284,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       alert('At least one component must remain!');
     }
   };
-
-  console.log({ value });
-  console.log({ isSubmitting });
-  console.log({ errors });
 
   useEffect(() => {
     const fieldsToReset: any = [
@@ -451,9 +442,10 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   });
   const { mutate: updateMaster }: any = useMutation(updateMasterByRole(role), {
     onSuccess: (data: any) => {
+      // console.log({ data });
       enqueueSnackbar(data?.message, { variant: 'success' });
       // router.push(paths.dashboard.symbol.root);
-      router.push(path.person.list);
+      router.push(path?.person?.root);
     },
     onError: (error: any) => {
       if (isAxiosError(error)) {

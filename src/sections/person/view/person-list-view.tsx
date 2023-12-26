@@ -1,51 +1,51 @@
-import { useMutation } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
-import { isWithinInterval, parse } from 'date-fns';
 import isEqual from 'lodash/isEqual';
 import { useSnackbar } from 'notistack';
-import { useCallback, useEffect, useState } from 'react';
+import { parse, isWithinInterval } from 'date-fns';
+import { useMutation } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect, useCallback } from 'react';
 
-import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
-import Container from '@mui/material/Container';
-import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableContainer from '@mui/material/TableContainer';
+import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
+import Container from '@mui/material/Container';
+import TableBody from '@mui/material/TableBody';
+import IconButton from '@mui/material/IconButton';
+import TableContainer from '@mui/material/TableContainer';
 
-import { RouterLink } from 'src/routes/components';
 import { useRouter } from 'src/routes/hooks';
+import { RouterLink } from 'src/routes/components';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import adminService from 'src/services/adminService';
 import masterService from 'src/services/masterService';
 import superMasterService from 'src/services/superMasterService';
-import { addExchanges, addPerson } from 'src/store/slices/admin';
+import { addPerson, addExchanges } from 'src/store/slices/admin';
 
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
+  useTable,
   emptyRows,
+  TableNoData,
   getComparator,
   TableEmptyRows,
   TableHeadCustom,
-  TableNoData,
-  TablePaginationCustom,
   TableSelectedAction,
-  useTable,
+  TablePaginationCustom,
 } from 'src/components/table';
 
 import { IUserItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
 
-import UserTableFiltersResult from '../person-table-filters-result';
 import PersonTableRow from '../person-table-row';
 import UserTableToolbar from '../person-table-toolbar';
+import UserTableFiltersResult from '../person-table-filters-result';
 
 // ----------------------------------------------------------------------
 
@@ -74,8 +74,6 @@ export default function PersonListView({ path }: { path: any }) {
   console.log({ path });
   const table = useTable();
   const role = useSelector((data: any) => data.auth.role);
-
-  console.log({ role });
 
   const dispatch = useDispatch();
 

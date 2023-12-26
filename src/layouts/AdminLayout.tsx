@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Navigate } from 'react-router';
+import { useSelector } from 'react-redux';
 
 import Box from '@mui/material/Box';
 
@@ -8,13 +9,12 @@ import { useResponsive } from 'src/hooks/use-responsive';
 
 import { useSettingsContext } from 'src/components/settings';
 
-import { useSelector } from 'react-redux';
-import { useMasterNav, useNavData, useSuperMasterNav } from './dashboard/config-navigation';
+import Main from './main';
 import Header from './dashboard/header';
-import NavHorizontal from './dashboard/nav-horizontal';
 import NavMini from './dashboard/nav-mini';
 import NavVertical from './dashboard/nav-vertical';
-import Main from './main';
+import NavHorizontal from './dashboard/nav-horizontal';
+import { useNavData, useMasterNav, useSuperMasterNav } from './dashboard/config-navigation';
 
 type Props = {
   children: React.ReactNode;
@@ -23,8 +23,6 @@ type Props = {
 const AdminLayout = ({ children }: Props) => {
   // const { role } = useAuth();
   const role = useSelector((data: any) => data.auth.role);
-
-  // console.log({ role });
 
   const [manager, setmaneger] = useState(true);
 

@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux';
 
+import { Box } from '@mui/system';
 import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import Checkbox from '@mui/material/Checkbox';
@@ -36,7 +37,7 @@ export default function PersonTableRow({
   onDeleteRow,
   onViewRow,
 }: Props) {
-  const { name, allowedExchange, ID, isActive, createdAt } = row;
+  const { name, exchangeList, ID, isActive, createdAt } = row;
 
   const confirm = useBoolean();
 
@@ -76,13 +77,10 @@ export default function PersonTableRow({
 
         {/* <TableCell sx={{ whiteSpace: 'nowrap' }}>{role}</TableCell> */}
 
-        {/* <TableCell>
+        <TableCell>
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-            {allowedExchange?.map((_el: any) => {
-              const data = exchangeData?.filter((el: any) => el._id === _el);
-              console.log({ allowedExchange });
-              console.log({ exchangeData });
-              console.log({ data });
+            {exchangeList.map((_el: any) => {
+              const data = exchangeData?.filter((el: any) => el._id === _el.allowedExchange);
               return (
                 <Label variant="soft" color="default">
                   {data && data[0]?.name}
@@ -90,11 +88,11 @@ export default function PersonTableRow({
               );
             })}
           </Box>
-        </TableCell> */}
+        </TableCell>
 
         <TableCell>
           <ListItemText
-            primary={<span>{createdAt || '-'}</span>}
+            primary={<span>{createdAt.substring(0, 10) || '-'}</span>}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
             secondaryTypographyProps={{
               mt: 0.5,
