@@ -1,8 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
+import { useState, useEffect, useCallback } from 'react';
 
-import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 
 import useAuth from 'src/hooks/useAuth';
 
@@ -40,8 +40,6 @@ function Container({ children }: Props) {
   const { authenticated, method } = useAuthContext();
   const { token } = useAuth();
 
-  console.log({ token });
-
   const [checked, setChecked] = useState(false);
 
   const check = useCallback(() => {
@@ -49,8 +47,6 @@ function Container({ children }: Props) {
       // const searchParams = new URLSearchParams({
       //   returnTo: window.location.pathname,
       // }).toString();
-
-      console.log({ token });
 
       router.replace('/auth/login');
 

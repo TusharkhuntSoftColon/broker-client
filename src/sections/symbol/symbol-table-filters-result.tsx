@@ -30,7 +30,6 @@ export default function SymbolTableFiltersResult({
 }: Props) {
   const shortLabel = shortDateLabel(filters.startDate, filters.endDate);
 
-  console.log({ filters });
 
   const handleRemoveStatus = () => {
     onFilters('status', null);
@@ -49,7 +48,6 @@ export default function SymbolTableFiltersResult({
     onFilters('endDate', null);
   };
 
-  console.log({ filters });
 
   return (
     <Stack spacing={1.5} {...other}>

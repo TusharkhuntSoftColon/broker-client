@@ -1,25 +1,24 @@
 import isEqual from 'lodash/isEqual';
 import { useSnackbar } from 'notistack';
-import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useState, useCallback } from 'react';
 
-import { Box, InputAdornment, TableBody, TextField } from '@mui/material';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
+import { Box, TableBody, TextField, InputAdornment } from '@mui/material';
 
 import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { _mock, USER_STATUS_OPTIONS } from 'src/_mock';
-import { _tradeList } from 'src/_mock/_trade';
 import { deleteAdmin } from 'src/store/slices/admin';
+import { _mock, USER_STATUS_OPTIONS } from 'src/_mock';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
-import { getComparator, TableHeadCustom, useTable } from 'src/components/table';
+import { useTable, getComparator, TableHeadCustom } from 'src/components/table';
 
 import { IUserItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
 
@@ -58,8 +57,6 @@ export default function xxSymbolLiveList() {
   const confirm = useBoolean();
 
   const { enqueueSnackbar } = useSnackbar();
-
-  console.log({ _tradeList });
 
   // const symbolTableDashboard = useSelector((data: any) => data?.admin?.adminList);
 
@@ -113,8 +110,6 @@ export default function xxSymbolLiveList() {
     };
   });
 
-  console.log({ symbolTableDashboard });
-
   const [filters, setFilters] = useState(defaultFilters);
 
   const dataFiltered = applyFilter({
@@ -147,7 +142,6 @@ export default function xxSymbolLiveList() {
 
   const handleDeleteRow = useCallback(
     (id: string) => {
-      console.log('delete row works');
       dispatch(deleteAdmin(id));
       enqueueSnackbar('Deleted Successfully', { variant: 'success' });
       table.onUpdatePageDeleteRow(dataInPage.length);
@@ -168,7 +162,6 @@ export default function xxSymbolLiveList() {
 
   const handleEditRow = useCallback(
     (id: string) => {
-      console.log({ id });
       // router.push(paths.dashboard.user.edit(id));
     },
     [router]
@@ -176,7 +169,6 @@ export default function xxSymbolLiveList() {
 
   const handleViewRow = useCallback(
     (id: string) => {
-      console.log({ id });
       // router.push(paths.dashboard.user.details(id));
     },
     [router]
@@ -318,10 +310,9 @@ function applyFilter({
   inputData = stabilizedThis?.map((el: any) => el[0]);
 
   if (name) {
-    inputData = inputData.filter((user: any) => {
-      console.log({ user });
-      return user.name.toLowerCase().indexOf(name.toLowerCase()) !== -1;
-    });
+    inputData = inputData.filter(
+      (user: any) => user.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+    );
   }
 
   if (status !== 'all') {

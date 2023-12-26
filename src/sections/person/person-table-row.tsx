@@ -47,7 +47,6 @@ export default function PersonTableRow({
 
   const exchangeData = useSelector((data: any) => data?.admin?.exchangeList);
 
-  console.log({ exchangeData });
 
   return (
     <>

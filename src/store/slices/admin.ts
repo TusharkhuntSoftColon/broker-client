@@ -24,9 +24,7 @@ const adminSlice = createSlice({
   reducers: {
     resetState: () => initialState,
     addPerson: (state, action) => {
-      // console.log('Action in slice', action.payload);
       const data = action.payload;
-      console.log({ data });
       // state.personList = state.personList.concat({
       //   data,
       //   id: Math.random().toString(36).substr(2, 5),
@@ -46,7 +44,6 @@ const adminSlice = createSlice({
     },
     updateAdmin: (state, action) => {
       const { id, updatedData } = action.payload;
-      console.log({ updatedData });
       const data = {
         ...updatedData,
         id,
@@ -54,22 +51,16 @@ const adminSlice = createSlice({
       };
       const dataIndex = state.personList.findIndex((item: any) => item.id === id);
 
-      console.log({ dataIndex });
       if (dataIndex !== -1) {
         state.personList[dataIndex] = data;
       }
-
-      // console.log({ data });
     },
     deleteAdmin: (state, action) => {
       const id = action.payload;
-      console.log({ id });
       state.personList = state.personList.filter((data: any) => data.id !== id);
-      // console.log(state.personList);
     },
     addExchanges: (state, action) => {
       state.exchangeList = action.payload;
-      // console.log(state.personList);
     },
   },
 });

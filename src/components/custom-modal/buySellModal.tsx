@@ -1,18 +1,19 @@
-import CloseIcon from '@mui/icons-material/Close';
-import { Box, FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { useState } from 'react';
+
+import { styled } from '@mui/system';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
 import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
-import { styled } from '@mui/system';
 import { DatePicker } from '@mui/x-date-pickers';
+import CloseIcon from '@mui/icons-material/Close';
+import Typography from '@mui/material/Typography';
+import DialogContent from '@mui/material/DialogContent';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
-import { useState } from 'react';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { Box, Select, MenuItem, FormControl, SelectChangeEvent } from '@mui/material';
 
 // import { ConfirmDialogProps } from './types';
 
@@ -48,8 +49,6 @@ export default function BuySellDialog({
     comment: '',
   });
 
-  console.log({ value });
-
   const dummyTypes = [
     { label: 'Instant Execution', value: 'instant-execution' },
     { label: 'Buy Limit', value: 'buy-limit' },
@@ -66,9 +65,6 @@ export default function BuySellDialog({
     { label: 'Specified', value: 'specified' },
     { label: 'Specified Day', value: 'specified-day' },
   ];
-  console.log({ isEdit });
-  console.log({ row });
-  console.log({ value });
 
   const handleMinusClick = (field: any) => {
     setValue((prevState: any) => ({
@@ -106,15 +102,13 @@ export default function BuySellDialog({
 
   const handleSellClick = () => {
     // console.log('Sell Clicked');
-    console.log({ type });
-    console.log({ value });
+
     onClose();
   };
 
   const handleBuyClick = () => {
     // console.log('Buy Clicked');
-    console.log({ type });
-    console.log({ value });
+
     onClose();
   };
   return (
@@ -425,13 +419,11 @@ export default function BuySellDialog({
                   },
                 }}
               >
-                {expirationData.map((data: any) => {
-                  return (
-                    <MenuItem sx={{ fontSize: '14px' }} value={data.value}>
-                      {data.label}
-                    </MenuItem>
-                  );
-                })}
+                {expirationData.map((data: any) => (
+                  <MenuItem sx={{ fontSize: '14px' }} value={data.value}>
+                    {data.label}
+                  </MenuItem>
+                ))}
               </Select>
             </FormControl>
           </Box>

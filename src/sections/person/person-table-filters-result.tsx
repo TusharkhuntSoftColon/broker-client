@@ -41,7 +41,6 @@ export default function UserTableFiltersResult({
     onFilters('dateRange', []);
   };
 
-  console.log({ filters });
 
   return (
     <Stack spacing={1.5} {...other}>

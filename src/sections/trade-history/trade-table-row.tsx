@@ -1,11 +1,11 @@
-import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { usePopover } from 'src/components/custom-popover';
-
 import UpdateTradeDialog from 'src/components/custom-modal/updateTradeModal';
+
 import { ITrade } from 'src/types/trade';
 
 // ----------------------------------------------------------------------
@@ -28,8 +28,6 @@ export default function TradeTableRow({
   onViewRow,
 }: Props) {
   const { symbol, ticket, time, type, volume, price1, price2, swap, profit, sl, tp } = row;
-
-  // console.log({ row });
 
   const confirm = useBoolean();
 
@@ -102,7 +100,7 @@ export default function TradeTableRow({
         </TableCell> */}
       </TableRow>
 
-      <UpdateTradeDialog open={confirm.value} onClose={confirm.onFalse} row={row} isEdit={true} />
+      <UpdateTradeDialog open={confirm.value} onClose={confirm.onFalse} row={row} isEdit />
     </>
   );
 }

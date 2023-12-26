@@ -1,36 +1,36 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
-import { useEffect, useMemo, useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useDispatch, useSelector } from 'react-redux';
 import * as Yup from 'yup';
+import { isAxiosError } from 'axios';
+import { useForm } from 'react-hook-form';
+import { useMutation } from '@tanstack/react-query';
+import { useMemo, useState, useEffect } from 'react';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useDispatch, useSelector } from 'react-redux';
 
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
-import LoadingButton from '@mui/lab/LoadingButton';
-import { Checkbox, Typography } from '@mui/material';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { Checkbox, Typography } from '@mui/material';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlankOutlined';
 
-import { useRouter } from 'src/routes/hooks';
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 
 import { EXCHANGE_GROUP } from 'src/_mock';
-import exchangeService from 'src/services/exchangeService';
-
-import FormProvider, {
-  RHFAutocomplete,
-  RHFCheckbox,
-  RHFSwitch,
-  RHFTextField,
-} from 'src/components/hook-form';
-import { useSnackbar } from 'src/components/snackbar';
-
 import { MASTER_ROLE } from 'src/_mock/_master';
 import MasterService from 'src/services/masterService';
+import exchangeService from 'src/services/exchangeService';
+
+import { useSnackbar } from 'src/components/snackbar';
+import FormProvider, {
+  RHFSwitch,
+  RHFCheckbox,
+  RHFTextField,
+  RHFAutocomplete,
+} from 'src/components/hook-form';
+
 import { IUserItem } from 'src/types/user';
 
 // ----------------------------------------------------------------------
@@ -101,7 +101,6 @@ export default function MasterNewEditForm({ currentUser, isView }: Props) {
   // create ADMIN
   const { mutate: createMaster } = useMutation(MasterService.createMaster, {
     onSuccess: (data) => {
-      console.log({ data });
       enqueueSnackbar(data?.message, { variant: 'success' });
       router.push(paths.dashboard.master.root);
     },
@@ -126,7 +125,6 @@ export default function MasterNewEditForm({ currentUser, isView }: Props) {
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log({ data });
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();

@@ -1,19 +1,19 @@
-import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
-import * as Yup from 'yup';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
+import LoadingButton from '@mui/lab/LoadingButton';
 
-import FormProvider, { RHFTextField } from '../../components/hook-form';
-import { useSnackbar } from '../../components/snackbar';
-import { useRouter } from '../../routes/hooks';
 import { paths } from '../../routes/paths';
+import { useRouter } from '../../routes/hooks';
 import { ExchangeProp } from '../../types/user';
+import { useSnackbar } from '../../components/snackbar';
+import FormProvider, { RHFTextField } from '../../components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -41,7 +41,6 @@ export default function BrokerageNewEditForm({ currentExchange }: Props) {
     [currentExchange]
   );
 
-  console.log({ currentExchange });
 
   const methods = useForm({
     resolver: yupResolver(NewUserSchema),
@@ -60,7 +59,6 @@ export default function BrokerageNewEditForm({ currentExchange }: Props) {
   const values = watch();
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log({ data });
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();

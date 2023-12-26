@@ -112,7 +112,6 @@ export default function AppNewInvoice() {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    console.log({ newValue });
     setValue(newValue);
   };
 

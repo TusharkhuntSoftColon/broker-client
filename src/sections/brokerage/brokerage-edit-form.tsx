@@ -46,7 +46,6 @@ export default function BrokerageQuickEditForm({
 
   const [symbolData, setSymbolData] = useState<any>([]);
 
-
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     statusOfExchange: Yup.mixed<any>().nullable().required('Status Of Exchange is required'),
@@ -120,12 +119,10 @@ export default function BrokerageQuickEditForm({
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log({ data });
     try {
       if (currentUser) {
         // updateExchange({ data, _id: currentUser?._id });
         dispatch(updateExchange({ id: currentUser?._id, updatedData: data }));
-        console.log({ data });
       } else {
         // createExchange(data);
         dispatch(addExchange(data));
@@ -151,12 +148,12 @@ export default function BrokerageQuickEditForm({
   }
 
   const symbols = [
-    {label:"Tata",value:"12345"},
-    {label:"Adani",value:"12345"},
-    {label:"Infosys",value:"12345"},
-    {label:"TCS",value:"12345"},
-    {label:"Adani Energy",value:"12345"},
-  ]
+    { label: 'Tata', value: '12345' },
+    { label: 'Adani', value: '12345' },
+    { label: 'Infosys', value: '12345' },
+    { label: 'TCS', value: '12345' },
+    { label: 'Adani Energy', value: '12345' },
+  ];
 
   // console.log({ SymbolOption });
   return (

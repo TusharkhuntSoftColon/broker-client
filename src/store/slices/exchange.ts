@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/naming-convention */
 import { createSlice } from '@reduxjs/toolkit';
 
-
 // Define a type for the slice state
 interface ExchangeState {
   exchangeList: any;
@@ -36,8 +35,6 @@ const exchangeSlice = createSlice({
     },
     updateExchange: (state, action) => {
       const { id, updatedData } = action.payload;
-      console.log({ id });
-      console.log({ updatedData });
       const data = {
         ...updatedData,
         _id: id,
@@ -48,14 +45,10 @@ const exchangeSlice = createSlice({
       if (dataIndex !== -1) {
         state.exchangeList[dataIndex] = data;
       }
-
-      // console.log({ data });
     },
     deleteExchange: (state, action) => {
       const id = action.payload;
-      console.log({ id });
       state.exchangeList = state.exchangeList.filter((data: any) => data._id !== id);
-      // console.log(state.exchangeList);
     },
   },
 });

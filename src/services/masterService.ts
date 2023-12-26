@@ -19,18 +19,25 @@ export interface adminType {
 
 const masterService = {
   createUser: async (data: any): Promise<any> => {
+    const newExchangeList = [
+      ...data.exchangeList,
+      {
+        allowedExchange: data.allowedExchange.value,
+        exchangeGroup: data.exchangeGroup?.value,
+      },
+    ];
+    const exchangeList =
+      data.allowedExchange.value && data.exchangeGroup.value ? newExchangeList : data?.exchangeList;
     try {
       const response: AxiosResponse<any> = await client.post(CREATE_USER_BY_MASTER, {
         ID: data?.ID,
         name: data?.name,
         password: data?.password,
         role: data?.role?.value,
-        exchangeGroup: data?.exchangeGroup?.map((option: any) => option.value),
-        allowedExchange: data?.allowedExchange?.map((option: any) => option.value),
-        leverageX: data?.leverageX,
-        leverageY: data?.leverageY,
+        leverageXY: `[${data?.leverageXY.value}]`,
         brokerage: data?.brokerage,
         investorPassword: data?.investorPassword,
+        exchangeList,
       });
       return response.data;
     } catch (error) {
@@ -50,20 +57,27 @@ const masterService = {
     }
   },
   updateUser: async (UserData: any): Promise<any> => {
+    const newExchangeList = [
+      ...UserData?.data?.exchangeList,
+      {
+        allowedExchange: UserData?.data?.allowedExchange.value,
+        exchangeGroup: UserData?.data?.exchangeGroup?.value,
+      },
+    ];
+    const exchangeList =
+      UserData?.data?.allowedExchange.value && UserData?.data?.exchangeGroup.value
+        ? newExchangeList
+        : UserData?.data?.exchangeList;
     try {
       const response: AxiosResponse<any> = await client.put(
         `${UPDATE_USER_BY_MASTER}/${UserData._id}`,
         {
           ID: UserData?.data?.ID,
           name: UserData?.data?.name,
-          password: UserData?.data?.password,
           role: UserData?.data?.role?.value,
-          exchangeGroup: UserData?.data?.exchangeGroup?.map((option: any) => option.value),
-          allowedExchange: UserData?.data?.allowedExchange?.map((option: any) => option.value),
-          leverageX: UserData?.data?.leverageX,
-          leverageY: UserData?.data?.leverageY,
+          leverageXY: `[${UserData?.data?.leverageXY.value}]`,
           brokerage: UserData?.data?.brokerage,
-          investorPassword: UserData?.data?.investorPassword,
+          exchangeList,
           isActive: UserData?.data?.isActive,
         }
       );

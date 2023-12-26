@@ -5,9 +5,9 @@
 /* eslint-disable no-underscore-dangle */
 import axios from 'axios';
 
-import { resetState, setRefreshToken } from '../store/slices/auth';
-import { BASE_URL } from '../utils/environments';
 import client from './client';
+import { BASE_URL } from '../utils/environments';
+import { resetState, setRefreshToken } from '../store/slices/auth';
 
 let isRefreshTokenUpdating = false;
 
@@ -15,7 +15,6 @@ export default function addAuthTokenInterceptor(store) {
   client.interceptors.request.use((req) => {
     const { token } = store.getState().auth;
 
-    console.log(token);
     if (!token) return req;
     req.headers.Authorization = `Bearer ${token}`;
     return req;
@@ -26,7 +25,7 @@ export default function addAuthTokenInterceptor(store) {
       const originalConfig = error?.config;
       const { refreshToken } = store.getState().auth;
 
-      // console.log({ refreshToken });
+      // ({ refreshToken });
       const { token } = store.getState().auth;
       // originalConfig._retry = true;
 
@@ -57,14 +56,10 @@ export default function addAuthTokenInterceptor(store) {
             };
 
             const result = await axios.request(config);
-            console.log({ result });
             isRefreshTokenUpdating = false;
             store.dispatch(setRefreshToken(result.data.data));
             return await client(originalConfig);
           } catch (error) {
-            console.log(
-              'This Line Working!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!'
-            );
             isRefreshTokenUpdating = false;
             store.dispatch(resetState());
             return (window.location = '/auth/login');

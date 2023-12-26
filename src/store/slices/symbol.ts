@@ -22,7 +22,7 @@ const symbolSlice = createSlice({
   reducers: {
     resetState: () => initialState,
     addSymbol: (state, action) => {
-      // console.log('Action in slice', action.payload);
+      // ('Action in slice', action.payload);
       const data = action.payload;
       // state.symbolList = state.symbolList.concat({
       //   data,
@@ -35,21 +35,15 @@ const symbolSlice = createSlice({
       const { id, updatedData } = action.payload;
       const dataIndex = state.symbolList.findIndex((item: any) => item.id === id);
 
-      console.log({ updatedData });
       const data = { ...updatedData, id };
 
-      // console.log({ dataIndex });
       if (dataIndex !== -1) {
         state.symbolList[dataIndex] = data;
       }
-
-      // console.log({ data });
     },
     deleteSymbol: (state, action) => {
       const id = action.payload;
-      console.log({ id });
       state.symbolList = state.symbolList.filter((data: any) => data.id !== id);
-      // console.log(state.symbolList);
     },
   },
 });

@@ -18,8 +18,6 @@ const symbolService = {
     try {
       const response: AxiosResponse<any> = await client.get(GET_SYMBOL_LIST);
 
-      // console.log({ response });
-
       return response.data;
     } catch (error) {
       // You can log the error here for debugging purposes
@@ -31,8 +29,6 @@ const symbolService = {
     try {
       const response: AxiosResponse<any> = await client.get(`${GET_SYMBOL_LIST}?id=${id}`);
 
-      console.log({ response });
-
       return response.data;
     } catch (error) {
       // You can log the error here for debugging purposes
@@ -41,7 +37,6 @@ const symbolService = {
     }
   },
   addSymbol: async (symbolData: any): Promise<any> => {
-    console.log({ symbolData });
     try {
       const response: AxiosResponse<any> = await client.post(ADD_SYMBOL, {
         ...symbolData,
@@ -67,7 +62,6 @@ const symbolService = {
     }
   },
   updateSymbol: async (symbolData: any): Promise<any> => {
-    console.log({ symbolData });
     try {
       const response: AxiosResponse<any> = await client.put(`${UPDATE_SYMBOL}${symbolData._id}`, {
         ...symbolData.data,

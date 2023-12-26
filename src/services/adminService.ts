@@ -38,7 +38,6 @@ export interface adminType {
 
 const adminService = {
   createSuperMaster: async (adminData: adminType): Promise<any> => {
-    console.log({ adminData });
     const newExchangeList = [
       ...adminData.exchangeList,
       {
@@ -50,8 +49,6 @@ const adminService = {
       adminData.allowedExchange.value && adminData.exchangeGroup.value
         ? newExchangeList
         : adminData?.exchangeList;
-
-    console.log({ exchangeList });
 
     try {
       const response: AxiosResponse<any> = await client.post(CREATE_SUPER_MASTER_BY_ADMIN, {
@@ -76,7 +73,6 @@ const adminService = {
   },
 
   createMaster: async (data: any): Promise<any> => {
-    console.log({ data });
     const newExchangeList = [
       ...data.exchangeList,
       {
@@ -176,7 +172,6 @@ const adminService = {
     }
   },
   updateSuperMaster: async (SuperMasterData: any): Promise<any> => {
-    console.log({ SuperMasterData });
     const newExchangeList = [
       ...SuperMasterData?.data.exchangeList,
       {
@@ -250,22 +245,28 @@ const adminService = {
     }
   },
   updateUser: async (UserData: any): Promise<any> => {
-    console.log({ UserData });
+    const newExchangeList = [
+      ...UserData?.data?.exchangeList,
+      {
+        allowedExchange: UserData?.data?.allowedExchange.value,
+        exchangeGroup: UserData?.data?.exchangeGroup?.value,
+      },
+    ];
+    const exchangeList =
+      UserData?.data?.allowedExchange.value && UserData?.data?.exchangeGroup.value
+        ? newExchangeList
+        : UserData?.data?.exchangeList;
     try {
       const response: AxiosResponse<any> = await client.put(
         `${UPDATE_USER_BY_ADMIN}/${UserData._id}`,
         {
           ID: UserData?.data?.ID,
           name: UserData?.data?.name,
-          password: UserData?.data?.password,
           role: UserData?.data?.role?.value,
-          exchangeGroup: UserData?.data?.exchangeGroup?.map((option: any) => option.value),
-          allowedExchange: UserData?.data?.allowedExchange?.map((option: any) => option.value),
-          leverageX: UserData?.data?.leverageX,
-          leverageY: UserData?.data?.leverageY,
+          leverageXY: `[${UserData?.data?.leverageXY.value}]`,
           brokerage: UserData?.data?.brokerage,
-          investorPassword: UserData?.data?.investorPassword,
           isActive: UserData?.data?.isActive,
+          exchangeList,
         }
       );
       return response.data;

@@ -41,8 +41,6 @@ export default function UserTableFiltersResult({
     onFilters('dateRange', []);
   };
 
-  console.log({ filters });
-
   return (
     <Stack spacing={1.5} {...other}>
       <Box sx={{ typography: 'body2' }}>
@@ -74,16 +72,14 @@ export default function UserTableFiltersResult({
 
         {!!filters.dateRange.length && (
           <Block label="Selected Range:">
-            {filters.dateRange.map((item: any) => {
-              return (
-                <Chip
-                  key={item}
-                  label={item.toDateString()}
-                  size="small"
-                  onDelete={() => handleRemoveDate()}
-                />
-              );
-            })}
+            {filters.dateRange.map((item: any) => (
+              <Chip
+                key={item}
+                label={item.toDateString()}
+                size="small"
+                onDelete={() => handleRemoveDate()}
+              />
+            ))}
           </Block>
         )}
 

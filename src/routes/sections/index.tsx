@@ -1,21 +1,19 @@
 import { Navigate, useRoutes } from 'react-router-dom';
 
-import { useMockedUser } from 'src/hooks/use-mocked-user';
 import useAuth from 'src/hooks/useAuth';
+import { useMockedUser } from 'src/hooks/use-mocked-user';
 
 import { paths } from '../paths';
-import { authDemoRoutes } from './auth-demo';
-import { componentsRoutes } from './components';
-import { dashboardRoutes } from './dashboard';
 import { mainRoutes } from './main';
+import { authDemoRoutes } from './auth-demo';
+import { dashboardRoutes } from './dashboard';
+import { componentsRoutes } from './components';
 
 // ----------------------------------------------------------------------
 
 export default function Router() {
   const { ADMIN, SUPER_MASTER, MASTER, USER } = useMockedUser();
   const { active } = useAuth();
-
-  console.log('Routes Working');
 
   return useRoutes([
     // SET INDEX PAGE WITH SKIP HOME PAGE

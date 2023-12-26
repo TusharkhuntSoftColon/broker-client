@@ -95,7 +95,6 @@ export default function MarginCallTableDashboard() {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    console.log({ newValue });
     setValue(newValue);
   };
 
@@ -223,7 +222,6 @@ function SymbolNewRow({ row, value, index }: SymbolNewRowProps) {
     console.info('DELETE', row.id);
   };
 
-  console.log({ row });
 
   return (
     <>

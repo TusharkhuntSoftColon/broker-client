@@ -18,7 +18,6 @@ type Props = {
 export default function PersonEditView({ id }: Props) {
   const settings = useSettingsContext();
   const adminData = useSelector((data: any) => data?.admin?.personList);
-  console.log({ adminData });
   const currentUser = adminData.find((user: any) => user._id === id);
 
   const role = useSelector((data: any) => data.auth.role);
@@ -41,7 +40,6 @@ export default function PersonEditView({ id }: Props) {
   };
 
   // console.log({ adminData });
-  console.log({ currentUser });
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs

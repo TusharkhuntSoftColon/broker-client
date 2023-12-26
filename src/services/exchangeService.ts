@@ -62,7 +62,6 @@ const exchangeService = {
     }
   },
   updateExchange: async (exchangeData: updateExchange): Promise<any> => {
-    console.log({ exchangeData });
     try {
       const response: AxiosResponse<any> = await client.put(
         `${UPDATE_EXCHANGE}${exchangeData._id}`,
@@ -72,7 +71,6 @@ const exchangeService = {
           status: exchangeData?.data?.status.value,
         }
       );
-      // console.log({ response });
       return response.data;
     } catch (error) {
       // You can log the error here for debugging purposes

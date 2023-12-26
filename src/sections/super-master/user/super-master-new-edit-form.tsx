@@ -103,7 +103,6 @@ export default function SuperMasterNewEditForm({ currentUser, isView }: Props) {
   // create ADMIN
   const { mutate: createSuperMaster } = useMutation(superMasterService.createSuperMaster, {
     onSuccess: (data) => {
-      console.log({ data });
       enqueueSnackbar(data?.message, { variant: 'success' });
       router.push(paths.dashboard.superMaster.list);
     },
@@ -128,7 +127,6 @@ export default function SuperMasterNewEditForm({ currentUser, isView }: Props) {
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log({ data });
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();

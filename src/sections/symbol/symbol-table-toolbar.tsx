@@ -1,21 +1,22 @@
-import { useCallback, useEffect, useMemo } from 'react';
 import * as Yup from 'yup';
+import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useMemo, useEffect, useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 
-import Iconify from 'src/components/iconify';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import { ISymbolTableFilterValue, ISymbolTableFilters } from 'src/types/symbol';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm } from 'react-hook-form';
 import { ExchangeStatus, SYMBOL_CURRENCY, SYMBOL_TICK_SIZE } from 'src/_mock';
+
+import Iconify from 'src/components/iconify';
 import { RHFAutocomplete } from 'src/components/hook-form';
 import FormProvider from 'src/components/hook-form/form-provider';
+import CustomPopover, { usePopover } from 'src/components/custom-popover';
+
+import { ISymbolTableFilters, ISymbolTableFilterValue } from 'src/types/symbol';
 
 // ----------------------------------------------------------------------
 
@@ -84,7 +85,6 @@ export default function SymbolTableToolbar({
     value.tickSize && onFilters('tickSize', value?.tickSize);
   }, [value?.tickSize]);
 
-  console.log({ value });
 
   const handleFilterName = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,15 +1,15 @@
-import { Button, IconButton, Tooltip } from '@mui/material';
 import Checkbox from '@mui/material/Checkbox';
-import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
+import TableCell from '@mui/material/TableCell';
+import { Button, Tooltip, IconButton } from '@mui/material';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { ConfirmDialog } from 'src/components/custom-dialog';
-import { usePopover } from 'src/components/custom-popover';
-import Iconify from 'src/components/iconify';
-
 import Label from 'src/components/label';
+import Iconify from 'src/components/iconify';
+import { usePopover } from 'src/components/custom-popover';
+import { ConfirmDialog } from 'src/components/custom-dialog';
+
 import { ISymbolItem } from 'src/types/symbol';
 
 // ----------------------------------------------------------------------
@@ -137,7 +137,6 @@ export default function SymbolTableRow({
             <IconButton
               color={popover.open ? 'inherit' : 'default'}
               onClick={(e) => {
-                console.log('function');
                 e.stopPropagation();
                 confirm.onTrue();
               }}

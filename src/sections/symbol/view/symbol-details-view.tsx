@@ -1,15 +1,16 @@
-import Container from '@mui/material/Container';
 import { useMemo } from 'react';
+import { useSnackbar } from 'notistack';
+import { useSelector } from 'react-redux';
+
+import { styled } from '@mui/material';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
 
 import { paths } from 'src/routes/paths';
 
 import { useSettingsContext } from 'src/components/settings';
-
-import { styled } from '@mui/material';
-import Typography from '@mui/material/Typography';
-import { useSnackbar } from 'notistack';
-import { useSelector } from 'react-redux';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs/custom-breadcrumbs';
+
 import SymbolNewEditForm from '../symbol-new-edit-form';
 
 // ----------------------------------------------------------------------
@@ -36,13 +37,10 @@ export default function SymbolDetailsView({ id }: Props) {
 
   const symbolData1 = useSelector((data: any) => data?.symbol?.symbolList);
 
-  console.log({ symbolData1 });
-
   // const [symbolData, setSymbolData] = useState<any>();
 
   // const { mutate } = useMutation(symbolService.getSymbolList, {
   //   onSuccess: (data) => {
-  //     console.log({ data });
   //     setSymbolData(data?.data?.rows);
   //     enqueueSnackbar(data?.message, { variant: 'success' });
   //   },
@@ -64,7 +62,6 @@ export default function SymbolDetailsView({ id }: Props) {
     [symbolData1]
   );
 
-  console.log({ currentSymbol });
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <CustomBreadcrumbs
@@ -84,10 +81,10 @@ export default function SymbolDetailsView({ id }: Props) {
           mb: { xs: 3, md: 5 },
         }}
         path={paths.dashboard.symbol.edit(id)}
-        isView={true}
+        isView
         id={currentSymbol?.id}
       />
-      <SymbolNewEditForm currentUser={currentSymbol} isView={true} />
+      <SymbolNewEditForm currentUser={currentSymbol} isView />
     </Container>
   );
 }

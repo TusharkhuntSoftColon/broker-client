@@ -1,34 +1,35 @@
 import isEqual from 'lodash/isEqual';
 import { useSnackbar } from 'notistack';
-import { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useState, useCallback } from 'react';
 
-import { Box, TableBody } from '@mui/material';
 import Card from '@mui/material/Card';
-import IconButton from '@mui/material/IconButton';
 import Table from '@mui/material/Table';
-import TableContainer from '@mui/material/TableContainer';
 import Tooltip from '@mui/material/Tooltip';
+import { Box, TableBody } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
+import TableContainer from '@mui/material/TableContainer';
 
 import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { USER_STATUS_OPTIONS } from 'src/_mock';
-import { _tradeList, newClientsTableData } from 'src/_mock/_trade';
 import { deleteAdmin } from 'src/store/slices/admin';
+import { newClientsTableData } from 'src/_mock/_trade';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
 import {
+  useTable,
   getComparator,
   TableHeadCustom,
   TableSelectedAction,
-  useTable,
 } from 'src/components/table';
 
 import { IUserItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
+
 import TradeTableRow from '../trade-table-row';
 
 // ----------------------------------------------------------------------
@@ -74,8 +75,6 @@ export default function TradeHistory() {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  console.log({ _tradeList });
-
   // const newClientsTableData = useSelector((data: any) => data?.admin?.adminList);
 
   // console.log({ newClientsTableData });
@@ -112,7 +111,6 @@ export default function TradeHistory() {
 
   const handleDeleteRow = useCallback(
     (id: string) => {
-      console.log('delete row works');
       dispatch(deleteAdmin(id));
       enqueueSnackbar('Deleted Successfully', { variant: 'success' });
       table.onUpdatePageDeleteRow(dataInPage.length);
@@ -133,7 +131,6 @@ export default function TradeHistory() {
 
   const handleEditRow = useCallback(
     (id: string) => {
-      console.log({ id });
       // router.push(paths.dashboard.user.edit(id));
     },
     [router]
@@ -141,7 +138,6 @@ export default function TradeHistory() {
 
   const handleViewRow = useCallback(
     (id: string) => {
-      console.log({ id });
       // router.push(paths.dashboard.user.details(id));
     },
     [router]
@@ -261,10 +257,9 @@ function applyFilter({
   inputData = stabilizedThis?.map((el: any) => el[0]);
 
   if (name) {
-    inputData = inputData.filter((user: any) => {
-      console.log({ user });
-      return user.name.toLowerCase().indexOf(name.toLowerCase()) !== -1;
-    });
+    inputData = inputData.filter(
+      (user: any) => user.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
+    );
   }
 
   if (status !== 'all') {

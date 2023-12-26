@@ -1,12 +1,13 @@
-import CloseIcon from '@mui/icons-material/Close';
-import { Box, FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import { useState } from 'react';
+
+import { styled } from '@mui/system';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
 import TextField from '@mui/material/TextField';
+import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
-import { styled } from '@mui/system';
-import { useState } from 'react';
+import DialogContent from '@mui/material/DialogContent';
+import { Box, Select, MenuItem, FormControl, SelectChangeEvent } from '@mui/material';
 
 // import { ConfirmDialogProps } from './types';
 
@@ -42,7 +43,6 @@ export default function UpdateTradeDialog({
     comment: '',
   });
   const [isModified, setIsModified] = useState(false);
-  console.log({ value1 });
 
   const dummyTypes = [
     { label: 'Instant Execution', value: 'instant-execution' },
@@ -60,9 +60,6 @@ export default function UpdateTradeDialog({
     { label: 'Specified', value: 'specified' },
     { label: 'Specified Day', value: 'specified-day' },
   ];
-  console.log({ isEdit });
-  console.log({ row });
-  console.log({ value1 });
 
   const handleMinusClick = (field: any) => {
     setValue1((prevState: any) => ({
@@ -85,17 +82,12 @@ export default function UpdateTradeDialog({
       [name]: value, // Update the specified property dynamically
     }));
 
-    console.log(value1[name]);
-    console.log(value);
-
     if (value[name] !== value) {
       setIsModified(true); // Enable the Modify button
     } else {
       setIsModified(false); // Disable the Modify button
     }
   };
-
-  console.log({ isModified });
 
   const handleChange = (event: SelectChangeEvent) => {
     setType(event.target.value as string);
@@ -108,15 +100,13 @@ export default function UpdateTradeDialog({
 
   const handleSellClick = () => {
     // console.log('Sell Clicked');
-    console.log({ type });
-    console.log({ value1 });
+
     onClose();
   };
 
   const handleModifyClick = () => {
     // console.log('Buy Clicked');
-    console.log({ type });
-    console.log({ value1 });
+
     onClose();
   };
   return (

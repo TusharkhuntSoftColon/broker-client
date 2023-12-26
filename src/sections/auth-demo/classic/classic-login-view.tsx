@@ -70,7 +70,6 @@ export default function ClassicLoginView() {
   const { mutate, isLoading } = useMutation(authService.login, {
     onSuccess: (data) => {
       setCredentialsAction(data?.data);
-      console.log({ data });
       enqueueSnackbar(data?.message, { variant: 'success' });
       router.push(getAfterLoginPath(data?.data?.role));
     },

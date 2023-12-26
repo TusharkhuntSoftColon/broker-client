@@ -6,9 +6,9 @@ import {
   CREATE_USER_BY_SUPER_MASTER,
   DELETE_USER_BY_SUPER_MASTER,
   UPDATE_USER_BY_SUPER_MASTER,
-  CREATE_MASTER_BY_SUPER_MASTER,
   DELETE_MASTER_BY_SUPER_MASTER,
   UPDATE_MASTER_BY_SUPER_MASTER,
+  CREATE_MASTER_BY_SUPER_MASTER,
   GET_ALL_PERSONS_BY_SUPER_MASTER,
 } from '../utils/urls';
 
@@ -22,20 +22,27 @@ export interface adminType {
 
 const superMasterService = {
   createMaster: async (data: any): Promise<any> => {
+    const newExchangeList = [
+      ...data.exchangeList,
+      {
+        allowedExchange: data.allowedExchange.value,
+        exchangeGroup: data.exchangeGroup?.value,
+      },
+    ];
+    const exchangeList =
+      data.allowedExchange.value && data.exchangeGroup.value ? newExchangeList : data?.exchangeList;
     try {
       const response: AxiosResponse<any> = await client.post(CREATE_MASTER_BY_SUPER_MASTER, {
         ID: data?.ID,
         name: data?.name,
         password: data?.password,
-        role: data?.role?.value,
-        exchangeGroup: data?.exchangeGroup?.map((option: any) => option.value),
-        allowedExchange: data?.allowedExchange?.map((option: any) => option.value),
-        leverageX: data?.leverageX,
-        leverageY: data?.leverageY,
         limitOfAddUser: data?.limitOfAddUser,
-        insertCustomBet: Boolean(data?.insertCustomBet),
-        editBet: Boolean(data?.editBet),
-        deleteBet: Boolean(data?.deleteBet),
+        insertCustomBet: data?.insertCustomBet,
+        editBet: data?.editBet,
+        deleteBet: data?.deleteBet,
+        leverageXY: `[${data?.leverageXY.value}]`,
+        role: data?.role?.value,
+        exchangeList,
       });
       return response.data;
     } catch (error) {
@@ -45,18 +52,25 @@ const superMasterService = {
     }
   },
   createUser: async (data: any): Promise<any> => {
+    const newExchangeList = [
+      ...data.exchangeList,
+      {
+        allowedExchange: data.allowedExchange.value,
+        exchangeGroup: data.exchangeGroup?.value,
+      },
+    ];
+    const exchangeList =
+      data.allowedExchange.value && data.exchangeGroup.value ? newExchangeList : data?.exchangeList;
     try {
       const response: AxiosResponse<any> = await client.post(CREATE_USER_BY_SUPER_MASTER, {
         ID: data?.ID,
         name: data?.name,
         password: data?.password,
         role: data?.role?.value,
-        exchangeGroup: data?.exchangeGroup?.map((option: any) => option.value),
-        allowedExchange: data?.allowedExchange?.map((option: any) => option.value),
-        leverageX: data?.leverageX,
-        leverageY: data?.leverageY,
+        leverageXY: `[${data?.leverageXY.value}]`,
         brokerage: data?.brokerage,
         investorPassword: data?.investorPassword,
+        exchangeList,
       });
       return response.data;
     } catch (error) {
@@ -76,24 +90,31 @@ const superMasterService = {
     }
   },
   updateMaster: async (MasterData: any): Promise<any> => {
-    console.log({ MasterData });
+    const newExchangeList = [
+      ...MasterData?.data?.exchangeList,
+      {
+        allowedExchange: MasterData?.data?.allowedExchange.value,
+        exchangeGroup: MasterData?.data?.exchangeGroup?.value,
+      },
+    ];
+    const exchangeList =
+      MasterData?.data?.allowedExchange.value && MasterData?.data?.exchangeGroup.value
+        ? newExchangeList
+        : MasterData?.data?.exchangeList;
     try {
       const response: AxiosResponse<any> = await client.put(
         `${UPDATE_MASTER_BY_SUPER_MASTER}/${MasterData._id}`,
         {
-          ID: MasterData.data?.ID,
-          name: MasterData.data?.name,
-          password: MasterData.data?.password,
-          role: MasterData.data?.role?.value,
-          exchangeGroup: MasterData.data?.exchangeGroup?.map((option: any) => option.value),
-          allowedExchange: MasterData.data?.allowedExchange?.map((option: any) => option.value),
-          leverageX: MasterData.data?.leverageX,
-          leverageY: MasterData.data?.leverageY,
-          limitOfAddUser: MasterData.data?.limitOfAddUser,
-          insertCustomBet: Boolean(MasterData.data?.insertCustomBet),
-          editBet: Boolean(MasterData.data?.editBet),
-          deleteBet: Boolean(MasterData.data?.deleteBet),
+          ID: MasterData?.data?.ID,
+          name: MasterData?.data?.name,
+          limitOfAddUser: MasterData?.data?.limitOfAddUser,
+          insertCustomBet: MasterData?.data?.insertCustomBet,
+          editBet: MasterData?.data?.editBet,
+          deleteBet: MasterData?.data?.deleteBet,
+          leverageXY: `[${MasterData?.data?.leverageXY.value}]`,
+          role: MasterData?.data?.role?.value,
           isActive: MasterData?.data?.isActive,
+          exchangeList,
         }
       );
       return response.data;
@@ -104,21 +125,27 @@ const superMasterService = {
     }
   },
   updateUser: async (UserData: any): Promise<any> => {
-    console.log({ UserData });
+    const newExchangeList = [
+      ...UserData?.data?.exchangeList,
+      {
+        allowedExchange: UserData?.data?.allowedExchange.value,
+        exchangeGroup: UserData?.data?.exchangeGroup?.value,
+      },
+    ];
+    const exchangeList =
+      UserData?.data?.allowedExchange.value && UserData?.data?.exchangeGroup.value
+        ? newExchangeList
+        : UserData?.data?.exchangeList;
     try {
       const response: AxiosResponse<any> = await client.put(
         `${UPDATE_USER_BY_SUPER_MASTER}/${UserData._id}`,
         {
           ID: UserData?.data?.ID,
           name: UserData?.data?.name,
-          password: UserData?.data?.password,
           role: UserData?.data?.role?.value,
-          exchangeGroup: UserData?.data?.exchangeGroup?.map((option: any) => option.value),
-          allowedExchange: UserData?.data?.allowedExchange?.map((option: any) => option.value),
-          leverageX: UserData?.data?.leverageX,
-          leverageY: UserData?.data?.leverageY,
+          leverageXY: `[${UserData?.data?.leverageXY.value}]`,
           brokerage: UserData?.data?.brokerage,
-          investorPassword: UserData?.data?.investorPassword,
+          exchangeList,
           isActive: UserData?.data?.isActive,
         }
       );

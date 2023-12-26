@@ -71,7 +71,6 @@ export default function UserTableToolbar({
 
   const value: any = watch();
 
-  console.log({ roleOptions });
 
   useEffect(() => {
     handleStatusChange();
@@ -105,7 +104,6 @@ export default function UserTableToolbar({
         const selectedOption = roleOptions.find((option: any) => option.label === label);
         return selectedOption ? selectedOption.value : null;
       });
-      console.log({ selectedValues });
       onFilters('exchange', selectedValues);
     },
     [onFilters]

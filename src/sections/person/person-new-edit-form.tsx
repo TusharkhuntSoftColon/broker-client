@@ -70,7 +70,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   };
 
   const defaultExchangeOptions = (index: number) => {
-    console.log({ index });
     if (!currentUser) return [];
     return EXCHANGE_GROUP.filter(
       (option: any) => currentUser?.exchangeList[index]?.exchangeGroup === option.value
@@ -78,14 +77,12 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   };
 
   const defaultLeverageOptions = useMemo(() => {
-    console.log({ currentUser });
     if (!currentUser) return [];
     return LEVERAGE_OPTIONS.filter(
       (option: any) => currentUser?.leverageXY.slice(1, -1) === option.value
     )[0];
   }, [currentUser]);
 
-  console.log({ currentUser });
 
   const [roleOption, setRoleOption] = useState<any>('');
 
@@ -129,7 +126,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     allowedExchange: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
     leverageXY: Yup.mixed<any>().nullable().required('Leverage  is required'),
     brokerage: Yup.number().required('Brokerage is required'),
-    investorPassword: Yup.string().required('Invester Password is required'),
+    // investorPassword: Yup.string().required('Invester Password is required'),
   });
 
   const defaultValues: any = useMemo(
@@ -148,7 +145,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       limitOfAddUser: currentUser?.limitOfAddUser || null,
       limitOfAddMaster: currentUser?.limitOfAddMaster || null,
       brokerage: currentUser?.brokerage || null,
-      investorPassword: currentUser?.investorPassword || null,
+      // investorPassword: currentUser?.investorPassword || null,
     }),
     [defaultAllowedExchange, defaultExchangeOptions]
   );
@@ -209,7 +206,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     }
   };
 
-  console.log({ currentUser });
 
   // console.log(ExchangeOptions);
 
@@ -227,8 +223,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   } = methods;
 
   const value = watch();
-  console.log({ errors });
-  console.log({ value });
+
 
   useEffect(() => {
     if (currentUser) {
@@ -257,7 +252,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   };
 
   const removeComponent = () => {
-    console.log({ value });
 
     const lastPos = value?.exchangeList[value?.exchangeList.length - 1];
 
@@ -387,7 +381,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   // create SUPER_MASTER
   const { mutate: createSuperMaster } = useMutation(adminService.createSuperMaster, {
     onSuccess: (data) => {
-      console.log({ data });
       enqueueSnackbar(data?.message, { variant: 'success' });
       // router.push(paths.dashboard.superMaster.list);
       router.push(path.person.list);
@@ -402,7 +395,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   // create MASTER
   const { mutate: createMaster } = useMutation(createMasterByRole(role), {
     onSuccess: (data: any) => {
-      console.log({ data });
       enqueueSnackbar(data?.message, { variant: 'success' });
       // router.push(paths.dashboard.superMaster.list);
       router.push(path.person.list);
@@ -417,7 +409,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   // create USER
   const { mutate: createUser } = useMutation(createUserByRole(role), {
     onSuccess: (data: any) => {
-      console.log({ data });
       enqueueSnackbar(data?.message, { variant: 'success' });
       // router.push(paths.dashboard.superMaster.list);
       router.push(path.person.list);
@@ -431,7 +422,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
 
   const { mutate: updateUser }: any = useMutation(updateUserByRole(role), {
     onSuccess: (data: any) => {
-      enqueueSnackbar(data?.message, { variant: 'success' });
+      enqueueSnackbar(data?.message ?? 'Data Updated Successfully', { variant: 'success' });
       router.push(path.person.list);
     },
     onError: (error: any) => {
@@ -442,10 +433,8 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   });
   const { mutate: updateMaster }: any = useMutation(updateMasterByRole(role), {
     onSuccess: (data: any) => {
-      // console.log({ data });
-      enqueueSnackbar(data?.message, { variant: 'success' });
-      // router.push(paths.dashboard.symbol.root);
-      router.push(path?.person?.root);
+      enqueueSnackbar(data?.message ?? 'Data Updated Successfully', { variant: 'success' });
+      router.push(path.person.list);
     },
     onError: (error: any) => {
       if (isAxiosError(error)) {
@@ -456,8 +445,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
 
   const { mutate: updateSuperMaster } = useMutation(adminService.updateSuperMaster, {
     onSuccess: (data) => {
-      enqueueSnackbar(data?.message, { variant: 'success' });
-      // router.push(paths.dashboard.symbol.root);
+      enqueueSnackbar(data?.message ?? 'Data Updated Successfully', { variant: 'success' });
       router.push(path.person.list);
     },
     onError: (error: any) => {
@@ -483,7 +471,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log({ data, path });
     try {
       if (roleOption === 'SUPER_MASTER') {
         if (currentUser) {
@@ -578,13 +565,14 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
               )}
               {roleOption === 'USER' && (
                 <>
-                  {' '}
-                  <RHFTextField
-                    isReadOnly={!!isView || currentUser}
-                    name="investorPassword"
-                    type="password"
-                    label="Investor Password"
-                  />
+                  {currentUser?.role !== 'USER' && (
+                    <RHFTextField
+                      isReadOnly={!!isView || currentUser}
+                      name="investorPassword"
+                      type="password"
+                      label="Investor Password"
+                    />
+                  )}
                   <RHFTextField
                     isReadOnly={!!isView}
                     name="brokerage"

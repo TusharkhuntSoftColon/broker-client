@@ -1,27 +1,27 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation } from '@tanstack/react-query';
-import { isAxiosError } from 'axios';
+import * as Yup from 'yup';
 import { useMemo } from 'react';
+import { isAxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import * as Yup from 'yup';
+import { useMutation } from '@tanstack/react-query';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import Grid from '@mui/material/Unstable_Grid2';
-
-import { useRouter } from 'src/routes/hooks';
-import { paths } from 'src/routes/paths';
-
-import { STOP_LOSS, SYMBOL_CURRENCY } from 'src/_mock/_symbol';
-import symbolService from 'src/services/symbolService';
-
-import FormProvider, { RHFAutocomplete, RHFSwitch, RHFTextField } from 'src/components/hook-form';
-import { useSnackbar } from 'src/components/snackbar';
-
 import { Typography } from '@mui/material';
+import Grid from '@mui/material/Unstable_Grid2';
+import LoadingButton from '@mui/lab/LoadingButton';
+
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+
+import symbolService from 'src/services/symbolService';
+import { STOP_LOSS, SYMBOL_CURRENCY } from 'src/_mock/_symbol';
+
+import { useSnackbar } from 'src/components/snackbar';
+import FormProvider, { RHFSwitch, RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
+
 import { ISymbolItem } from 'src/types/symbol';
 
 // ----------------------------------------------------------------------
@@ -32,7 +32,6 @@ type Props = {
 };
 
 export default function SymbolNewEditForm({ currentUser, isView }: Props) {
-  console.log({ currentUser });
   const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -106,7 +105,6 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
       router.push(paths.dashboard.symbol.root);
     },
     onError: (error: any) => {
-      console.log({ error });
       if (isAxiosError(error)) {
         enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
       }
@@ -129,8 +127,6 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
   const onSubmit = handleSubmit(async (data: any) => {
     // console.log('Worked');
     try {
-      console.log({ data });
-
       if (currentUser) {
         await updateSymbol({ data, _id: currentUser._id });
         // dispatch(updateSymbol({ id: currentUser?.id, updatedData: data }));
@@ -142,7 +138,6 @@ export default function SymbolNewEditForm({ currentUser, isView }: Props) {
 
       // currentUser == undefined ? await createSymbol(data) : await updateSymbol(data);
     } catch (error) {
-      console.log({ error });
     }
     // const values = watch();
     // try {

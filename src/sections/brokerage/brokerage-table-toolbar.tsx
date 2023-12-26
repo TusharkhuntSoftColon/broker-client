@@ -57,7 +57,6 @@ export default function BrokerageTableToolbar({
 
   const handleFilterName = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      console.log(event.target);
       onFilters('name', event.target.value);
     },
     [onFilters]

@@ -71,7 +71,6 @@ const defaultFilters: IUserTableFilters = {
 // ----------------------------------------------------------------------
 
 export default function PersonListView({ path }: { path: any }) {
-  console.log({ path });
   const table = useTable();
   const role = useSelector((data: any) => data.auth.role);
 
@@ -87,13 +86,11 @@ export default function PersonListView({ path }: { path: any }) {
 
   const personData = useSelector((data: any) => data?.admin?.personList);
   const exchangeList = useSelector((data: any) => data?.admin?.exchangeList);
-  console.log({ exchangeList });
 
   const [tableData, setTableData] = useState([]);
   const [exchangeData, setExchangeData] = useState<any>();
 
-  console.log({ personData });
-  console.log({ tableData });
+
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -192,7 +189,6 @@ export default function PersonListView({ path }: { path: any }) {
 
   const { mutate } = useMutation(getAllPersonSByRole(role), {
     onSuccess: (data) => {
-      console.log({ data });
       setTableData(data?.data?.rows);
       // dispatch(addExchanges(data?.data?.allowedExchange));
       dispatch(addPerson(data?.data?.rows));
@@ -255,14 +251,12 @@ export default function PersonListView({ path }: { path: any }) {
   });
 
   useEffect(() => {
-    console.log('USe Effect Runs');
     mutate();
     getAllExchanges();
   }, []);
 
   const handleDeleteRow = useCallback(
     (id: string, role: string) => {
-      console.log({ id });
       // dispatch(deleteAdmin(id));
       if (role === 'SUPER_MASTER') {
         deleteSuperMaster(id);
@@ -292,7 +286,6 @@ export default function PersonListView({ path }: { path: any }) {
   const handleEditRow = useCallback(
     (id: string) => {
       // console.log('Edit Clicked');
-      console.log({ path });
       router.push(path.person.edit(id));
     },
     [router]
@@ -521,7 +514,6 @@ function applyFilter({
 }) {
   const { name, status, exchange, dateRange } = filters;
 
-  console.log({ inputData });
 
   const stabilizedThis = inputData?.map((el: any, index: any) => [el, index] as const);
 
