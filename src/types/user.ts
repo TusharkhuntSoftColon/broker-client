@@ -8,6 +8,7 @@ export type IUserTableFilters = {
   name: string;
   exchange: string[];
   status: any;
+  role?: any;
   dateRange: any;
 };
 
@@ -101,7 +102,7 @@ export type IUserItem = {
   password: string;
   ID: string;
   exchangeGroup?: string;
-  allowedExchange: string;
+  allowedExchange: any;
   investerPassword: string;
   leverage?: string;
   status: string;

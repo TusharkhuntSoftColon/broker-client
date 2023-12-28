@@ -1,18 +1,18 @@
 import { Box } from '@mui/material';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
 import Checkbox from '@mui/material/Checkbox';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 import ListItemText from '@mui/material/ListItemText';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import Tooltip from '@mui/material/Tooltip';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import Label from 'src/components/label';
-import Iconify from 'src/components/iconify';
-import { usePopover } from 'src/components/custom-popover';
 import { ConfirmDialog } from 'src/components/custom-dialog';
+import { usePopover } from 'src/components/custom-popover';
+import Iconify from 'src/components/iconify';
+import Label from 'src/components/label';
 
 import { IUserItem } from 'src/types/user';
 
@@ -35,17 +35,8 @@ export default function UserTableRow({
   onDeleteRow,
   onViewRow,
 }: Props) {
-  const {
-    name,
-    role,
-    exchange,
-    phoneNumber,
-    allowedExchange,
-    ID,
-    Domain,
-    isActiveAdmin,
-    createdAt,
-  } = row;
+  const { name, role, exchange, phoneNumber, allowedExchange, ID, Domain, isActive, createdAt } =
+    row;
 
   const confirm = useBoolean();
 
@@ -105,8 +96,8 @@ export default function UserTableRow({
         </TableCell>
 
         <TableCell>
-          <Label variant="soft" color={isActiveAdmin ? 'success' : 'warning'}>
-            {isActiveAdmin === true ? 'Active' : 'In Active'}
+          <Label variant="soft" color={isActive ? 'success' : 'warning'}>
+            {isActive === true ? 'Active' : 'In Active'}
           </Label>
         </TableCell>
 

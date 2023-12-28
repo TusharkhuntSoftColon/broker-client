@@ -1,7 +1,7 @@
 import { Controller, useFormContext } from 'react-hook-form';
 
-import TextField from '@mui/material/TextField';
 import Autocomplete, { AutocompleteProps } from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
 
 // ----------------------------------------------------------------------
 
@@ -20,6 +20,7 @@ interface Props<
   data?: any;
   multiple?: Multiple;
   value?: any;
+  resetFunction?: any;
   isLabled?: any;
 }
 

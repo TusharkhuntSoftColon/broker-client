@@ -1,19 +1,16 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
+import Container from '@mui/material/Container';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import Container from '@mui/material/Container';
 
-import { paths } from 'src/routes/paths';
-
-import { _tours, TOUR_DETAILS_TABS, TOUR_PUBLISH_OPTIONS } from 'src/_mock';
+import { _tours, TOUR_DETAILS_TABS } from 'src/_mock';
 
 import Label from 'src/components/label';
 import { useSettingsContext } from 'src/components/settings';
 
-import TourDetailsToolbar from '../tour-details-toolbar';
-import TourDetailsContent from '../tour-details-content';
 import TourDetailsBookers from '../tour-details-bookers';
+import TourDetailsContent from '../tour-details-content';
 
 // ----------------------------------------------------------------------
 
@@ -66,14 +63,14 @@ export default function TourDetailsView({ id }: Props) {
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
-      <TourDetailsToolbar
+      {/* <TourDetailsToolbar
         backLink={paths.dashboard.tour.root}
         editLink={paths.dashboard.tour.edit(`${currentTour?.id}`)}
         liveLink="#"
         publish={publish || ''}
         onChangePublish={handleChangePublish}
         publishOptions={TOUR_PUBLISH_OPTIONS}
-      />
+      /> */}
       {renderTabs}
 
       {currentTab === 'content' && <TourDetailsContent tour={currentTour} />}

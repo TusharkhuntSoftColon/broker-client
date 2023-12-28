@@ -3,7 +3,6 @@ import { useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Pagination, { paginationClasses } from '@mui/material/Pagination';
 
-import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { ITourItem } from 'src/types/tour';
@@ -21,14 +20,14 @@ export default function TourList({ tours }: Props) {
 
   const handleView = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.tour.details(id));
+      // router.push(paths.dashboard.tour.details(id));
     },
     [router]
   );
 
   const handleEdit = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.tour.edit(id));
+      // router.push(paths.dashboard.tour.edit(id));
     },
     [router]
   );

@@ -1,18 +1,17 @@
 import Box from '@mui/material/Box';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
-import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
 
-import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import { useLocation } from 'react-router';
+import { usePopover } from '../custom-popover';
 import Iconify from '../iconify';
 import LinkItem from './link-item';
-import { usePopover } from '../custom-popover';
 import { CustomBreadcrumbsProps } from './types';
-import { useLocation } from 'react-router';
 
 // ----------------------------------------------------------------------
 
@@ -55,7 +54,7 @@ export default function CustomBreadcrumbs({
                 color={popover.open ? 'inherit' : 'default'}
                 onClick={(e) => {
                   e.stopPropagation();
-                  router.push(path);
+                  // router.push(path);
                   popover.onClose();
                 }}
                 sx={{ marginLeft: '31rem' }}

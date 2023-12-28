@@ -1,39 +1,38 @@
-import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useForm, Controller } from 'react-hook-form';
-import { useMemo, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
+import { Controller, useForm } from 'react-hook-form';
+import * as Yup from 'yup';
 
-import Chip from '@mui/material/Chip';
-import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
-import Avatar from '@mui/material/Avatar';
-import Switch from '@mui/material/Switch';
-import Grid from '@mui/material/Unstable_Grid2';
-import CardHeader from '@mui/material/CardHeader';
-import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import Avatar from '@mui/material/Avatar';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import Chip from '@mui/material/Chip';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Stack from '@mui/material/Stack';
+import Switch from '@mui/material/Switch';
+import Typography from '@mui/material/Typography';
+import Grid from '@mui/material/Unstable_Grid2';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
-import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 
-import { countries } from 'src/assets/data';
 import { _tags, _tourGuides, TOUR_SERVICE_OPTIONS } from 'src/_mock';
+import { countries } from 'src/assets/data';
 
+import FormProvider, {
+  RHFAutocomplete,
+  RHFEditor,
+  RHFMultiCheckbox,
+  RHFTextField,
+  RHFUpload,
+} from 'src/components/hook-form';
 import Iconify from 'src/components/iconify';
 import { useSnackbar } from 'src/components/snackbar';
-import FormProvider, {
-  RHFEditor,
-  RHFUpload,
-  RHFTextField,
-  RHFAutocomplete,
-  RHFMultiCheckbox,
-} from 'src/components/hook-form';
 
-import { ITourItem, ITourGuide } from 'src/types/tour';
+import { ITourGuide, ITourItem } from 'src/types/tour';
 
 // ----------------------------------------------------------------------
 
@@ -116,7 +115,7 @@ export default function TourNewEditForm({ currentTour }: Props) {
       await new Promise((resolve) => setTimeout(resolve, 500));
       reset();
       enqueueSnackbar(currentTour ? 'Update success!' : 'Create success!');
-      router.push(paths.dashboard.tour.root);
+      // router.push(paths.dashboard.tour.root);
       console.info('DATA', data);
     } catch (error) {
       console.error(error);

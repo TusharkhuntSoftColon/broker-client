@@ -1,48 +1,48 @@
+import { isWithinInterval, parse } from 'date-fns';
 import isEqual from 'lodash/isEqual';
 import { useSnackbar } from 'notistack';
-import { useState, useCallback } from 'react';
-import { parse, isWithinInterval } from 'date-fns';
+import { useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import Card from '@mui/material/Card';
-import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
+import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
-import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
+import Tooltip from '@mui/material/Tooltip';
 
-import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
+import { useRouter } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { deleteAdmin } from 'src/store/slices/admin';
 import { Exchanges, USER_STATUS_OPTIONS } from 'src/_mock';
+import { deleteAdmin } from 'src/store/slices/admin';
 
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
-  useTable,
   emptyRows,
-  TableNoData,
   getComparator,
   TableEmptyRows,
   TableHeadCustom,
-  TableSelectedAction,
+  TableNoData,
   TablePaginationCustom,
+  TableSelectedAction,
+  useTable,
 } from 'src/components/table';
 
 import { IUserItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
 
+import UserTableFiltersResult from '../user-table-filters-result';
 import UserTableRow from '../user-table-row';
 import UserTableToolbar from '../user-table-toolbar';
-import UserTableFiltersResult from '../user-table-filters-result';
 
 // ----------------------------------------------------------------------
 
@@ -137,14 +137,14 @@ export default function UserListView({ path }: { path: any }) {
 
   const handleEditRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.user.edit(id));
+      // router.push(paths.dashboard.user.edit(id));
     },
     [router]
   );
 
   const handleViewRow = useCallback(
     (id: string) => {
-      router.push(paths.dashboard.user.details(id));
+      // router.push(paths.dashboard.user.details(id));
     },
     [router]
   );
@@ -167,7 +167,7 @@ export default function UserListView({ path }: { path: any }) {
           heading="List"
           links={[
             { name: 'Admin', href: paths.dashboard.root },
-            { name: 'User', href: paths.dashboard.user.root },
+            // { name: 'User', href: paths.dashboard.user.root },
             { name: 'List' },
           ]}
           action={

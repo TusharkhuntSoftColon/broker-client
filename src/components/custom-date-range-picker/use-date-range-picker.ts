@@ -1,13 +1,13 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
 import { fDate } from 'src/utils/format-time';
 
-import { shortDateLabel } from './utils';
 import { DateRangePickerProps } from './types';
+import { shortDateLabel } from './utils';
 
 // ----------------------------------------------------------------------
 
-type ReturnType = DateRangePickerProps;
+type ReturnType = DateRangePickerProps | any;
 
 export default function useDateRangePicker(start: Date | null, end: Date | null): ReturnType {
   const [open, setOpen] = useState(false);

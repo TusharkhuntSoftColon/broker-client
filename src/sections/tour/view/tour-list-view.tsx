@@ -1,32 +1,31 @@
 import orderBy from 'lodash/orderBy';
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 
-import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
+import Stack from '@mui/material/Stack';
 
-import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
+import { paths } from 'src/routes/paths';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { fTimestamp } from 'src/utils/format-time';
 
+import { TOUR_SERVICE_OPTIONS, TOUR_SORT_OPTIONS, _tourGuides, _tours } from 'src/_mock';
 import { countries } from 'src/assets/data';
-import { _tours, _tourGuides, TOUR_SORT_OPTIONS, TOUR_SERVICE_OPTIONS } from 'src/_mock';
 
-import Iconify from 'src/components/iconify';
-import EmptyContent from 'src/components/empty-content';
-import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import EmptyContent from 'src/components/empty-content';
+import Iconify from 'src/components/iconify';
+import { useSettingsContext } from 'src/components/settings';
 
-import { ITourItem, ITourFilters, ITourFilterValue } from 'src/types/tour';
+import { ITourFilterValue, ITourFilters, ITourItem } from 'src/types/tour';
 
-import TourList from '../tour-list';
-import TourSort from '../tour-sort';
-import TourSearch from '../tour-search';
 import TourFilters from '../tour-filters';
 import TourFiltersResult from '../tour-filters-result';
+import TourList from '../tour-list';
+import TourSort from '../tour-sort';
 
 // ----------------------------------------------------------------------
 
@@ -117,12 +116,12 @@ export default function TourListView() {
       alignItems={{ xs: 'flex-end', sm: 'center' }}
       direction={{ xs: 'column', sm: 'row' }}
     >
-      <TourSearch
+      {/* <TourSearch
         query={search.query}
         results={search.results}
         onSearch={handleSearch}
         hrefItem={(id: string) => paths.dashboard.tour.details(id)}
-      />
+      /> */}
 
       <Stack direction="row" spacing={1} flexShrink={0}>
         <TourFilters
@@ -168,15 +167,14 @@ export default function TourListView() {
           { name: 'Dashboard', href: paths.dashboard.root },
           {
             name: 'Tour',
-            href: paths.dashboard.tour.root,
+            // href: paths.dashboard.tour.root,
           },
           { name: 'List' },
         ]}
-        
         action={
           <Button
             component={RouterLink}
-            href={paths.dashboard.tour.new}
+            // href={paths.dashboard.tour.new}
             variant="contained"
             startIcon={<Iconify icon="mingcute:add-line" />}
           >

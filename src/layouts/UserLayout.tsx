@@ -1,5 +1,3 @@
-import { useEffect } from 'react';
-
 import Box from '@mui/material/Box';
 import { SymbolLiveList } from 'src/sections/symbol-live/view';
 import { TradeHistory } from 'src/sections/trade-history/view';
@@ -9,9 +7,9 @@ type Props = {
 };
 
 const UserLayout = ({ children }: Props) => {
-  useEffect(() => {
-    window.initOnReady();
-  }, []);
+  // useEffect(() => {
+  //   window.initOnReady();
+  // }, []);
 
   return (
     <>

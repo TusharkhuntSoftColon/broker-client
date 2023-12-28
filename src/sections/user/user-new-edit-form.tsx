@@ -16,10 +16,8 @@ import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 
 import { useRouter } from 'src/routes/hooks';
-import { paths } from 'src/routes/paths';
 
 import { EXCHANGE_GROUP, USER_ROLE } from 'src/_mock';
-import adminService from 'src/services/adminService';
 import exchangeService from 'src/services/exchangeService';
 
 import FormProvider, { RHFAutocomplete, RHFSwitch, RHFTextField } from 'src/components/hook-form';
@@ -91,7 +89,7 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
     [currentUser]
   );
 
-  const methods = useForm({
+  const methods = useForm<any>({
     resolver: yupResolver(NewUserSchema),
     defaultValues,
   });
@@ -104,19 +102,6 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
     handleSubmit,
     formState: { isSubmitting, errors },
   } = methods;
-
-  // create ADMIN
-  const { mutate: createAdmin } = useMutation(adminService.createAdmin, {
-    onSuccess: (data) => {
-      enqueueSnackbar(data?.message, { variant: 'success' });
-      router.push(paths.dashboard.user.root);
-    },
-    onError: (error: any) => {
-      if (isAxiosError(error)) {
-        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-      }
-    },
-  });
 
   // get exchange list
   const { mutate } = useMutation(exchangeService.getExchangeList, {
@@ -143,7 +128,7 @@ export default function UserNewEditForm({ currentUser, isView }: Props) {
       } else {
         // dispatch(addAdmin(data));
       }
-      router.push(paths.dashboard.user.list);
+      // router.push(paths.dashboard.user.list);
       console.info('DATA', data);
     } catch (error) {
       console.error(error);

@@ -1,16 +1,11 @@
 import { m } from 'framer-motion';
 
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
-import Typography from '@mui/material/Typography';
 import { alpha } from '@mui/material/styles';
 
 import { useRouter } from 'src/routes/hooks';
-
-import { useMockedUser } from 'src/hooks/use-mocked-user';
 
 import { useAuthContext } from 'src/auth/hooks';
 
@@ -25,7 +20,7 @@ import { useSnackbar } from 'src/components/snackbar';
 export default function AccountPopover() {
   const router = useRouter();
 
-  const { user } = useMockedUser();
+  // const { user } = useMockedUser();
 
   const { logout } = useAuthContext();
 
@@ -67,7 +62,7 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar
+        {/* <Avatar
           src={user?.photoURL}
           alt={user?.displayName}
           sx={{
@@ -77,11 +72,11 @@ export default function AccountPopover() {
           }}
         >
           {user?.displayName.charAt(0).toUpperCase()}
-        </Avatar>
+        </Avatar> */}
       </IconButton>
 
       <CustomPopover open={popover.open} onClose={popover.onClose} sx={{ width: 200, p: 0 }}>
-        <Box sx={{ p: 2, pb: 1.5 }}>
+        {/* <Box sx={{ p: 2, pb: 1.5 }}>
           <Typography variant="subtitle2" noWrap>
             {user?.displayName}
           </Typography>
@@ -89,7 +84,7 @@ export default function AccountPopover() {
           <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
             {user?.email}
           </Typography>
-        </Box>
+        </Box> */}
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 

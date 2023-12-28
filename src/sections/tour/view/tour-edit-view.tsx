@@ -4,8 +4,8 @@ import { paths } from 'src/routes/paths';
 
 import { _tours } from 'src/_mock';
 
-import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import { useSettingsContext } from 'src/components/settings';
 
 import TourNewEditForm from '../tour-new-edit-form';
 
@@ -31,14 +31,13 @@ export default function TourEditView({ id }: Props) {
           },
           {
             name: 'Tour',
-            href: paths.dashboard.tour.root,
+            // href: paths.dashboard.tour.root,
           },
           { name: currentTour?.name },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },
         }}
-        
       />
 
       <TourNewEditForm currentTour={currentTour} />
