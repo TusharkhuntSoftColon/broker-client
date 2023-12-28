@@ -1,3 +1,5 @@
+import { useSelector } from 'react-redux';
+
 import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import Paper from '@mui/material/Paper';
@@ -41,6 +43,15 @@ export default function UserTableFiltersResult({
     onFilters('dateRange', []);
   };
 
+  const ExchangeList = useSelector((data: any) => data?.admin?.exchangeList);
+
+  console.log({ ExchangeList });
+
+  console.log({ filters });
+
+  const matchedNames = filters?.exchange?.map(
+    (id: any) => ExchangeList.find((item: any) => item._id === id)?.name
+  );
 
   return (
     <Stack spacing={1.5} {...other}>
@@ -60,7 +71,7 @@ export default function UserTableFiltersResult({
 
         {!!filters.exchange.length && (
           <Block label="Exchange:">
-            {filters.exchange.map((item) => (
+            {matchedNames.map((item) => (
               <Chip
                 key={item}
                 label={item}
@@ -74,13 +85,13 @@ export default function UserTableFiltersResult({
         {!!filters.dateRange.length && (
           <Block label="Selected Range:">
             {filters.dateRange.map((item: any) => (
-                <Chip
-                  key={item}
-                  label={item.toDateString()}
-                  size="small"
-                  onDelete={() => handleRemoveDate()}
-                />
-              ))}
+              <Chip
+                key={item}
+                label={item.toDateString()}
+                size="small"
+                onDelete={() => handleRemoveDate()}
+              />
+            ))}
           </Block>
         )}
 
