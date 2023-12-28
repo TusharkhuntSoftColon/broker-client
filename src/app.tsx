@@ -18,7 +18,6 @@ import ProgressBar from 'src/components/progress-bar';
 import { SettingsDrawer, SettingsProvider } from 'src/components/settings';
 import SnackbarProvider from 'src/components/snackbar/snackbar-provider';
 
-import { CheckoutProvider } from 'src/sections/checkout/context';
 import { RoleBasedGuard } from './auth/guard';
 
 // import { AuthProvider } from 'src/auth/context/auth0';
@@ -32,8 +31,7 @@ export default function App() {
 
   return (
     // <AuthProvider>
-      <RoleBasedGuard hasContent roles={["ADMIN"]} sx={{ py: 10 }}>
-
+    <RoleBasedGuard hasContent roles={['ADMIN']} sx={{ py: 10 }}>
       <LocalizationProvider>
         <SettingsProvider
           defaultSettings={{
@@ -48,17 +46,15 @@ export default function App() {
           <ThemeProvider>
             <MotionLazy>
               <SnackbarProvider>
-                <CheckoutProvider>
-                  <SettingsDrawer />
-                  <ProgressBar />
-                  <Router />
-                </CheckoutProvider>
+                <SettingsDrawer />
+                <ProgressBar />
+                <Router />
               </SnackbarProvider>
             </MotionLazy>
           </ThemeProvider>
         </SettingsProvider>
       </LocalizationProvider>
-      </RoleBasedGuard>
+    </RoleBasedGuard>
     // </AuthProvider>
   );
 }

@@ -1,3 +1,4 @@
+/* eslint-disable arrow-body-style */
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
@@ -379,7 +380,7 @@ export default function AppNewInvoice() {
 // ----------------------------------------------------------------------
 
 type AppNewInvoiceRowProps = {
-  row: RowProps;
+  row: RowProps | any;
   value: any;
 };
 

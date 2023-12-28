@@ -40,11 +40,6 @@ export const STATUS_OF_SCRIPTS = [
   { value: 'disabled', label: 'Disabled' },
 ];
 
-export const STOP_LOSS = [
-  { value: true, label: 'On' },
-  { value: false, label: 'Off' },
-];
-
 export const SYMBOL_CURRENCY = [
   {
     label: 'INR',

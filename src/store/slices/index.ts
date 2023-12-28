@@ -1,7 +1,7 @@
 import { persistReducer } from 'redux-persist';
-import { combineReducers } from '@reduxjs/toolkit';
-import { encryptTransform } from 'redux-persist-transform-encrypt'; // defaults to localStorage for web
 import storage from 'redux-persist/lib/storage';
+import { combineReducers } from '@reduxjs/toolkit';
+import { encryptTransform } from 'redux-persist-transform-encrypt';
 
 import authSlice from './auth';
 import adminSlice from './admin';

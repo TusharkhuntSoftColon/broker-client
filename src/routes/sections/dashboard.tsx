@@ -3,9 +3,9 @@ import { Outlet } from 'react-router-dom';
 
 import { AuthGuard } from 'src/auth/guard';
 import AdminLayout from 'src/layouts/AdminLayout';
+import PersonDetailsPage from 'src/pages/dashboard/person/details';
 
 import { LoadingScreen } from 'src/components/loading-screen';
-import PersonDetailsPage from 'src/pages/dashboard/person/details';
 
 // ----------------------------------------------------------------------
 
@@ -18,12 +18,9 @@ const PersonEditPage = lazy(() => import('src/pages/dashboard/person/edit'));
 const PersonCreatePage = lazy(() => import('src/pages/dashboard/person/new'));
 
 // FILE MANAGER
-const FileManagerPage = lazy(() => import('src/pages/dashboard/file-manager'));
 // APP
-const ChatPage = lazy(() => import('src/pages/dashboard/chat'));
 const MailPage = lazy(() => import('src/pages/dashboard/mail'));
 const CalendarPage = lazy(() => import('src/pages/dashboard/calendar'));
-const KanbanPage = lazy(() => import('src/pages/dashboard/kanban'));
 // TEST RENDER PAGE BY ROLE
 const PermissionDeniedPage = lazy(() => import('src/pages/dashboard/permission'));
 // BLANK PAGE
@@ -55,11 +52,8 @@ export const dashboardRoutes = [
           { path: ':id/edit', element: <PersonEditPage /> },
         ],
       },
-      { path: 'file-manager', element: <FileManagerPage /> },
       { path: 'mail', element: <MailPage /> },
-      { path: 'chat', element: <ChatPage /> },
       { path: 'calendar', element: <CalendarPage /> },
-      { path: 'kanban', element: <KanbanPage /> },
       { path: 'permission', element: <PermissionDeniedPage /> },
       { path: 'blank', element: <BlankPage /> },
     ],

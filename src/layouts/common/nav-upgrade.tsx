@@ -1,7 +1,7 @@
-import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
 
 import { paths } from 'src/routes/paths';
 
@@ -22,7 +22,7 @@ export default function NavUpgrade() {
     >
       <Stack alignItems="center">
         <Box sx={{ position: 'relative' }}>
-          <Avatar src={user?.photoURL} alt={user?.displayName} sx={{ width: 48, height: 48 }} />
+          <Avatar src="user?.photoURL" alt="user?.displayName" sx={{ width: 48, height: 48 }} />
           <Label
             color="success"
             variant="filled"

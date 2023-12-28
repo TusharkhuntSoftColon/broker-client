@@ -1,37 +1,32 @@
+/* eslint-disable arrow-body-style */
+import React from 'react';
+
 import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import { styled } from '@mui/system';
+import Tabs from '@mui/material/Tabs';
 import Table from '@mui/material/Table';
-import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import CardHeader from '@mui/material/CardHeader';
-import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
 import Card, { CardProps } from '@mui/material/Card';
 import TableContainer from '@mui/material/TableContainer';
 
-import { fCurrency } from 'src/utils/format-number';
+import {
+  newClientsTableData,
+  newClientsOrderTableData,
+  newClientsOnlineTableData,
+  newClientsAccountTableData,
+} from 'src/_mock';
 
-import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { TableHeadCustom } from 'src/components/table';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import {
-  _appInvoices,
-  clientsTableDashboard,
-  newClientsAccountTableData,
-  newClientsOnlineTableData,
-  newClientsOrderTableData,
-  newClientsTableData,
-  symbolTableDashboard,
-} from 'src/_mock';
-import React from 'react';
-import Typography from '@mui/material/Typography';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import { styled } from '@mui/system';
 
 // ----------------------------------------------------------------------
 
@@ -40,8 +35,6 @@ type RowProps = {
   login: number;
   position: number;
   symbol: string;
-  type: string;
-  volume: any;
   price1: number;
   price2: number;
   reason: string;
@@ -54,12 +47,12 @@ type RowProps = {
   version: number;
   ip: string;
   equity: number;
-  order:number;
-  time:string;
-  type:string;
-  volume:string;
-  sl:any;
-  tp:any;
+  order: number;
+  time: string;
+  type: string;
+  volume: string;
+  sl: any;
+  tp: any;
 };
 
 interface Props extends CardProps {
@@ -273,7 +266,7 @@ export default function ClientTableDashboard() {
 // ----------------------------------------------------------------------
 
 type ClientNewRowProps = {
-  row: RowProps;
+  row: RowProps | any;
   value?: any;
 };
 
@@ -299,7 +292,6 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
     popover.onClose();
     console.info('DELETE', row.id);
   };
-
 
   return (
     <>
@@ -369,22 +361,24 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
           </StyledTableCell>
         </StyledTableRow>
       )}
-      
+
       {value === 3 && (
         <StyledTableRow>
           <StyledTableCell sx={{ textAlign: 'left', padding: '9px', borderLeft: 'none' }}>
             {row.login}
           </StyledTableCell>
           <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.order}</StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.symbol}</StyledTableCell>
           <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
-            {row.time}
+            {row.symbol}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.time}</StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.type}</StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row.volume}
           </StyledTableCell>
           <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
-            {row.type}
+            {row.price1}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.volume}</StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.price1}</StyledTableCell>
           <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.sl}</StyledTableCell>
           <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.tp}</StyledTableCell>
           <StyledTableCell sx={{ textAlign: 'right', padding: '9px', borderRight: 'none' }}>

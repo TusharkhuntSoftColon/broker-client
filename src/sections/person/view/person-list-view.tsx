@@ -90,8 +90,6 @@ export default function PersonListView({ path }: { path: any }) {
   const [tableData, setTableData] = useState([]);
   const [exchangeData, setExchangeData] = useState<any>();
 
-
-
   const [filters, setFilters] = useState(defaultFilters);
 
   const dataFiltered = applyFilter({
@@ -513,7 +511,6 @@ function applyFilter({
   filters: IUserTableFilters;
 }) {
   const { name, status, exchange, dateRange } = filters;
-
 
   const stabilizedThis = inputData?.map((el: any, index: any) => [el, index] as const);
 

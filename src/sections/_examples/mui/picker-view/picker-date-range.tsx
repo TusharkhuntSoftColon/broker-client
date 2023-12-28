@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 
 import { fDate } from 'src/utils/format-time';
 
-import CustomDateRangePicker, { useDateRangePicker } from 'src/components/custom-date-range-picker';
+import { useDateRangePicker } from 'src/components/custom-date-range-picker';
 
 import ComponentBlock from '../../component-block';
 
@@ -49,7 +49,7 @@ export default function PickerDateRange() {
             </div>
           </Stack>
 
-          <CustomDateRangePicker
+          {/* <CustomDateRangePicker
             open={rangeInputPicker.open}
             startDate={rangeInputPicker.startDate}
             endDate={rangeInputPicker.endDate}
@@ -57,7 +57,7 @@ export default function PickerDateRange() {
             onChangeEndDate={rangeInputPicker.onChangeEndDate}
             onClose={rangeInputPicker.onClose}
             error={rangeInputPicker.error}
-          />
+          /> */}
         </ComponentBlock>
 
         <ComponentBlock title="Calendar">
@@ -74,7 +74,7 @@ export default function PickerDateRange() {
             </div>
           </Stack>
 
-          <CustomDateRangePicker
+          {/* <CustomDateRangePicker
             variant="calendar"
             open={rangeCalendarPicker.open}
             startDate={rangeCalendarPicker.startDate}
@@ -83,7 +83,7 @@ export default function PickerDateRange() {
             onChangeEndDate={rangeCalendarPicker.onChangeEndDate}
             onClose={rangeCalendarPicker.onClose}
             error={rangeCalendarPicker.error}
-          />
+          /> */}
         </ComponentBlock>
       </Box>
     </>
