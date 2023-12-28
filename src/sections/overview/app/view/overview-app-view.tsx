@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-shadow */
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Responsive, WidthProvider } from 'react-grid-layout';
 
 import Container from '@mui/material/Container';
@@ -8,10 +8,10 @@ import { useSettingsContext } from 'src/components/settings';
 
 import AppNewInvoice from '../app-new-invoice';
 import ClientTableDashboard from '../client-new-table';
-import SymbolTableDashboard from '../symbol-new-table';
 import MarginCallTableDashboard from '../margin-call-table';
-import '../../../node_modules/react-resizable/css/styles.css';
-import '../../../node_modules/react-grid-layout/css/styles.css';
+import SymbolTableDashboard from '../symbol-new-table';
+// import '../../../node_modules/react-resizable/css/styles.css';
+// import '../../../node_modules/react-grid-layout/css/styles.css';
 
 // ----------------------------------------------------------------------
 
