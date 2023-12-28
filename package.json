@@ -16,7 +16,8 @@
     "re:start": "yarn rm:all && yarn install && yarn dev",
     "re:build": "yarn rm:all && yarn install && yarn build",
     "re:build-npm": "npm run rm:all && npm install && npm run build",
-    "dev:host": "vite --host"
+    "dev:host": "vite --host",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.2.1",
@@ -125,6 +126,7 @@
     "prettier": "^3.0.3",
     "typescript": "^5.2.2",
     "vite": "^4.4.11",
-    "vite-plugin-checker": "^0.6.2"
+    "vite-plugin-checker": "^0.6.2",
+    "husky": "^8.0.0"
   }
 }

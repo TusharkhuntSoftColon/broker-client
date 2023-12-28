@@ -9,23 +9,19 @@ import Logo from 'src/components/logo';
 import { NavSectionMini } from 'src/components/nav-section';
 
 import { NAV } from '../config-layout';
-import { useNavData } from './config-navigation';
 import { NavItemBaseProps } from '../main/nav/types';
 import NavToggleButton from '../common/nav-toggle-button';
 
 // ----------------------------------------------------------------------
 
 type Props = {
-    nav: {
+  nav: {
     items: NavItemBaseProps[];
   }[];
 };
 
-
-export default function NavMini({nav}: Props) {
+export default function NavMini({ nav }: Props) {
   const { ADMIN } = useMockedUser();
-
-  const navData = useNavData();
 
   return (
     <Box

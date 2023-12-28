@@ -2,8 +2,8 @@ import { memo } from 'react';
 
 import Stack from '@mui/material/Stack';
 
-import { NavGroupProps, NavProps } from '../types';
 import NavList from './nav-list';
+import { NavProps, NavGroupProps } from '../types';
 
 // ----------------------------------------------------------------------
 

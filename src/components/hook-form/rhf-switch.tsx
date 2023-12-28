@@ -18,8 +18,7 @@ export default function RHFSwitch({ name, helperText, ...other }: Props) {
     <Controller
       name={name}
       control={control}
-      render={({ field, fieldState: { error } }) => {
-        return (
+      render={({ field, fieldState: { error } }) => (
           <div>
             <FormControlLabel control={<Switch {...field} checked={field.value} />} {...other} />
 
@@ -27,8 +26,7 @@ export default function RHFSwitch({ name, helperText, ...other }: Props) {
               <FormHelperText error={!!error}>{error ? error?.message : helperText}</FormHelperText>
             )}
           </div>
-        );
-      }}
+        )}
     />
   );
 }

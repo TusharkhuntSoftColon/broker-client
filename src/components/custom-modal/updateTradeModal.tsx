@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { useState } from 'react';
 
 import { styled } from '@mui/system';
@@ -8,8 +9,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import DialogContent from '@mui/material/DialogContent';
 import { Box, Select, MenuItem, FormControl, SelectChangeEvent } from '@mui/material';
-
-// import { ConfirmDialogProps } from './types';
 
 // ----------------------------------------------------------------------
 
@@ -34,6 +33,7 @@ export default function UpdateTradeDialog({
 }: any) {
   const [type, setType] = useState('instant-execution');
   const [expiration, setExpiration] = useState('gtc');
+  console.log(expiration);
   const [value1, setValue1] = useState({
     volume: isEdit ? row?.volume : 0,
     price: isEdit ? row?.price1 : 0,
@@ -43,7 +43,7 @@ export default function UpdateTradeDialog({
     comment: '',
   });
   const [isModified, setIsModified] = useState(false);
-
+  console.log(isModified);
   const dummyTypes = [
     { label: 'Instant Execution', value: 'instant-execution' },
     { label: 'Buy Limit', value: 'buy-limit' },
@@ -52,13 +52,6 @@ export default function UpdateTradeDialog({
     { label: 'Sell Stop', value: 'sell-stop' },
     { label: 'Buy Stop Limit', value: 'buy-stop-limit' },
     { label: 'Sell Stop Limit', value: 'sell-stop-limit' },
-  ];
-
-  const expirationData = [
-    { label: 'GTC', value: 'gtc' },
-    { label: 'Today', value: 'today' },
-    { label: 'Specified', value: 'specified' },
-    { label: 'Specified Day', value: 'specified-day' },
   ];
 
   const handleMinusClick = (field: any) => {
@@ -92,16 +85,6 @@ export default function UpdateTradeDialog({
   const handleChange = (event: SelectChangeEvent) => {
     setType(event.target.value as string);
     setExpiration('gtc');
-  };
-
-  const handleExpirationChange = (event: SelectChangeEvent) => {
-    setExpiration(event.target.value as string);
-  };
-
-  const handleSellClick = () => {
-    // console.log('Sell Clicked');
-
-    onClose();
   };
 
   const handleModifyClick = () => {

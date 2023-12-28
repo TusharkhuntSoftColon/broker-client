@@ -1,4 +1,5 @@
 import Box from '@mui/material/Box';
+
 import { SymbolLiveList } from 'src/sections/symbol-live/view';
 import { TradeHistory } from 'src/sections/trade-history/view';
 
@@ -6,12 +7,12 @@ type Props = {
   children: React.ReactNode;
 };
 
-const UserLayout = ({ children }: Props) => {
+const UserLayout = ({ children }: Props) => 
   // useEffect(() => {
   //   window.initOnReady();
   // }, []);
 
-  return (
+   (
     <>
       <Box>
         <Box display="flex">
@@ -34,7 +35,7 @@ const UserLayout = ({ children }: Props) => {
         <TradeHistory />
       </Box>
     </>
-  );
-};
+  )
+;
 
 export default UserLayout;

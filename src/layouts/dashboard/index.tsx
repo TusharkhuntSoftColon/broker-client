@@ -1,20 +1,18 @@
-import { useState } from 'react';
 import { Navigate } from 'react-router';
 
 import Box from '@mui/material/Box';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useResponsive } from 'src/hooks/use-responsive';
-import useAuth from 'src/hooks/useAuth';
 
 import { useSettingsContext } from 'src/components/settings';
 
-import { useNavData } from './config-navigation';
-import Header from './header';
 import Main from './main';
-import NavHorizontal from './nav-horizontal';
+import Header from './header';
 import NavMini from './nav-mini';
 import NavVertical from './nav-vertical';
+import NavHorizontal from './nav-horizontal';
+import { useNavData } from './config-navigation';
 
 // ----------------------------------------------------------------------
 
@@ -23,9 +21,7 @@ type Props = {
 };
 
 export default function DashboardLayout({ children }: Props) {
-  const { role } = useAuth();
-
-  const [manager, setmaneger] = useState(true);
+  // const [manager, setmaneger] = useState(true);
 
   const adminNav = useNavData();
 
@@ -92,7 +88,7 @@ export default function DashboardLayout({ children }: Props) {
       >
         {renderNavVertical}
 
-        <Main>{manager ? children : <Navigate to="/" />}</Main>
+        <Main>{children || <Navigate to="/" />}</Main>
       </Box>
     </>
   );

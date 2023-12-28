@@ -1,4 +1,4 @@
-import isEqual from 'lodash/isEqual';
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useSnackbar } from 'notistack';
 import { useDispatch } from 'react-redux';
 import { useState, useCallback } from 'react';
@@ -8,16 +8,11 @@ import Table from '@mui/material/Table';
 import TableContainer from '@mui/material/TableContainer';
 import { Box, TableBody, TextField, InputAdornment } from '@mui/material';
 
-import { useRouter } from 'src/routes/hooks';
-
-import { useBoolean } from 'src/hooks/use-boolean';
-
+import { _mock } from 'src/_mock';
 import { deleteAdmin } from 'src/store/slices/admin';
-import { _mock, USER_STATUS_OPTIONS } from 'src/_mock';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { useSettingsContext } from 'src/components/settings';
 import { useTable, getComparator, TableHeadCustom } from 'src/components/table';
 
 import { IUserItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
@@ -25,8 +20,6 @@ import { IUserItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/u
 import SymbolLiveTableRow from '../symbol-live-table-row';
 
 // ----------------------------------------------------------------------
-
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
   { id: 'symbol', label: 'Symbol', width: 100 },
@@ -50,15 +43,7 @@ export default function xxSymbolLiveList() {
 
   const dispatch = useDispatch();
 
-  const settings = useSettingsContext();
-
-  const router = useRouter();
-
-  const confirm = useBoolean();
-
   const { enqueueSnackbar } = useSnackbar();
-
-  // const symbolTableDashboard = useSelector((data: any) => data?.admin?.adminList);
 
   const symbolTableDashboard = [...Array(10)].map((_, index) => {
     const symbol = [
@@ -123,12 +108,6 @@ export default function xxSymbolLiveList() {
     table.page * table.rowsPerPage + table.rowsPerPage
   );
 
-  const denseHeight = table.dense ? 52 : 72;
-
-  const canReset = !isEqual(defaultFilters, filters);
-
-  const notFound = (!dataFiltered?.length && canReset) || !dataFiltered?.length;
-
   const handleFilters = useCallback(
     (name: string, value: IUserTableFilterValue) => {
       table.onResetPage();
@@ -140,6 +119,7 @@ export default function xxSymbolLiveList() {
     [table]
   );
 
+  console.log(handleFilters);
   const handleDeleteRow = useCallback(
     (id: string) => {
       dispatch(deleteAdmin(id));
@@ -149,40 +129,12 @@ export default function xxSymbolLiveList() {
     [dispatch, enqueueSnackbar, table, dataInPage.length]
   );
 
-  const handleDeleteRows = useCallback(() => {
-    const deleteRows = symbolTableDashboard.filter((row: any) => !table.selected.includes(row.id));
-    // setsymbolTableDashboard(deleteRows);
+  const handleEditRow = useCallback((id: string) => {
+    // router.push(paths.dashboard.user.edit(id));
+  }, []);
 
-    table.onUpdatePageDeleteRows({
-      totalRows: symbolTableDashboard.length,
-      totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
-    });
-  }, [dataFiltered?.length, dataInPage?.length, table, symbolTableDashboard]);
-
-  const handleEditRow = useCallback(
-    (id: string) => {
-      // router.push(paths.dashboard.user.edit(id));
-    },
-    [router]
-  );
-
-  const handleViewRow = useCallback(
-    (id: string) => {
-      // router.push(paths.dashboard.user.details(id));
-    },
-    [router]
-  );
-
-  const handleFilterStatus = useCallback(
-    (event: React.SyntheticEvent, newValue: string) => {
-      handleFilters('status', newValue);
-    },
-    [handleFilters]
-  );
-
-  const handleResetFilters = useCallback(() => {
-    setFilters(defaultFilters);
+  const handleViewRow = useCallback((id: string) => {
+    // router.push(paths.dashboard.user.details(id));
   }, []);
 
   return (
@@ -201,7 +153,6 @@ export default function xxSymbolLiveList() {
             '.MuiInputBase-input': { p: 1 },
             '.MuiInputBase-root': { borderRadius: '0px', height: '100%' },
           }}
-          // onChange={handleFilterName}
           placeholder="Search symbol"
           InputProps={{
             startAdornment: (
@@ -217,29 +168,9 @@ export default function xxSymbolLiveList() {
           width: '100%',
           borderRadius: '0px',
           bgcolor: 'white',
-          // height: 'calc(100% - 40px)',
         }}
       >
         <TableContainer sx={{ position: 'relative', overflow: 'unset', height: '100%' }}>
-          {/* <TableSelectedAction
-            dense={table.dense}
-            numSelected={table.selected.length}
-            rowCount={symbolTableDashboard?.length}
-            onSelectAllRows={(checked) =>
-              table.onSelectAllRows(
-                checked,
-                symbolTableDashboard.map((row: any) => row.id)
-              )
-            }
-            action={
-              <Tooltip title="Delete">
-                <IconButton color="primary" onClick={confirm.onTrue}>
-                  <Iconify icon="solar:trash-bin-trash-bold" />
-                </IconButton>
-              </Tooltip>
-            }
-          /> */}
-
           <Scrollbar>
             <Table size={table.dense ? 'small' : 'medium'}>
               <TableHeadCustom
@@ -270,13 +201,6 @@ export default function xxSymbolLiveList() {
                     index={index}
                   />
                 ))}
-
-                {/* <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, symbolTableDashboard.length)}
-                  /> */}
-
-                {/* <TableNoData notFound={notFound} /> */}
               </TableBody>
             </Table>
           </Scrollbar>

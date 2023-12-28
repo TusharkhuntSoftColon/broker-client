@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import { useState } from 'react';
 import { Navigate } from 'react-router';
 import { useSelector } from 'react-redux';
@@ -21,11 +22,10 @@ type Props = {
 };
 
 const AdminLayout = ({ children }: Props) => {
-  // const { role } = useAuth();
   const role = useSelector((data: any) => data.auth.role);
 
   const [manager, setmaneger] = useState(true);
-
+  console.log(setmaneger);
   const adminNav = useNavData();
   const superMasterNav = useSuperMasterNav();
   const masterNav = useMasterNav();

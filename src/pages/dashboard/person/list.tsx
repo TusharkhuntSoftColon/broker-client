@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 import { useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
 

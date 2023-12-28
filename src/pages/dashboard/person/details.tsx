@@ -1,6 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 
 import { useParams } from 'src/routes/hooks';
+
 import { PersonDetailsView } from 'src/sections/person/view';
 
 // ----------------------------------------------------------------------

@@ -10,10 +10,6 @@ import SvgColor from 'src/components/svg-color';
 
 const icon = (name: string) => (
   <SvgColor src={`/assets/icons/navbar/${name}.svg`} sx={{ width: 1, height: 1 }} />
-  // OR
-  // <Iconify icon="fluent:mail-24-filled" />
-  // https://icon-sets.iconify.design/solar/
-  // https://www.streamlinehq.com/icons
 );
 
 const ICONS = {
@@ -64,47 +60,13 @@ export function useNavData() {
       },
 
       // MANAGEMENT
-      // ----------------------------------------------------------------------
       {
-        // subheader: t('management'),
         items: [
-          // {
-          //   title: 'Super Master',
-          //   path: paths.dashboard.superMaster.root,
-          //   icon: ICONS.user,
-          // },
-          // {
-          //   title: 'Master',
-          //   path: paths.dashboard.master.root,
-          //   icon: ICONS.user,
-          // },
-          // // USER
-          // {
-          //   title: 'User',
-          //   path: paths.dashboard.user.root,
-          //   icon: ICONS.user,
-          // },
           {
             title: 'Person',
             path: paths.dashboard.person.root,
             icon: ICONS.user,
           },
-
-          // INVOICE
-          // {
-          //   title: t('invoice'),
-          //   path: paths.dashboard.invoice.root,
-          //   icon: ICONS.invoice,
-          //   children: [
-          //     { title: t('list'), path: paths.dashboard.invoice.root },
-          //     {
-          //       title: t('details'),
-          //       path: paths.dashboard.invoice.demo.details,
-          //     },
-          //     { title: t('create'), path: paths.dashboard.invoice.new },
-          //     { title: t('edit'), path: paths.dashboard.invoice.demo.edit },
-          //   ],
-          // },
         ],
       },
     ],
@@ -115,7 +77,6 @@ export function useNavData() {
 }
 
 export function useMasterNav() {
-  const { t } = useTranslate();
   const adminData = useMemo(
     () => [
       {
@@ -129,19 +90,7 @@ export function useMasterNav() {
         ],
       },
       {
-        // subheader: t('management'),
         items: [
-          // {
-          //   title: 'Master',
-          //   path: paths.superMaster.master.root,
-          //   icon: ICONS.user,
-          // },
-          // // USER
-          // {
-          //   title: 'User',
-          //   path: paths.superMaster.user.root,
-          //   icon: ICONS.user,
-          // },
           {
             title: 'Person',
             path: paths.master.person.root,
@@ -150,7 +99,7 @@ export function useMasterNav() {
         ],
       },
     ],
-    [t]
+    []
   );
   return adminData;
 }

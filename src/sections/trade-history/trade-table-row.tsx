@@ -3,7 +3,6 @@ import TableCell from '@mui/material/TableCell';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { usePopover } from 'src/components/custom-popover';
 import UpdateTradeDialog from 'src/components/custom-modal/updateTradeModal';
 
 import { ITrade } from 'src/types/trade';
@@ -30,10 +29,6 @@ export default function TradeTableRow({
   const { symbol, ticket, time, type, volume, price1, price2, swap, profit, sl, tp } = row;
 
   const confirm = useBoolean();
-
-  const quickEdit = useBoolean();
-
-  const popover = usePopover();
 
   return (
     <>
@@ -82,22 +77,6 @@ export default function TradeTableRow({
         >
           {profit}
         </TableCell>
-
-        {/* <TableCell sx={{ whiteSpace: 'nowrap' }}>{Domain}</TableCell> */}
-
-        {/* <TableCell sx={{ whiteSpace: 'nowrap' }}>{company}</TableCell> */}
-
-        {/* <TableCell sx={{ whiteSpace: 'nowrap' }}>{role}</TableCell> */}
-
-        {/* <TableCell>
-          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-            {allowedExchange.map((_el: any) => (
-              <Label variant="soft" color="default">
-                {_el}
-              </Label>
-            ))}
-          </Box>
-        </TableCell> */}
       </TableRow>
 
       <UpdateTradeDialog open={confirm.value} onClose={confirm.onFalse} row={row} isEdit />

@@ -1,16 +1,13 @@
 import Box from '@mui/material/Box';
-import Breadcrumbs from '@mui/material/Breadcrumbs';
-import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
 
-import { useRouter } from 'src/routes/hooks';
-
-import { useLocation } from 'react-router';
-import { usePopover } from '../custom-popover';
 import Iconify from '../iconify';
 import LinkItem from './link-item';
+import { usePopover } from '../custom-popover';
 import { CustomBreadcrumbsProps } from './types';
 
 // ----------------------------------------------------------------------
@@ -29,20 +26,13 @@ export default function CustomBreadcrumbs({
 }: CustomBreadcrumbsProps) {
   const lastLink = links[links.length - 1].name;
 
-  const router = useRouter();
-
-  const location = useLocation();
-
-  // console.log(location.pathname);
-
   const popover = usePopover();
 
   return (
     <Box sx={{ ...sx }}>
       <Stack direction="row" alignItems="center" justifyContent="space-around">
         <Box sx={{ flexGrow: 1 }}>
-          {/* HEADING */}
-          <Box display={'flex'} alignItems="center">
+          <Box display="flex" alignItems="center">
             {heading && (
               <Typography variant="h4" gutterBottom>
                 {heading}

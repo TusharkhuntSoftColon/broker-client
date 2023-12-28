@@ -1,35 +1,27 @@
 /* eslint-disable arrow-body-style */
+import React from 'react';
+
 import Box from '@mui/material/Box';
+import Tab from '@mui/material/Tab';
+import { styled } from '@mui/system';
+import Tabs from '@mui/material/Tabs';
+import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import CardHeader from '@mui/material/CardHeader';
-import IconButton from '@mui/material/IconButton';
-import Card, { CardProps } from '@mui/material/Card';
+import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 
-import { fCurrency } from 'src/utils/format-number';
+import { newInvoiceData, newInvoiceJournalData, newInvoiceExposureData } from 'src/_mock';
 
-import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { TableHeadCustom } from 'src/components/table';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-import {
-  _appInvoices,
-  newInvoiceData,
-  newInvoiceExposureData,
-  newInvoiceJournalData,
-} from 'src/_mock';
-import React from 'react';
-import Typography from '@mui/material/Typography';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
-import { styled } from '@mui/system';
 
 // ----------------------------------------------------------------------
 
@@ -56,13 +48,6 @@ type RowProps = {
   positive: number;
   graph: string;
 };
-
-interface Props extends CardProps {
-  title?: string;
-  subheader?: string;
-  tableData: RowProps[];
-  tableLabels: any;
-}
 
 interface TabPanelProps {
   children?: React.ReactNode;

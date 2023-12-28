@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import { styled } from '@mui/system';
 import Tabs from '@mui/material/Tabs';
+import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
@@ -13,7 +14,6 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
-import Card, { CardProps } from '@mui/material/Card';
 import TableContainer from '@mui/material/TableContainer';
 
 import {
@@ -54,13 +54,6 @@ type RowProps = {
   sl: any;
   tp: any;
 };
-
-interface Props extends CardProps {
-  title?: string;
-  subheader?: string;
-  tableData: RowProps[];
-  tableLabels: any;
-}
 
 interface TabPanelProps {
   children?: React.ReactNode;

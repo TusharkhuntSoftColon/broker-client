@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable no-nested-ternary */
 import { useState } from 'react';
 
 import { styled } from '@mui/system';
@@ -14,8 +16,6 @@ import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { Box, Select, MenuItem, FormControl, SelectChangeEvent } from '@mui/material';
-
-// import { ConfirmDialogProps } from './types';
 
 // ----------------------------------------------------------------------
 

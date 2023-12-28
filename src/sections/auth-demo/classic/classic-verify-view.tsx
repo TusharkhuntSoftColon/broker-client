@@ -10,8 +10,6 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { paths } from 'src/routes/paths';
 import { RouterLink } from 'src/routes/components';
 
-import { EmailInboxIcon } from 'src/assets/icons';
-
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFCode, RHFTextField } from 'src/components/hook-form';
 
@@ -97,20 +95,20 @@ export default function ClassicVerifyView() {
     </Stack>
   );
 
-  const renderHead = (
-    <>
-      <EmailInboxIcon sx={{ height: 96 }} />
+  // const renderHead = (
+  //   <>
+  //     <EmailInboxIcon sx={{ height: 96 }} />
 
-      <Stack spacing={1} sx={{ my: 5 }}>
-        <Typography variant="h3">Please check your email!</Typography>
+  //     <Stack spacing={1} sx={{ my: 5 }}>
+  //       <Typography variant="h3">Please check your email!</Typography>
 
-        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          We have emailed a 6-digit confirmation code to acb@domain, please enter the code in below
-          box to verify your email.
-        </Typography>
-      </Stack>
-    </>
-  );
+  //       <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+  //         We have emailed a 6-digit confirmation code to acb@domain, please enter the code in below
+  //         box to verify your email.
+  //       </Typography>
+  //     </Stack>
+  //   </>
+  // );
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>

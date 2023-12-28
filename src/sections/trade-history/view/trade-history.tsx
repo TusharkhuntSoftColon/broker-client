@@ -1,4 +1,3 @@
-import isEqual from 'lodash/isEqual';
 import { useSnackbar } from 'notistack';
 import { useDispatch } from 'react-redux';
 import { useState, useCallback } from 'react';
@@ -10,17 +9,13 @@ import { Box, TableBody } from '@mui/material';
 import IconButton from '@mui/material/IconButton';
 import TableContainer from '@mui/material/TableContainer';
 
-import { useRouter } from 'src/routes/hooks';
-
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { USER_STATUS_OPTIONS } from 'src/_mock';
 import { deleteAdmin } from 'src/store/slices/admin';
 import { newClientsTableData } from 'src/_mock/_trade';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { useSettingsContext } from 'src/components/settings';
 import {
   useTable,
   getComparator,
@@ -33,8 +28,6 @@ import { IUserItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/u
 import TradeTableRow from '../trade-table-row';
 
 // ----------------------------------------------------------------------
-
-const STATUS_OPTIONS = [{ value: 'all', label: 'All' }, ...USER_STATUS_OPTIONS];
 
 const TABLE_HEAD = [
   { id: 'symbol', label: 'Symbol' },
@@ -67,17 +60,9 @@ export default function TradeHistory() {
 
   const dispatch = useDispatch();
 
-  const settings = useSettingsContext();
-
-  const router = useRouter();
-
   const confirm = useBoolean();
 
   const { enqueueSnackbar } = useSnackbar();
-
-  // const newClientsTableData = useSelector((data: any) => data?.admin?.adminList);
-
-  // console.log({ newClientsTableData });
 
   const [filters, setFilters] = useState(defaultFilters);
 
@@ -92,12 +77,6 @@ export default function TradeHistory() {
     table.page * table.rowsPerPage + table.rowsPerPage
   );
 
-  const denseHeight = table.dense ? 52 : 72;
-
-  const canReset = !isEqual(defaultFilters, filters);
-
-  const notFound = (!dataFiltered?.length && canReset) || !dataFiltered?.length;
-
   const handleFilters = useCallback(
     (name: string, value: IUserTableFilterValue) => {
       table.onResetPage();
@@ -108,6 +87,7 @@ export default function TradeHistory() {
     },
     [table]
   );
+  console.log(handleFilters);
 
   const handleDeleteRow = useCallback(
     (id: string) => {
@@ -118,40 +98,12 @@ export default function TradeHistory() {
     [dispatch, enqueueSnackbar, table, dataInPage.length]
   );
 
-  const handleDeleteRows = useCallback(() => {
-    const deleteRows = newClientsTableData.filter((row: any) => !table.selected.includes(row.id));
-    // setnewClientsTableData(deleteRows);
+  const handleEditRow = useCallback((id: string) => {
+    // router.push(paths.dashboard.user.edit(id));
+  }, []);
 
-    table.onUpdatePageDeleteRows({
-      totalRows: newClientsTableData.length,
-      totalRowsInPage: dataInPage.length,
-      totalRowsFiltered: dataFiltered.length,
-    });
-  }, [dataFiltered?.length, dataInPage?.length, table, newClientsTableData]);
-
-  const handleEditRow = useCallback(
-    (id: string) => {
-      // router.push(paths.dashboard.user.edit(id));
-    },
-    [router]
-  );
-
-  const handleViewRow = useCallback(
-    (id: string) => {
-      // router.push(paths.dashboard.user.details(id));
-    },
-    [router]
-  );
-
-  const handleFilterStatus = useCallback(
-    (event: React.SyntheticEvent, newValue: string) => {
-      handleFilters('status', newValue);
-    },
-    [handleFilters]
-  );
-
-  const handleResetFilters = useCallback(() => {
-    setFilters(defaultFilters);
+  const handleViewRow = useCallback((id: string) => {
+    // router.push(paths.dashboard.user.details(id));
   }, []);
 
   return (
@@ -214,13 +166,6 @@ export default function TradeHistory() {
                     onViewRow={() => handleViewRow(row.id)}
                   />
                 ))}
-
-                {/* <TableEmptyRows
-                    height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, newClientsTableData.length)}
-                  /> */}
-
-                {/* <TableNoData notFound={notFound} /> */}
               </TableBody>
             </Table>
             <Box sx={{ bgcolor: '#f0f5f9', px: '14px', py: 1, fontSize: 12 }}>

@@ -1,6 +1,5 @@
 import { Navigate, useRoutes } from 'react-router-dom';
 
-import useAuth from 'src/hooks/useAuth';
 import { useMockedUser } from 'src/hooks/use-mocked-user';
 
 import { paths } from '../paths';
@@ -12,8 +11,7 @@ import { componentsRoutes } from './components';
 // ----------------------------------------------------------------------
 
 export default function Router() {
-  const { ADMIN, SUPER_MASTER, MASTER, USER } = useMockedUser();
-  const { active } = useAuth();
+  const { SUPER_MASTER } = useMockedUser();
 
   return useRoutes([
     // SET INDEX PAGE WITH SKIP HOME PAGE
@@ -23,16 +21,6 @@ export default function Router() {
     },
 
     // ----------------------------------------------------------------------
-
-    // SET INDEX PAGE WITH HOME PAGE
-    // {
-    //   path: '/',
-    //   element: (
-    //     <MainLayout>
-    //       <HomePage />
-    //     </MainLayout>
-    //   ),
-    // },
 
     // Auth routes
     // ...authRoutes,

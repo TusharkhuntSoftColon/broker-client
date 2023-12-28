@@ -1,7 +1,5 @@
-import { useNavigate } from 'react-router';
 import { useState, useEffect, useCallback } from 'react';
 
-import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import useAuth from 'src/hooks/useAuth';
@@ -9,15 +7,6 @@ import useAuth from 'src/hooks/useAuth';
 import { SplashScreen } from 'src/components/loading-screen';
 
 import { useAuthContext } from '../hooks';
-
-// ----------------------------------------------------------------------
-
-const loginPaths: Record<string, string> = {
-  jwt: paths.auth.login,
-  auth0: paths.auth.login,
-  amplify: paths.auth.login,
-  firebase: paths.auth.login,
-};
 
 // ----------------------------------------------------------------------
 
@@ -35,29 +24,15 @@ export default function AuthGuard({ children }: Props) {
 
 function Container({ children }: Props) {
   const router = useRouter();
-  const navigate = useNavigate();
 
-  const { authenticated, method } = useAuthContext();
   const { token } = useAuth();
 
   const [checked, setChecked] = useState(false);
 
   const check = useCallback(() => {
     if (!token) {
-      // const searchParams = new URLSearchParams({
-      //   returnTo: window.location.pathname,
-      // }).toString();
-
       router.replace('/auth/login');
-
-      // const loginPath = loginPaths[method];
-
-      // const href = `${loginPath}?${searchParams}`;
-
-      // router.replace(href);
     } else {
-      // router.replace('/admstr');
-      // navigate(-1);
       setChecked(true);
     }
   }, [router, token]);

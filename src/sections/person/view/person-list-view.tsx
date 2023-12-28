@@ -1,3 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable no-plusplus */
 import { isAxiosError } from 'axios';
 import isEqual from 'lodash/isEqual';
 import { useSnackbar } from 'notistack';
@@ -52,9 +55,6 @@ import UserTableFiltersResult from '../person-table-filters-result';
 const TABLE_HEAD = [
   { id: 'name', label: 'Name' },
   { id: 'userId', label: 'User Id' },
-  // { id: 'phoneNumber', label: 'Phone Number' },
-  // { id: 'company', label: 'Company' },
-  // { id: 'role', label: 'Role', width: 180 },
   { id: 'exchange', label: 'Exchange' },
   { is: 'createdAt', label: 'Created At' },
   { is: 'status', label: 'Status' },
@@ -85,7 +85,6 @@ export default function PersonListView({ path }: { path: any }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const personData = useSelector((data: any) => data?.admin?.personList);
-  const exchangeList = useSelector((data: any) => data?.admin?.exchangeList);
 
   const [tableData, setTableData] = useState([]);
   const [exchangeData, setExchangeData] = useState<any>();
@@ -120,9 +119,8 @@ export default function PersonListView({ path }: { path: any }) {
         return adminService.getExchangeListForMaster;
       case 'MASTER':
         return adminService.getExchangeListForUser;
-      // Add other cases for different roles with their respective paths
       default:
-        return adminService.getExchangeListForSuperMaster; // Return a default path if role doesn't match
+        return adminService.getExchangeListForSuperMaster;
     }
   };
 
@@ -271,9 +269,6 @@ export default function PersonListView({ path }: { path: any }) {
   );
 
   const handleDeleteRows = useCallback(() => {
-    const deleteRows = personData.filter((row: any) => !table.selected.includes(row.id));
-    // setpersonData(deleteRows);
-
     table.onUpdatePageDeleteRows({
       totalRows: personData.length,
       totalRowsInPage: dataInPage.length,
@@ -283,7 +278,6 @@ export default function PersonListView({ path }: { path: any }) {
 
   const handleEditRow = useCallback(
     (id: string) => {
-      // console.log('Edit Clicked');
       router.push(path.person.edit(id));
     },
     [router]
@@ -294,13 +288,6 @@ export default function PersonListView({ path }: { path: any }) {
       router.push(path.person.details(id));
     },
     [router]
-  );
-
-  const handleFilterStatus = useCallback(
-    (event: React.SyntheticEvent, newValue: string) => {
-      handleFilters('status', newValue);
-    },
-    [handleFilters]
   );
 
   const handleResetFilters = useCallback(() => {
@@ -333,48 +320,6 @@ export default function PersonListView({ path }: { path: any }) {
         />
 
         <Card>
-          {/* <Tabs
-            value={filters.status}
-            onChange={handleFilterStatus}
-            sx={{
-              px: 2.5,
-              boxShadow: (theme) => `inset 0 -2px 0 0 ${alpha(theme.palette.grey[500], 0.08)}`,
-            }}
-          >
-            {STATUS_OPTIONS.map((tab) => (
-              <Tab
-                key={tab.value}
-                iconPosition="end"
-                value={tab.value}
-                label={tab.label}
-                icon={
-                  <Label
-                    variant={
-                      ((tab.value === 'all' || tab.value === filters.status) && 'filled') || 'soft'
-                    }
-                    color={
-                      (tab.value === 'active' && 'success') ||
-                      (tab.value === 'pending' && 'warning') ||
-                      (tab.value === 'banned' && 'error') ||
-                      'default'
-                    }
-                  >
-                    {tab.value === 'all' && _userList.length}
-                    {tab.value === 'active' &&
-                      _userList.filter((user) => user.status === 'active').length}
-
-                    {tab.value === 'pending' &&
-                      _userList.filter((user) => user.status === 'pending').length}
-                    {tab.value === 'banned' &&
-                      _userList.filter((user) => user.status === 'banned').length}
-                    {tab.value === 'rejected' &&
-                      _userList.filter((user) => user.status === 'rejected').length}
-                  </Label>
-                }
-              />
-            ))}
-          </Tabs> */}
-
           <UserTableToolbar
             filters={filters}
             onFilters={handleFilters}

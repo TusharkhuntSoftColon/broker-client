@@ -1,26 +1,26 @@
-import { yupResolver } from '@hookform/resolvers/yup';
-import { useMutation } from '@tanstack/react-query';
+import * as Yup from 'yup';
 import { isAxiosError } from 'axios';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
-import * as Yup from 'yup';
+import { useMutation } from '@tanstack/react-query';
+import { yupResolver } from '@hookform/resolvers/yup';
 
-import LoadingButton from '@mui/lab/LoadingButton';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
 import Stack from '@mui/material/Stack';
+import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
+import LoadingButton from '@mui/lab/LoadingButton';
+import InputAdornment from '@mui/material/InputAdornment';
 
 import { useRouter } from 'src/routes/hooks';
 
-import { useBoolean } from 'src/hooks/use-boolean';
 import useAuth from 'src/hooks/useAuth';
+import { useBoolean } from 'src/hooks/use-boolean';
 
-import { PATH_DASHBOARD, PATH_MASTER, PATH_SUPER_MASTER, PATH_USER } from 'src/config-global';
 import authService from 'src/services/authService';
+import { PATH_USER, PATH_MASTER, PATH_DASHBOARD, PATH_SUPER_MASTER } from 'src/config-global';
 
-import FormProvider, { RHFTextField } from 'src/components/hook-form';
 import Iconify from 'src/components/iconify';
+import FormProvider, { RHFTextField } from 'src/components/hook-form';
 
 // ----------------------------------------------------------------------
 
@@ -67,7 +67,7 @@ export default function ClassicLoginView() {
   } = methods;
 
   // login api
-  const { mutate, isLoading } = useMutation(authService.login, {
+  const { mutate } = useMutation(authService.login, {
     onSuccess: (data) => {
       setCredentialsAction(data?.data);
       enqueueSnackbar(data?.message, { variant: 'success' });
@@ -83,6 +83,7 @@ export default function ClassicLoginView() {
   const onSubmit = handleSubmit(async (data) => {
     try {
       const res = await mutate(data);
+      console.log(res);
       // Continue with your success logic
     } catch (error) {
       console.error(error);
@@ -90,19 +91,9 @@ export default function ClassicLoginView() {
     }
   });
 
-  type ValidationSchema = Yup.InferType<typeof LoginSchema>;
-
   const renderHead = (
     <Stack spacing={2} sx={{ mb: 3 }}>
       <Typography variant="h4">Sign in </Typography>
-
-      {/* <Stack direction="row" spacing={0.5}>
-        <Typography variant="body2">New user?</Typography>
-
-        <Link component={RouterLink} href={paths.auth.register} variant="subtitle2">
-          Create an account
-        </Link>
-      </Stack> */}
     </Stack>
   );
 

@@ -1,5 +1,4 @@
 import { _mock } from './_mock';
-import NorthEastIcon from '@mui/icons-material/NorthEast';
 
 // APP
 // ----------------------------------------------------------------------
@@ -732,10 +731,6 @@ export const symbolTableDashboard = [...Array(10)].map((_, index) => {
 });
 
 export const clientsTableDashboard = [...Array(10)].map((_, index) => {
-  const bid = [123, 446, 533, 23234, 675, 3234, 8784, 8858, 485, 7, 5458, 5, 554, 548, 8, 5, 5][
-    index
-  ];
-
   const login = [
     120521, 120521, 120521, 120521, 120521, 120521, 120521, 120521, 120521, 120521, 120521, 120521,
     120521, 120521, 120521, 120521, 120521, 120521,
@@ -777,7 +772,6 @@ export const clientsTableDashboard = [...Array(10)].map((_, index) => {
     '104354',
   ][index];
 
-  const ask = [12324, 444, 6554, 7451, 14554, 5444, 6565, 65, 65, 6956, 65, 6, 95, 2, 5][index];
   const type = [
     'sell',
     'buy',

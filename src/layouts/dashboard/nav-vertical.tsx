@@ -1,22 +1,21 @@
 import { useEffect } from 'react';
 
 import Box from '@mui/material/Box';
-import Drawer from '@mui/material/Drawer';
 import Stack from '@mui/material/Stack';
+import Drawer from '@mui/material/Drawer';
 
 import { usePathname } from 'src/routes/hooks';
 
-import { useMockedUser } from 'src/hooks/use-mocked-user';
 import { useResponsive } from 'src/hooks/use-responsive';
+import { useMockedUser } from 'src/hooks/use-mocked-user';
 
 import Logo from 'src/components/logo';
-import { NavSectionVertical } from 'src/components/nav-section';
 import Scrollbar from 'src/components/scrollbar';
+import { NavSectionVertical } from 'src/components/nav-section';
 
-import NavToggleButton from '../common/nav-toggle-button';
 import { NAV } from '../config-layout';
 import { NavItemBaseProps } from '../main/nav/types';
-import { useNavData } from './config-navigation';
+import NavToggleButton from '../common/nav-toggle-button';
 
 // ----------------------------------------------------------------------
 
@@ -34,8 +33,6 @@ export default function NavVertical({ openNav, onCloseNav, nav }: Props) {
   const pathname = usePathname();
 
   const lgUp = useResponsive('up', 'lg');
-
-  const navData = useNavData();
 
   useEffect(() => {
     if (openNav) {

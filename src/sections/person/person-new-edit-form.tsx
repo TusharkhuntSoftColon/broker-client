@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unsafe-optional-chaining */
 /* eslint-disable no-nested-ternary */
@@ -83,7 +84,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     )[0];
   }, [currentUser]);
 
-
   const [roleOption, setRoleOption] = useState<any>('');
 
   for (let i = 0; i < exchangeData?.length; i++) {
@@ -92,8 +92,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       value: exchangeData[i]?._id,
     });
   }
-
-  const adminData = useSelector((data: any) => data?.admin?.adminList);
 
   const dispatch = useDispatch();
 
@@ -206,7 +204,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     }
   };
 
-
   // console.log(ExchangeOptions);
 
   const methods = useForm({
@@ -214,16 +211,14 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     defaultValues,
   });
   const {
-    reset,
     watch,
     control,
     setValue,
     handleSubmit,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting },
   } = methods;
 
   const value = watch();
-
 
   useEffect(() => {
     if (currentUser) {
@@ -236,10 +231,10 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     control,
   });
 
-  const [components, setComponents] = useState([]); // State to hold components
+  const [components, setComponents] = useState([]);
 
   const addNewComponent = () => {
-    // const newComponents: any = [...components, allowedExchangeComponent()];
+    const newComponents: any = [...components];
     if (value.allowedExchange?.label && value?.exchangeGroup.label) {
       append({
         allowedExchange: value?.allowedExchange?.value,
@@ -247,12 +242,11 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       });
       setValue('allowedExchange', {});
       setValue('exchangeGroup', {});
-      // setComponents(newComponents);
+      setComponents(newComponents);
     }
   };
 
   const removeComponent = () => {
-
     const lastPos = value?.exchangeList[value?.exchangeList.length - 1];
 
     const lastValueOfAllowedExchange = Exchange.filter(
@@ -458,7 +452,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   // get exchange list
   const { mutate } = useMutation(getExchangeListForPerson(role), {
     onSuccess: (data: any) => {
-      // console.log(data);
       setExchangeData(data?.data?.rows);
       dispatch(addExchanges(data?.data?.rows));
       enqueueSnackbar(data?.message, { variant: 'success' });
@@ -615,58 +608,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                   </li>
                 )}
               />
-
-              {/* <RHFAutocomplete
-                name="exchangeGroup"
-                label="Exchange Group"
-                // control={control}
-                isReadOnly={!!isView}
-                options={EXCHANGE_GROUP}
-                freeSolo
-                defaultValue={defaultExchangeOptions}
-                data={EXCHANGE_GROUP}
-                isLabled={false}
-                multiple
-                isOptionEqualToValue={(option, value) => option.value === value.value}
-                getOptionLabel={(option: any) => option.label}
-                renderOption={(props, option, { selected }) => (
-                  <li {...props} key={option.value}>
-                    <Checkbox
-                      icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
-                      checkedIcon={<CheckBoxIcon fontSize="small" />}
-                      style={{ marginRight: 8 }}
-                      checked={selected}
-                    />
-                    {option.label}
-                  </li>
-                )}
-              />
-
-              <RHFAutocomplete
-                name="allowedExchange"
-                label="Allowed Exchange"
-                // control={control}
-                isReadOnly={!!isView}
-                options={ExchangeOptions}
-                freeSolo
-                data={ExchangeOptions}
-                defaultValue={defaultAllowedExchange}
-                isLabled={false}
-                multiple
-                isOptionEqualToValue={(option, value) => option.value === value.value}
-                getOptionLabel={(option: any) => option.label}
-                renderOption={(props, option, { selected }) => (
-                  <li {...props} key={option.value}>
-                    <Checkbox
-                      icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
-                      checkedIcon={<CheckBoxIcon fontSize="small" />}
-                      style={{ marginRight: 8 }}
-                      checked={selected}
-                    />
-                    {option.label}
-                  </li>
-                )}
-              /> */}
 
               {roleOption !== 'USER' && (
                 <>

@@ -1,9 +1,9 @@
-import { useCallback, useState } from 'react';
+import { useState, useCallback } from 'react';
 
 import { fDate } from 'src/utils/format-time';
 
-import { DateRangePickerProps } from './types';
 import { shortDateLabel } from './utils';
+import { DateRangePickerProps } from './types';
 
 // ----------------------------------------------------------------------
 
