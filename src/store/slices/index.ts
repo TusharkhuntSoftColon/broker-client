@@ -1,17 +1,16 @@
+import { combineReducers } from '@reduxjs/toolkit';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-import { combineReducers } from '@reduxjs/toolkit';
-import { encryptTransform } from 'redux-persist-transform-encrypt';
+// import { encryptTransform } from 'redux-persist-transform-encrypt';
 
-import authSlice from './auth';
 import adminSlice from './admin';
-import symbolSlice from './symbol';
+import authSlice from './auth';
 import exchangeSlice from './exchange';
-import { REDUX_SECRET_KEY } from '../../utils/environments';
+import symbolSlice from './symbol';
 
-const encryptor = encryptTransform({
-  secretKey: REDUX_SECRET_KEY,
-});
+// const encryptor = encryptTransform({
+//   secretKey: REDUX_SECRET_KEY,
+// });
 
 const persistConfig = {
   key: 'root',
@@ -19,7 +18,7 @@ const persistConfig = {
   whitelist: ['auth', 'admin', 'exchange', 'symbol'],
   // blacklist: ["auth"],
   // stateReconciler: hardSet,
-  transforms: [encryptor],
+  // transforms: [encryptor],
 };
 
 const rootReducers = combineReducers({
