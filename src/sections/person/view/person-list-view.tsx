@@ -290,6 +290,25 @@ export default function PersonListView({ path }: { path: any }) {
     [router]
   );
 
+  const { mutate: getPerson } = useMutation(adminService.getAllPersonById, {
+    onSuccess: (data) => {
+      // enqueueSnackbar(data?.message, { variant: 'success' });
+      setTableData(data?.data?.rows);
+      dispatch(addPerson(data?.data?.rows));
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+
+  console.log({ tableData });
+
+  const handleGetUsers = (userId: string) => {
+    getPerson(userId);
+  };
+
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
@@ -301,7 +320,7 @@ export default function PersonListView({ path }: { path: any }) {
           heading="List"
           links={[
             { name: 'Admin', href: path.root },
-            { name: 'Person', href: path.root },
+            { name: 'Person', href: path.person.root },
             { name: 'List' },
           ]}
           action={
@@ -391,6 +410,7 @@ export default function PersonListView({ path }: { path: any }) {
                         onDeleteRow={() => handleDeleteRow(row._id, row.role)}
                         onEditRow={() => handleEditRow(row._id)}
                         onViewRow={() => handleViewRow(row._id)}
+                        onGetPersonRow={() => handleGetUsers(row._id)}
                       />
                     ))}
 

@@ -27,6 +27,7 @@ type Props = {
   onSelectRow: VoidFunction;
   onDeleteRow: VoidFunction;
   onViewRow: VoidFunction;
+  onGetPersonRow: VoidFunction;
 };
 
 export default function PersonTableRow({
@@ -36,6 +37,7 @@ export default function PersonTableRow({
   onSelectRow,
   onDeleteRow,
   onViewRow,
+  onGetPersonRow,
 }: Props) {
   const { name, exchangeList, ID, isActive, createdAt } = row;
 
@@ -47,10 +49,16 @@ export default function PersonTableRow({
 
   const exchangeData = useSelector((data: any) => data?.admin?.exchangeList);
 
-
   return (
     <>
-      <TableRow hover selected={selected} sx={{ cursor: 'pointer' }}>
+      <TableRow
+        hover
+        selected={selected}
+        sx={{ cursor: 'pointer' }}
+        onClick={() => {
+          onGetPersonRow();
+        }}
+      >
         <TableCell padding="checkbox">
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>

@@ -53,6 +53,8 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   const ExchangeList = useSelector((data: any) => data?.admin?.exchangeList);
   const router = useRouter();
 
+  console.log({ currentUser });
+
   const [exchangeData, setExchangeData] = useState<any>();
 
   const Exchange: { label: any; value: any }[] = [];

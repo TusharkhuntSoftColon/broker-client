@@ -11,6 +11,7 @@ export const GET_ALL_PERSONS_BY_ADMIN = '/admin/person';
 export const GET_EXCHANGE_FOR_SUPERMASTER = '/admin/all-exchanges';
 export const GET_EXCHANGE_FOR_MASTER = '/super-master/all-exchanges';
 export const GET_EXCHANGE_FOR_USER = '/master/all-exchanges';
+export const GET_ALL_USER_BYID = '/allusers';
 
 export const UPDATE_SUPER_MASTER_BY_ADMIN = '/admin/super-master/update';
 export const UPDATE_MASTER_BY_ADMIN = '/admin/master/update';

@@ -3,6 +3,7 @@ import { AxiosResponse } from 'axios';
 import client from 'src/lib/client';
 
 import {
+  GET_ALL_USER_BYID,
   CREATE_USER_BY_ADMIN,
   DELETE_USER_BY_ADMIN,
   UPDATE_USER_BY_ADMIN,
@@ -71,7 +72,6 @@ const adminService = {
       throw error; // Re-throw the error to be caught by the caller
     }
   },
-
   createMaster: async (data: any): Promise<any> => {
     const newExchangeList = [
       ...data.exchangeList,
@@ -102,7 +102,6 @@ const adminService = {
       throw error; // Re-throw the error to be caught by the caller
     }
   },
-
   createUser: async (data: any): Promise<any> => {
     const newExchangeList = [
       ...data.exchangeList,
@@ -306,6 +305,15 @@ const adminService = {
       // You can log the error here for debugging purposes
       console.error('Error in symbolService.deleteSymbol:', error);
       throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  getAllPersonById: async (userId: string): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(`${GET_ALL_USER_BYID}/${userId}`);
+      return response?.data;
+    } catch (error) {
+      console.error('Error in symbolService.deleteSymbol:', error);
+      throw error;
     }
   },
 };
