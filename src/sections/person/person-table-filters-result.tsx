@@ -45,10 +45,6 @@ export default function UserTableFiltersResult({
 
   const ExchangeList = useSelector((data: any) => data?.admin?.exchangeList);
 
-  console.log({ ExchangeList });
-
-  console.log({ filters });
-
   const matchedNames = filters?.exchange?.map(
     (id: any) => ExchangeList.find((item: any) => item._id === id)?.name
   );
@@ -63,7 +59,7 @@ export default function UserTableFiltersResult({
       </Box>
 
       <Stack flexGrow={1} spacing={1} direction="row" flexWrap="wrap" alignItems="center">
-        {filters.status !== null && (
+        {filters.status?.label?.length > 0 && (
           <Block label="Status:">
             <Chip size="small" label={filters.status?.label} onDelete={handleRemoveStatus} />
           </Block>

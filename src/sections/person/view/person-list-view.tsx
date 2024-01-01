@@ -303,8 +303,6 @@ export default function PersonListView({ path }: { path: any }) {
     },
   });
 
-  console.log({ tableData });
-
   const handleGetUsers = (userId: string) => {
     getPerson(userId);
   };
@@ -493,13 +491,13 @@ function applyFilter({
     );
   }
 
-  if (status) {
-    inputData = inputData.filter((user: any) => user?.isActiveAdmin === status?.value);
+  if (status?.label?.length > 0) {
+    inputData = inputData.filter((user: any) => user?.isActive === status?.value);
   }
 
   if (exchange.length) {
     inputData = inputData.filter((user: any) =>
-      user.allowedExchange.some((data: any) => exchange.includes(data))
+      user.exchangeList.some((data: any) => exchange.includes(data?.allowedExchange))
     );
   }
 

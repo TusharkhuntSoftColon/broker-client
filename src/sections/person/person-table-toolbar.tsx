@@ -8,15 +8,12 @@ import { useMemo, useEffect, useCallback } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import Checkbox from '@mui/material/Checkbox';
+import { Autocomplete } from '@mui/material';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import IconButton from '@mui/material/IconButton';
-import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
-import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 import { fDate } from 'src/utils/format-time';
 
@@ -71,7 +68,6 @@ export default function UserTableToolbar({
 
   const value: any = watch();
 
-
   useEffect(() => {
     handleStatusChange();
   }, [value?.status]);
@@ -95,19 +91,10 @@ export default function UserTableToolbar({
     },
     [onFilters]
   );
-
-  const handleFilterRole = useCallback(
-    (event: SelectChangeEvent<string[]>) => {
-      // console.log(event.target.value);
-      const selectedLabels: any = event.target.value;
-      const selectedValues = selectedLabels.map((label: any) => {
-        const selectedOption = roleOptions.find((option: any) => option.label === label);
-        return selectedOption ? selectedOption.value : null;
-      });
-      onFilters('exchange', selectedValues);
-    },
-    [onFilters]
-  );
+  const handleChangeExchange = (e: any, value: any) => {
+    const data = value.map((data: any) => data.value);
+    onFilters('exchange', data);
+  };
 
   const handleSelectedDate = () => {
     const date = [rangeCalendarPicker.startDate, rangeCalendarPicker.endDate];
@@ -146,37 +133,28 @@ export default function UserTableToolbar({
               width: { xs: 1, md: 200 },
             }}
           >
-            <InputLabel>Exchange</InputLabel>
-
-            <Select
+            <Autocomplete
               multiple
-              value={filters.exchange}
-              onChange={handleFilterRole}
-              input={<OutlinedInput label="Exchange" />}
-              renderValue={(selected) => {
-                const selectedLabels = selected.map((value) => {
-                  const selectedOption = roleOptions.find((option: any) => option.value === value);
-                  return selectedOption ? selectedOption.label : '';
-                });
-                return selectedLabels.join(', ');
-              }}
-              MenuProps={{
-                PaperProps: {
-                  sx: { maxHeight: 240 },
-                },
-              }}
-            >
-              {roleOptions.map((option: any) => (
-                <MenuItem key={option.label} value={option.label}>
-                  <Checkbox
-                    disableRipple
-                    size="small"
-                    checked={filters.exchange.includes(option.label)}
-                  />
-                  {option.label}
-                </MenuItem>
-              ))}
-            </Select>
+              id="tags-filled"
+              options={roleOptions}
+              freeSolo
+              disableCloseOnSelect
+              // value={filters.exchange}
+              onChange={(w, value) => handleChangeExchange(w, value)}
+              renderTags={(value: readonly string[]) =>
+                value.map((option: any, index: number) => option?.label).join(', ')
+              }
+              renderInput={(params) => (
+                <TextField
+                  label="Exchange"
+                  {...params}
+                  inputProps={{
+                    ...params.inputProps,
+                    autoComplete: 'disabled',
+                  }}
+                />
+              )}
+            />
           </FormControl>
 
           <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
@@ -241,7 +219,7 @@ export default function UserTableToolbar({
                 label="Status"
                 options={ExchangeStatus}
                 isLabled={false}
-                // value={ExchangeStatus.map((data) => data.value)}
+                value={filters?.status}
                 data={ExchangeStatus}
                 isOptionEqualToValue={(option, value) => option.value === value.value}
                 getOptionLabel={(option: any) => option.label}
