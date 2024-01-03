@@ -1,54 +1,54 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-plusplus */
+import { useMutation } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
+import { isWithinInterval } from 'date-fns';
 import isEqual from 'lodash/isEqual';
 import { useSnackbar } from 'notistack';
-import { parse, isWithinInterval } from 'date-fns';
-import { useMutation } from '@tanstack/react-query';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useState, useEffect, useCallback } from 'react';
 
-import Card from '@mui/material/Card';
-import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
+import Card from '@mui/material/Card';
 import Container from '@mui/material/Container';
-import TableBody from '@mui/material/TableBody';
 import IconButton from '@mui/material/IconButton';
+import Table from '@mui/material/Table';
+import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
+import Tooltip from '@mui/material/Tooltip';
 
-import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
+import { useRouter } from 'src/routes/hooks';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import adminService from 'src/services/adminService';
 import masterService from 'src/services/masterService';
 import superMasterService from 'src/services/superMasterService';
-import { addPerson, addExchanges } from 'src/store/slices/admin';
+import { addExchanges, addPerson } from 'src/store/slices/admin';
 
+import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import { ConfirmDialog } from 'src/components/custom-dialog';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
-import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 import {
-  useTable,
   emptyRows,
-  TableNoData,
   getComparator,
   TableEmptyRows,
   TableHeadCustom,
-  TableSelectedAction,
+  TableNoData,
   TablePaginationCustom,
+  TableSelectedAction,
+  useTable,
 } from 'src/components/table';
 
 import { IUserItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
 
-import PersonTableRow from '../person-table-row';
-import UserTableToolbar from '../person-table-toolbar';
 import UserTableFiltersResult from '../person-table-filters-result';
+import PersonTableRow from '../person-table-row';
+import PersonTableToolbar from '../person-table-toolbar';
 
 // ----------------------------------------------------------------------
 
@@ -337,7 +337,7 @@ export default function PersonListView({ path }: { path: any }) {
         />
 
         <Card>
-          <UserTableToolbar
+          <PersonTableToolbar
             filters={filters}
             onFilters={handleFilters}
             //
@@ -501,10 +501,12 @@ function applyFilter({
     );
   }
 
+  console.log({ dateRange });
+  console.log({ inputData });
+
   if (dateRange.length > 0) {
     inputData = inputData.filter((item: any) => {
-      const createdAtDate = parse(item.createdAt, 'EEE MMM dd yyyy', new Date());
-      return isWithinInterval(createdAtDate, { start: dateRange[0], end: dateRange[1] });
+      return isWithinInterval(new Date(item.createdAt), { start: dateRange[0], end: dateRange[1] });
     });
   }
 

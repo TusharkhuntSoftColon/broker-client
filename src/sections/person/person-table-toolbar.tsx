@@ -1,31 +1,29 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable react-hooks/exhaustive-deps */
-import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
+import * as Yup from 'yup';
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useMemo, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import { Autocomplete } from '@mui/material';
-import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
 import InputAdornment from '@mui/material/InputAdornment';
+import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
 
 import { fDate } from 'src/utils/format-time';
 
 import { ExchangeStatus } from 'src/_mock';
 
-import Iconify from 'src/components/iconify';
-import { RHFAutocomplete } from 'src/components/hook-form';
-import { useSettingsContext } from 'src/components/settings';
-import FormProvider from 'src/components/hook-form/form-provider';
-import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import { useDateRangePicker } from 'src/components/custom-date-range-picker';
 import CustomDateRangePicker from 'src/components/custom-date-range-picker/custom-date-range-picker';
+import { usePopover } from 'src/components/custom-popover';
+import { RHFAutocomplete } from 'src/components/hook-form';
+import FormProvider from 'src/components/hook-form/form-provider';
+import Iconify from 'src/components/iconify';
+import { useSettingsContext } from 'src/components/settings';
 
 import { IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
 
@@ -38,7 +36,7 @@ type Props = {
   roleOptions: string[] | any;
 };
 
-export default function UserTableToolbar({
+export default function PersonTableToolbar({
   filters,
   onFilters,
   //
@@ -112,6 +110,8 @@ export default function UserTableToolbar({
     }
   });
 
+  console.log('Working ToolBar');
+
   return (
     <>
       <FormProvider methods={methods} onSubmit={onSubmit}>
@@ -157,12 +157,12 @@ export default function UserTableToolbar({
             />
           </FormControl>
 
-          <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 1 }}>
+          <Stack direction="row" alignItems="center" spacing={2} flexGrow={1} sx={{ width: 0.5 }}>
             <TextField
               fullWidth
               value={filters.name}
               onChange={handleFilterName}
-              placeholder="Search..."
+              placeholder="Search"
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -213,7 +213,7 @@ export default function UserTableToolbar({
               />
             </Stack>
 
-            <Stack spacing={2} sx={{ width: 0.2 }}>
+            <Stack spacing={2} sx={{ width: 0.5 }}>
               <RHFAutocomplete
                 name="status"
                 label="Status"
@@ -243,14 +243,14 @@ export default function UserTableToolbar({
               />
             </Stack>
 
-            <IconButton onClick={popover.onOpen}>
+            {/* <IconButton onClick={popover.onOpen}>
               <Iconify icon="eva:more-vertical-fill" />
-            </IconButton>
+            </IconButton> */}
           </Stack>
         </Stack>
       </FormProvider>
 
-      <CustomPopover
+      {/* <CustomPopover
         open={popover.open}
         onClose={popover.onClose}
         arrow="right-top"
@@ -281,7 +281,7 @@ export default function UserTableToolbar({
           <Iconify icon="solar:export-bold" />
           Export
         </MenuItem>
-      </CustomPopover>
+      </CustomPopover> */}
     </>
   );
 }
