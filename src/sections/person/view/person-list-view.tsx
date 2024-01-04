@@ -198,8 +198,6 @@ export default function PersonListView({ path }: { path: any }) {
     },
   });
 
-
-
   const { mutate: getAllExchanges } = useMutation(getExchangeListForPerson(role), {
     onSuccess: (data: any) => {
       setExchangeData(data?.data?.rows);
