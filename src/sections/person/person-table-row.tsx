@@ -7,7 +7,6 @@ import Checkbox from '@mui/material/Checkbox';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
-import ListItemText from '@mui/material/ListItemText';
 
 import { useBoolean } from 'src/hooks/use-boolean';
 
@@ -39,7 +38,8 @@ export default function PersonTableRow({
   onViewRow,
   onGetPersonRow,
 }: Props) {
-  const { name, exchangeList, ID, isActive, createdAt } = row;
+  const { name, exchangeList, ID, isActive, createdAt, role } = row;
+  console.log({ row });
 
   const confirm = useBoolean();
 
@@ -63,6 +63,7 @@ export default function PersonTableRow({
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{ID}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>
           {/* <Avatar alt={name} src={avatarUrl} sx={{ mr: 2 }} /> */}
 
@@ -78,11 +79,9 @@ export default function PersonTableRow({
           /> */}
         </TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{ID}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{role}</TableCell>
 
         {/* <TableCell sx={{ whiteSpace: 'nowrap' }}>{company}</TableCell> */}
-
-        {/* <TableCell sx={{ whiteSpace: 'nowrap' }}>{role}</TableCell> */}
 
         <TableCell>
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
@@ -97,7 +96,7 @@ export default function PersonTableRow({
           </Box>
         </TableCell>
 
-        <TableCell>
+        {/* <TableCell>
           <ListItemText
             primary={<span>{createdAt.substring(0, 10) || '-'}</span>}
             primaryTypographyProps={{ typography: 'body2', noWrap: true }}
@@ -107,7 +106,7 @@ export default function PersonTableRow({
               typography: 'caption',
             }}
           />
-        </TableCell>
+        </TableCell> */}
 
         <TableCell>
           <Label variant="soft" color={isActive ? 'success' : 'warning'}>

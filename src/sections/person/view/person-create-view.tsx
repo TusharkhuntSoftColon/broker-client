@@ -34,19 +34,19 @@ export default function PersonCreateView() {
   };
 
   return (
-    <Container maxWidth={settings.themeStretch ? false : 'lg'}>
+    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
       <CustomBreadcrumbs
-        heading="Create a new Person"
+        heading="Create a new User"
         links={[
           {
             name: 'Admin',
             href: paths.dashboard.root,
           },
           {
-            name: 'Person',
-            href: paths.dashboard.root,
+            name: 'User',
+            href: paths.dashboard.person.root,
           },
-          { name: 'New Person' },
+          { name: 'New User' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

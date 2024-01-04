@@ -21,6 +21,8 @@ export const DELETE_SUPER_MASTER_BY_ADMIN = '/admin/super-master/remove/';
 export const DELETE_MASTER_BY_ADMIN = '/admin/master/remove/';
 export const DELETE_USER_BY_ADMIN = '/admin/user/remove/';
 
+export const GET_BROKERAGE_LIST = '/admin/brockrage';
+
 // SUPER MASTER
 export const CREATE_MASTER_BY_SUPER_MASTER = '/super-master/master';
 export const CREATE_USER_BY_SUPER_MASTER = '/super-master/user';

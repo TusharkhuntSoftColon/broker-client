@@ -4,6 +4,7 @@ import client from 'src/lib/client';
 
 import {
   GET_ALL_USER_BYID,
+  GET_BROKERAGE_LIST,
   CREATE_USER_BY_ADMIN,
   DELETE_USER_BY_ADMIN,
   UPDATE_USER_BY_ADMIN,
@@ -314,6 +315,16 @@ const adminService = {
     } catch (error) {
       console.error('Error in symbolService.deleteSymbol:', error);
       throw error;
+    }
+  },
+  getBrokerageList: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(GET_BROKERAGE_LIST);
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in exchangeService.getExchangeList:', error);
+      throw error; // Re-throw the error to be caught by the caller
     }
   },
 };

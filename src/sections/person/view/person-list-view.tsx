@@ -4,7 +4,7 @@
 import { isAxiosError } from 'axios';
 import isEqual from 'lodash/isEqual';
 import { useSnackbar } from 'notistack';
-import { parse, isWithinInterval } from 'date-fns';
+import { isWithinInterval } from 'date-fns';
 import { useMutation } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect, useCallback } from 'react';
@@ -53,10 +53,11 @@ import UserTableFiltersResult from '../person-table-filters-result';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'name', label: 'Name' },
-  { id: 'userId', label: 'User Id' },
-  { id: 'exchange', label: 'Exchange' },
-  { is: 'createdAt', label: 'Created At' },
+  { id: 'srno', label: 'Sr.no' },
+  { id: 'name', label: 'User Name' },
+  { id: 'role', label: 'Role' },
+  { id: 'exchange', label: 'Allowed Exchange' },
+  // { is: 'createdAt', label: 'Created At' },
   { is: 'status', label: 'Status' },
   { id: '', width: 88 },
 ];
@@ -87,6 +88,7 @@ export default function PersonListView({ path }: { path: any }) {
   const personData = useSelector((data: any) => data?.admin?.personList);
 
   const [tableData, setTableData] = useState([]);
+
   const [exchangeData, setExchangeData] = useState<any>();
 
   const [filters, setFilters] = useState(defaultFilters);
@@ -149,9 +151,8 @@ export default function PersonListView({ path }: { path: any }) {
         return superMasterService.getAllPersons;
       case 'MASTER':
         return masterService.getAllPersons;
-      // Add other cases for different roles with their respective paths
       default:
-        return masterService.getAllPersons; // Return a default path if role doesn't match
+        return masterService.getAllPersons;
     }
   };
 
@@ -188,7 +189,7 @@ export default function PersonListView({ path }: { path: any }) {
       setTableData(data?.data?.rows);
       // dispatch(addExchanges(data?.data?.allowedExchange));
       dispatch(addPerson(data?.data?.rows));
-      enqueueSnackbar(data?.message, { variant: 'success' });
+      // enqueueSnackbar(data?.message, { variant: 'success' });
     },
     onError: (error: any) => {
       if (isAxiosError(error)) {
@@ -196,6 +197,8 @@ export default function PersonListView({ path }: { path: any }) {
       }
     },
   });
+
+
 
   const { mutate: getAllExchanges } = useMutation(getExchangeListForPerson(role), {
     onSuccess: (data: any) => {
@@ -318,7 +321,7 @@ export default function PersonListView({ path }: { path: any }) {
           heading="List"
           links={[
             { name: 'Admin', href: path.root },
-            { name: 'Person', href: path.person.root },
+            { name: 'User', href: path.person.root },
             { name: 'List' },
           ]}
           action={
@@ -328,7 +331,7 @@ export default function PersonListView({ path }: { path: any }) {
               variant="contained"
               startIcon={<Iconify icon="mingcute:add-line" />}
             >
-              New Person
+              Add User
             </Button>
           }
           sx={{
@@ -502,10 +505,9 @@ function applyFilter({
   }
 
   if (dateRange.length > 0) {
-    inputData = inputData.filter((item: any) => {
-      const createdAtDate = parse(item.createdAt, 'EEE MMM dd yyyy', new Date());
-      return isWithinInterval(createdAtDate, { start: dateRange[0], end: dateRange[1] });
-    });
+    inputData = inputData.filter((item: any) =>
+      isWithinInterval(new Date(item.createdAt), { start: dateRange[0], end: dateRange[1] })
+    );
   }
 
   return inputData;

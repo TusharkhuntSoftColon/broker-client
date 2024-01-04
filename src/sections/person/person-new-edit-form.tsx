@@ -14,10 +14,21 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
+import { Container } from '@mui/system';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Accordion, Typography, AccordionDetails, AccordionSummary } from '@mui/material';
+import {
+  Table,
+  TableRow,
+  Accordion,
+  TableBody,
+  TableCell,
+  Typography,
+  TableContainer,
+  AccordionDetails,
+  AccordionSummary,
+} from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -29,7 +40,10 @@ import { EXCHANGE_GROUP, LEVERAGE_OPTIONS } from 'src/_mock';
 import superMasterService from 'src/services/superMasterService';
 import { ADMIN_ROLE, MASTER_ROLE, SUPER_MASTER_ROLE } from 'src/_mock/_person';
 
+import Scrollbar from 'src/components/scrollbar';
 import { useSnackbar } from 'src/components/snackbar';
+import { useSettingsContext } from 'src/components/settings';
+import { useTable, TableHeadCustom } from 'src/components/table';
 import FormProvider, {
   RHFSwitch,
   RHFCheckbox,
@@ -47,7 +61,26 @@ type Props = {
   path?: any;
 };
 
+const TABLE_HEAD = [
+  { id: 'template', label: 'Template', width: 160 },
+  { id: 'date', label: 'Date', width: 160 },
+  { id: 'exchangeCode', label: 'Exchange Code', width: 160 },
+  { is: 'symbol', label: 'Symbol' },
+  { is: 'brokerage_call_option', label: 'BCO' },
+  { is: 'brokerage_call_method', label: 'BCM' },
+  { is: 'brokerage_rate', label: 'BRKG Rate' },
+  { is: 'brokerage_per', label: 'BRKG Per' },
+  // { id: 'createdAt', label: 'Create at', width: 160 },
+  // { id: 'inventoryType', label: 'Stock', width: 160 },
+  // { id: 'price', label: 'Price', width: 140 },
+  // { id: 'publish', label: 'Publish', width: 110 },
+  { id: '', width: 88 },
+];
+
 export default function PersonNewEditForm({ currentUser, isView, path }: Props) {
+  const settings = useSettingsContext();
+  const table = useTable();
+
   const ExchangeOptions: any = [];
   const role = useSelector((data: any) => data.auth.role);
   const ExchangeList = useSelector((data: any) => data?.admin?.exchangeList);
@@ -125,8 +158,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     exchangeGroup: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
     allowedExchange: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
     leverageXY: Yup.mixed<any>().nullable().required('Leverage  is required'),
-    brokerage: Yup.number().required('Brokerage is required'),
-    // investorPassword: Yup.string().required('Invester Password is required'),
+    // brokerageTemplate:Yup.string().required('Brokerage Template is required'),
   });
 
   const defaultValues: any = useMemo(
@@ -144,8 +176,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       isActive: currentUser?.isActive || null,
       limitOfAddUser: currentUser?.limitOfAddUser || null,
       limitOfAddMaster: currentUser?.limitOfAddMaster || null,
-      brokerage: currentUser?.brokerage || null,
-      // investorPassword: currentUser?.investorPassword || null,
+      // brokerageTemplate: currentUser?.brokerageTemplate || null,
     }),
     [defaultAllowedExchange, defaultExchangeOptions]
   );
@@ -232,6 +263,8 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     name: 'exchangeList',
     control,
   });
+  const [brokerageDataList, setBrokerageDataList] = useState([]);
+  console.log({ brokerageDataList });
 
   const [components, setComponents] = useState([]);
 
@@ -295,18 +328,18 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       }
     });
     if (currentUser) {
-      setRoleOption(value.role);
+      setRoleOption(value?.role);
     } else {
-      setRoleOption(value.role.value);
+      setRoleOption(value?.role?.value);
     }
-    if (value.role.value === 'SUPER_MASTER') {
+    if (value?.role?.value === 'SUPER_MASTER') {
       setValue('limitOfAddMaster', currentUser?.limitOfAddMaster || '');
       setValue('limitOfAddUser', currentUser?.limitOfAddUser || '');
     }
-    if (value.role.value === 'MASTER') {
+    if (value?.role?.value === 'MASTER') {
       setValue('limitOfAddUser', currentUser?.limitOfAddUser || '');
     }
-    if (value.role.value === 'USER') {
+    if (value?.role?.value === 'USER') {
       setValue('brokerage', currentUser?.brokerage || '');
       setValue('investorPassword', currentUser?.investorPassword || '');
     }
@@ -465,6 +498,19 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     },
   });
 
+  // Get All Brokerage
+  const { mutate: brokerageList } = useMutation(adminService.getBrokerageList, {
+    onSuccess: (data) => {
+      setBrokerageDataList(data?.data?.rows);
+      // dispatch(addBrokerage(data?.data?.rows));
+    },
+    onError: (error) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (roleOption === 'SUPER_MASTER') {
@@ -499,6 +545,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
 
   useEffect(() => {
     mutate();
+    brokerageList();
   }, []);
 
   const RolesOptions = (role: any) => {
@@ -516,6 +563,13 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   };
 
   const Role: any = RolesOptions(role);
+
+  const [selectedRow, setSelectedRow] = useState(null);
+
+  const handleSelectRow = (rowId: any) => {
+    setSelectedRow(rowId);
+    table.onSelectRow(rowId);
+  };
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
@@ -568,12 +622,12 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                       label="Investor Password"
                     />
                   )}
-                  <RHFTextField
+                  {/* <RHFTextField
                     isReadOnly={!!isView}
                     name="brokerage"
                     type="number"
                     label="Brokerage"
-                  />
+                  /> */}
                 </>
               )}
               {roleOption === 'SUPER_MASTER' && (
@@ -684,6 +738,119 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
               </Accordion>
             </Stack>
 
+            {roleOption === 'USER' && (
+              <Stack sx={{ mt: 3 }}>
+                <Accordion>
+                  <AccordionSummary
+                    expandIcon={<ExpandMoreIcon />}
+                    aria-controls="panel1a-content"
+                    id="panel1a-header"
+                  >
+                    <Typography sx={{ marginBottom: 1 }}>Select Brokerage Template</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
+                      <Card>
+                        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+                          <Scrollbar>
+                            <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
+                              <TableHeadCustom
+                                order={table.order}
+                                orderBy={table.orderBy}
+                                headLabel={TABLE_HEAD}
+                                rowCount={brokerageDataList.length}
+                                numSelected={table.selected.length}
+                                onSort={table.onSort}
+                                // onSelectAllRows={(checked) =>
+                                //   table.onSelectAllRows(
+                                //     checked,
+                                //     brokerageDataList?.map((row: any) => row._id)
+                                //   )
+                                // }
+                              />
+                              {brokerageDataList?.map((row: any) => {
+                                const {
+                                  _id,
+                                  template,
+                                  date,
+                                  exchangeCode,
+                                  symbol,
+                                  bco,
+                                  bcm,
+                                  brkgRate,
+                                  brkgRatePer,
+                                } = row;
+                                const isItemSelected = table.selected.includes(_id);
+
+                                return (
+                                  <TableBody key={row?._id}>
+                                    <TableRow
+                                      aria-checked={isItemSelected}
+                                      tabIndex={-1}
+                                      selected={selectedRow === row?._id}
+                                      onClick={() => handleSelectRow(row?._id)}
+                                      sx={{ cursor: 'pointer' }}
+                                    >
+                                      <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                                        {template || '-'}
+                                      </TableCell>
+                                      <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                                        {date.substring(0, 10) || '-'}
+                                      </TableCell>
+                                      <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                                        {exchangeCode || '-'}
+                                      </TableCell>
+                                      <TableCell sx={{ whiteSpace: 'nowrap' }}>{symbol}</TableCell>
+                                      <TableCell sx={{ whiteSpace: 'nowrap' }}>{bco}</TableCell>
+                                      <TableCell sx={{ whiteSpace: 'nowrap' }}>{bcm}</TableCell>
+                                      <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                                        {brkgRate}
+                                      </TableCell>
+                                      <TableCell sx={{ whiteSpace: 'nowrap' }}>
+                                        {brkgRatePer}
+                                      </TableCell>
+                                    </TableRow>
+                                  </TableBody>
+                                );
+                              })}
+                            </Table>
+                          </Scrollbar>
+                        </TableContainer>
+                      </Card>
+                      {/* <Grid container spacing={2}>
+                        {brokerageDataList?.map((data: any) => (
+                          <Grid item xs={12} sm={6} md={4} lg={3}>
+                            <Box
+                              sx={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                width: '100%',
+                                height: '100%',
+                                border: '1px solid #637381',
+                                borderRadius: '5px',
+                                padding: '1rem',
+                                cursor: 'pointer',
+                              }}
+                              onClick={() => {
+                                setValue('brokerage', data?.brokerage);
+                              }}
+                            >
+                              <Typography variant="h6" sx={{ marginBottom: '1rem' }}>
+                                {data?.name}
+                              </Typography>
+                              <Typography variant="h6">{data?.brokerage}</Typography>
+                            </Box>
+                          </Grid>
+                        ))}
+                      </Grid> */}
+                    </Container>
+                  </AccordionDetails>
+                </Accordion>
+              </Stack>
+            )}
+
             {!isView && (
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>
                 <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
@@ -695,7 +862,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                             ? 'Master'
                             : roleOption === 'USER'
                               ? 'User'
-                              : 'Person'
+                              : 'User'
                       }`
                     : 'Save Changes'}
                 </LoadingButton>

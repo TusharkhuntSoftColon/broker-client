@@ -63,7 +63,7 @@ export function useNavData() {
       {
         items: [
           {
-            title: 'Person',
+            title: 'Client Listing',
             path: paths.dashboard.person.root,
             icon: ICONS.user,
           },
@@ -92,7 +92,7 @@ export function useMasterNav() {
       {
         items: [
           {
-            title: 'Person',
+            title: 'Client Listing',
             path: paths.master.person.root,
             icon: ICONS.user,
           },
@@ -137,7 +137,7 @@ export function useSuperMasterNav() {
           //   icon: ICONS.user,
           // },
           {
-            title: 'Person',
+            title: 'Client Listing',
             path: paths.superMaster.person.root,
             icon: ICONS.user,
           },
