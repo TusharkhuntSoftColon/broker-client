@@ -57,7 +57,6 @@ const TABLE_HEAD = [
   { id: 'name', label: 'User Name' },
   { id: 'role', label: 'Role' },
   { id: 'exchange', label: 'Allowed Exchange' },
-  // { is: 'createdAt', label: 'Created At' },
   { is: 'status', label: 'Status' },
   { id: '', width: 88 },
 ];

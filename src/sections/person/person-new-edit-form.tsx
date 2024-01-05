@@ -86,8 +86,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   const ExchangeList = useSelector((data: any) => data?.admin?.exchangeList);
   const router = useRouter();
 
-  console.log({ currentUser });
-
   const [exchangeData, setExchangeData] = useState<any>();
 
   const Exchange: { label: any; value: any }[] = [];
@@ -160,6 +158,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     leverageXY: Yup.mixed<any>().nullable().required('Leverage  is required'),
     // brokerageTemplate:Yup.string().required('Brokerage Template is required'),
   });
+  console.log(currentUser);
 
   const defaultValues: any = useMemo(
     () => ({
@@ -176,10 +175,12 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       isActive: currentUser?.isActive || null,
       limitOfAddUser: currentUser?.limitOfAddUser || null,
       limitOfAddMaster: currentUser?.limitOfAddMaster || null,
-      // brokerageTemplate: currentUser?.brokerageTemplate || null,
+      brokerageTemplate: currentUser?.brokerageTemplate || null,
     }),
     [defaultAllowedExchange, defaultExchangeOptions]
   );
+
+  const defaultSelectedRow = defaultValues.brokerageTemplate || null;
 
   const allowedExchangeComponent = (index: any) => (
     <Box sx={{ display: 'flex', gap: 2, width: '100%' }}>
@@ -237,8 +238,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     }
   };
 
-  // console.log(ExchangeOptions);
-
   const methods = useForm({
     resolver: yupResolver(getValidationSchema(roleOption)),
     defaultValues,
@@ -248,9 +247,8 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     control,
     setValue,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
   } = methods;
-
   const value = watch();
 
   useEffect(() => {
@@ -264,7 +262,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     control,
   });
   const [brokerageDataList, setBrokerageDataList] = useState([]);
-  console.log({ brokerageDataList });
 
   const [components, setComponents] = useState([]);
 
@@ -436,7 +433,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   });
 
   // create USER
-  const { mutate: createUser } = useMutation(createUserByRole(role), {
+  const { mutate: createUser }: any = useMutation(createUserByRole(role), {
     onSuccess: (data: any) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
       // router.push(paths.dashboard.superMaster.list);
@@ -502,7 +499,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   const { mutate: brokerageList } = useMutation(adminService.getBrokerageList, {
     onSuccess: (data) => {
       setBrokerageDataList(data?.data?.rows);
-      // dispatch(addBrokerage(data?.data?.rows));
     },
     onError: (error) => {
       if (isAxiosError(error)) {
@@ -510,6 +506,13 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
       }
     },
   });
+
+  const [selectedRow, setSelectedRow] = useState(defaultSelectedRow);
+
+  const handleSelectRow = (rowId: any) => {
+    setSelectedRow(rowId);
+    table.onSelectRow(rowId);
+  };
 
   const onSubmit = handleSubmit(async (data) => {
     try {
@@ -533,11 +536,9 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
         if (currentUser) {
           await updateUser({ data, _id: currentUser._id });
         } else {
-          await createUser(data);
+          await createUser({ data, brokerageTemplate: selectedRow });
         }
       }
-      // console.log({ path });
-      // router.push(path.person.list);
     } catch (error) {
       console.log(error);
     }
@@ -563,13 +564,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   };
 
   const Role: any = RolesOptions(role);
-
-  const [selectedRow, setSelectedRow] = useState(null);
-
-  const handleSelectRow = (rowId: any) => {
-    setSelectedRow(rowId);
-    table.onSelectRow(rowId);
-  };
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
@@ -761,12 +755,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                                 rowCount={brokerageDataList.length}
                                 numSelected={table.selected.length}
                                 onSort={table.onSort}
-                                // onSelectAllRows={(checked) =>
-                                //   table.onSelectAllRows(
-                                //     checked,
-                                //     brokerageDataList?.map((row: any) => row._id)
-                                //   )
-                                // }
                               />
                               {brokerageDataList?.map((row: any) => {
                                 const {
@@ -817,34 +805,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                           </Scrollbar>
                         </TableContainer>
                       </Card>
-                      {/* <Grid container spacing={2}>
-                        {brokerageDataList?.map((data: any) => (
-                          <Grid item xs={12} sm={6} md={4} lg={3}>
-                            <Box
-                              sx={{
-                                display: 'flex',
-                                flexDirection: 'column',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                width: '100%',
-                                height: '100%',
-                                border: '1px solid #637381',
-                                borderRadius: '5px',
-                                padding: '1rem',
-                                cursor: 'pointer',
-                              }}
-                              onClick={() => {
-                                setValue('brokerage', data?.brokerage);
-                              }}
-                            >
-                              <Typography variant="h6" sx={{ marginBottom: '1rem' }}>
-                                {data?.name}
-                              </Typography>
-                              <Typography variant="h6">{data?.brokerage}</Typography>
-                            </Box>
-                          </Grid>
-                        ))}
-                      </Grid> */}
                     </Container>
                   </AccordionDetails>
                 </Accordion>

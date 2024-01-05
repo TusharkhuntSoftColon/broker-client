@@ -38,7 +38,7 @@ export default function PersonTableRow({
   onViewRow,
   onGetPersonRow,
 }: Props) {
-  const { name, exchangeList, ID, isActive, createdAt, role } = row;
+  const { name, exchangeList, ID, isActive, role } = row;
   console.log({ row });
 
   const confirm = useBoolean();
@@ -95,18 +95,6 @@ export default function PersonTableRow({
             })}
           </Box>
         </TableCell>
-
-        {/* <TableCell>
-          <ListItemText
-            primary={<span>{createdAt.substring(0, 10) || '-'}</span>}
-            primaryTypographyProps={{ typography: 'body2', noWrap: true }}
-            secondaryTypographyProps={{
-              mt: 0.5,
-              component: 'span',
-              typography: 'caption',
-            }}
-          />
-        </TableCell> */}
 
         <TableCell>
           <Label variant="soft" color={isActive ? 'success' : 'warning'}>

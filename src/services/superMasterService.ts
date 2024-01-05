@@ -3,13 +3,13 @@ import { AxiosResponse } from 'axios';
 import client from 'src/lib/client';
 
 import {
-  CREATE_MASTER_BY_SUPER_MASTER,
   CREATE_USER_BY_SUPER_MASTER,
-  DELETE_MASTER_BY_SUPER_MASTER,
   DELETE_USER_BY_SUPER_MASTER,
-  GET_ALL_PERSONS_BY_SUPER_MASTER,
-  UPDATE_MASTER_BY_SUPER_MASTER,
   UPDATE_USER_BY_SUPER_MASTER,
+  CREATE_MASTER_BY_SUPER_MASTER,
+  DELETE_MASTER_BY_SUPER_MASTER,
+  UPDATE_MASTER_BY_SUPER_MASTER,
+  GET_ALL_PERSONS_BY_SUPER_MASTER,
 } from '../utils/urls';
 
 export interface adminType {
@@ -53,24 +53,27 @@ const superMasterService = {
   },
   createUser: async (data: any): Promise<any> => {
     const newExchangeList = [
-      ...data.exchangeList,
+      ...data?.data.exchangeList,
       {
-        allowedExchange: data.allowedExchange.value,
-        exchangeGroup: data.exchangeGroup?.value,
+        allowedExchange: data?.data.allowedExchange.value,
+        exchangeGroup: data?.data.exchangeGroup?.value,
       },
     ];
     const exchangeList =
-      data.allowedExchange.value && data.exchangeGroup.value ? newExchangeList : data?.exchangeList;
+      data?.data.allowedExchange.value && data?.data.exchangeGroup.value
+        ? newExchangeList
+        : data?.data?.exchangeList;
     try {
       const response: AxiosResponse<any> = await client.post(CREATE_USER_BY_SUPER_MASTER, {
-        ID: data?.ID,
-        name: data?.name,
-        password: data?.password,
-        role: data?.role?.value,
-        leverageXY: `[${data?.leverageXY.value}]`,
-        brokerage: data?.brokerage,
-        investorPassword: data?.investorPassword,
+        ID: data?.data?.ID,
+        name: data?.data?.name,
+        password: data?.data?.password,
+        role: data?.data?.role?.value,
+        leverageXY: `[${data?.data?.leverageXY.value}]`,
+        brokerage: data?.data?.brokerage,
+        investorPassword: data?.data?.investorPassword,
         exchangeList,
+        brokerageTemplate: data?.brokerageTemplate,
       });
       return response.data;
     } catch (error) {
