@@ -364,7 +364,7 @@ export default function PersonListView({ path }: { path: any }) {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  personData.map((row: any) => row.id)
+                  personData.map((row: any) => row._id)
                 )
               }
               action={
@@ -388,7 +388,7 @@ export default function PersonListView({ path }: { path: any }) {
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      personData.map((row: any) => row.id)
+                      personData.map((row: any) => row._id)
                     )
                   }
                 />

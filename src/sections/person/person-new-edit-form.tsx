@@ -752,7 +752,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                                 order={table.order}
                                 orderBy={table.orderBy}
                                 headLabel={TABLE_HEAD}
-                                rowCount={brokerageDataList.length}
+                                rowCount={brokerageDataList?.length}
                                 numSelected={table.selected.length}
                                 onSort={table.onSort}
                               />
