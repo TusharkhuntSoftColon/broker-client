@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 /* eslint-disable no-plusplus */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-unsafe-optional-chaining */
@@ -14,25 +15,15 @@ import { useForm, useFieldArray } from 'react-hook-form';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import Stack from '@mui/material/Stack';
-import { Container } from '@mui/system';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {
-  Table,
-  TableRow,
-  Accordion,
-  TableBody,
-  TableCell,
-  Typography,
-  TableContainer,
-  AccordionDetails,
-  AccordionSummary,
-} from '@mui/material';
+import { Accordion, Typography, AccordionDetails, AccordionSummary } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import { addUser } from 'src/store/slices/person';
 import adminService from 'src/services/adminService';
 import { addExchanges } from 'src/store/slices/admin';
 import masterService from 'src/services/masterService';
@@ -40,10 +31,8 @@ import { EXCHANGE_GROUP, LEVERAGE_OPTIONS } from 'src/_mock';
 import superMasterService from 'src/services/superMasterService';
 import { ADMIN_ROLE, MASTER_ROLE, SUPER_MASTER_ROLE } from 'src/_mock/_person';
 
-import Scrollbar from 'src/components/scrollbar';
+import { useTable } from 'src/components/table';
 import { useSnackbar } from 'src/components/snackbar';
-import { useSettingsContext } from 'src/components/settings';
-import { useTable, TableHeadCustom } from 'src/components/table';
 import FormProvider, {
   RHFSwitch,
   RHFCheckbox,
@@ -59,34 +48,20 @@ type Props = {
   currentUser?: IUserItem | any;
   isView?: any;
   path?: any;
+  setTabValue?: any;
 };
 
-const TABLE_HEAD = [
-  { id: 'template', label: 'Template', width: 160 },
-  { id: 'date', label: 'Date', width: 160 },
-  { id: 'exchangeCode', label: 'Exchange Code', width: 160 },
-  { is: 'symbol', label: 'Symbol' },
-  { is: 'brokerage_call_option', label: 'BCO' },
-  { is: 'brokerage_call_method', label: 'BCM' },
-  { is: 'brokerage_rate', label: 'BRKG Rate' },
-  { is: 'brokerage_per', label: 'BRKG Per' },
-  // { id: 'createdAt', label: 'Create at', width: 160 },
-  // { id: 'inventoryType', label: 'Stock', width: 160 },
-  // { id: 'price', label: 'Price', width: 140 },
-  // { id: 'publish', label: 'Publish', width: 110 },
-  { id: '', width: 88 },
-];
-
-export default function PersonNewEditForm({ currentUser, isView, path }: Props) {
-  const settings = useSettingsContext();
+export default function PersonNewEditForm({ currentUser, isView, path, setTabValue }: Props) {
   const table = useTable();
-
   const ExchangeOptions: any = [];
   const role = useSelector((data: any) => data.auth.role);
   const ExchangeList = useSelector((data: any) => data?.admin?.exchangeList);
   const router = useRouter();
 
   const [exchangeData, setExchangeData] = useState<any>();
+
+  const personList = useSelector((data: any) => data?.person?.personData);
+  console.log('personList : ', personList);
 
   const Exchange: { label: any; value: any }[] = [];
   for (let i = 0; i < ExchangeList?.length; i++) {
@@ -103,19 +78,59 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     )[0];
   };
 
-  const defaultExchangeOptions = (index: number) => {
-    if (!currentUser) return [];
-    return EXCHANGE_GROUP.filter(
-      (option: any) => currentUser?.exchangeList[index]?.exchangeGroup === option.value
-    )[0];
-  };
+  // const defaultExchangeOptions = useMemo(
+  //   () => (index: number) => {
+  //     // if (!currentUser) return [];
+  //     // return EXCHANGE_GROUP.filter(
+  //     //   (option: any) => currentUser?.exchangeList[index]?.exchangeGroup === option.value
+  //     // )[0];
+
+  //     const data = currentUser
+  //       ? EXCHANGE_GROUP.filter(
+  //           (option: any) => currentUser?.exchangeList[index]?.exchangeGroup === option.value
+  //         )[0]
+  //       : EXCHANGE_GROUP.filter((option: any) =>
+  //           personList?.exchangeList?.length > 0
+  //             ? personList?.exchangeList?.exchangeGroup?.value === option?.value
+  //             : personList?.exchangeGroup?.value === option?.value
+  //         )[0];
+
+  //     console.log({ data });
+  //     return data;
+  //   },
+  //   [currentUser, personList]
+  // );
+
+  const defaultExchangeOptions = useMemo(
+    () => (index: number) => {
+      const data = currentUser
+        ? EXCHANGE_GROUP.filter(
+            (option: any) => currentUser?.exchangeList[index]?.exchangeGroup === option.value
+          )[0]
+        : EXCHANGE_GROUP.filter((option: any) =>
+            personList?.exchangeList?.length > 0
+              ? personList?.exchangeList?.exchangeGroup?.value === option?.value
+              : personList?.exchangeGroup?.value === option?.value
+          )[0];
+
+      console.log({ data });
+      return data;
+    },
+    [currentUser, personList, EXCHANGE_GROUP]
+  );
+
+  console.log({ defaultExchangeOptions });
 
   const defaultLeverageOptions = useMemo(() => {
-    if (!currentUser) return [];
-    return LEVERAGE_OPTIONS.filter(
-      (option: any) => currentUser?.leverageXY.slice(1, -1) === option.value
-    )[0];
-  }, [currentUser]);
+    const data = currentUser
+      ? LEVERAGE_OPTIONS.filter(
+          (option: any) => currentUser?.leverageXY.slice(1, -1) === option.value
+        )[0]
+      : LEVERAGE_OPTIONS.filter(
+          (option: any) => personList?.leverageXY?.value === option?.value
+        )[0];
+    return data;
+  }, [currentUser, personList]);
 
   const [roleOption, setRoleOption] = useState<any>('');
 
@@ -162,9 +177,9 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
 
   const defaultValues: any = useMemo(
     () => ({
-      name: currentUser?.name || '',
-      ID: currentUser?.ID || '',
-      exchangeGroup: defaultExchangeOptions || [],
+      name: currentUser?.name || personList?.name,
+      ID: currentUser?.ID || personList?.ID,
+      exchangeGroup: defaultExchangeOptions || '',
       allowedExchange: defaultAllowedExchange || [],
       insertCustomBet: currentUser?.insertCustomBet || false,
       exchangeList: [],
@@ -247,7 +262,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
     control,
     setValue,
     handleSubmit,
-    formState: { isSubmitting, errors },
+    formState: { isSubmitting },
   } = methods;
   const value = watch();
 
@@ -408,7 +423,6 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
   const { mutate: createSuperMaster } = useMutation(adminService.createSuperMaster, {
     onSuccess: (data) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
-      // router.push(paths.dashboard.superMaster.list);
       router.push(path.person.list);
     },
     onError: (error: any) => {
@@ -516,29 +530,34 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      if (roleOption === 'SUPER_MASTER') {
-        if (currentUser) {
-          await updateSuperMaster({ data, _id: currentUser._id });
-        } else {
-          await createSuperMaster(data);
-        }
-      }
+      dispatch(addUser(data));
+      setTabValue(1);
+      // if (roleOption === 'SUPER_MASTER') {
+      //   return navigate('/admin/brokerage', { state: { data } });
+      //   // if (currentUser) {
+      //   //   await updateSuperMaster({ data, _id: currentUser._id });
+      //   // } else {
+      //   //   await createSuperMaster(data);
+      //   // }
+      // }
 
-      if (roleOption === 'MASTER') {
-        if (currentUser) {
-          await updateMaster({ data, _id: currentUser._id });
-        } else {
-          await createMaster(data);
-        }
-      }
+      // if (roleOption === 'MASTER') {
+      //   return navigate('/admin/brokerage', { state: { data } });
+      //   // if (currentUser) {
+      //   //   await updateMaster({ data, _id: currentUser._id });
+      //   // } else {
+      //   //   await createMaster(data);
+      //   // }
+      // }
 
-      if (roleOption === 'USER') {
-        if (currentUser) {
-          await updateUser({ data, _id: currentUser._id });
-        } else {
-          await createUser({ data, brokerageTemplate: selectedRow });
-        }
-      }
+      // if (roleOption === 'USER') {
+      //   return navigate('/admin/brokerage', { state: { data } });
+      //   // if (currentUser) {
+      //   //   await updateUser({ data, _id: currentUser._id });
+      //   // } else {
+      //   //   await createUser({ data, brokerageTemplate: selectedRow });
+      //   // }
+      // }
     } catch (error) {
       console.log(error);
     }
@@ -647,7 +666,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                 // control={control}
                 isReadOnly={!!isView}
                 options={LEVERAGE_OPTIONS}
-                defaultValue={currentUser && defaultLeverageOptions}
+                defaultValue={defaultLeverageOptions}
                 data={LEVERAGE_OPTIONS}
                 isLabled={false}
                 isOptionEqualToValue={(option, value) => option.value === value.value}
@@ -732,7 +751,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
               </Accordion>
             </Stack>
 
-            {roleOption === 'USER' && (
+            {/* {roleOption === 'USER' && (
               <Stack sx={{ mt: 3 }}>
                 <Accordion>
                   <AccordionSummary
@@ -809,7 +828,7 @@ export default function PersonNewEditForm({ currentUser, isView, path }: Props) 
                   </AccordionDetails>
                 </Accordion>
               </Stack>
-            )}
+            )} */}
 
             {!isView && (
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>

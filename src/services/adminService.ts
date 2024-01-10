@@ -40,6 +40,7 @@ export interface adminType {
 
 const adminService = {
   createSuperMaster: async (adminData: adminType): Promise<any> => {
+    console.log('adminData', adminData);
     const newExchangeList = [
       ...adminData.exchangeList,
       {
@@ -54,14 +55,7 @@ const adminService = {
 
     try {
       const response: AxiosResponse<any> = await client.post(CREATE_SUPER_MASTER_BY_ADMIN, {
-        ID: adminData?.ID,
-        name: adminData?.name,
-        password: adminData?.password,
-        limitOfAddMaster: adminData?.limitOfAddMaster,
-        limitOfAddUser: adminData?.limitOfAddUser,
-        insertCustomBet: adminData?.insertCustomBet,
-        editBet: adminData?.editBet,
-        deleteBet: adminData?.deleteBet,
+        ...adminData,
         leverageXY: `[${adminData?.leverageXY.value}]`,
         role: adminData?.role?.value,
         exchangeList,

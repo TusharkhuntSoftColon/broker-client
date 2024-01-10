@@ -138,10 +138,10 @@ export const ExchangeStatus = [
 ];
 
 export const ClientList = [
-  { value: 'KGB-0012', label: 'KGB-0012' },
-  { value: 'KGB-0013', label: 'KGB-0013' },
-  { value: 'KGB-0014', label: 'KGB-0014' },
-  { value: 'KGB-0015', label: 'KGB-0015' },
-  { value: 'KGB-0016', label: 'KGB-0016' },
-  { value: 'KGB-0017', label: 'KGB-0017' },
+  { label: 'Template 1', value: 'Template1' },
+  { label: 'Template 2', value: 'Template2' },
+  { label: 'Template 3', value: 'Template3' },
+  { label: 'Template 4', value: 'Template4' },
+  { label: 'Template 5', value: 'Template5' },
+  { label: 'Template 6', value: 'Template6' },
 ];

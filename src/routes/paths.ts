@@ -109,6 +109,12 @@ export const paths = {
       details: (id: string) => `${ROOTS.DASHBOARD}/person/${id}`,
       edit: (id: string) => `${ROOTS.DASHBOARD}/person/${id}/edit`,
     },
+    brokerage: {
+      root: `${ROOTS.DASHBOARD}/brokerage`,
+      new: `${ROOTS.DASHBOARD}/brokerage/new`,
+      details: (id: string) => `${ROOTS.DASHBOARD}/brokerage/${id}`,
+      edit: (id: string) => `${ROOTS.DASHBOARD}/brokerage/${id}/edit`,
+    },
   },
   superMaster: {
     root: `${ROOTS.SUPER_MASTER}`,
@@ -145,18 +151,5 @@ export const paths = {
   },
   user: {
     root: `${ROOTS.USER}`,
-    user: {
-      root: `${ROOTS.USER}/user`,
-      new: `${ROOTS.USER}/user/new`,
-      list: `${ROOTS.USER}/user/list`,
-      cards: `${ROOTS.USER}/user/cards`,
-      profile: `${ROOTS.USER}/user/profile`,
-      account: `${ROOTS.USER}/user/account`,
-      details: (id: string) => `${ROOTS.USER}/user/${id}`,
-      edit: (id: string) => `${ROOTS.USER}/user/${id}/edit`,
-      demo: {
-        edit: `${ROOTS.USER}/user/${MOCK_ID}/edit`,
-      },
-    },
   },
 };

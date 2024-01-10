@@ -7,8 +7,6 @@ import { paths } from 'src/routes/paths';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
 
-import PersonNewEditForm from '../person-new-edit-form';
-
 // ----------------------------------------------------------------------
 
 export default function PersonCreateView() {
@@ -53,7 +51,7 @@ export default function PersonCreateView() {
         }}
       />
 
-      <PersonNewEditForm isView={false} path={getPath(role)} />
+      {/* <PersonNewEditForm isView={false} path={getPath(role)} /> */}
     </Container>
   );
 }

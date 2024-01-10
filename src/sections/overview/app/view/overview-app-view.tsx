@@ -1,14 +1,14 @@
 /* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable @typescript-eslint/no-shadow */
-import { useEffect, useState } from 'react';
-import { Responsive, WidthProvider } from 'react-grid-layout';
-import 'react-grid-layout/css/styles.css';
 import 'react-resizable/css/styles.css';
+import 'react-grid-layout/css/styles.css';
+/* eslint-disable @typescript-eslint/no-shadow */
+import { useState, useEffect } from 'react';
+import { Responsive, WidthProvider } from 'react-grid-layout';
 
 import AppNewInvoice from '../app-new-invoice';
 import ClientTableDashboard from '../client-new-table';
-import MarginCallTableDashboard from '../margin-call-table';
 import SymbolTableDashboard from '../symbol-new-table';
+import MarginCallTableDashboard from '../margin-call-table';
 
 // ----------------------------------------------------------------------
 

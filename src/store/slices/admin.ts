@@ -8,6 +8,7 @@ interface AuthState {
   refreshToken: null | string;
   role: string | null;
   exchangeList: any;
+  brokerageList: any;
 }
 
 // Define the initial state using that type
@@ -16,6 +17,7 @@ const initialState: AuthState = {
   refreshToken: null,
   role: null,
   exchangeList: [],
+  brokerageList: [],
 };
 
 const adminSlice = createSlice({
@@ -62,9 +64,13 @@ const adminSlice = createSlice({
     addExchanges: (state, action) => {
       state.exchangeList = action.payload;
     },
+    addBrokerage: (state, action) => {
+      state.brokerageList = action.payload;
+    },
   },
 });
 
-export const { addPerson, resetState, updateAdmin, deleteAdmin, addExchanges } = adminSlice.actions;
+export const { addPerson, resetState, updateAdmin, deleteAdmin, addExchanges, addBrokerage } =
+  adminSlice.actions;
 
 export default adminSlice.reducer;

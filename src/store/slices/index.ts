@@ -1,12 +1,13 @@
-import { combineReducers } from '@reduxjs/toolkit';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
+import { combineReducers } from '@reduxjs/toolkit';
 // import { encryptTransform } from 'redux-persist-transform-encrypt';
 
-import adminSlice from './admin';
 import authSlice from './auth';
-import exchangeSlice from './exchange';
+import adminSlice from './admin';
 import symbolSlice from './symbol';
+import personSlice from './person';
+import exchangeSlice from './exchange';
 
 // const encryptor = encryptTransform({
 //   secretKey: REDUX_SECRET_KEY,
@@ -26,6 +27,7 @@ const rootReducers = combineReducers({
   admin: adminSlice,
   exchange: exchangeSlice,
   symbol: symbolSlice,
+  person: personSlice,
 });
 
 export default persistReducer(persistConfig, rootReducers);
