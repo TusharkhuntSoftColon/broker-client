@@ -7,7 +7,9 @@ export type IUserTableFilterValue = string | string[] | any;
 export type IUserTableFilters = {
   name: string;
   status: any;
-  role: any;
+  role?: any;
+  exchange?: any;
+  dateRange?: any;
 };
 
 // ----------------------------------------------------------------------
