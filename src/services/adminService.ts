@@ -5,9 +5,9 @@ import client from 'src/lib/client';
 import {
   GET_ALL_USER_BYID,
   GET_BROKERAGE_LIST,
-  CREATE_USER_BY_ADMIN,
   DELETE_USER_BY_ADMIN,
   UPDATE_USER_BY_ADMIN,
+  CREATE_USER_BY_ADMIN,
   GET_EXCHANGE_FOR_USER,
   CREATE_MASTER_BY_ADMIN,
   DELETE_MASTER_BY_ADMIN,
@@ -36,11 +36,21 @@ export interface adminType {
   exchangeList: any;
   brokerage: number;
   investorPassword: string;
+  date: any;
+  template: any;
+  exchangeCode: any;
+  bco: any;
+  bcm: any;
+  symbol: any;
 }
 
 const adminService = {
   createSuperMaster: async (adminData: adminType): Promise<any> => {
     console.log('adminData', adminData);
+    const date = new Date(adminData?.date);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
     const newExchangeList = [
       ...adminData.exchangeList,
       {
@@ -58,6 +68,12 @@ const adminService = {
         ...adminData,
         leverageXY: `[${adminData?.leverageXY.value}]`,
         role: adminData?.role?.value,
+        date: `${year}-${month}-${day}`,
+        template: adminData?.template?.value,
+        exchangeCode: adminData?.exchangeCode?.value,
+        bco: adminData?.bco?.value,
+        bcm: adminData?.bcm?.value,
+        symbol: adminData?.symbol?.value,
         exchangeList,
       });
       return response.data;
@@ -68,6 +84,11 @@ const adminService = {
     }
   },
   createMaster: async (data: any): Promise<any> => {
+    console.log(data);
+    const date = new Date(data?.date);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
     const newExchangeList = [
       ...data.exchangeList,
       {
@@ -79,47 +100,53 @@ const adminService = {
       data.allowedExchange.value && data.exchangeGroup.value ? newExchangeList : data?.exchangeList;
     try {
       const response: AxiosResponse<any> = await client.post(CREATE_MASTER_BY_ADMIN, {
-        ID: data?.ID,
-        name: data?.name,
-        password: data?.password,
-        limitOfAddUser: data?.limitOfAddUser,
-        insertCustomBet: data?.insertCustomBet,
-        editBet: data?.editBet,
-        deleteBet: data?.deleteBet,
+        ...data,
         leverageXY: `[${data?.leverageXY.value}]`,
         role: data?.role?.value,
+        date: `${year}-${month}-${day}`,
+        template: data?.template?.value,
+        exchangeCode: data?.exchangeCode?.value,
+        bco: data?.bco?.value,
+        bcm: data?.bcm?.value,
+        symbol: data?.symbol?.value,
         exchangeList,
       });
       return response.data;
     } catch (error) {
-      // You can log the error here for debugging purposes
       console.error('Error in adminService.createMaster:', error);
       throw error; // Re-throw the error to be caught by the caller
     }
   },
   createUser: async (data: any): Promise<any> => {
+    console.log('data', data);
+    const date = new Date(data?.date);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
     const newExchangeList = [
-      ...data?.data.exchangeList,
+      ...data?.exchangeList,
       {
-        allowedExchange: data?.data.allowedExchange.value,
-        exchangeGroup: data?.data.exchangeGroup?.value,
+        allowedExchange: data?.allowedExchange.value,
+        exchangeGroup: data?.exchangeGroup?.value,
       },
     ];
     const exchangeList =
-      data?.data.allowedExchange.value && data?.data.exchangeGroup.value
+      data?.allowedExchange.value && data?.exchangeGroup.value
         ? newExchangeList
-        : data?.data?.exchangeList;
+        : data?.exchangeList;
+
     try {
       const response: AxiosResponse<any> = await client.post(CREATE_USER_BY_ADMIN, {
-        ID: data?.data?.ID,
-        name: data?.data?.name,
-        password: data?.data?.password,
-        role: data?.data?.role?.value,
-        leverageXY: `[${data?.data?.leverageXY.value}]`,
-        brokerage: data?.data?.brokerage,
-        investorPassword: data?.data?.investorPassword,
+        ...data,
+        leverageXY: `[${data?.leverageXY?.value}]`,
+        date: `${year}-${month}-${day}`,
+        template: data?.template?.value,
+        role: data?.role?.value,
+        exchangeCode: data?.exchangeCode?.value,
+        bco: data?.bco?.value,
+        bcm: data?.bcm?.value,
+        symbol: data?.symbol?.value,
         exchangeList,
-        brokerageTemplate: data?.brokerageTemplate,
       });
       return response.data;
     } catch (error) {
@@ -169,32 +196,35 @@ const adminService = {
     }
   },
   updateSuperMaster: async (SuperMasterData: any): Promise<any> => {
+    console.log('SuperMasterData', SuperMasterData);
+    const date = new Date(SuperMasterData?.date);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
     const newExchangeList = [
-      ...SuperMasterData?.data.exchangeList,
+      ...SuperMasterData?.exchangeList,
       {
-        allowedExchange: SuperMasterData?.data.allowedExchange.value,
-        exchangeGroup: SuperMasterData?.data.exchangeGroup?.value,
+        allowedExchange: SuperMasterData?.allowedExchange.value,
+        exchangeGroup: SuperMasterData?.exchangeGroup?.value,
       },
     ];
     const exchangeList =
-      SuperMasterData?.data.allowedExchange.value && SuperMasterData?.data.exchangeGroup.value
+      SuperMasterData?.allowedExchange.value && SuperMasterData?.exchangeGroup.value
         ? newExchangeList
-        : SuperMasterData?.data?.exchangeList;
+        : SuperMasterData?.exchangeList;
     try {
       const response: AxiosResponse<any> = await client.put(
         `${UPDATE_SUPER_MASTER_BY_ADMIN}/${SuperMasterData._id}`,
         {
-          // ...SuperMasterData.data,
-          ID: SuperMasterData?.data?.ID,
-          name: SuperMasterData?.data?.name,
-          limitOfAddMaster: SuperMasterData?.data?.limitOfAddMaster,
-          limitOfAddUser: SuperMasterData?.data?.limitOfAddUser,
-          insertCustomBet: SuperMasterData?.data?.insertCustomBet,
-          editBet: SuperMasterData?.data?.editBet,
-          deleteBet: SuperMasterData?.data?.deleteBet,
-          leverageXY: `[${SuperMasterData?.data?.leverageXY.value}]`,
-          role: SuperMasterData?.data?.role?.value,
-          isActive: SuperMasterData?.data?.isActive,
+          ...SuperMasterData,
+          leverageXY: `[${SuperMasterData?.leverageXY.value}]`,
+          role: SuperMasterData?.role?.value,
+          date: `${year}-${month}-${day}`,
+          template: SuperMasterData?.template?.value,
+          exchangeCode: SuperMasterData?.exchangeCode?.value,
+          bco: SuperMasterData?.bco?.value,
+          bcm: SuperMasterData?.bcm?.value,
+          symbol: SuperMasterData?.symbol?.value,
           exchangeList,
         }
       );
@@ -207,30 +237,36 @@ const adminService = {
     }
   },
   updateMaster: async (MasterData: any): Promise<any> => {
+    console.log('MasterData', MasterData);
+
+    const date = new Date(MasterData?.date);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
     const newExchangeList = [
-      ...MasterData?.data.exchangeList,
+      ...MasterData?.exchangeList,
       {
-        allowedExchange: MasterData?.data.allowedExchange.value,
-        exchangeGroup: MasterData?.data.exchangeGroup?.value,
+        allowedExchange: MasterData?.allowedExchange.value,
+        exchangeGroup: MasterData?.exchangeGroup?.value,
       },
     ];
     const exchangeList =
-      MasterData?.data.allowedExchange.value && MasterData?.data.exchangeGroup.value
+      MasterData?.allowedExchange.value && MasterData?.exchangeGroup.value
         ? newExchangeList
-        : MasterData?.data?.exchangeList;
+        : MasterData?.exchangeList;
     try {
       const response: AxiosResponse<any> = await client.put(
         `${UPDATE_MASTER_BY_ADMIN}/${MasterData?._id}`,
         {
-          ID: MasterData?.data?.ID,
-          name: MasterData?.data?.name,
-          limitOfAddUser: MasterData?.data?.limitOfAddUser,
-          insertCustomBet: MasterData?.data?.insertCustomBet,
-          editBet: MasterData?.data?.editBet,
-          deleteBet: MasterData?.data?.deleteBet,
-          leverageXY: `[${MasterData?.data?.leverageXY.value}]`,
-          isActive: MasterData?.data?.isActive,
-          role: MasterData?.data?.role?.value,
+          ...MasterData,
+          leverageXY: `[${MasterData?.leverageXY.value}]`,
+          role: MasterData?.role?.value,
+          date: `${year}-${month}-${day}`,
+          template: MasterData?.template?.value,
+          exchangeCode: MasterData?.exchangeCode?.value,
+          bco: MasterData?.bco?.value,
+          bcm: MasterData?.bcm?.value,
+          symbol: MasterData?.symbol?.value,
           exchangeList,
         }
       );
@@ -242,27 +278,35 @@ const adminService = {
     }
   },
   updateUser: async (UserData: any): Promise<any> => {
+    console.log(UserData);
+    const date = new Date(UserData?.date);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
     const newExchangeList = [
-      ...UserData?.data?.exchangeList,
+      ...UserData?.exchangeList,
       {
-        allowedExchange: UserData?.data?.allowedExchange.value,
-        exchangeGroup: UserData?.data?.exchangeGroup?.value,
+        allowedExchange: UserData?.allowedExchange.value,
+        exchangeGroup: UserData?.exchangeGroup?.value,
       },
     ];
     const exchangeList =
-      UserData?.data?.allowedExchange.value && UserData?.data?.exchangeGroup.value
+      UserData?.allowedExchange.value && UserData?.exchangeGroup.value
         ? newExchangeList
-        : UserData?.data?.exchangeList;
+        : UserData?.exchangeList;
     try {
       const response: AxiosResponse<any> = await client.put(
         `${UPDATE_USER_BY_ADMIN}/${UserData._id}`,
         {
-          ID: UserData?.data?.ID,
-          name: UserData?.data?.name,
-          role: UserData?.data?.role?.value,
-          leverageXY: `[${UserData?.data?.leverageXY.value}]`,
-          brokerage: UserData?.data?.brokerage,
-          isActive: UserData?.data?.isActive,
+          ...UserData,
+          leverageXY: `[${UserData?.leverageXY.value}]`,
+          role: UserData?.role?.value,
+          date: `${year}-${month}-${day}`,
+          template: UserData?.template?.value,
+          exchangeCode: UserData?.exchangeCode?.value,
+          bco: UserData?.bco?.value,
+          bcm: UserData?.bcm?.value,
+          symbol: UserData?.symbol?.value,
           exchangeList,
         }
       );

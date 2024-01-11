@@ -1,17 +1,11 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { isAxiosError } from 'axios';
 import { useSelector } from 'react-redux';
-import { enqueueSnackbar } from 'notistack';
-import { useState, useEffect } from 'react';
-import { useMutation } from '@tanstack/react-query';
 
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
-
-import symbolService from 'src/services/symbolService';
 
 import Label from 'src/components/label/label';
 
@@ -46,25 +40,10 @@ export default function BrokerageTableRow({
 }: Props) {
   const { date, exchangeCode, symbol, bco, bcm, brkgRate, brkgRatePer, template } = row;
 
-  const [Symbol, setSymbol] = useState<any>([]);
   const exchanges = useSelector((state: any) => state?.admin?.exchangeList);
   const ExchnageName = exchanges?.filter((data: any) => data?._id === exchangeCode)[0]?.name;
-  const SymbolName = Symbol?.filter((data: any) => data?._id === symbol)[0]?.name;
-
-  const { mutate: getSymbolList } = useMutation(symbolService.getSymbolList, {
-    onSuccess: (data) => {
-      setSymbol(data?.data?.rows);
-    },
-    onError: (error: any) => {
-      if (isAxiosError(error)) {
-        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-      }
-    },
-  });
-
-  useEffect(() => {
-    getSymbolList();
-  }, []);
+  const symbolList = useSelector((data: any) => data?.symbol?.symbolList);
+  const SymbolName = symbolList?.filter((data: any) => data?._id === symbol)[0]?.name;
 
   const confirm = useBoolean();
 

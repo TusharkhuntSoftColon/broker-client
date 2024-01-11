@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { useSelector } from 'react-redux';
 
 import { Box } from '@mui/system';

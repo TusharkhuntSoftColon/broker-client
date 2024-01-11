@@ -21,17 +21,13 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Accordion, Typography, AccordionDetails, AccordionSummary } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
-import { useRouter } from 'src/routes/hooks';
 
 import { addUser } from 'src/store/slices/person';
 import adminService from 'src/services/adminService';
 import { addExchanges } from 'src/store/slices/admin';
-import masterService from 'src/services/masterService';
 import { EXCHANGE_GROUP, LEVERAGE_OPTIONS } from 'src/_mock';
-import superMasterService from 'src/services/superMasterService';
 import { ADMIN_ROLE, MASTER_ROLE, SUPER_MASTER_ROLE } from 'src/_mock/_person';
 
-import { useTable } from 'src/components/table';
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
   RHFSwitch,
@@ -52,11 +48,9 @@ type Props = {
 };
 
 export default function PersonNewEditForm({ currentUser, isView, path, setTabValue }: Props) {
-  const table = useTable();
   const ExchangeOptions: any = [];
   const role = useSelector((data: any) => data.auth.role);
   const ExchangeList = useSelector((data: any) => data?.admin?.exchangeList);
-  const router = useRouter();
 
   const [exchangeData, setExchangeData] = useState<any>();
 
@@ -78,28 +72,7 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
     )[0];
   };
 
-  // const defaultExchangeOptions = useMemo(
-  //   () => (index: number) => {
-  //     // if (!currentUser) return [];
-  //     // return EXCHANGE_GROUP.filter(
-  //     //   (option: any) => currentUser?.exchangeList[index]?.exchangeGroup === option.value
-  //     // )[0];
-
-  //     const data = currentUser
-  //       ? EXCHANGE_GROUP.filter(
-  //           (option: any) => currentUser?.exchangeList[index]?.exchangeGroup === option.value
-  //         )[0]
-  //       : EXCHANGE_GROUP.filter((option: any) =>
-  //           personList?.exchangeList?.length > 0
-  //             ? personList?.exchangeList?.exchangeGroup?.value === option?.value
-  //             : personList?.exchangeGroup?.value === option?.value
-  //         )[0];
-
-  //     console.log({ data });
-  //     return data;
-  //   },
-  //   [currentUser, personList]
-  // );
+  console.log({ currentUser });
 
   const defaultExchangeOptions = useMemo(
     () => (index: number) => {
@@ -194,8 +167,6 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
     }),
     [defaultAllowedExchange, defaultExchangeOptions]
   );
-
-  const defaultSelectedRow = defaultValues.brokerageTemplate || null;
 
   const allowedExchangeComponent = (index: any) => (
     <Box sx={{ display: 'flex', gap: 2, width: '100%' }}>
@@ -304,9 +275,6 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
     )[0];
 
     if (value.exchangeList?.length >= 1) {
-      // const newComponents = components.slice(0, -1);
-      // setComponents(newComponents);
-
       if (
         !(value.exchangeList.length < components.length) ||
         value.exchangeList.length === components.length
@@ -371,130 +339,6 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
     }
   };
 
-  const createMasterByRole: any = (role: any) => {
-    switch (role) {
-      case 'ADMIN':
-        return adminService.createMaster;
-      case 'SUPER_MASTER':
-        return superMasterService.createMaster;
-      default:
-        return paths; // Return a default path if role doesn't match
-    }
-  };
-
-  const updateMasterByRole: any = (role: any) => {
-    switch (role) {
-      case 'ADMIN':
-        return adminService.updateMaster;
-      case 'SUPER_MASTER':
-        return superMasterService.updateMaster;
-      default:
-        return paths; // Return a default path if role doesn't match
-    }
-  };
-
-  const updateUserByRole: any = (role: any) => {
-    switch (role) {
-      case 'ADMIN':
-        return adminService.updateUser;
-      case 'SUPER_MASTER':
-        return superMasterService.updateUser;
-      case 'MASTER':
-        return masterService.updateUser;
-      default:
-        return paths; // Return a default path if role doesn't match
-    }
-  };
-
-  const createUserByRole: any = (role: any) => {
-    switch (role) {
-      case 'ADMIN':
-        return adminService.createUser;
-      case 'SUPER_MASTER':
-        return superMasterService.createUser;
-      case 'MASTER':
-        return masterService.createUser;
-      default:
-        return paths; // Return a default path if role doesn't match
-    }
-  };
-
-  // create SUPER_MASTER
-  const { mutate: createSuperMaster } = useMutation(adminService.createSuperMaster, {
-    onSuccess: (data) => {
-      enqueueSnackbar(data?.message, { variant: 'success' });
-      router.push(path.person.list);
-    },
-    onError: (error: any) => {
-      if (isAxiosError(error)) {
-        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-      }
-    },
-  });
-
-  // create MASTER
-  const { mutate: createMaster } = useMutation(createMasterByRole(role), {
-    onSuccess: (data: any) => {
-      enqueueSnackbar(data?.message, { variant: 'success' });
-      // router.push(paths.dashboard.superMaster.list);
-      router.push(path.person.list);
-    },
-    onError: (error: any) => {
-      if (isAxiosError(error)) {
-        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-      }
-    },
-  });
-
-  // create USER
-  const { mutate: createUser }: any = useMutation(createUserByRole(role), {
-    onSuccess: (data: any) => {
-      enqueueSnackbar(data?.message, { variant: 'success' });
-      // router.push(paths.dashboard.superMaster.list);
-      router.push(path.person.list);
-    },
-    onError: (error: any) => {
-      if (isAxiosError(error)) {
-        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-      }
-    },
-  });
-
-  const { mutate: updateUser }: any = useMutation(updateUserByRole(role), {
-    onSuccess: (data: any) => {
-      enqueueSnackbar(data?.message ?? 'Data Updated Successfully', { variant: 'success' });
-      router.push(path.person.list);
-    },
-    onError: (error: any) => {
-      if (isAxiosError(error)) {
-        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-      }
-    },
-  });
-  const { mutate: updateMaster }: any = useMutation(updateMasterByRole(role), {
-    onSuccess: (data: any) => {
-      enqueueSnackbar(data?.message ?? 'Data Updated Successfully', { variant: 'success' });
-      router.push(path.person.list);
-    },
-    onError: (error: any) => {
-      if (isAxiosError(error)) {
-        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-      }
-    },
-  });
-
-  const { mutate: updateSuperMaster } = useMutation(adminService.updateSuperMaster, {
-    onSuccess: (data) => {
-      enqueueSnackbar(data?.message ?? 'Data Updated Successfully', { variant: 'success' });
-      router.push(path.person.list);
-    },
-    onError: (error: any) => {
-      if (isAxiosError(error)) {
-        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-      }
-    },
-  });
-
   // get exchange list
   const { mutate } = useMutation(getExchangeListForPerson(role), {
     onSuccess: (data: any) => {
@@ -521,43 +365,11 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
     },
   });
 
-  const [selectedRow, setSelectedRow] = useState(defaultSelectedRow);
-
-  const handleSelectRow = (rowId: any) => {
-    setSelectedRow(rowId);
-    table.onSelectRow(rowId);
-  };
-
   const onSubmit = handleSubmit(async (data) => {
+    console.log({ data });
     try {
       dispatch(addUser(data));
       setTabValue(1);
-      // if (roleOption === 'SUPER_MASTER') {
-      //   return navigate('/admin/brokerage', { state: { data } });
-      //   // if (currentUser) {
-      //   //   await updateSuperMaster({ data, _id: currentUser._id });
-      //   // } else {
-      //   //   await createSuperMaster(data);
-      //   // }
-      // }
-
-      // if (roleOption === 'MASTER') {
-      //   return navigate('/admin/brokerage', { state: { data } });
-      //   // if (currentUser) {
-      //   //   await updateMaster({ data, _id: currentUser._id });
-      //   // } else {
-      //   //   await createMaster(data);
-      //   // }
-      // }
-
-      // if (roleOption === 'USER') {
-      //   return navigate('/admin/brokerage', { state: { data } });
-      //   // if (currentUser) {
-      //   //   await updateUser({ data, _id: currentUser._id });
-      //   // } else {
-      //   //   await createUser({ data, brokerageTemplate: selectedRow });
-      //   // }
-      // }
     } catch (error) {
       console.log(error);
     }
@@ -635,12 +447,6 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
                       label="Investor Password"
                     />
                   )}
-                  {/* <RHFTextField
-                    isReadOnly={!!isView}
-                    name="brokerage"
-                    type="number"
-                    label="Brokerage"
-                  /> */}
                 </>
               )}
               {roleOption === 'SUPER_MASTER' && (
@@ -750,85 +556,6 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
                 </AccordionDetails>
               </Accordion>
             </Stack>
-
-            {/* {roleOption === 'USER' && (
-              <Stack sx={{ mt: 3 }}>
-                <Accordion>
-                  <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                  >
-                    <Typography sx={{ marginBottom: 1 }}>Select Brokerage Template</Typography>
-                  </AccordionSummary>
-                  <AccordionDetails>
-                    <Container maxWidth={settings.themeStretch ? false : 'xl'}>
-                      <Card>
-                        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-                          <Scrollbar>
-                            <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
-                              <TableHeadCustom
-                                order={table.order}
-                                orderBy={table.orderBy}
-                                headLabel={TABLE_HEAD}
-                                rowCount={brokerageDataList?.length}
-                                numSelected={table.selected.length}
-                                onSort={table.onSort}
-                              />
-                              {brokerageDataList?.map((row: any) => {
-                                const {
-                                  _id,
-                                  template,
-                                  date,
-                                  exchangeCode,
-                                  symbol,
-                                  bco,
-                                  bcm,
-                                  brkgRate,
-                                  brkgRatePer,
-                                } = row;
-                                const isItemSelected = table.selected.includes(_id);
-
-                                return (
-                                  <TableBody key={row?._id}>
-                                    <TableRow
-                                      aria-checked={isItemSelected}
-                                      tabIndex={-1}
-                                      selected={selectedRow === row?._id}
-                                      onClick={() => handleSelectRow(row?._id)}
-                                      sx={{ cursor: 'pointer' }}
-                                    >
-                                      <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                                        {template || '-'}
-                                      </TableCell>
-                                      <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                                        {date.substring(0, 10) || '-'}
-                                      </TableCell>
-                                      <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                                        {exchangeCode || '-'}
-                                      </TableCell>
-                                      <TableCell sx={{ whiteSpace: 'nowrap' }}>{symbol}</TableCell>
-                                      <TableCell sx={{ whiteSpace: 'nowrap' }}>{bco}</TableCell>
-                                      <TableCell sx={{ whiteSpace: 'nowrap' }}>{bcm}</TableCell>
-                                      <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                                        {brkgRate}
-                                      </TableCell>
-                                      <TableCell sx={{ whiteSpace: 'nowrap' }}>
-                                        {brkgRatePer}
-                                      </TableCell>
-                                    </TableRow>
-                                  </TableBody>
-                                );
-                              })}
-                            </Table>
-                          </Scrollbar>
-                        </TableContainer>
-                      </Card>
-                    </Container>
-                  </AccordionDetails>
-                </Accordion>
-              </Stack>
-            )} */}
 
             {!isView && (
               <Stack alignItems="flex-end" sx={{ mt: 3 }}>

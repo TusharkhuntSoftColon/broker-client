@@ -22,13 +22,7 @@ const symbolSlice = createSlice({
   reducers: {
     resetState: () => initialState,
     addSymbol: (state, action) => {
-      // ('Action in slice', action.payload);
       const data = action.payload;
-      // state.symbolList = state.symbolList.concat({
-      //   data,
-      //   id: Math.random().toString(36).substr(2, 5),
-      // });
-
       state.symbolList = data;
     },
     updateSymbol: (state, action) => {

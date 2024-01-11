@@ -19,28 +19,35 @@ export interface adminType {
 
 const masterService = {
   createUser: async (data: any): Promise<any> => {
+    console.log('data', data);
+    const date = new Date(data?.date);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
     const newExchangeList = [
-      ...data?.data.exchangeList,
+      ...data?.exchangeList,
       {
-        allowedExchange: data?.data.allowedExchange.value,
-        exchangeGroup: data?.data.exchangeGroup?.value,
+        allowedExchange: data?.allowedExchange.value,
+        exchangeGroup: data?.exchangeGroup?.value,
       },
     ];
     const exchangeList =
-      data?.data.allowedExchange.value && data?.data.exchangeGroup.value
+      data?.allowedExchange.value && data?.exchangeGroup.value
         ? newExchangeList
-        : data?.data?.exchangeList;
+        : data?.exchangeList;
+
     try {
       const response: AxiosResponse<any> = await client.post(CREATE_USER_BY_MASTER, {
-        ID: data?.data?.ID,
-        name: data?.data?.name,
-        password: data?.data?.password,
-        role: data?.data?.role?.value,
-        leverageXY: `[${data?.data?.leverageXY.value}]`,
-        brokerage: data?.data?.brokerage,
-        investorPassword: data?.data?.investorPassword,
+        ...data,
+        leverageXY: `[${data?.leverageXY?.value}]`,
+        date: `${year}-${month}-${day}`,
+        template: data?.template?.value,
+        role: data?.role?.value,
+        exchangeCode: data?.exchangeCode?.value,
+        bco: data?.bco?.value,
+        bcm: data?.bcm?.value,
+        symbol: data?.symbol?.value,
         exchangeList,
-        brokerageTemplate: data?.brokerageTemplate,
       });
       return response.data;
     } catch (error) {
@@ -60,6 +67,11 @@ const masterService = {
     }
   },
   updateUser: async (UserData: any): Promise<any> => {
+    console.log(UserData);
+    const date = new Date(UserData?.date);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
     const newExchangeList = [
       ...UserData?.data?.exchangeList,
       {
@@ -75,13 +87,16 @@ const masterService = {
       const response: AxiosResponse<any> = await client.put(
         `${UPDATE_USER_BY_MASTER}/${UserData._id}`,
         {
-          ID: UserData?.data?.ID,
-          name: UserData?.data?.name,
-          role: UserData?.data?.role?.value,
-          leverageXY: `[${UserData?.data?.leverageXY.value}]`,
-          brokerage: UserData?.data?.brokerage,
+          ...UserData,
+          leverageXY: `[${UserData?.leverageXY.value}]`,
+          role: UserData?.role?.value,
+          date: `${year}-${month}-${day}`,
+          template: UserData?.template?.value,
+          exchangeCode: UserData?.exchangeCode?.value,
+          bco: UserData?.bco?.value,
+          bcm: UserData?.bcm?.value,
+          symbol: UserData?.symbol?.value,
           exchangeList,
-          isActive: UserData?.data?.isActive,
         }
       );
       return response.data;

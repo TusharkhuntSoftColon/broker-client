@@ -7,11 +7,12 @@ import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 
 import { paths } from 'src/routes/paths';
+import { useParams } from 'src/routes/hooks';
 
-import BrokerageListPage from 'src/pages/dashboard/brokerage/list';
+import BrokeragePage from 'src/pages/dashboard/brokerage/list';
 
-import { PersonCreateView } from 'src/sections/person/view';
 import PersonNewEditForm from 'src/sections/person/person-new-edit-form';
+import { PersonEditView, PersonCreateView } from 'src/sections/person/view';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -47,6 +48,13 @@ function a11yProps(index: number) {
 }
 
 export default function BasicTabs() {
+  const params = useParams();
+
+  const { id } = params;
+
+  const adminData = useSelector((data: any) => data?.admin?.personList);
+  const currentUser = adminData.find((user: any) => user._id === id);
+  console.log({ currentUser });
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -63,15 +71,14 @@ export default function BasicTabs() {
         return paths.superMaster;
       case 'MASTER':
         return paths.master;
-      // Add other cases for different roles with their respective paths
       default:
-        return paths.dashboard.person; // Return a default path if role doesn't match
+        return paths.dashboard.person;
     }
   };
 
   return (
     <Box sx={{ width: '100%', ml: 1 }}>
-      <PersonCreateView />
+      {currentUser ? <PersonEditView /> : <PersonCreateView />}
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange}>
           <Tab label="User" {...a11yProps(0)} />
@@ -79,10 +86,15 @@ export default function BasicTabs() {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <PersonNewEditForm isView={false} path={getPath(role)} setTabValue={setValue} />
+        <PersonNewEditForm
+          isView={false}
+          currentUser={currentUser}
+          path={getPath(role)}
+          setTabValue={setValue}
+        />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <BrokerageListPage />
+        <BrokeragePage currentUser={currentUser} />
       </CustomTabPanel>
     </Box>
   );

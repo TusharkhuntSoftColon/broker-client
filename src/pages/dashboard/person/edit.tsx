@@ -17,7 +17,7 @@ export default function PersonEditPage() {
         <title> Dashboard: Master Edit</title>
       </Helmet>
 
-      <PersonEditView id={`${id}`} />
+      <PersonEditView />
     </>
   );
 }

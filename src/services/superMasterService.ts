@@ -22,6 +22,11 @@ export interface adminType {
 
 const superMasterService = {
   createMaster: async (data: any): Promise<any> => {
+    console.log(data);
+    const date = new Date(data?.date);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
     const newExchangeList = [
       ...data.exchangeList,
       {
@@ -33,15 +38,15 @@ const superMasterService = {
       data.allowedExchange.value && data.exchangeGroup.value ? newExchangeList : data?.exchangeList;
     try {
       const response: AxiosResponse<any> = await client.post(CREATE_MASTER_BY_SUPER_MASTER, {
-        ID: data?.ID,
-        name: data?.name,
-        password: data?.password,
-        limitOfAddUser: data?.limitOfAddUser,
-        insertCustomBet: data?.insertCustomBet,
-        editBet: data?.editBet,
-        deleteBet: data?.deleteBet,
+        ...data,
         leverageXY: `[${data?.leverageXY.value}]`,
         role: data?.role?.value,
+        date: `${year}-${month}-${day}`,
+        template: data?.template?.value,
+        exchangeCode: data?.exchangeCode?.value,
+        bco: data?.bco?.value,
+        bcm: data?.bcm?.value,
+        symbol: data?.symbol?.value,
         exchangeList,
       });
       return response.data;
@@ -52,28 +57,35 @@ const superMasterService = {
     }
   },
   createUser: async (data: any): Promise<any> => {
+    console.log(data);
+    const date = new Date(data?.date);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
     const newExchangeList = [
-      ...data?.data.exchangeList,
+      ...data?.exchangeList,
       {
-        allowedExchange: data?.data.allowedExchange.value,
-        exchangeGroup: data?.data.exchangeGroup?.value,
+        allowedExchange: data?.allowedExchange.value,
+        exchangeGroup: data?.exchangeGroup?.value,
       },
     ];
     const exchangeList =
-      data?.data.allowedExchange.value && data?.data.exchangeGroup.value
+      data?.allowedExchange.value && data?.exchangeGroup.value
         ? newExchangeList
-        : data?.data?.exchangeList;
+        : data?.exchangeList;
+
     try {
       const response: AxiosResponse<any> = await client.post(CREATE_USER_BY_SUPER_MASTER, {
-        ID: data?.data?.ID,
-        name: data?.data?.name,
-        password: data?.data?.password,
-        role: data?.data?.role?.value,
-        leverageXY: `[${data?.data?.leverageXY.value}]`,
-        brokerage: data?.data?.brokerage,
-        investorPassword: data?.data?.investorPassword,
+        ...data,
+        leverageXY: `[${data?.leverageXY?.value}]`,
+        role: data?.role?.value,
+        date: `${year}-${month}-${day}`,
+        template: data?.template?.value,
+        exchangeCode: data?.exchangeCode?.value,
+        bco: data?.bco?.value,
+        bcm: data?.bcm?.value,
+        symbol: data?.symbol?.value,
         exchangeList,
-        brokerageTemplate: data?.brokerageTemplate,
       });
       return response.data;
     } catch (error) {
@@ -93,30 +105,35 @@ const superMasterService = {
     }
   },
   updateMaster: async (MasterData: any): Promise<any> => {
+    console.log(MasterData);
+    const date = new Date(MasterData?.date);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
     const newExchangeList = [
-      ...MasterData?.data?.exchangeList,
+      ...MasterData.exchangeList,
       {
-        allowedExchange: MasterData?.data?.allowedExchange.value,
-        exchangeGroup: MasterData?.data?.exchangeGroup?.value,
+        allowedExchange: MasterData.allowedExchange.value,
+        exchangeGroup: MasterData.exchangeGroup?.value,
       },
     ];
     const exchangeList =
-      MasterData?.data?.allowedExchange.value && MasterData?.data?.exchangeGroup.value
+      MasterData.allowedExchange.value && MasterData.exchangeGroup.value
         ? newExchangeList
-        : MasterData?.data?.exchangeList;
+        : MasterData?.exchangeList;
     try {
       const response: AxiosResponse<any> = await client.put(
         `${UPDATE_MASTER_BY_SUPER_MASTER}/${MasterData._id}`,
         {
-          ID: MasterData?.data?.ID,
-          name: MasterData?.data?.name,
-          limitOfAddUser: MasterData?.data?.limitOfAddUser,
-          insertCustomBet: MasterData?.data?.insertCustomBet,
-          editBet: MasterData?.data?.editBet,
-          deleteBet: MasterData?.data?.deleteBet,
-          leverageXY: `[${MasterData?.data?.leverageXY.value}]`,
-          role: MasterData?.data?.role?.value,
-          isActive: MasterData?.data?.isActive,
+          ...MasterData,
+          leverageXY: `[${MasterData?.leverageXY.value}]`,
+          role: MasterData?.role?.value,
+          date: `${year}-${month}-${day}`,
+          template: MasterData?.template?.value,
+          exchangeCode: MasterData?.exchangeCode?.value,
+          bco: MasterData?.bco?.value,
+          bcm: MasterData?.bcm?.value,
+          symbol: MasterData?.symbol?.value,
           exchangeList,
         }
       );
@@ -128,6 +145,11 @@ const superMasterService = {
     }
   },
   updateUser: async (UserData: any): Promise<any> => {
+    console.log(UserData);
+    const date = new Date(UserData?.date);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
     const newExchangeList = [
       ...UserData?.data?.exchangeList,
       {
@@ -143,13 +165,16 @@ const superMasterService = {
       const response: AxiosResponse<any> = await client.put(
         `${UPDATE_USER_BY_SUPER_MASTER}/${UserData._id}`,
         {
-          ID: UserData?.data?.ID,
-          name: UserData?.data?.name,
-          role: UserData?.data?.role?.value,
-          leverageXY: `[${UserData?.data?.leverageXY.value}]`,
-          brokerage: UserData?.data?.brokerage,
+          ...UserData,
+          leverageXY: `[${UserData?.leverageXY.value}]`,
+          role: UserData?.role?.value,
+          date: `${year}-${month}-${day}`,
+          template: UserData?.template?.value,
+          exchangeCode: UserData?.exchangeCode?.value,
+          bco: UserData?.bco?.value,
+          bcm: UserData?.bcm?.value,
+          symbol: UserData?.symbol?.value,
           exchangeList,
-          isActive: UserData?.data?.isActive,
         }
       );
       return response.data;

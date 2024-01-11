@@ -57,7 +57,7 @@ export const dashboardRoutes = [
           { path: 'list', element: <PersonListPage /> },
           { path: 'new', element: <BasicTabs /> },
           { path: ':id', element: <PersonDetailsPage /> },
-          { path: ':id/edit', element: <PersonEditPage /> },
+          { path: ':id/edit', element: <BasicTabs /> },
         ],
       },
       {

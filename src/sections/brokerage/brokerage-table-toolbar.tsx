@@ -3,13 +3,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-shadow */
 import * as Yup from 'yup';
-import { useEffect } from 'react';
 import { isAxiosError } from 'axios';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
-import { useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { Box } from '@mui/material';
 import Stack from '@mui/material/Stack';
@@ -20,8 +20,11 @@ import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
 import { ClientList } from 'src/_mock';
+import { addUser } from 'src/store/slices/person';
+import { addSymbol } from 'src/store/slices/symbol';
 import adminService from 'src/services/adminService';
 import masterService from 'src/services/masterService';
+import symbolService from 'src/services/symbolService';
 import superMasterService from 'src/services/superMasterService';
 import { brokerageCallMethod, brokerageCallOptions } from 'src/_mock/_brokerage';
 
@@ -35,37 +38,34 @@ type Props = {
   mutate: any;
   currentBrokerage: any;
   setCurrentBrokerage: any;
+  currentUser: any;
 };
 
 export default function BrokerageTableToolbar({
   mutate,
+  currentUser,
   currentBrokerage,
   setCurrentBrokerage,
 }: Props) {
+  console.log({ currentUser });
+  console.log({ currentBrokerage });
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
-
-  const ExchangeList = useSelector((data: any) => data?.admin?.exchangeList);
-
   const symbolList = useSelector((data: any) => data?.symbol?.symbolList);
-  console.log({ symbolList });
-  const NewUserSchema = Yup.object().shape({
-    exchangeCode: Yup.mixed<any>().nullable().required('Exchange is required'),
-    // symbol: Yup.mixed<any>().nullable().required('Symbol is required'),
-    date: Yup.date().required('Date is required'),
-    template: Yup.mixed<any>().nullable().required('Template is required'),
-    bco: Yup.mixed<any>().nullable().required('Brokerage call option is required'),
-    bcm: Yup.mixed<any>().nullable().required('Brokerage call method is required'),
-    brkgRate: Yup.number().required('BrokerageRate is required'),
-    brkgRatePer: Yup.number().required('BrokerageRatePer is required'),
-  });
+  const ExchangeList = useSelector((data: any) => data?.admin?.exchangeList);
+  const dispatch = useDispatch();
   const role = useSelector((data: any) => data.auth.role);
-
   const usersData = useSelector((state: any) => state?.person?.personData);
   console.log({ usersData });
+
+  const [roleOption, setRoleOption] = useState<any>(
+    currentUser ? usersData?.role : usersData?.role?.value
+  );
+
   const defaultTemplate = ClientList.find(
     (data: any) => data?.value === currentBrokerage?.template
   );
+
   const Exchange: { label: any; value: any }[] = [];
   for (let i = 0; i < ExchangeList?.length; i++) {
     Exchange.push({
@@ -81,6 +81,7 @@ export default function BrokerageTableToolbar({
       value: symbolList[i]?._id,
     });
   }
+
   const defaultExchnageCode = Exchange.filter(
     (data: any) => data?.value === currentBrokerage?.exchangeCode
   )[0];
@@ -91,6 +92,243 @@ export default function BrokerageTableToolbar({
   const defaultBco = brokerageCallOptions.find(
     (data: any) => data?.value === currentBrokerage?.bco
   );
+
+  const defaultValues = {
+    date: new Date(),
+    template: {
+      label: '',
+      value: '',
+    },
+    exchangeCode: {
+      label: '',
+      value: '',
+    },
+    symbol: {
+      label: '',
+      value: '',
+    },
+    bco: {
+      label: '',
+      value: '',
+    },
+    bcm: {
+      label: '',
+      value: '',
+    },
+    brkgRate: currentBrokerage?.brkgRate || '',
+    brkgRatePer: currentBrokerage?.brkgRatePer || 0,
+  };
+
+  const NewUserSchema = Yup.object().shape({
+    exchangeCode: Yup.mixed<any>().nullable().required('Exchange is required'),
+    symbol: Yup.mixed<any>().nullable().required('Symbol is required'),
+    date: Yup.date().required('Date is required'),
+    template: Yup.mixed<any>().nullable().required('Template is required'),
+    bco: Yup.mixed<any>().nullable().required('Brokerage call option is required'),
+    bcm: Yup.mixed<any>().nullable().required('Brokerage call method is required'),
+    brkgRate: Yup.number().required('BrokerageRate is required'),
+    brkgRatePer: Yup.number().required('BrokerageRatePer is required'),
+  });
+
+  const methods = useForm<any>({
+    resolver: yupResolver(NewUserSchema),
+    defaultValues,
+  });
+
+  const {
+    watch,
+    setValue,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = methods;
+
+  const value: any = watch();
+
+  const symbolOptionsArray = symbolList.filter(
+    (data: any) => data.exchange === value.exchangeCode?.value
+  );
+  const symbolOptions: any = [];
+
+  for (let i = 0; i < symbolOptionsArray?.length; i++) {
+    symbolOptions.push({
+      label: symbolOptionsArray[i]?.name,
+      value: symbolOptionsArray[i]?._id,
+    });
+  }
+
+  const createMasterByRole: any = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.createMaster;
+      case 'SUPER_MASTER':
+        return superMasterService.createMaster;
+      default:
+        return paths;
+    }
+  };
+
+  const createUserByRole: any = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.createUser;
+      case 'SUPER_MASTER':
+        return superMasterService.createUser;
+      case 'MASTER':
+        return masterService.createUser;
+      default:
+        return paths;
+    }
+  };
+
+  const updateMasterByRole: any = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.updateMaster;
+      case 'SUPER_MASTER':
+        return superMasterService.updateMaster;
+      default:
+        return paths; // Return a default path if role doesn't match
+    }
+  };
+
+  const updateUserByRole: any = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.updateUser;
+      case 'SUPER_MASTER':
+        return superMasterService.updateUser;
+      case 'MASTER':
+        return masterService.updateUser;
+      default:
+        return paths; // Return a default path if role doesn't match
+    }
+  };
+  // get symbol list
+  const { mutate: getSymbol } = useMutation(symbolService.getSymbolListAdmin, {
+    onSuccess: (data) => {
+      dispatch(addSymbol(data?.data?.rows));
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+  // create SUPER_MASTER
+  const { mutate: createSuperMaster } = useMutation(adminService.createSuperMaster, {
+    onSuccess: (data) => {
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      router.push(paths.dashboard.person.root);
+      dispatch(addUser([]));
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+  // create MASTER
+  const { mutate: createMaster } = useMutation(createMasterByRole(role), {
+    onSuccess: (data: any) => {
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      router.push(paths.dashboard.person.root);
+      dispatch(addUser([]));
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+  // create USER
+  const { mutate: createUser }: any = useMutation(createUserByRole(role), {
+    onSuccess: (data: any) => {
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      router.push(paths.dashboard.person.root);
+      dispatch(addUser([]));
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+  // update USER
+  const { mutate: updateUser }: any = useMutation(updateUserByRole(role), {
+    onSuccess: (data: any) => {
+      enqueueSnackbar(data?.message ?? 'Data Updated Successfully', { variant: 'success' });
+      router.push(paths.dashboard.person.root);
+      dispatch(addUser([]));
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+  // update MASTER
+  const { mutate: updateMaster }: any = useMutation(updateMasterByRole(role), {
+    onSuccess: (data: any) => {
+      enqueueSnackbar(data?.message ?? 'Data Updated Successfully', { variant: 'success' });
+      router.push(paths.dashboard.person.root);
+      dispatch(addUser([]));
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+  // update SUPER_MASTER
+  const { mutate: updateSuperMaster } = useMutation(adminService.updateSuperMaster, {
+    onSuccess: (data) => {
+      enqueueSnackbar(data?.message ?? 'Data Updated Successfully', { variant: 'success' });
+      router.push(paths.dashboard.person.root);
+      dispatch(addUser([]));
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+    },
+  });
+
+  const onSubmit = handleSubmit(async (data) => {
+    console.log({ data });
+    try {
+      if (roleOption === 'SUPER_MASTER') {
+        if (currentUser) {
+          await updateSuperMaster({ ...usersData, ...data, _id: currentUser?._id });
+        } else {
+          await createSuperMaster({ ...usersData, ...data });
+        }
+      }
+      if (roleOption === 'MASTER') {
+        if (currentUser) {
+          await updateMaster({ ...usersData, ...data, _id: currentUser?._id });
+        } else {
+          await createMaster({ ...usersData, ...data });
+        }
+      }
+      if (roleOption === 'USER') {
+        if (currentUser) {
+          await updateUser({ ...usersData, ...data, _id: currentUser?._id });
+        } else {
+          await createUser({ ...usersData, ...data });
+        }
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  });
+
+  useEffect(() => {
+    if (value.bcm?.value === 'Q') {
+      setValue('brkgRatePer', 1);
+    } else if (value.bcm?.value === 'P') {
+      setValue('brkgRatePer', 100000);
+    }
+  }, [value.bcm]);
 
   useEffect(() => {
     setValue('brkgRate', currentBrokerage?.brkgRate || '');
@@ -131,141 +369,9 @@ export default function BrokerageTableToolbar({
     );
   }, [currentBrokerage]);
 
-  const defaultValues = {
-    date: new Date(),
-    template: {
-      label: '',
-      value: '',
-    },
-    exchangeCode: {
-      label: '',
-      value: '',
-    },
-    symbol: {
-      label: '',
-      value: '',
-    },
-    bco: {
-      label: '',
-      value: '',
-    },
-    bcm: {
-      label: '',
-      value: '',
-    },
-    brkgRate: currentBrokerage?.brkgRate || '',
-    brkgRatePer: currentBrokerage?.brkgRatePer || 0,
-  };
-
-  const methods = useForm<any>({
-    resolver: yupResolver(NewUserSchema),
-    defaultValues,
-  });
-
-  const {
-    reset,
-    watch,
-    setValue,
-    handleSubmit,
-    formState: { isSubmitting },
-  } = methods;
-
-  const value: any = watch();
-  const symbolOptionsArray = symbolList.filter(
-    (data: any) => data.exchange === value.exchangeCode?.value
-  );
-  const symbolOptions: any = [];
-
-  for (let i = 0; i < symbolOptionsArray?.length; i++) {
-    symbolOptions.push({
-      label: symbolOptionsArray[i]?.name,
-      value: symbolOptionsArray[i]?._id,
-    });
-  }
-
   useEffect(() => {
-    if (value.bcm?.value === 'Q') {
-      setValue('brkgRatePer', 1);
-    } else if (value.bcm?.value === 'P') {
-      setValue('brkgRatePer', 100000);
-    }
-  }, [value.bcm]);
-
-  const createMasterByRole: any = (role: any) => {
-    switch (role) {
-      case 'ADMIN':
-        return adminService.createMaster;
-      case 'SUPER_MASTER':
-        return superMasterService.createMaster;
-      default:
-        return paths; // Return a default path if role doesn't match
-    }
-  };
-
-  const createUserByRole: any = (role: any) => {
-    switch (role) {
-      case 'ADMIN':
-        return adminService.createUser;
-      case 'SUPER_MASTER':
-        return superMasterService.createUser;
-      case 'MASTER':
-        return masterService.createUser;
-      default:
-        return paths; // Return a default path if role doesn't match
-    }
-  };
-
-  // create SUPER_MASTER
-  const { mutate: createSuperMaster } = useMutation(adminService.createSuperMaster, {
-    onSuccess: (data) => {
-      enqueueSnackbar(data?.message, { variant: 'success' });
-      router.push(paths.dashboard.person.root);
-    },
-    onError: (error: any) => {
-      if (isAxiosError(error)) {
-        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-      }
-    },
-  });
-
-  // create MASTER
-  const { mutate: createMaster } = useMutation(createMasterByRole(role), {
-    onSuccess: (data: any) => {
-      enqueueSnackbar(data?.message, { variant: 'success' });
-      // router.push(paths.dashboard.superMaster.list);
-      router.push(paths.user.root);
-    },
-    onError: (error: any) => {
-      if (isAxiosError(error)) {
-        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-      }
-    },
-  });
-
-  // create USER
-  const { mutate: createUser }: any = useMutation(createUserByRole(role), {
-    onSuccess: (data: any) => {
-      enqueueSnackbar(data?.message, { variant: 'success' });
-      // router.push(paths.dashboard.superMaster.list);
-      router.push(paths.dashboard.person.root);
-    },
-    onError: (error: any) => {
-      if (isAxiosError(error)) {
-        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-      }
-    },
-  });
-
-  const onSubmit = handleSubmit(async (data) => {
-    console.log({ data });
-    try {
-      // if (roleOption === 'Super Master') {
-      await createSuperMaster({ ...usersData, ...data });
-      // }
-    } catch (error) {
-      console.error(error);
-    }
-  });
+    getSymbol();
+  }, []);
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
@@ -291,14 +397,12 @@ export default function BrokerageTableToolbar({
               <RHFAutocomplete
                 name="template"
                 label="Template"
-                // isReadOnly={!!currentBrokerage}
                 id="template"
                 options={ClientList}
                 isLabled={false}
                 value={value.template}
                 defaultValue={defaultTemplate}
                 data={ClientList}
-                // isOptionEqualToValue={(option, value) => option.value === value.value}
                 getOptionLabel={(option: any) => option.label}
                 renderOption={(props, option) => (
                   <li {...props} key={option.label}>
@@ -325,10 +429,8 @@ export default function BrokerageTableToolbar({
               // defaultValue={currentUser && new Date(currentUser?.date)}
               onChange={(newValue: any) => {
                 setValue('date', newValue);
-
-                // Handle the value change in the parent component state or context
               }}
-            />{' '}
+            />
             <FormControl
               sx={{
                 flexShrink: 0,
@@ -451,7 +553,7 @@ export default function BrokerageTableToolbar({
             <RHFTextField sx={{ width: '100%' }} name="brkgRatePer" isReadOnly label="BRKG Per" />
           </Box>
           <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
-            Create User
+            {currentUser ? 'Update User' : 'Create User'}
           </LoadingButton>
         </Stack>
       </Stack>

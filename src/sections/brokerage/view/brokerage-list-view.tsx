@@ -76,7 +76,7 @@ const defaultFilters: IProductTableFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function BrokerageListView() {
+export default function BrokerageListView({ currentUser }: any) {
   const router = useRouter();
 
   const { enqueueSnackbar } = useSnackbar();
@@ -96,8 +96,9 @@ export default function BrokerageListView() {
   const settings = useSettingsContext();
 
   const exchangeList = useSelector((data: any) => data?.exchange?.exchangeList);
-  console.log('exchangeList', exchangeList);
   const brokerageList = useSelector((data: any) => data?.admin?.brokerageList);
+
+  console.log({ brokerageList });
 
   const [filters, setFilters] = useState(defaultFilters);
   const [currentBrokerage, setCurrentBrokerage] = useState();
@@ -116,7 +117,6 @@ export default function BrokerageListView() {
   const denseHeight = table.dense ? 60 : 80;
 
   const canReset = !isEqual(defaultFilters, filters);
-  console.log('tableData', tableData);
   // const notFound = (!dataFiltered.length && canReset) || productsEmpty;
 
   const handleFilters = useCallback(
@@ -175,6 +175,7 @@ export default function BrokerageListView() {
         <Card>
           <BrokerageTableToolbar
             mutate={mutate}
+            currentUser={currentUser}
             currentBrokerage={currentBrokerage}
             setCurrentBrokerage={setCurrentBrokerage}
           />
@@ -199,13 +200,6 @@ export default function BrokerageListView() {
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(checked, tableData?.map((row: any) => row._id))
               }
-              // action={
-              //   <Tooltip title="Delete">
-              //     <IconButton color="primary" onClick={confirm.onTrue}>
-              //       <Iconify icon="solar:trash-bin-trash-bold" />
-              //     </IconButton>
-              //   </Tooltip>
-              // }
             />
 
             <Scrollbar>

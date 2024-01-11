@@ -2,7 +2,13 @@ import { AxiosResponse } from 'axios';
 
 import client from 'src/lib/client';
 
-import { ADD_SYMBOL, DELETE_SYMBOL, UPDATE_SYMBOL, GET_SYMBOL_LIST } from '../utils/urls';
+import {
+  ADD_SYMBOL,
+  DELETE_SYMBOL,
+  UPDATE_SYMBOL,
+  GET_SYMBOL_LIST,
+  GET_SYMBOL_ADMIN,
+} from '../utils/urls';
 
 export interface symbolType {
   id: string;
@@ -18,6 +24,16 @@ const symbolService = {
     try {
       const response: AxiosResponse<any> = await client.get(GET_SYMBOL_LIST);
 
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in symbolService.getSymbolList:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  getSymbolListAdmin: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(GET_SYMBOL_ADMIN);
       return response.data;
     } catch (error) {
       // You can log the error here for debugging purposes

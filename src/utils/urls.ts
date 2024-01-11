@@ -55,8 +55,9 @@ export const EXCHANGE_DELETE = '/exchange/delete/';
 
 // symbol
 
-export const GET_SYMBOL_LIST = '/symbol/get';
 export const ADD_SYMBOL = '/symbol/create';
+export const GET_SYMBOL_LIST = '/symbol/get';
+export const GET_SYMBOL_ADMIN = '/admin/all-symbols';
 export const UPDATE_SYMBOL = '/symbol/update/';
 export const DELETE_SYMBOL = '/symbol/delete/';
 
