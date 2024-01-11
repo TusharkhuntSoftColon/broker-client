@@ -67,3 +67,6 @@ export const GET_EXCHANGE_LIST = '/exchange/get';
 export const ADD_EXCHANGE = '/exchange/create';
 export const UPDATE_EXCHANGE = '/exchange/update/';
 export const DELETE_EXCHANGE = '/exchange/delete/';
+
+// import month
+export const GET_USER_IMPORT_MONTH = '/admin/importmonth';

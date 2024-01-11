@@ -9,6 +9,7 @@ import {
   UPDATE_USER_BY_ADMIN,
   CREATE_USER_BY_ADMIN,
   GET_EXCHANGE_FOR_USER,
+  GET_USER_IMPORT_MONTH,
   CREATE_MASTER_BY_ADMIN,
   DELETE_MASTER_BY_ADMIN,
   UPDATE_MASTER_BY_ADMIN,
@@ -78,9 +79,8 @@ const adminService = {
       });
       return response.data;
     } catch (error) {
-      // You can log the error here for debugging purposes
       console.error('Error in adminService.createAdmin:', error);
-      throw error; // Re-throw the error to be caught by the caller
+      throw error;
     }
   },
   createMaster: async (data: any): Promise<any> => {
@@ -114,7 +114,7 @@ const adminService = {
       return response.data;
     } catch (error) {
       console.error('Error in adminService.createMaster:', error);
-      throw error; // Re-throw the error to be caught by the caller
+      throw error;
     }
   },
   createUser: async (data: any): Promise<any> => {
@@ -150,9 +150,8 @@ const adminService = {
       });
       return response.data;
     } catch (error) {
-      // You can log the error here for debugging purposes
       console.error('Error in adminService.createMaster:', error);
-      throw error; // Re-throw the error to be caught by the caller
+      throw error;
     }
   },
   getExchangeListForSuperMaster: async (): Promise<any> => {
@@ -160,9 +159,8 @@ const adminService = {
       const response: AxiosResponse<any> = await client.get(GET_EXCHANGE_FOR_SUPERMASTER);
       return response.data;
     } catch (error) {
-      // You can log the error here for debugging purposes
       console.error('Error in exchangeService.getExchangeList:', error);
-      throw error; // Re-throw the error to be caught by the caller
+      throw error;
     }
   },
   getExchangeListForMaster: async (): Promise<any> => {
@@ -170,9 +168,8 @@ const adminService = {
       const response: AxiosResponse<any> = await client.get(GET_EXCHANGE_FOR_MASTER);
       return response.data;
     } catch (error) {
-      // You can log the error here for debugging purposes
       console.error('Error in exchangeService.getExchangeList:', error);
-      throw error; // Re-throw the error to be caught by the caller
+      throw error;
     }
   },
   getExchangeListForUser: async (): Promise<any> => {
@@ -180,9 +177,8 @@ const adminService = {
       const response: AxiosResponse<any> = await client.get(GET_EXCHANGE_FOR_USER);
       return response.data;
     } catch (error) {
-      // You can log the error here for debugging purposes
       console.error('Error in exchangeService.getExchangeList:', error);
-      throw error; // Re-throw the error to be caught by the caller
+      throw error;
     }
   },
   getAllPersons: async (): Promise<any> => {
@@ -190,9 +186,8 @@ const adminService = {
       const response: AxiosResponse<any> = await client.get(GET_ALL_PERSONS_BY_ADMIN);
       return response.data;
     } catch (error) {
-      // You can log the error here for debugging purposes
       console.error('Error in exchangeService.getExchangeList:', error);
-      throw error; // Re-throw the error to be caught by the caller
+      throw error;
     }
   },
   updateSuperMaster: async (SuperMasterData: any): Promise<any> => {
@@ -231,9 +226,8 @@ const adminService = {
 
       return response.data;
     } catch (error) {
-      // You can log the error here for debugging purposes
       console.error('Error in exchangeService.getExchangeList:', error);
-      throw error; // Re-throw the error to be caught by the caller
+      throw error;
     }
   },
   updateMaster: async (MasterData: any): Promise<any> => {
@@ -272,9 +266,8 @@ const adminService = {
       );
       return response.data;
     } catch (error) {
-      // You can log the error here for debugging purposes
       console.error('Error in exchangeService.getExchangeList:', error);
-      throw error; // Re-throw the error to be caught by the caller
+      throw error;
     }
   },
   updateUser: async (UserData: any): Promise<any> => {
@@ -312,9 +305,8 @@ const adminService = {
       );
       return response.data;
     } catch (error) {
-      // You can log the error here for debugging purposes
       console.error('Error in exchangeService.getExchangeList:', error);
-      throw error; // Re-throw the error to be caught by the caller
+      throw error;
     }
   },
   deleteSuperMaster: async (id: string): Promise<any> => {
@@ -324,9 +316,8 @@ const adminService = {
       );
       return response.data;
     } catch (error) {
-      // You can log the error here for debugging purposes
       console.error('Error in symbolService.deleteSymbol:', error);
-      throw error; // Re-throw the error to be caught by the caller
+      throw error;
     }
   },
   deleteMaster: async (id: string): Promise<any> => {
@@ -334,9 +325,8 @@ const adminService = {
       const response: AxiosResponse<any> = await client.delete(`${DELETE_MASTER_BY_ADMIN}${id}`);
       return response.data;
     } catch (error) {
-      // You can log the error here for debugging purposes
       console.error('Error in symbolService.deleteSymbol:', error);
-      throw error; // Re-throw the error to be caught by the caller
+      throw error;
     }
   },
   deleteUser: async (id: String): Promise<any> => {
@@ -344,9 +334,8 @@ const adminService = {
       const response: AxiosResponse<any> = await client.delete(`${DELETE_USER_BY_ADMIN}${id}`);
       return response.data;
     } catch (error) {
-      // You can log the error here for debugging purposes
       console.error('Error in symbolService.deleteSymbol:', error);
-      throw error; // Re-throw the error to be caught by the caller
+      throw error;
     }
   },
   getAllPersonById: async (userId: string): Promise<any> => {
@@ -363,9 +352,17 @@ const adminService = {
       const response: AxiosResponse<any> = await client.get(GET_BROKERAGE_LIST);
       return response.data;
     } catch (error) {
-      // You can log the error here for debugging purposes
       console.error('Error in exchangeService.getExchangeList:', error);
-      throw error; // Re-throw the error to be caught by the caller
+      throw error;
+    }
+  },
+  getImportMonthByUser: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(GET_USER_IMPORT_MONTH);
+      return response.data;
+    } catch (error) {
+      console.error('Error in exchangeService.getExchangeList:', error);
+      throw error;
     }
   },
 };

@@ -77,7 +77,7 @@ export default function BasicTabs() {
   };
 
   return (
-    <Box sx={{ width: '100%', ml: 1 }}>
+    <Box sx={{ width: '100%', ml: 2 }}>
       {currentUser ? <PersonEditView /> : <PersonCreateView />}
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange}>

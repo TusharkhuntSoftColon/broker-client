@@ -83,8 +83,6 @@ export default function BrokerageListView({ currentUser }: any) {
 
   useEffect(() => {
     mutate();
-    // getExchanges();
-    // getSymbolList();
   }, []);
 
   const table = useTable();
@@ -103,8 +101,6 @@ export default function BrokerageListView({ currentUser }: any) {
   const [filters, setFilters] = useState(defaultFilters);
   const [currentBrokerage, setCurrentBrokerage] = useState();
 
-  // const { products, productsLoading, productsEmpty } = useGetProducts();
-
   const [tableData, setTableData] = useState([]);
   const confirm = useBoolean();
 
@@ -117,7 +113,6 @@ export default function BrokerageListView({ currentUser }: any) {
   const denseHeight = table.dense ? 60 : 80;
 
   const canReset = !isEqual(defaultFilters, filters);
-  // const notFound = (!dataFiltered.length && canReset) || productsEmpty;
 
   const handleFilters = useCallback(
     (name: string, value: IProductTableFilterValue) => {
@@ -130,10 +125,7 @@ export default function BrokerageListView({ currentUser }: any) {
     [table]
   );
 
-  const handleDeleteRow = (id: any) => {
-    // deleteBrokerage([id]);
-    // table.onUpdatePageDeleteRow(dataInPage.length);
-  };
+  const handleDeleteRow = (id: any) => {};
 
   const handleDeleteRows = useCallback(() => {
     const deleteRows = table.selected;
@@ -145,12 +137,7 @@ export default function BrokerageListView({ currentUser }: any) {
     setCurrentBrokerage(SelectedBrokerage);
   };
 
-  const handleViewRow = useCallback(
-    (id: string) => {
-      // router.push(paths.dashboard.exchange.details(id));
-    },
-    [router]
-  );
+  const handleViewRow = useCallback((id: string) => {}, [router]);
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);

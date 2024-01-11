@@ -1,21 +1,27 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-plusplus */
+/* eslint-disable consistent-return */
+/* eslint-disable import/extensions */
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useSnackbar } from 'notistack';
 import { useDispatch } from 'react-redux';
-import { useState, useCallback } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import { io } from 'https://cdn.socket.io/4.7.2/socket.io.esm.min.js';
 
 import Card from '@mui/material/Card';
-import Table from '@mui/material/Table';
-import TableContainer from '@mui/material/TableContainer';
-import { Box, TableBody, TextField, InputAdornment } from '@mui/material';
+import { Box, Table, TextField, TableBody, InputAdornment, TableContainer } from '@mui/material';
 
-import { _mock } from 'src/_mock';
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
+
 import { deleteAdmin } from 'src/store/slices/admin';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { useTable, getComparator, TableHeadCustom } from 'src/components/table';
 
-import { IUserItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
+import { IUserItem, IUserTableFilters } from 'src/types/user';
 
 import SymbolLiveTableRow from '../symbol-live-table-row';
 
@@ -32,73 +38,126 @@ const defaultFilters: IUserTableFilters = {
   name: '',
   role: [],
   status: 'all',
-  exchange: [],
-  dateRange: undefined,
 };
 
 // ----------------------------------------------------------------------
-
 export default function xxSymbolLiveList() {
   const table = useTable();
+  const [tableData, setTableData] = useState<any>([]);
+  const [isLoading, setIsLoading] = useState<any>(false);
+  const [rows, setRow] = useState<any>([]);
 
   const dispatch = useDispatch();
 
+  const router = useRouter();
+
   const { enqueueSnackbar } = useSnackbar();
 
-  const symbolTableDashboard = [...Array(10)].map((_, index) => {
-    const symbol = [
-      'USDSDK',
-      'USDWSF',
-      'USDWIUF',
-      'USDASD',
-      'USDOKI',
-      'USDNMJ',
-      'USDDVC',
-      'USDASE',
-      'USDTGY',
-      'USDLKO',
-      'USDLKn',
-      'USDSNK',
-      'USDSTR',
-      'USDSSR',
-      'USDLMN',
-    ][index];
-    const bid = [123, 446, 533, 23234, 675, 3234, 8784, 8858, 485, 7, 5458, 5, 554, 548, 8, 5, 5][
-      index
-    ];
+  const socketConnection = async () => {
+    setIsLoading(true);
+    try {
+      const socket = io('ws://127.0.0.1:3111');
 
-    const ask = [12324, 444, 6554, 7451, 14554, 5444, 6565, 65, 65, 6956, 65, 6, 95, 2, 5][index];
-    const dailyChange = [
-      '0.12%',
-      '0.53%',
-      '0.53%',
-      '0.53%',
-      '0.53%',
-      '0.53%',
-      '0.53%',
-      '0.53%',
-      '0.53%',
-      '0.53%',
-      '0.53%',
-      '0.53%',
-      '0.53%',
-      '0.53%',
-      '0.53%',
-    ][index];
+      socket.on('connect', () => {
+        console.log('[socket] Connected');
+        socket.emit('subscribeToServerMarket', [
+          'GOLD-I',
+          'NATURALGAS-I',
+          'SILVER-I',
+          'TATASTEEL',
+          'HDFCBANK',
+          'TCS',
+          'SBIN',
+          'WIPRO',
+          'IRCTC',
+        ]);
+      });
 
-    return {
-      id: _mock.id(index),
-      symbol,
-      bid,
-      ask,
-      dailyChange,
-    };
-  });
+      socket.emit('joinRoom', [
+        'GOLD-I',
+        'NATURALGAS-I',
+        'SILVER-I',
+        'TATASTEEL',
+        'HDFCBANK',
+        'TCS',
+        'SBIN',
+        'WIPRO',
+        'IRCTC',
+      ]);
 
-  const [filters, setFilters] = useState(defaultFilters);
+      socket.on('disconnect', (reason: any) => {
+        console.log('[socket] Disconnected:', reason);
+      });
+      socket.on('error', (error: any) => {
+        console.log('[socket] Error:', error);
+      });
+
+      socket.on('marketWatch', (data: any) => {
+        setTableData((prev: any) => {
+          let index1 = -1;
+
+          for (let index = 0; index < prev.length; index++) {
+            const data1 = prev[index];
+            if (
+              data1.InstrumentIdentifier &&
+              data.InstrumentIdentifier &&
+              data1.InstrumentIdentifier === data.InstrumentIdentifier
+            ) {
+              index1 = index;
+
+              break;
+            }
+          }
+
+          if (index1 === -1) {
+            return [...prev, data];
+          }
+
+          const newObj = {
+            ...data,
+            oldBuyPrice: prev[index1].BuyPrice,
+            oldSellPrice: prev[index1].SellPrice,
+            oldPercentage: prev[index1].PriceChangePercentage,
+          };
+          prev[index1] = newObj;
+          return [...prev];
+        });
+      });
+      setIsLoading(false);
+    } catch (e) {
+      console.log(e);
+      setIsLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    socketConnection();
+  }, []);
+
+  useEffect(() => {
+    const symbolTableDashboard = [];
+    for (const data of tableData) {
+      symbolTableDashboard.push({
+        id: data.InstrumentIdentifier,
+        symbol: data.InstrumentIdentifier,
+        bid: data.BuyPrice,
+        ask: data.SellPrice,
+        dailyChange: data.PriceChangePercentage,
+
+        oldBuyPrice: data.oldBuyPrice,
+        oldSellPrice: data.oldSellPrice,
+        oldPercentage: data.oldPercentage,
+      });
+    }
+    setRow(symbolTableDashboard);
+  }, [tableData]);
+
+  useEffect(() => {}, [rows]);
+
+  const [filters] = useState(defaultFilters);
 
   const dataFiltered = applyFilter({
-    inputData: symbolTableDashboard,
+    inputData: rows,
     comparator: getComparator(table.order, table.orderBy),
     filters,
   });
@@ -108,20 +167,9 @@ export default function xxSymbolLiveList() {
     table.page * table.rowsPerPage + table.rowsPerPage
   );
 
-  const handleFilters = useCallback(
-    (name: string, value: IUserTableFilterValue) => {
-      table.onResetPage();
-      setFilters((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    },
-    [table]
-  );
-
-  console.log(handleFilters);
   const handleDeleteRow = useCallback(
     (id: string) => {
+      console.log('delete row works');
       dispatch(deleteAdmin(id));
       enqueueSnackbar('Deleted Successfully', { variant: 'success' });
       table.onUpdatePageDeleteRow(dataInPage.length);
@@ -129,13 +177,19 @@ export default function xxSymbolLiveList() {
     [dispatch, enqueueSnackbar, table, dataInPage.length]
   );
 
-  const handleEditRow = useCallback((id: string) => {
-    // router.push(paths.dashboard.user.edit(id));
-  }, []);
+  const handleEditRow = useCallback(
+    (id: string) => {
+      router.push(paths.dashboard.person.edit(id));
+    },
+    [router]
+  );
 
-  const handleViewRow = useCallback((id: string) => {
-    // router.push(paths.dashboard.user.details(id));
-  }, []);
+  const handleViewRow = useCallback(
+    (id: string) => {
+      router.push(paths.dashboard.person.details(id));
+    },
+    [router]
+  );
 
   return (
     <>
@@ -177,19 +231,19 @@ export default function xxSymbolLiveList() {
                 order={table.order}
                 orderBy={table.orderBy}
                 headLabel={TABLE_HEAD}
-                rowCount={symbolTableDashboard?.length}
+                rowCount={rows?.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
-                onSelectAllRows={(checked) =>
-                  table.onSelectAllRows(
-                    checked,
-                    symbolTableDashboard.map((row: any) => row.id)
-                  )
-                }
+                // onSelectAllRows={(checked) =>
+                //   table.onSelectAllRows(
+                //     checked,
+                //     rows.map((row: any) => row.id)
+                //   )
+                // }
               />
 
               <TableBody>
-                {symbolTableDashboard.map((row: any, index: any) => (
+                {rows.map((row: any, index: any) => (
                   <SymbolLiveTableRow
                     key={row?.id}
                     row={row}

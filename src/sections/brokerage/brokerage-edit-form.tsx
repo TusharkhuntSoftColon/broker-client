@@ -1,11 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-plusplus */
 import * as Yup from 'yup';
-import { isAxiosError } from 'axios';
+import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { useMutation } from '@tanstack/react-query';
-import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
@@ -18,8 +16,6 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 
 import { IExchangeItem } from '../../types/exchange';
-import { useSnackbar } from '../../components/snackbar';
-import symbolService from '../../services/symbolService';
 import { STOP_LOSS, STATUS_OF_EXCHANGE } from '../../_mock/_exchange';
 import { addExchange, updateExchange } from '../../store/slices/exchange';
 import FormProvider, { RHFSwitch, RHFTextField, RHFAutocomplete } from '../../components/hook-form';
@@ -41,11 +37,7 @@ export default function BrokerageQuickEditForm({
   onClose,
   isView,
 }: Props) {
-  const { enqueueSnackbar } = useSnackbar();
-
   const dispatch = useDispatch();
-
-  const [symbolData, setSymbolData] = useState<any>([]);
 
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
@@ -74,26 +66,11 @@ export default function BrokerageQuickEditForm({
     formState: { isSubmitting },
   } = methods;
 
-  // Get symbol API
-  const { mutate } = useMutation(symbolService.getSymbolList, {
-    onSuccess: (data) => {
-      setSymbolData(data?.data?.rows);
-      // enqueueSnackbar(data?.message, { variant: 'success' });
-    },
-    onError: (error: any) => {
-      if (isAxiosError(error)) {
-        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-      }
-    },
-  });
-
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (currentUser) {
-        // updateExchange({ data, _id: currentUser?._id });
         dispatch(updateExchange({ id: currentUser?._id, updatedData: data }));
       } else {
-        // createExchange(data);
         dispatch(addExchange(data));
         reset();
       }
@@ -102,19 +79,6 @@ export default function BrokerageQuickEditForm({
       console.log({ error });
     }
   });
-
-  useEffect(() => {
-    mutate();
-  }, []);
-
-  const SymbolOption: any = [];
-
-  for (let i = 0; i < symbolData?.length; i++) {
-    SymbolOption.push({
-      label: symbolData[i]?.name,
-      value: symbolData[i]?._id,
-    });
-  }
 
   return (
     <Dialog
@@ -167,7 +131,6 @@ export default function BrokerageQuickEditForm({
               options={STOP_LOSS}
               isLabled={false}
               // value={STOP_LOSS.find((data) => data.value === currentUser?.stAndTp)?.label}
-              // data={STOP_LOSS}
               isOptionEqualToValue={(option, value) => option.value === value.value}
               getOptionLabel={(option: any) => option.label}
               renderOption={(props, option) => (

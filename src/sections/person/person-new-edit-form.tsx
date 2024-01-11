@@ -146,24 +146,26 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
     leverageXY: Yup.mixed<any>().nullable().required('Leverage  is required'),
     // brokerageTemplate:Yup.string().required('Brokerage Template is required'),
   });
-  console.log(currentUser);
+  console.log(personList);
 
   const defaultValues: any = useMemo(
     () => ({
-      name: currentUser?.name || personList?.name,
-      ID: currentUser?.ID || personList?.ID,
+      password: personList?.password || '',
+      investorPassword: personList?.investorPassword || '',
+      name: currentUser?.name || personList?.name || '',
+      ID: currentUser?.ID || personList?.ID || '',
       exchangeGroup: defaultExchangeOptions || '',
       allowedExchange: defaultAllowedExchange || [],
-      insertCustomBet: currentUser?.insertCustomBet || false,
+      insertCustomBet: currentUser?.insertCustomBet || personList?.insertCustomBet || false,
       exchangeList: [],
-      editBet: currentUser?.editBet || false,
-      role: currentUser?.role || '',
-      deleteBet: currentUser?.deleteBet || false,
+      editBet: currentUser?.editBet || personList?.editBet || false,
+      role: currentUser?.role || personList?.role?.label,
+      deleteBet: currentUser?.deleteBet || personList?.deleteBet || false,
       leverageXY: defaultLeverageOptions || '',
       isActive: currentUser?.isActive || null,
-      limitOfAddUser: currentUser?.limitOfAddUser || null,
-      limitOfAddMaster: currentUser?.limitOfAddMaster || null,
-      brokerageTemplate: currentUser?.brokerageTemplate || null,
+      limitOfAddUser: currentUser?.limitOfAddUser || personList?.limitOfAddUser || null,
+      limitOfAddMaster: currentUser?.limitOfAddMaster || personList?.limitOfAddMaster || null,
+      brokerageTemplate: currentUser?.brokerageTemplate || personList?.brokerageTemplate || null,
     }),
     [defaultAllowedExchange, defaultExchangeOptions]
   );

@@ -13,4 +13,7 @@ export type ITrade = {
   ask: any;
   dailyChange: any;
   sl: any;
+  oldBuyPrice: any;
+  oldSellPrice: any;
+  oldPercentage: any;
 };

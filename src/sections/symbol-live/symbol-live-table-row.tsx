@@ -1,3 +1,5 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-constant-condition */
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
@@ -30,9 +32,13 @@ export default function SymbolLiveTableRow({
   onViewRow,
   index,
 }: Props) {
-  const { symbol, bid, ask, dailyChange } = row;
+  const { symbol, bid, ask, dailyChange, oldBuyPrice, oldPercentage, oldSellPrice } = row;
 
   const confirm = useBoolean();
+  const handleBidData = bid !== undefined && oldBuyPrice !== undefined && bid > oldBuyPrice;
+  const handleAskData = ask !== undefined && oldSellPrice !== undefined && ask > oldSellPrice;
+  const handlePercentageData =
+    dailyChange !== undefined && oldPercentage !== undefined && dailyChange > oldPercentage;
 
   return (
     <>
@@ -52,10 +58,10 @@ export default function SymbolLiveTableRow({
             fontSize: '14px',
           }}
         >
-          {index % 2 === 0 ? (
-            <ArrowDropDownIcon sx={{ color: 'red', fontSize: '23px' }} />
+          {handleBidData || handleAskData || handlePercentageData ? (
+            <ArrowDropUpIcon sx={{ color: 'blue', fontSize: '23px' }} />
           ) : (
-            <ArrowDropUpIcon sx={{ color: 'green', fontSize: '23px' }} />
+            <ArrowDropDownIcon sx={{ color: 'red', fontSize: '23px' }} />
           )}
           {symbol}
         </TableCell>
@@ -65,7 +71,14 @@ export default function SymbolLiveTableRow({
             whiteSpace: 'nowrap',
             py: '0px',
             fontSize: '14px',
-            color: index % 2 === 0 ? 'blue' : 'red',
+            color:
+              bid !== undefined && oldBuyPrice !== undefined
+                ? bid > oldBuyPrice
+                  ? 'blue'
+                  : bid === oldBuyPrice
+                    ? 'black'
+                    : 'red'
+                : 'red',
             textAlign: 'end',
           }}
         >
@@ -76,7 +89,14 @@ export default function SymbolLiveTableRow({
             whiteSpace: 'nowrap',
             py: '0px',
             fontSize: '14px',
-            color: index % 2 === 0 ? 'red' : 'blue',
+            color:
+              ask !== undefined && oldSellPrice !== undefined
+                ? ask > oldSellPrice
+                  ? 'blue'
+                  : ask === oldSellPrice
+                    ? 'black'
+                    : 'red'
+                : 'red',
             textAlign: 'end',
           }}
         >
@@ -87,11 +107,18 @@ export default function SymbolLiveTableRow({
             whiteSpace: 'nowrap',
             py: '0px',
             fontSize: '14px',
-            color: index % 2 === 0 ? 'blue' : 'red',
+            color:
+              dailyChange !== undefined && oldPercentage !== undefined
+                ? dailyChange > oldPercentage
+                  ? 'blue'
+                  : dailyChange === oldPercentage
+                    ? 'black'
+                    : 'red'
+                : 'red',
             textAlign: 'end',
           }}
         >
-          {dailyChange}
+          {`${dailyChange.toFixed(3)}%`}
         </TableCell>
       </TableRow>
 

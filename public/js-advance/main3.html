@@ -1,32 +1,30 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>TradingView Advanced Charts demo</title>
 
-		<!-- Fix for iOS Safari zooming bug -->
-		<meta
-			name="viewport"
-			content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0"
-		/>
+<head>
+	<title>TradingView Advanced Charts demo</title>
 
-		<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=RnY8ll91HqC1d2xBpX9ZCi0390EW_625yvf6K29Np-Zckvo68wexpWsWdyW8o7DVT_IOCpyjbo-IvuVUF7Hfhnz3PxULGnxQPC-bxGJ4LO0" charset="UTF-8"></script><script
-			type="text/javascript"
-			src="charting_library/charting_library.standalone.js"
-		></script>
-		<script type="text/javascript" src="datafeeds/tv-datafeed.js"></script>
+	<!-- Fix for iOS Safari zooming bug -->
+	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0" />
 
-		<script type="text/javascript">
-			function getParameterByName(name) {
-				name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
-				var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'),
-					results = regex.exec(location.search);
-				return results === null
-					? ''
-					: decodeURIComponent(results[1].replace(/\+/g, ' '));
-			}
+	<script type="text/javascript"
+		src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=RnY8ll91HqC1d2xBpX9ZCi0390EW_625yvf6K29Np-Zckvo68wexpWsWdyW8o7DVT_IOCpyjbo-IvuVUF7Hfhnz3PxULGnxQPC-bxGJ4LO0"
+		charset="UTF-8"></script>
+	<script type="text/javascript" src="charting_library/charting_library.standalone.js"></script>
+	<script type="text/javascript" src="datafeeds/tv-datafeed.js"></script>
 
-			const codeSvg = (style) => `<svg style="${style}" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.93556 4.5061L3.43556 8.5061L3.00342 8.99998L3.43556 9.49386L6.93556 13.4939L8.06443 12.5061L4.99657 8.99998L8.06443 5.49386L6.93556 4.5061ZM11.0644 13.4939L14.5644 9.49386L14.9966 8.99998L14.5644 8.5061L11.0644 4.5061L9.93556 5.49386L13.0034 8.99998L9.93556 12.5061L11.0644 13.4939Z" fill="currentColor"/></svg>`;
-			const customCSS = `#documentation-toolbar-button {
+	<script type="text/javascript">
+		function getParameterByName(name) {
+			name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+			var regex = new RegExp('[\\?&]' + name + '=([^&#]*)'),
+				results = regex.exec(location.search);
+			return results === null
+				? ''
+				: decodeURIComponent(results[1].replace(/\+/g, ' '));
+		}
+
+		const codeSvg = (style) => `<svg style="${style}" width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.93556 4.5061L3.43556 8.5061L3.00342 8.99998L3.43556 9.49386L6.93556 13.4939L8.06443 12.5061L4.99657 8.99998L8.06443 5.49386L6.93556 4.5061ZM11.0644 13.4939L14.5644 9.49386L14.9966 8.99998L14.5644 8.5061L11.0644 4.5061L9.93556 5.49386L13.0034 8.99998L9.93556 12.5061L11.0644 13.4939Z" fill="currentColor"/></svg>`;
+		const customCSS = `#documentation-toolbar-button {
 				all: unset;
 				position: relative;
 				color: #FFF;
@@ -125,88 +123,88 @@
 				outline: #2962FF solid 2px;
 			}`;
 
-			function initOnReady() {
-				const cssBlob = new Blob([customCSS], {
-					type: "text/css",
-				});
-				const cssBlobUrl = URL.createObjectURL(cssBlob);
-				let setDemoDatafeedStatus = undefined;
-				class CustomDatafeed extends TradingViewDatafeed.TradingViewDatafeed {
-					resolveSymbol() {
-						if (setDemoDatafeedStatus) {
-							setDemoDatafeedStatus(arguments[0]);
-						}
-						super.resolveSymbol(
-							arguments[0],
-							arguments[1],
-							arguments[2],
-							arguments[3]
-						);
+		function initOnReady() {
+			const cssBlob = new Blob([customCSS], {
+				type: "text/css",
+			});
+			const cssBlobUrl = URL.createObjectURL(cssBlob);
+			let setDemoDatafeedStatus = undefined;
+			class CustomDatafeed extends TradingViewDatafeed.TradingViewDatafeed {
+				resolveSymbol() {
+					if (setDemoDatafeedStatus) {
+						setDemoDatafeedStatus(arguments[0]);
 					}
+					super.resolveSymbol(
+						arguments[0],
+						arguments[1],
+						arguments[2],
+						arguments[3]
+					);
 				}
-				const datafeed = new CustomDatafeed(10000, false);
-				const isDark =
-					window.matchMedia &&
-					window.matchMedia('(prefers-color-scheme: dark)').matches;
-				const theme = getParameterByName('theme') || (isDark ? 'dark' : 'light');
-				var widget = (window.tvWidget = new TradingView.widget({
-					// debug: true, // uncomment this line to see Library errors and warnings in the console
-					fullscreen: true,
-					symbol: 'NASDAQ:AAPL',
-					interval: '60',
-					container: 'tv_chart_container',
-					datafeed: datafeed,
-					library_path: 'charting_library/',
-					locale: getParameterByName('lang') || 'en',
-					custom_css_url: cssBlobUrl,
+			}
+			const datafeed = new CustomDatafeed(10000, false);
+			const isDark =
+				window.matchMedia &&
+				window.matchMedia('(prefers-color-scheme: dark)').matches;
+			const theme = getParameterByName('theme') || (isDark ? 'dark' : 'light');
+			var widget = (window.tvWidget = new TradingView.widget({
+				// debug: true, // uncomment this line to see Library errors and warnings in the console
+				fullscreen: true,
+				symbol: 'NASDAQ:AAPL',
+				interval: '60',
+				container: 'tv_chart_container',
+				datafeed: datafeed,
+				library_path: 'charting_library/',
+				locale: getParameterByName('lang') || 'en',
+				custom_css_url: cssBlobUrl,
 
-					disabled_features: ['use_localstorage_for_settings'],
-					enabled_features: [
-						'study_templates',
-						'pre_post_market_sessions',
-						'show_symbol_logos',
-						'show_exchange_logos',
-						'seconds_resolution',
-						'custom_resolutions',
-						'secondary_series_extend_time_scale',
-						'show_percent_option_for_right_margin',
-						'display_data_mode',
-					],
-					overrides: {
-						// 'mainSeriesProperties.sessionId': 'extended',
-					},
-					charts_storage_url: 'https://saveload.tradingview.com',
-					charts_storage_api_version: '1.1',
-					client_id: 'tradingview.com',
-					user_id: 'public_user_id',
-					theme: theme,
-				}));
-				setDemoDatafeedStatus = function (symbol) {
-					widget
-						.customSymbolStatus()
-						.symbol(symbol)
-						.setColor('#00BCD4')
-						.setVisible(true)
-						.setIcon(codeSvg(''))
-						.setTooltip('Demo Datafeed')
-						.setDropDownContent([
-							{
-								title: 'Demo Datafeed',
-								icon: codeSvg('background-color: rgba(0, 188, 212, 0.15); border-radius: 100%'),
-								content: [
-									'Data updates are throttled to once every 10 seconds, and not all symbols are fully supported.',
-								],
-							},
-						]);
-				};
+				disabled_features: ['use_localstorage_for_settings'],
+				enabled_features: [
+					'study_templates',
+					'pre_post_market_sessions',
+					'show_symbol_logos',
+					'show_exchange_logos',
+					'seconds_resolution',
+					'custom_resolutions',
+					'secondary_series_extend_time_scale',
+					'show_percent_option_for_right_margin',
+					'display_data_mode',
+				],
+				overrides: {
+					// 'mainSeriesProperties.sessionId': 'extended',
+				},
+				charts_storage_url: 'https://saveload.tradingview.com',
+				charts_storage_api_version: '1.1',
+				client_id: 'tradingview.com',
+				user_id: 'public_user_id',
+				theme: theme,
+			}));
+			setDemoDatafeedStatus = function (symbol) {
+				widget
+					.customSymbolStatus()
+					.symbol(symbol)
+					.setColor('#00BCD4')
+					.setVisible(true)
+					.setIcon(codeSvg(''))
+					.setTooltip('Demo Datafeed')
+					.setDropDownContent([
+						{
+							title: 'Demo Datafeed',
+							icon: codeSvg('background-color: rgba(0, 188, 212, 0.15); border-radius: 100%'),
+							content: [
+								'Data updates are throttled to once every 10 seconds, and not all symbols are fully supported.',
+							],
+						},
+					]);
+			};
 
-				widget.headerReady().then(() => {
-					const themeToggleEl = widget.createButton({
-						useTradingViewStyle: false,
-						align: 'right',
-					});
-					themeToggleEl.id = 'theme-toggle';
-					themeToggleEl.innerHTML = `<label for="theme-switch" id="theme-switch-label">Dark Mode</label>
+			widget.headerReady().then(() => {
+				const themeToggleEl = widget.createButton({
+					useTradingViewStyle: false,
+					align: 'right',
+				});
+				themeToggleEl.id = 'theme-toggle';
+				themeToggleEl.innerHTML = `<label for="theme-switch" id="theme-switch-label">Dark Mode</label>
 					<div class="switcher">
 						<input type="checkbox" id="theme-switch" tabindex="-1">
 						<span class="thumb-wrapper">
@@ -214,50 +212,51 @@
 							<span class="thumb"></span>
 						</span>
 					</div>`;
-					themeToggleEl.title = 'Toggle theme';
-					const checkboxEl = themeToggleEl.querySelector('#theme-switch');
-					checkboxEl.checked = theme === 'dark';
-					checkboxEl.addEventListener('change', function() {
-						const themeToSet = this.checked ? 'dark' : 'light'
-						widget.changeTheme(themeToSet, { disableUndo: true });
-					});
-
-					const element = widget.createButton({
-						useTradingViewStyle: false,
-						align: 'right',
-					});
-					element.innerHTML = `<button id="documentation-toolbar-button" tabindex="-1">Documentation</button>`;
-					element.title = 'View the documentation site';
-					element.addEventListener('click', () => {
-						window.open(
-							'https://www.tradingview.com/charting-library-docs/',
-							'_blank'
-						);
-					});
-
-					const themeSwitchCheckbox = themeToggleEl.querySelector('#theme-switch');
-					const documentationButton = element.querySelector('#documentation-toolbar-button');
-
-					const handleRovingTabindexMainElement = (e) => {
-						e.target.tabIndex = 0;
-					};
-					const handleRovingTabindexSecondaryElement = (e) => {
-						e.target.tabIndex = -1;
-					};
-
-					themeSwitchCheckbox.addEventListener('roving-tabindex:main-element', handleRovingTabindexMainElement);
-					themeSwitchCheckbox.addEventListener('roving-tabindex:secondary-element', handleRovingTabindexSecondaryElement);
-					documentationButton.addEventListener('roving-tabindex:main-element', handleRovingTabindexMainElement);
-					documentationButton.addEventListener('roving-tabindex:secondary-element', handleRovingTabindexSecondaryElement);
+				themeToggleEl.title = 'Toggle theme';
+				const checkboxEl = themeToggleEl.querySelector('#theme-switch');
+				checkboxEl.checked = theme === 'dark';
+				checkboxEl.addEventListener('change', function () {
+					const themeToSet = this.checked ? 'dark' : 'light'
+					widget.changeTheme(themeToSet, { disableUndo: true });
 				});
-				window.frames[0].focus();
-			}
 
-			window.addEventListener('DOMContentLoaded', initOnReady, false);
-		</script>
-	</head>
+				const element = widget.createButton({
+					useTradingViewStyle: false,
+					align: 'right',
+				});
+				element.innerHTML = `<button id="documentation-toolbar-button" tabindex="-1">Documentation</button>`;
+				element.title = 'View the documentation site';
+				element.addEventListener('click', () => {
+					window.open(
+						'https://www.tradingview.com/charting-library-docs/',
+						'_blank'
+					);
+				});
 
-	<body style="margin: 0px">
-		<div id="tv_chart_container"></div>
-	</body>
+				const themeSwitchCheckbox = themeToggleEl.querySelector('#theme-switch');
+				const documentationButton = element.querySelector('#documentation-toolbar-button');
+
+				const handleRovingTabindexMainElement = (e) => {
+					e.target.tabIndex = 0;
+				};
+				const handleRovingTabindexSecondaryElement = (e) => {
+					e.target.tabIndex = -1;
+				};
+
+				themeSwitchCheckbox.addEventListener('roving-tabindex:main-element', handleRovingTabindexMainElement);
+				themeSwitchCheckbox.addEventListener('roving-tabindex:secondary-element', handleRovingTabindexSecondaryElement);
+				documentationButton.addEventListener('roving-tabindex:main-element', handleRovingTabindexMainElement);
+				documentationButton.addEventListener('roving-tabindex:secondary-element', handleRovingTabindexSecondaryElement);
+			});
+			window.frames[0].focus();
+		}
+
+		window.addEventListener('DOMContentLoaded', initOnReady, false);
+	</script>
+</head>
+
+<body style="margin: 0px">
+	<div id="tv_chart_container"></div>
+</body>
+
 </html>

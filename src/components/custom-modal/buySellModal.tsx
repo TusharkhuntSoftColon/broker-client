@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-nested-ternary */
 import { useState } from 'react';
@@ -6,15 +7,9 @@ import { styled } from '@mui/system';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import TextField from '@mui/material/TextField';
-import { DatePicker } from '@mui/x-date-pickers';
 import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import DialogContent from '@mui/material/DialogContent';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { renderTimeViewClock } from '@mui/x-date-pickers/timeViewRenderers';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { Box, Select, MenuItem, FormControl, SelectChangeEvent } from '@mui/material';
 
 // ----------------------------------------------------------------------
@@ -431,7 +426,7 @@ export default function BuySellDialog({
 
         {expiration.includes('specified') && type !== 'instant-execution' && (
           <Box sx={{ mt: 1 }}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
               <Typography>Expiration Date</Typography>
               <DemoContainer components={['DateTimePicker', 'DateTimePicker']}>
                 {expiration === 'specified' ? (
@@ -446,7 +441,7 @@ export default function BuySellDialog({
                   <DatePicker />
                 )}
               </DemoContainer>
-            </LocalizationProvider>
+            </LocalizationProvider> */}
           </Box>
         )}
 

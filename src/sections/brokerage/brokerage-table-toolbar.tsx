@@ -58,9 +58,7 @@ export default function BrokerageTableToolbar({
   const usersData = useSelector((state: any) => state?.person?.personData);
   console.log({ usersData });
 
-  const [roleOption, setRoleOption] = useState<any>(
-    currentUser ? usersData?.role : usersData?.role?.value
-  );
+  const [roleOption] = useState<any>(currentUser ? usersData?.role : usersData?.role?.value);
 
   const defaultTemplate = ClientList.find(
     (data: any) => data?.value === currentBrokerage?.template
