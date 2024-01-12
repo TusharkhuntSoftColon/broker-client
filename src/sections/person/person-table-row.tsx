@@ -28,6 +28,7 @@ type Props = {
   onDeleteRow: VoidFunction;
   onViewRow: VoidFunction;
   onGetPersonRow: VoidFunction;
+  index: number;
 };
 
 export default function PersonTableRow({
@@ -38,6 +39,7 @@ export default function PersonTableRow({
   onDeleteRow,
   onViewRow,
   onGetPersonRow,
+  index,
 }: Props) {
   const { name, exchangeList, ID, isActive, role } = row;
   console.log({ row });
@@ -64,25 +66,11 @@ export default function PersonTableRow({
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{ID}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>
-          {/* <Avatar alt={name} src={avatarUrl} sx={{ mr: 2 }} /> */}
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{index}</TableCell>
 
-          {name}
-          {/* <ListItemText
-            primary={name}
-            secondary={email}
-            primaryTypographyProps={{ typography: 'body2' }}
-            secondaryTypographyProps={{
-              component: 'span',
-              color: 'text.disabled',
-            }}
-          /> */}
-        </TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{`${ID} (${name})`}</TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{role}</TableCell>
-
-        {/* <TableCell sx={{ whiteSpace: 'nowrap' }}>{company}</TableCell> */}
 
         <TableCell>
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>

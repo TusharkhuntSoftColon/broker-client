@@ -37,13 +37,18 @@ export const UPDATE_USER_BY_SUPER_MASTER = '/super-master/user/update';
 export const DELETE_MASTER_BY_SUPER_MASTER = '/super-master/master/remove/';
 export const DELETE_USER_BY_SUPER_MASTER = '/super-master/user/remove/';
 
+export const GET_BROKERAGE_LIST_FOR_SUPER_MASTER = '/super-master/brockrage';
+export const GET_SYMBOL_SUPER_MASTER = '/super-master/all-symbols';
+
 // MASTER
 export const CREATE_USER_BY_MASTER = '/master/user';
 export const GET_ALL_PERSONS_BY_MASTER = '/master/person';
 
 export const GET_EXCHANGE_FOR_USER_BY_MASTER = '/master/all-exchanges';
+export const GET_BROKERAGE_LIST_FOR_MASTER = '/master/brockrage';
 
 export const UPDATE_USER_BY_MASTER = '/master/user/update';
+export const GET_SYMBOL_MASTER = '/master/all-symbols';
 
 export const DELETE_USER_BY_MASTER = '/master/user/remove/';
 

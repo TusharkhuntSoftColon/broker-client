@@ -1,3 +1,5 @@
+/* eslint-disable array-callback-return */
+/* eslint-disable consistent-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-plusplus */
@@ -409,6 +411,12 @@ export default function PersonListView({ path }: { path: any }) {
                         onEditRow={() => handleEditRow(row._id)}
                         onViewRow={() => handleViewRow(row._id)}
                         onGetPersonRow={() => handleGetUsers(row._id)}
+                        index={personData?.map((data: any, index: number) => {
+                          console.log(data, index, row);
+                          if (data?._id === row?._id) {
+                            return Number(index + 1);
+                          }
+                        })}
                       />
                     ))}
 

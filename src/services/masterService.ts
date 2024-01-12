@@ -3,10 +3,12 @@ import { AxiosResponse } from 'axios';
 import client from 'src/lib/client';
 
 import {
+  GET_SYMBOL_MASTER,
   CREATE_USER_BY_MASTER,
   DELETE_USER_BY_MASTER,
   UPDATE_USER_BY_MASTER,
   GET_ALL_PERSONS_BY_MASTER,
+  GET_BROKERAGE_LIST_FOR_MASTER,
 } from '../utils/urls';
 
 export interface adminType {
@@ -71,18 +73,21 @@ const masterService = {
     const date = new Date(UserData?.date);
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
     const day = date.getDate().toString().padStart(2, '0');
+    console.log('date', day);
     const year = date.getFullYear();
     const newExchangeList = [
-      ...UserData?.data?.exchangeList,
+      ...UserData?.exchangeList,
       {
-        allowedExchange: UserData?.data?.allowedExchange.value,
-        exchangeGroup: UserData?.data?.exchangeGroup?.value,
+        allowedExchange: UserData?.allowedExchange.value,
+        exchangeGroup: UserData?.exchangeGroup?.value,
       },
     ];
+    console.log('newExchangeList', newExchangeList);
     const exchangeList =
-      UserData?.data?.allowedExchange.value && UserData?.data?.exchangeGroup.value
+      UserData?.allowedExchange.value && UserData?.exchangeGroup.value
         ? newExchangeList
-        : UserData?.data?.exchangeList;
+        : UserData?.exchangeList;
+    console.log('exchangeList', exchangeList);
     try {
       const response: AxiosResponse<any> = await client.put(
         `${UPDATE_USER_BY_MASTER}/${UserData._id}`,
@@ -113,6 +118,25 @@ const masterService = {
     } catch (error) {
       // You can log the error here for debugging purposes
       console.error('Error in symbolService.deleteSymbol:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  getBrokerageList: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(GET_BROKERAGE_LIST_FOR_MASTER);
+      return response.data;
+    } catch (error) {
+      console.error('Error in exchangeService.getExchangeList:', error);
+      throw error;
+    }
+  },
+  getSymbolListMaster: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(GET_SYMBOL_MASTER);
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in symbolService.getSymbolList:', error);
       throw error; // Re-throw the error to be caught by the caller
     }
   },

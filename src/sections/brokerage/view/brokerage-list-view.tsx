@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { isAxiosError } from 'axios';
 import isEqual from 'lodash/isEqual';
@@ -16,6 +17,8 @@ import TableContainer from '@mui/material/TableContainer';
 
 import adminService from 'src/services/adminService';
 import { addBrokerage } from 'src/store/slices/admin';
+import masterService from 'src/services/masterService';
+import superMasterService from 'src/services/superMasterService';
 
 import { useRouter } from '../../../routes/hooks';
 import Scrollbar from '../../../components/scrollbar';
@@ -78,6 +81,7 @@ const defaultFilters: IProductTableFilters = {
 
 export default function BrokerageListView({ currentUser }: any) {
   const router = useRouter();
+  const role = useSelector((data: any) => data.auth.role);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -143,8 +147,21 @@ export default function BrokerageListView({ currentUser }: any) {
     setFilters(defaultFilters);
   }, []);
 
+  const getBrokerageByRole = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.getBrokerageList;
+      case 'SUPER_MASTER':
+        return superMasterService.getBrokerageList;
+      case 'MASTER':
+        return masterService.getBrokerageList;
+      default:
+        return masterService.getBrokerageList;
+    }
+  };
+
   // get exchange list
-  const { mutate } = useMutation(adminService.getBrokerageList, {
+  const { mutate } = useMutation(getBrokerageByRole(role), {
     onSuccess: (data) => {
       setTableData(data?.data?.rows);
       dispatch(addBrokerage(data?.data?.rows));

@@ -3,6 +3,7 @@ import { AxiosResponse } from 'axios';
 import client from 'src/lib/client';
 
 import {
+  GET_SYMBOL_ADMIN,
   GET_ALL_USER_BYID,
   GET_BROKERAGE_LIST,
   DELETE_USER_BY_ADMIN,
@@ -363,6 +364,16 @@ const adminService = {
     } catch (error) {
       console.error('Error in exchangeService.getExchangeList:', error);
       throw error;
+    }
+  },
+  getSymbolListAdmin: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(GET_SYMBOL_ADMIN);
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in symbolService.getSymbolList:', error);
+      throw error; // Re-throw the error to be caught by the caller
     }
   },
 };

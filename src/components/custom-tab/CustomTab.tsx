@@ -63,6 +63,8 @@ export default function BasicTabs() {
 
   const role = useSelector((data: any) => data.auth.role);
 
+  console.log({ role });
+
   const getPath = (roleOfPerson: any) => {
     switch (roleOfPerson) {
       case 'ADMIN':

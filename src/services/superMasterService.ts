@@ -3,6 +3,7 @@ import { AxiosResponse } from 'axios';
 import client from 'src/lib/client';
 
 import {
+  GET_SYMBOL_SUPER_MASTER,
   CREATE_USER_BY_SUPER_MASTER,
   DELETE_USER_BY_SUPER_MASTER,
   UPDATE_USER_BY_SUPER_MASTER,
@@ -10,6 +11,7 @@ import {
   DELETE_MASTER_BY_SUPER_MASTER,
   UPDATE_MASTER_BY_SUPER_MASTER,
   GET_ALL_PERSONS_BY_SUPER_MASTER,
+  GET_BROKERAGE_LIST_FOR_SUPER_MASTER,
 } from '../utils/urls';
 
 export interface adminType {
@@ -205,6 +207,25 @@ const superMasterService = {
     } catch (error) {
       // You can log the error here for debugging purposes
       console.error('Error in symbolService.deleteSymbol:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  getBrokerageList: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(GET_BROKERAGE_LIST_FOR_SUPER_MASTER);
+      return response.data;
+    } catch (error) {
+      console.error('Error in exchangeService.getExchangeList:', error);
+      throw error;
+    }
+  },
+  getSymbolListSuperMaster: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(GET_SYMBOL_SUPER_MASTER);
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in symbolService.getSymbolList:', error);
       throw error; // Re-throw the error to be caught by the caller
     }
   },

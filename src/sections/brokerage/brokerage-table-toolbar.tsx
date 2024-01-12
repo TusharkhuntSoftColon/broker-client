@@ -24,10 +24,10 @@ import { addUser } from 'src/store/slices/person';
 import { addSymbol } from 'src/store/slices/symbol';
 import adminService from 'src/services/adminService';
 import masterService from 'src/services/masterService';
-import symbolService from 'src/services/symbolService';
 import superMasterService from 'src/services/superMasterService';
 import { brokerageCallMethod, brokerageCallOptions } from 'src/_mock/_brokerage';
 
+import { useSettingsContext } from 'src/components/settings';
 import FormProvider from 'src/components/hook-form/form-provider';
 import { CustomDatePicker } from 'src/components/custom-datePicker';
 import { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
@@ -47,8 +47,8 @@ export default function BrokerageTableToolbar({
   currentBrokerage,
   setCurrentBrokerage,
 }: Props) {
-  console.log({ currentUser });
-  console.log({ currentBrokerage });
+  const settings = useSettingsContext();
+
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
   const symbolList = useSelector((data: any) => data?.symbol?.symbolList);
@@ -142,7 +142,7 @@ export default function BrokerageTableToolbar({
 
   const value: any = watch();
 
-  const symbolOptionsArray = symbolList.filter(
+  const symbolOptionsArray = symbolList?.filter(
     (data: any) => data.exchange === value.exchangeCode?.value
   );
   const symbolOptions: any = [];
@@ -201,15 +201,29 @@ export default function BrokerageTableToolbar({
         return paths; // Return a default path if role doesn't match
     }
   };
+
+  const getSymbolByRole: any = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.getSymbolListAdmin;
+      case 'SUPER_MASTER':
+        return superMasterService.getSymbolListSuperMaster;
+      case 'MASTER':
+        return masterService.getSymbolListMaster;
+      default:
+        return paths; // Return a default path if role doesn't match
+    }
+  };
   // get symbol list
-  const { mutate: getSymbol } = useMutation(symbolService.getSymbolListAdmin, {
-    onSuccess: (data) => {
+  const { mutate: getSymbol } = useMutation(getSymbolByRole(role), {
+    onSuccess: (data: any) => {
       dispatch(addSymbol(data?.data?.rows));
     },
     onError: (error: any) => {
       if (isAxiosError(error)) {
         enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
       }
+      enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
   // create SUPER_MASTER
@@ -223,6 +237,7 @@ export default function BrokerageTableToolbar({
       if (isAxiosError(error)) {
         enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
       }
+      enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
   // create MASTER
@@ -236,6 +251,7 @@ export default function BrokerageTableToolbar({
       if (isAxiosError(error)) {
         enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
       }
+      enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
   // create USER
@@ -249,19 +265,23 @@ export default function BrokerageTableToolbar({
       if (isAxiosError(error)) {
         enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
       }
+      enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
   // update USER
   const { mutate: updateUser }: any = useMutation(updateUserByRole(role), {
     onSuccess: (data: any) => {
+      console.log({ data });
       enqueueSnackbar(data?.message ?? 'Data Updated Successfully', { variant: 'success' });
       router.push(paths.dashboard.person.root);
       dispatch(addUser([]));
     },
     onError: (error: any) => {
+      console.log({ error });
       if (isAxiosError(error)) {
         enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
       }
+      enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
   // update MASTER
@@ -275,6 +295,7 @@ export default function BrokerageTableToolbar({
       if (isAxiosError(error)) {
         enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
       }
+      enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
   // update SUPER_MASTER
@@ -288,11 +309,11 @@ export default function BrokerageTableToolbar({
       if (isAxiosError(error)) {
         enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
       }
+      enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log({ data });
     try {
       if (roleOption === 'SUPER_MASTER') {
         if (currentUser) {

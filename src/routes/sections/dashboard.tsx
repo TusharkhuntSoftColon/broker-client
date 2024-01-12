@@ -94,9 +94,19 @@ export const dashboardRoutes = [
         children: [
           { element: <PersonListPage />, index: true },
           { path: 'list', element: <PersonListPage /> },
-          { path: 'new', element: <PersonCreatePage /> },
+          { path: 'new', element: <BasicTabs /> },
           { path: ':id', element: <PersonDetailsPage /> },
-          { path: ':id/edit', element: <PersonEditPage /> },
+          { path: ':id/edit', element: <BasicTabs /> },
+        ],
+      },
+      {
+        path: 'brokerage',
+        children: [
+          { element: <BrokerageListPage />, index: true },
+          { path: 'list', element: <BrokerageListPage /> },
+          { path: ':id', element: <BrokerageDetailsPage /> },
+          { path: 'new', element: <BrokerageCreatePage /> },
+          { path: ':id/edit', element: <BrokerageEditPage /> },
         ],
       },
     ],
@@ -118,9 +128,19 @@ export const dashboardRoutes = [
         children: [
           { element: <PersonListPage />, index: true },
           { path: 'list', element: <PersonListPage /> },
-          { path: 'new', element: <PersonCreatePage /> },
+          { path: 'new', element: <BasicTabs /> },
           { path: ':id', element: <PersonDetailsPage /> },
-          { path: ':id/edit', element: <PersonEditPage /> },
+          { path: ':id/edit', element: <BasicTabs /> },
+        ],
+      },
+      {
+        path: 'brokerage',
+        children: [
+          { element: <BrokerageListPage />, index: true },
+          { path: 'list', element: <BrokerageListPage /> },
+          { path: ':id', element: <BrokerageDetailsPage /> },
+          { path: 'new', element: <BrokerageCreatePage /> },
+          { path: ':id/edit', element: <BrokerageEditPage /> },
         ],
       },
     ],
