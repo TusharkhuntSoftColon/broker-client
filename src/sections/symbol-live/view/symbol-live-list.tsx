@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-restricted-syntax */
 /* eslint-disable no-plusplus */
@@ -7,7 +8,9 @@
 import { useSnackbar } from 'notistack';
 import { useDispatch } from 'react-redux';
 import { useState, useEffect, useCallback } from 'react';
-import { io } from 'https://cdn.socket.io/4.7.2/socket.io.esm.min.js';
+// import { io } from 'https://cdn.socket.io/4.7.2/socket.io.esm.min.js';
+
+import { io } from 'socket.io-client';
 
 import Card from '@mui/material/Card';
 import { Box, Table, TextField, TableBody, InputAdornment, TableContainer } from '@mui/material';

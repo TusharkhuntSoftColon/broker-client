@@ -28,7 +28,6 @@ const BrokerageEditPage = lazy(() => import('src/pages/dashboard/brokerage/edit'
 // FILE MANAGER
 // APP
 const MailPage = lazy(() => import('src/pages/dashboard/mail'));
-const CalendarPage = lazy(() => import('src/pages/dashboard/calendar'));
 // TEST RENDER PAGE BY ROLE
 const PermissionDeniedPage = lazy(() => import('src/pages/dashboard/permission'));
 // BLANK PAGE
@@ -71,7 +70,6 @@ export const dashboardRoutes = [
         ],
       },
       { path: 'mail', element: <MailPage /> },
-      { path: 'calendar', element: <CalendarPage /> },
       { path: 'permission', element: <PermissionDeniedPage /> },
       { path: 'blank', element: <BlankPage /> },
     ],
