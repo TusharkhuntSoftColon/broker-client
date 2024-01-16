@@ -1,4 +1,4 @@
-import { LogoutOptions, PopupLoginOptions, RedirectLoginOptions } from '@auth0/auth0-react';
+// import { LogoutOptions, PopupLoginOptions, RedirectLoginOptions } from '@auth0/auth0-react';
 
 // ----------------------------------------------------------------------
 
@@ -36,8 +36,8 @@ type CanRemove = {
   loginWithGithub?: () => Promise<void>;
   loginWithTwitter?: () => Promise<void>;
   //
-  loginWithPopup?: (options?: PopupLoginOptions) => Promise<void>;
-  loginWithRedirect?: (options?: RedirectLoginOptions) => Promise<void>;
+  loginWithPopup?: (options?: any) => Promise<void>;
+  loginWithRedirect?: (options?: any) => Promise<void>;
   //
   confirmRegister?: (email: string, code: string) => Promise<void>;
   forgotPassword?: (email: string) => Promise<void>;
@@ -99,7 +99,7 @@ export type Auth0ContextType = CanRemove & {
   loading: boolean;
   authenticated: boolean;
   unauthenticated: boolean;
-  loginWithPopup: (options?: PopupLoginOptions) => Promise<void>;
-  loginWithRedirect: (options?: RedirectLoginOptions) => Promise<void>;
-  logout: (options?: LogoutOptions) => Promise<void>;
+  loginWithPopup: (options?: any) => Promise<void>;
+  loginWithRedirect: (options?: any) => Promise<void>;
+  logout: (options?: any) => Promise<void>;
 };

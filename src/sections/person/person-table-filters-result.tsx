@@ -35,7 +35,7 @@ export default function UserTableFiltersResult({
   };
 
   const handleRemoveExchange = (inputValue: string) => {
-    const newValue = filters.exchange.filter((item) => item !== inputValue);
+    const newValue = filters.exchange.filter((item: any) => item !== inputValue);
     onFilters('exchange', newValue);
   };
 
@@ -67,7 +67,7 @@ export default function UserTableFiltersResult({
 
         {!!filters.exchange.length && (
           <Block label="Exchange:">
-            {matchedNames.map((item) => (
+            {matchedNames.map((item: any) => (
               <Chip
                 key={item}
                 label={item}
