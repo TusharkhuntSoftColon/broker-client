@@ -153,16 +153,16 @@ const superMasterService = {
     const day = date.getDate().toString().padStart(2, '0');
     const year = date.getFullYear();
     const newExchangeList = [
-      ...UserData?.data?.exchangeList,
+      ...UserData?.exchangeList,
       {
-        allowedExchange: UserData?.data?.allowedExchange.value,
-        exchangeGroup: UserData?.data?.exchangeGroup?.value,
+        allowedExchange: UserData?.allowedExchange.value,
+        exchangeGroup: UserData?.exchangeGroup?.value,
       },
     ];
     const exchangeList =
-      UserData?.data?.allowedExchange.value && UserData?.data?.exchangeGroup.value
+      UserData?.allowedExchange.value && UserData?.exchangeGroup.value
         ? newExchangeList
-        : UserData?.data?.exchangeList;
+        : UserData?.exchangeList;
     try {
       const response: AxiosResponse<any> = await client.put(
         `${UPDATE_USER_BY_SUPER_MASTER}/${UserData._id}`,

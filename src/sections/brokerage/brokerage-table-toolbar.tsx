@@ -11,9 +11,9 @@ import { useMutation } from '@tanstack/react-query';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { Box } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import { LoadingButton } from '@mui/lab';
+import { Box, Divider } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 
 import { paths } from 'src/routes/paths';
@@ -27,7 +27,6 @@ import masterService from 'src/services/masterService';
 import superMasterService from 'src/services/superMasterService';
 import { brokerageCallMethod, brokerageCallOptions } from 'src/_mock/_brokerage';
 
-import { useSettingsContext } from 'src/components/settings';
 import FormProvider from 'src/components/hook-form/form-provider';
 import { CustomDatePicker } from 'src/components/custom-datePicker';
 import { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
@@ -47,8 +46,6 @@ export default function BrokerageTableToolbar({
   currentBrokerage,
   setCurrentBrokerage,
 }: Props) {
-  const settings = useSettingsContext();
-
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
   const symbolList = useSelector((data: any) => data?.symbol?.symbolList);
@@ -56,7 +53,6 @@ export default function BrokerageTableToolbar({
   const dispatch = useDispatch();
   const role = useSelector((data: any) => data.auth.role);
   const usersData = useSelector((state: any) => state?.person?.personData);
-  console.log({ usersData });
 
   const [roleOption] = useState<any>(currentUser ? usersData?.role : usersData?.role?.value);
 
@@ -392,6 +388,13 @@ export default function BrokerageTableToolbar({
     getSymbol();
   }, []);
 
+  useEffect(() => {
+    setValue('symbol', {
+      label: '',
+      value: '',
+    });
+  }, [value.exchangeCode]);
+
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack
@@ -576,6 +579,14 @@ export default function BrokerageTableToolbar({
           </LoadingButton>
         </Stack>
       </Stack>
+      <Divider
+        sx={{
+          width: '100%',
+          height: 1,
+          backgroundColor: '#D9DBE9',
+          margin: '3px 5px',
+        }}
+      />
     </FormProvider>
   );
 }

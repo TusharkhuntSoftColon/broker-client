@@ -3,22 +3,27 @@
 import { isAxiosError } from 'axios';
 import isEqual from 'lodash/isEqual';
 import { useSnackbar } from 'notistack';
-import { parse, isWithinInterval } from 'date-fns';
+import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect, useCallback } from 'react';
 
 import Card from '@mui/material/Card';
+import { Stack } from '@mui/material';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 
+import { ClientList } from 'src/_mock';
 import adminService from 'src/services/adminService';
 import { addBrokerage } from 'src/store/slices/admin';
 import masterService from 'src/services/masterService';
 import superMasterService from 'src/services/superMasterService';
+
+import { RHFAutocomplete } from 'src/components/hook-form';
+import FormProvider from 'src/components/hook-form/form-provider';
 
 import { useRouter } from '../../../routes/hooks';
 import Scrollbar from '../../../components/scrollbar';
@@ -107,11 +112,21 @@ export default function BrokerageListView({ currentUser }: any) {
 
   const [tableData, setTableData] = useState([]);
   const confirm = useBoolean();
+  const defaultValues = {
+    template: '',
+  };
+  const methods = useForm<any>({
+    defaultValues,
+  });
+
+  const { watch } = methods;
+
+  const value: any = watch();
 
   const dataFiltered = applyFilter({
     inputData: tableData,
     comparator: getComparator(table.order, table.orderBy),
-    filters,
+    value,
   });
 
   const denseHeight = table.dense ? 60 : 80;
@@ -183,7 +198,31 @@ export default function BrokerageListView({ currentUser }: any) {
             currentBrokerage={currentBrokerage}
             setCurrentBrokerage={setCurrentBrokerage}
           />
-
+          <FormProvider methods={methods}>
+            <Stack
+              spacing={1.5}
+              sx={{
+                p: 2,
+                width: 1,
+              }}
+            >
+              <RHFAutocomplete
+                name="template"
+                label="Template"
+                id="template"
+                options={ClientList}
+                isLabled={false}
+                // value={value.template}
+                // data={ClientList}
+                getOptionLabel={(option: any) => option.label}
+                renderOption={(props, option) => (
+                  <li {...props} key={option.label}>
+                    {option.label}
+                  </li>
+                )}
+              />
+            </Stack>
+          </FormProvider>
           {canReset && (
             <BrokerageTableFiltersResult
               filters={filters}
@@ -300,13 +339,13 @@ export default function BrokerageListView({ currentUser }: any) {
 function applyFilter({
   inputData,
   comparator,
-  filters,
+  value,
 }: {
   inputData: IProductItem | any;
   comparator: (a: any, b: any) => number;
-  filters: IProductTableFilters;
+  value: any;
 }) {
-  const { name, stock, publish, status, dateRange } = filters;
+  console.log(value);
 
   const stabilizedThis = inputData?.map((el: any, index: any) => [el, index] as const);
 
@@ -318,29 +357,8 @@ function applyFilter({
 
   inputData = stabilizedThis?.map((el: any) => el[0]);
 
-  if (name) {
-    inputData = inputData.filter(
-      (product: any) => product.name.toLowerCase().indexOf(name.toLowerCase()) !== -1
-    );
-  }
-
-  if (stock.length) {
-    inputData = inputData.filter((product: any) => stock.includes(product.inventoryType));
-  }
-
-  if (publish.length) {
-    inputData = inputData.filter((product: any) => publish.includes(product.publish));
-  }
-
-  if (status) {
-    inputData = inputData.filter((_el: any) => status.value === _el?.isActiveExchange);
-  }
-
-  if (dateRange.length > 0) {
-    inputData = inputData.filter((item: any) => {
-      const createdAtDate = parse(item.createdAt, 'EEE MMM dd yyyy', new Date());
-      return isWithinInterval(createdAtDate, { start: dateRange[0], end: dateRange[1] });
-    });
+  if (value.template) {
+    inputData = inputData.filter((item: any) => item.template === value.template.value);
   }
 
   return inputData;
