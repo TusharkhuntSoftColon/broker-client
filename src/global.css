@@ -23,6 +23,22 @@
   background-color: rgba(0, 167, 111, 0.16) !important;
 }
 
+.fonts-loaded {
+  font-family: 'Trebuchet MS', 'Roboto', 'Ubuntu', 'sans-serif';
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.react-grid-placeholder {
+  background-color: rgba(0, 167, 111, 0.16) !important;
+}
+
+#tv_chart_container,
+#tv_chart_container iframe {
+  height: 100% !important;
+  width: 100%;
+}
+
 .grid-item__title {
   font-size: 14px;
   color: #fff;

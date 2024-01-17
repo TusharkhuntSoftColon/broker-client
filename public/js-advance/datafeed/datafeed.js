@@ -1299,12 +1299,11 @@ const uniqueExchanges =  [...new Map(Dummyexchanges.map(item => [item['value'], 
 				 symbolData.push(newData);
 	}
 
-	console.log({symbolData});
 
 export default  {
 	onReady:async  (callback) => {
 		console.log('[onReady]: Method call');
-		setTimeout(() => callback(configurationData));
+		setTimeout(() => callback(symbolData));
 	},
 
 	searchSymbols: async (
@@ -1323,11 +1322,6 @@ export default  {
 			return isExchangeValid && isFullSymbolContainsInput;
 		});
 
-		// symbolType = symbols.symbol.exchange
-
-		console.log(symbolType);
-
-		console.log("Exchange",exchange);
 		onResultReadyCallback(newSymbols);
 	},
 
@@ -1380,7 +1374,9 @@ export default  {
         };
         const query = Object.keys(urlParameters)
             .map(name => `${encodeURIComponent(urlParameters[name])}`)
+			.join('&');
 			let exchange
+			let totalBar;
 			let filteredData
 			if (query[1] === 'BSE') {
 				 filteredData = await fivePaisa.filter(item => (item.Name === `${query[0]}` && item.Exch === "B" && item.Series === 'EQ'))
@@ -1394,35 +1390,75 @@ export default  {
 				filteredData = await fivePaisa.filter(item => (item.Name === `${query[0]}` && item.Exch === "M" && item.Series === 'EQ'))
 				exchange = 'm'
 			}
-        try {
-			const filteredData2 = await filteredData[0].ScripCode
-            const data = await axios.get(`https://openapi.5paisa.com/historical/${exchange}/c/${filteredData2}/1m?from=2023-10-01&end=2024-01-04`,{
-                headers: {
-                    'Ocp-Apim-Subscription-Key': OCP_KEY,
-                    'x-clientcode': CLIENT_CODE,
-                    'x-auth-token': AUTH_TOKEN,
-            }, 
-              });
-            const receivedArray = data?.data?.data?.candles;
+			if (resolution === "1") {
+				totalBar = 100000;
+			  }
+			  if (resolution === 5) {
+				totalBar = 500000;
+			  }
+			  if (5 < resolution === 15) {
+				totalBar = 1500000;
+			  }
+			  if (15 < resolution <= 75) {
+				totalBar = 7500000;
+			  }
+			  if (75 < resolution <= 125) {
+				totalBar = 12500000;
+			  }
+			  if (125 < resolution <= 375) {
+				totalBar = 37500000;
+			  }
+			  if (375 < resolution) {
+				totalBar = 50000000;
+			  }
+        // try {
+		// 	const filteredData2 = await filteredData[0].ScripCode
+        //     const data = await axios.get(`https://openapi.5paisa.com/historical/${exchange}/c/${filteredData2}/1m?from=2023-10-01&end=2024-01-04`,{
+        //         headers: {
+        //             'Ocp-Apim-Subscription-Key': OCP_KEY,
+        //             'x-clientcode': CLIENT_CODE,
+        //             'x-auth-token': AUTH_TOKEN,
+        //     }, 
+        //       });
+		try {
+			const historicalData = await axios.get(
+			//   `https://admin.1stock.live:3338/data/historical?symbolName=${symbolInfo.name}&totalCandals=${totalBar}`,
+			`https://admin.1stock.live:3338/data/historical?symbolName=${symbolInfo.name}&totalCandals=${1000}`,
+
+			  {
+				headers: {
+				  "Ocp-Apim-Subscription-Key": OCP_KEY,
+				  "x-clientcode": CLIENT_CODE,
+				  "x-auth-token": AUTH_TOKEN,
+				},
+			  }
+			);
+			console.log({historicalData})
+            const receivedArray = historicalData?.data?.data?.Records;
+
+			console.log({receivedArray})
             const convertedData = receivedArray.map((item) => {
                 return {
-                    time: Math.floor(new Date(item[0]).getTime() / 1000),
-                    open: item[1],
-                    high: item[2],
-					low: item[3],
-                    close: item[4],
-                    volumefrom: 5467,
-                    volumeto: 9875,
-                    conversionSymbol: "",
-                    conversionType: "force_direct"
+                    time: Math.floor(new Date(item.timestamp).getTime() / 1000),
+					open: item.open,
+					high: item.high,
+					low: item.low,
+					close: item.close,
+					volumefrom: 5467,
+					volumeto: 9875,
+					conversionSymbol: "",
+					conversionType: "force_direct",
                 };
             });
-            if (data.data.status && data.data.data === 'Error' || data?.data?.data?.candles?.length === 0) {
-                onHistoryCallback([], {
-                    noData: true,
-                });
-                return;
-            }
+			console.log(convertedData);
+
+            // if (historicalData?.data.status && historicalData?.data.data === 'Error' || historicalData?.data?.data?.Records?.length === 0) {
+            //     onHistoryCallback([], {
+            //         noData: true,
+            //     });
+            //     return;
+            // }
+			
             let bars = [];
             convertedData?.forEach(bar => {
                 if (bar.time >= from && bar.time < to) {

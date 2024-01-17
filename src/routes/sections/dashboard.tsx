@@ -2,6 +2,7 @@ import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { AuthGuard } from 'src/auth/guard';
+import UserLayout from 'src/layouts/UserLayout';
 // import UserLayout from 'src/layouts/UserLayout';
 import AdminLayout from 'src/layouts/AdminLayout';
 import PersonDetailsPage from 'src/pages/dashboard/person/details';
@@ -143,16 +144,16 @@ export const dashboardRoutes = [
       },
     ],
   },
-  // {
-  //   path: '/user',
-  //   element: (
-  //     <AuthGuard>
-  //       <UserLayout>
-  //         <Suspense fallback={<LoadingScreen />}>
-  //           <Outlet />
-  //         </Suspense>
-  //       </UserLayout>
-  //     </AuthGuard>
-  //   ),
-  // },
+  {
+    path: '/user',
+    element: (
+      <AuthGuard>
+        <UserLayout>
+          <Suspense fallback={<LoadingScreen />}>
+            <Outlet />
+          </Suspense>
+        </UserLayout>
+      </AuthGuard>
+    ),
+  },
 ];

@@ -227,7 +227,10 @@ export default function xxSymbolLiveList() {
           bgcolor: 'white',
         }}
       >
-        <TableContainer sx={{ position: 'relative', overflow: 'unset', height: '100%' }}>
+        <TableContainer
+          sx={{ position: 'relative', overflow: 'unset', height: '100%' }}
+          className="fonts-loaded"
+        >
           <Scrollbar>
             <Table size={table.dense ? 'small' : 'medium'}>
               <TableHeadCustom

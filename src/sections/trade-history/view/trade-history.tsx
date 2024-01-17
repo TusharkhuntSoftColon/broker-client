@@ -146,12 +146,13 @@ export default function TradeHistory() {
                 rowCount={newClientsTableData?.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
-                onSelectAllRows={(checked) =>
-                  table.onSelectAllRows(
-                    checked,
-                    newClientsTableData.map((row: any) => row.id)
-                  )
-                }
+
+                // onSelectAllRows={(checked) =>
+                //   table.onSelectAllRows(
+                //     checked,
+                //     newClientsTableData.map((row: any) => row.id)
+                //   )
+                // }
               />
 
               <TableBody>

@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Resizable } from 're-resizable';
 
 import Box from '@mui/material/Box';
@@ -10,8 +11,18 @@ type Props = {
 };
 
 const UserLayout = ({ children }: Props) => {
+  useEffect(() => {
+    window.initOnReady();
+  }, []);
+  console.log(window);
   // useEffect(() => {
-  //   (window as any).initOnReady();
+  //   const initializeOnReady = async () => {
+  //     if (window.initOnReady) {
+  //       await window.initOnReady();
+  //     }
+  //   };
+
+  //   initializeOnReady();
   // }, []);
 
   const enable = {

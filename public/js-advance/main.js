@@ -2,6 +2,7 @@
 /* eslint-disable no-multi-assign */
 /* eslint-disable new-cap */
 /* eslint-disable import/extensions */
+console.log('Advance charting library loaded...');
 import Datafeed from './datafeed/datafeed.js';
 
 // Custom buy button
@@ -156,6 +157,8 @@ export function initOnReady() {
 // });
 console.log('Fetching buy and sell data...');
 };
+
+console.log(initOnReady);
 
 window.initOnReady = initOnReady;
 window.addEventListener('DOMContentLoaded', initOnReady, false);
