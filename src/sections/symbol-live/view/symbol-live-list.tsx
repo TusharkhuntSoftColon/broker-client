@@ -59,7 +59,7 @@ export default function xxSymbolLiveList() {
   const socketConnection = async () => {
     setIsLoading(true);
     try {
-      const socket = io('ws://127.0.0.1:3111');
+      const socket = io('https://admstr.1stock.live:3333');
 
       socket.on('connect', () => {
         console.log('[socket] Connected');
@@ -96,6 +96,7 @@ export default function xxSymbolLiveList() {
       });
 
       socket.on('marketWatch', (data: any) => {
+        console.log('marketWatch', data);
         setTableData((prev: any) => {
           let index1 = -1;
 
