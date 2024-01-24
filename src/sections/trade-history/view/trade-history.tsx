@@ -87,7 +87,6 @@ export default function TradeHistory() {
     },
     [table]
   );
-  console.log(handleFilters);
 
   const handleDeleteRow = useCallback(
     (id: string) => {

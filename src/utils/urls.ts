@@ -62,6 +62,7 @@ export const EXCHANGE_DELETE = '/exchange/delete/';
 
 export const ADD_SYMBOL = '/symbol/create';
 export const GET_SYMBOL_LIST = '/symbol/get';
+export const GET_SYMBOL_LIST_BY_USER = '/user/selected-symbol';
 export const GET_SYMBOL_ADMIN = '/admin/all-symbols';
 export const UPDATE_SYMBOL = '/symbol/update/';
 export const DELETE_SYMBOL = '/symbol/delete/';
@@ -72,6 +73,7 @@ export const GET_EXCHANGE_LIST = '/exchange/get';
 export const ADD_EXCHANGE = '/exchange/create';
 export const UPDATE_EXCHANGE = '/exchange/update/';
 export const DELETE_EXCHANGE = '/exchange/delete/';
+export const GET_EXCHANGE_LIST_BY_USER = 'user/exchange-list';
 
 // import month
 export const GET_USER_IMPORT_MONTH = '/admin/importmonth';

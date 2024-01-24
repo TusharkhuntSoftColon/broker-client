@@ -80,7 +80,7 @@ export default function BrokerageTableToolbar({
     (data: any) => data?.value === currentBrokerage?.exchangeCode
   )[0];
   const defaultSymbol = Symbol.find((data: any) => data?.value === currentBrokerage?.symbol);
-
+  console.log({ defaultSymbol });
   const defaultBcm = brokerageCallMethod.find((data: any) => data?.value === currentBrokerage?.bcm);
 
   const defaultBco = brokerageCallOptions.find(
@@ -389,10 +389,12 @@ export default function BrokerageTableToolbar({
   }, []);
 
   useEffect(() => {
-    setValue('symbol', {
-      label: '',
-      value: '',
-    });
+    if (!currentBrokerage) {
+      setValue('symbol', {
+        label: '',
+        value: '',
+      });
+    }
   }, [value.exchangeCode]);
 
   return (

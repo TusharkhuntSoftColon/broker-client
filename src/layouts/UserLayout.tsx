@@ -14,16 +14,6 @@ const UserLayout = ({ children }: Props) => {
   useEffect(() => {
     window.initOnReady();
   }, []);
-  console.log(window);
-  // useEffect(() => {
-  //   const initializeOnReady = async () => {
-  //     if (window.initOnReady) {
-  //       await window.initOnReady();
-  //     }
-  //   };
-
-  //   initializeOnReady();
-  // }, []);
 
   const enable = {
     left: true,

@@ -2,7 +2,13 @@ import { AxiosResponse } from 'axios';
 
 import client from 'src/lib/client';
 
-import { ADD_EXCHANGE, DELETE_EXCHANGE, UPDATE_EXCHANGE, GET_EXCHANGE_LIST } from '../utils/urls';
+import {
+  ADD_EXCHANGE,
+  DELETE_EXCHANGE,
+  UPDATE_EXCHANGE,
+  GET_EXCHANGE_LIST,
+  GET_EXCHANGE_LIST_BY_USER,
+} from '../utils/urls';
 
 export interface exchangeType {
   name: string;
@@ -22,6 +28,16 @@ const exchangeService = {
   getExchangeList: async (): Promise<any> => {
     try {
       const response: AxiosResponse<any> = await client.get(GET_EXCHANGE_LIST);
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in exchangeService.getExchangeList:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  getExchangeListByUser: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(GET_EXCHANGE_LIST_BY_USER);
       return response.data;
     } catch (error) {
       // You can log the error here for debugging purposes

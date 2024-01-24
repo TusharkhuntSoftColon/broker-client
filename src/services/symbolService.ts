@@ -8,6 +8,7 @@ import {
   UPDATE_SYMBOL,
   GET_SYMBOL_LIST,
   GET_SYMBOL_ADMIN,
+  GET_SYMBOL_LIST_BY_USER,
 } from '../utils/urls';
 
 export interface symbolType {
@@ -28,6 +29,16 @@ const symbolService = {
     } catch (error) {
       // You can log the error here for debugging purposes
       console.error('Error in symbolService.getSymbolList:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  getSymbolListByUser: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(GET_SYMBOL_LIST_BY_USER);
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in exchangeService.getExchangeList:', error);
       throw error; // Re-throw the error to be caught by the caller
     }
   },
@@ -84,6 +95,19 @@ const symbolService = {
         stAndTp: symbolData.data?.stAndTp.value,
         currency: symbolData?.data?.currency.value,
       });
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in symbolService.updateSymbol:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  updateSelectSymbol: async (updateSelectSymbol: any): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.put(
+        `/user/update-selectsymbol`,
+        updateSelectSymbol
+      );
       return response.data;
     } catch (error) {
       // You can log the error here for debugging purposes

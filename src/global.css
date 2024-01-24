@@ -71,3 +71,26 @@
   padding-left: 0% !important;
   padding-right: 0% !important;
 }
+
+.css-1hjqebv:focus-visible {
+  outline: none !important;
+}
+
+.css-1ebjqk4-MuiFormControl-root-MuiTextField-root:focus-visible {
+  outline: none !important;
+}
+
+.css-1tu5hzz-MuiInputBase-root-MuiOutlinedInput-root:focus-visible:focus {
+  outline: none !important;
+  border: none !important;
+}
+
+.css-1tu5hzz-MuiInputBase-root-MuiOutlinedInput-root:hover {
+  border: none !important;
+}
+
+.css-1tu5hzz-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused {
+  outline: none !important;
+
+  border: none !important;
+}

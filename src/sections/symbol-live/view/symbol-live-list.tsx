@@ -11,6 +11,7 @@ import { useState, useEffect, useCallback } from 'react';
 // import { io } from 'https://cdn.socket.io/4.7.2/socket.io.esm.min.js';
 
 import { io } from 'socket.io-client';
+import { useMutation } from '@tanstack/react-query';
 
 import Card from '@mui/material/Card';
 import { Box, Table, TextField, TableBody, InputAdornment, TableContainer } from '@mui/material';
@@ -18,7 +19,13 @@ import { Box, Table, TextField, TableBody, InputAdornment, TableContainer } from
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import useAuth from 'src/hooks/useAuth';
+
+import { SOCKET_URL } from 'src/utils/environments';
+
 import { deleteAdmin } from 'src/store/slices/admin';
+import symbolService from 'src/services/symbolService';
+import exchangeService from 'src/services/exchangeService';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -26,6 +33,7 @@ import { useTable, getComparator, TableHeadCustom } from 'src/components/table';
 
 import { IUserItem, IUserTableFilters } from 'src/types/user';
 
+import ImportMonthList from '../ImportMonthList';
 import SymbolLiveTableRow from '../symbol-live-table-row';
 
 // ----------------------------------------------------------------------
@@ -43,50 +51,138 @@ const defaultFilters: IUserTableFilters = {
   status: 'all',
 };
 
+interface formattedDataInterface {
+  name: string;
+  _id: string;
+  importMonth: {
+    label: string;
+    value: string;
+  }[];
+}
+
 // ----------------------------------------------------------------------
 export default function xxSymbolLiveList() {
+  const dispatch = useDispatch();
+  const router = useRouter();
+  const { enqueueSnackbar } = useSnackbar();
+  const { token } = useAuth();
   const table = useTable();
   const [tableData, setTableData] = useState<any>([]);
-  const [isLoading, setIsLoading] = useState<any>(false);
+  const [symbolData, setSymbolData] = useState<any>([]);
+  const [exchangeData, setExchangeData] = useState<formattedDataInterface[]>([]);
+  const [activeSymbolData, setActiveSymbolData] = useState<any>([]);
   const [rows, setRow] = useState<any>([]);
 
-  const dispatch = useDispatch();
+  const { mutate } = useMutation(symbolService.getSymbolListByUser, {
+    onSuccess: (data) => {
+      const symbolnewData: any[] = data?.data?.rows;
 
-  const router = useRouter();
+      setSymbolData(symbolnewData);
 
-  const { enqueueSnackbar } = useSnackbar();
+      // set table data with empty socket
+      const symbolTableDashboard = [];
+      for (const symbols of symbolnewData) {
+        symbolTableDashboard.push({
+          id: symbols?._id,
+          symbol: symbols?.name,
+          bid: 0,
+          ask: 0,
+          dailyChange: 0,
 
-  const socketConnection = async () => {
-    setIsLoading(true);
+          oldBuyPrice: 0,
+          oldSellPrice: 0,
+          oldPercentage: 0,
+        });
+      }
+      setRow(symbolTableDashboard);
+
+      setActiveSymbolData(symbolnewData);
+      socketConnection(symbolnewData);
+    },
+    onError: (error) => {
+      console.log('error', error);
+    },
+  });
+
+  interface exchangeListData {
+    exchange: {
+      name: string;
+      _id: string;
+    };
+    historicalName: string;
+    name: string;
+    socketLiveName: string;
+    _id: string;
+  }
+
+  const { mutate: exchangeList } = useMutation(exchangeService.getExchangeListByUser, {
+    onSuccess: (data) => {
+      const exchangeNewData: exchangeListData[] = data?.data?.rows;
+
+      const formattedData: formattedDataInterface[] = [];
+
+      exchangeNewData?.forEach((item: exchangeListData) => {
+        // Check if an entry with the same exchange name already exists
+        const existingEntry = formattedData.find((entry) => entry.name === item.exchange.name);
+
+        if (existingEntry) {
+          // If it exists, add the importMonth to the existing entry
+          existingEntry.importMonth.push({
+            label: item.name,
+            value: item._id,
+          });
+        } else {
+          // If it doesn't exist, create a new entry
+          formattedData.push({
+            name: item.exchange.name,
+            _id: item.exchange._id,
+            importMonth: [
+              {
+                label: item.name,
+                value: item._id,
+              },
+            ],
+          });
+        }
+      });
+
+      setExchangeData(formattedData);
+    },
+    onError: (error) => {
+      console.log('error', error);
+    },
+  });
+
+  const { mutate: updateSelectSymbol } = useMutation(symbolService.updateSelectSymbol, {
+    onSuccess: (data) => {
+      console.log({ data });
+    },
+    onError: (error) => {
+      console.log('error', error);
+    },
+  });
+
+  const socketConnection = async (activeSymbols: any) => {
     try {
-      const socket = io('https://admstr.1stock.live:3333');
+      const socket = io(SOCKET_URL, {
+        transports: ['websocket'],
+        query: {
+          transport: 'websocket',
+          EIO: '4',
+          authorization: token,
+        },
+        extraHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const Symbols = activeSymbols.map((symbol: any) => console.log(symbol));
 
       socket.on('connect', () => {
         console.log('[socket] Connected');
-        socket.emit('subscribeToServerMarket', [
-          'GOLD-I',
-          'NATURALGAS-I',
-          'SILVER-I',
-          'TATASTEEL',
-          'HDFCBANK',
-          'TCS',
-          'SBIN',
-          'WIPRO',
-          'IRCTC',
-        ]);
+        socket.emit('subscribeToUserServerMarket', Symbols);
       });
 
-      socket.emit('joinRoom', [
-        'GOLD-I',
-        'NATURALGAS-I',
-        'SILVER-I',
-        'TATASTEEL',
-        'HDFCBANK',
-        'TCS',
-        'SBIN',
-        'WIPRO',
-        'IRCTC',
-      ]);
+      socket.emit('joinUserRoom', Symbols);
 
       socket.on('disconnect', (reason: any) => {
         console.log('[socket] Disconnected:', reason);
@@ -127,15 +223,15 @@ export default function xxSymbolLiveList() {
           return [...prev];
         });
       });
-      setIsLoading(false);
     } catch (e) {
       console.log(e);
-      setIsLoading(false);
     }
   };
 
   useEffect(() => {
-    socketConnection();
+    // socketConnection();
+    mutate();
+    exchangeList();
   }, []);
 
   useEffect(() => {
@@ -195,6 +291,17 @@ export default function xxSymbolLiveList() {
     [router]
   );
 
+  const [showExchange, setShowExchange] = useState<boolean>(false);
+  const [activeExchange, setActiveExchange] = useState<formattedDataInterface | undefined>(
+    undefined
+  );
+
+  interface importMonthInterface {
+    id: string;
+  }
+
+  const [activeImportMonths, setActiveImportMonths] = useState<importMonthInterface[]>([]);
+
   return (
     <>
       <Box sx={{ height: '42px', borderBottom: '4px solid #e0e3eb' }}>
@@ -202,6 +309,10 @@ export default function xxSymbolLiveList() {
           fullWidth
           autoComplete="off"
           name="symbol"
+          onClick={() => {
+            setActiveImportMonths(rows);
+            setShowExchange(true);
+          }}
           value=""
           sx={{
             height: '100%',
@@ -215,7 +326,25 @@ export default function xxSymbolLiveList() {
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
-                <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
+                <Iconify
+                  icon="eva:search-fill"
+                  sx={{
+                    color: 'text.disabled',
+                  }}
+                />
+              </InputAdornment>
+            ),
+            endAdornment: (
+              <InputAdornment position="end">
+                <Iconify
+                  icon="eva:close-fill"
+                  sx={{
+                    color: 'text.disabled',
+                  }}
+                  onClick={() => {
+                    setShowExchange(false);
+                  }}
+                />
               </InputAdornment>
             ),
           }}
@@ -228,44 +357,99 @@ export default function xxSymbolLiveList() {
           bgcolor: 'white',
         }}
       >
-        <TableContainer
-          sx={{ position: 'relative', overflow: 'unset', height: '100%' }}
-          className="fonts-loaded"
-        >
-          <Scrollbar>
-            <Table size={table.dense ? 'small' : 'medium'}>
-              <TableHeadCustom
-                order={table.order}
-                orderBy={table.orderBy}
-                headLabel={TABLE_HEAD}
-                rowCount={rows?.length}
-                numSelected={table.selected.length}
-                onSort={table.onSort}
-                // onSelectAllRows={(checked) =>
-                //   table.onSelectAllRows(
-                //     checked,
-                //     rows.map((row: any) => row.id)
-                //   )
-                // }
-              />
-
-              <TableBody>
-                {rows.map((row: any, index: any) => (
-                  <SymbolLiveTableRow
-                    key={row?.id}
-                    row={row}
-                    selected={table.selected.includes(row?.id)}
-                    onSelectRow={() => table.onSelectRow(row.id)}
-                    onDeleteRow={() => handleDeleteRow(row.id)}
-                    onEditRow={() => handleEditRow(row.id)}
-                    onViewRow={() => handleViewRow(row.id)}
-                    index={index}
+        {showExchange ? (
+          <Box>
+            {!activeExchange ? (
+              <>
+                {exchangeData?.map((exchange: formattedDataInterface) => (
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                    }}
+                    onClick={() => {
+                      setActiveExchange(exchange);
+                    }}
+                  >
+                    <Box>{exchange?.name}</Box>
+                    <Box>{exchange?.importMonth?.length}</Box>
+                  </Box>
+                ))}
+              </>
+            ) : (
+              <>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 2,
+                  }}
+                >
+                  <Box
+                    onClick={() => {
+                      setActiveExchange(undefined);
+                    }}
+                  >
+                    Back
+                  </Box>
+                  {activeExchange?.name}
+                </Box>
+                {activeExchange?.importMonth?.map((item) => (
+                  <ImportMonthList
+                    checked={activeImportMonths.some(
+                      (importMonth) => importMonth.id === item?.value
+                    )}
+                    item={item}
+                    key={item?.value}
+                    handleChannge={() => {
+                      updateSelectSymbol({
+                        selectedExchange: activeExchange?._id,
+                        selectedImportMonth: item?.value,
+                      });
+                    }}
                   />
                 ))}
-              </TableBody>
-            </Table>
-          </Scrollbar>
-        </TableContainer>
+              </>
+            )}
+          </Box>
+        ) : (
+          <TableContainer
+            sx={{ position: 'relative', overflow: 'unset', height: '100%' }}
+            className="fonts-loaded"
+          >
+            <Scrollbar>
+              <Table size={table.dense ? 'small' : 'medium'}>
+                <TableHeadCustom
+                  order={table.order}
+                  orderBy={table.orderBy}
+                  headLabel={TABLE_HEAD}
+                  rowCount={rows?.length}
+                  numSelected={table.selected.length}
+                  onSort={table.onSort}
+                  // onSelectAllRows={(checked) =>
+                  //   table.onSelectAllRows(
+                  //     checked,
+                  //     rows.map((row: any) => row.id)
+                  //   )
+                  // }
+                />
+                <TableBody>
+                  {rows.map((row: any, index: any) => (
+                    <SymbolLiveTableRow
+                      key={row?.id}
+                      row={row}
+                      selected={table.selected.includes(row?.id)}
+                      onSelectRow={() => table.onSelectRow(row.id)}
+                      onDeleteRow={() => handleDeleteRow(row.id)}
+                      onEditRow={() => handleEditRow(row.id)}
+                      onViewRow={() => handleViewRow(row.id)}
+                      index={index}
+                    />
+                  ))}
+                </TableBody>
+              </Table>
+            </Scrollbar>
+          </TableContainer>
+        )}
       </Card>
     </>
   );

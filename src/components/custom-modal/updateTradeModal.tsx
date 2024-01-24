@@ -1,3 +1,4 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-nested-ternary */
 import { useState } from 'react';
 
@@ -33,7 +34,6 @@ export default function UpdateTradeDialog({
 }: any) {
   const [type, setType] = useState('instant-execution');
   const [expiration, setExpiration] = useState('gtc');
-  console.log(expiration);
   const [value1, setValue1] = useState({
     volume: isEdit ? row?.volume : 0,
     price: isEdit ? row?.price1 : 0,
@@ -43,7 +43,6 @@ export default function UpdateTradeDialog({
     comment: '',
   });
   const [isModified, setIsModified] = useState(false);
-  console.log(isModified);
   const dummyTypes = [
     { label: 'Instant Execution', value: 'instant-execution' },
     { label: 'Buy Limit', value: 'buy-limit' },
