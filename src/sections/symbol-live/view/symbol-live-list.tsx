@@ -14,6 +14,7 @@ import { io } from 'socket.io-client';
 import { useMutation } from '@tanstack/react-query';
 
 import Card from '@mui/material/Card';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { Box, Table, TextField, TableBody, InputAdornment, TableContainer } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -35,7 +36,6 @@ import { IUserItem, IUserTableFilters } from 'src/types/user';
 
 import ImportMonthList from '../ImportMonthList';
 import SymbolLiveTableRow from '../symbol-live-table-row';
-
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
@@ -175,7 +175,7 @@ export default function xxSymbolLiveList() {
           Authorization: `Bearer ${token}`,
         },
       });
-      const Symbols = activeSymbols.map((symbol: any) => console.log(symbol));
+      const Symbols = activeSymbols.map((symbol: any) => symbol?.socketLiveName);
 
       socket.on('connect', () => {
         console.log('[socket] Connected');
@@ -358,7 +358,11 @@ export default function xxSymbolLiveList() {
         }}
       >
         {showExchange ? (
-          <Box>
+          <Box
+          // sx={{
+          //   padding: 1,
+          // }}
+          >
             {!activeExchange ? (
               <>
                 {exchangeData?.map((exchange: formattedDataInterface) => (
@@ -366,13 +370,48 @@ export default function xxSymbolLiveList() {
                     sx={{
                       display: 'flex',
                       justifyContent: 'space-between',
+                      cursor: 'pointer',
+                      width: '100%',
+                      '&:hover': {
+                        backgroundColor: '#F1F9FF',
+                      },
                     }}
                     onClick={() => {
                       setActiveExchange(exchange);
                     }}
                   >
-                    <Box>{exchange?.name}</Box>
-                    <Box>{exchange?.importMonth?.length}</Box>
+                    <Box
+                      sx={{
+                        alignItems: 'center',
+                        cursor: 'pointer',
+                        minHeight: '30px',
+                        maxHeight: '44px',
+                        fontSize: '14px',
+                        fontWeight: 600,
+                        color: '#000000',
+                        padding: 1,
+                        fontFamily:
+                          'Roboto,Ubuntu,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif',
+                      }}
+                    >
+                      {exchange?.name}
+                    </Box>
+                    <Box
+                      sx={{
+                        alignItems: 'center',
+                        cursor: 'pointer',
+                        minHeight: '30px',
+                        maxHeight: '44px',
+                        fontSize: '14px',
+                        fontWeight: 600,
+                        color: '#000000',
+                        padding: 1,
+                        fontFamily:
+                          'Roboto,Ubuntu,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif',
+                      }}
+                    >
+                      {exchange?.importMonth?.length}
+                    </Box>
                   </Box>
                 ))}
               </>
@@ -381,33 +420,75 @@ export default function xxSymbolLiveList() {
                 <Box
                   sx={{
                     display: 'flex',
-                    gap: 2,
                   }}
                 >
                   <Box
+                    sx={{
+                      padding: 1,
+                    }}
                     onClick={() => {
                       setActiveExchange(undefined);
                     }}
                   >
-                    Back
+                    <ArrowBackIosIcon
+                      style={{
+                        cursor: 'pointer',
+                        height: '20px',
+                        width: '20px',
+                        color: '#0B71F3',
+                      }}
+                    />
                   </Box>
-                  {activeExchange?.name}
-                </Box>
-                {activeExchange?.importMonth?.map((item) => (
-                  <ImportMonthList
-                    checked={activeImportMonths.some(
-                      (importMonth) => importMonth.id === item?.value
-                    )}
-                    item={item}
-                    key={item?.value}
-                    handleChannge={() => {
-                      updateSelectSymbol({
-                        selectedExchange: activeExchange?._id,
-                        selectedImportMonth: item?.value,
-                      });
+                  <Box
+                    onClick={() => {
+                      setActiveExchange(undefined);
                     }}
-                  />
-                ))}
+                    sx={{
+                      alignItems: 'center',
+                      cursor: 'pointer',
+                      minHeight: '30px',
+                      maxHeight: '44px',
+                      fontSize: '14px',
+                      fontWeight: 600,
+                      color: '#0B71F3',
+                      padding: 1,
+                      fontFamily:
+                        'Roboto,Ubuntu,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif',
+                    }}
+                  >
+                    {activeExchange?.name}
+                  </Box>
+                </Box>
+                <Box
+                  sx={{
+                    alignItems: 'center',
+                    cursor: 'pointer',
+                    minHeight: '30px',
+                    maxHeight: '44px',
+                    fontSize: '14px',
+                    fontWeight: 600,
+                    color: '#0B71F3',
+                    padding: 1,
+                    fontFamily:
+                      'Roboto,Ubuntu,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif',
+                  }}
+                >
+                  {activeExchange?.importMonth?.map((item) => (
+                    <ImportMonthList
+                      checked={activeImportMonths.some(
+                        (importMonth) => importMonth.id === item?.value
+                      )}
+                      item={item}
+                      key={item?.value}
+                      handleChannge={() => {
+                        updateSelectSymbol({
+                          selectedExchange: activeExchange?._id,
+                          selectedImportMonth: item?.value,
+                        });
+                      }}
+                    />
+                  ))}
+                </Box>
               </>
             )}
           </Box>
