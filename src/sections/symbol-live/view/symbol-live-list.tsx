@@ -153,11 +153,11 @@ export default function xxSymbolLiveList() {
     },
   });
 
-  const { mutate: updateSelectSymbol } = useMutation(symbolService.updateSelectSymbol, {
+  const { mutate: updateSelectSymbol }: any = useMutation(symbolService.updateSelectSymbol, {
     onSuccess: (data) => {
-      console.log({ data });
       exchangeList();
       mutate();
+      console.log({ data });
     },
     onError: (error) => {
       console.log('error', error);
@@ -179,13 +179,14 @@ export default function xxSymbolLiveList() {
         },
       });
       const Symbols = activeSymbols.map((symbol: any) => symbol?.socketLiveName);
-
+      const parseSymbol = JSON.stringify(Symbols);
+      console.log('parseSymbol', parseSymbol);
       socket.on('connect', () => {
         console.log('[socket] Connected');
-        socket.emit('subscribeToUserServerMarket', Symbols);
+        socket.emit('subscribeToUserServerMarket', parseSymbol);
       });
 
-      socket.emit('joinUserRoom', Symbols);
+      socket.emit('joinUserRoom', parseSymbol);
 
       socket.on('disconnect', (reason: any) => {
         console.log('[socket] Disconnected:', reason);
@@ -476,12 +477,10 @@ export default function xxSymbolLiveList() {
                   sx={{
                     alignItems: 'center',
                     cursor: 'pointer',
-                    // minHeight: '30px',
-                    // maxHeight: '44px',
                     fontSize: '14px',
                     fontWeight: 600,
                     color: '#000000',
-                    padding: 1,
+                    // padding: 1,
                     fontFamily:
                       'Roboto,Ubuntu,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif',
                   }}

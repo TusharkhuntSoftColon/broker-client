@@ -19,6 +19,10 @@ const ImportMonthList = ({ checked, item, handleChannge }: ImportMonthListProps)
         display: 'flex',
         justifyContent: 'space-between',
         minHeight: '30px',
+        padding: 1,
+        '&:hover': {
+          backgroundColor: '#F1F9FF',
+        },
         maxHeight: '44px',
       }}
       onClick={() => {
