@@ -31,7 +31,7 @@ const UserLayout = ({ children }: Props) => {
               sx={{
                 minWidth: '400px',
                 height: '600px',
-                borderLeft: '4px solid #e0e3eb',
+                borderLeft: '2px solid #e0e3eb',
               }}
             >
               <SymbolLiveList />

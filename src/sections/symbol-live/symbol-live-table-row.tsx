@@ -46,16 +46,20 @@ export default function SymbolLiveTableRow({
         hover
         selected={selected}
         onClick={() => confirm.onTrue()}
-        sx={{ cursor: 'pointer', borderBottom: '1px solid #e0e3eb' }}
+        sx={{ cursor: 'pointer' }}
       >
         <TableCell
           sx={{
+            lineHeight: '2.1',
             whiteSpace: 'nowrap',
             py: '4px',
             px: 0,
             display: 'flex',
             alignItems: 'center',
             fontSize: '14px',
+            borderBottom: '0 !important',
+            color: 'black',
+            fontWeight: '500',
           }}
         >
           {handleBidData || handleAskData || handlePercentageData ? (
@@ -68,9 +72,13 @@ export default function SymbolLiveTableRow({
 
         <TableCell
           sx={{
+            fontweight: '200',
             whiteSpace: 'nowrap',
             py: '0px',
             fontSize: '14px',
+            height: '2rem',
+            lineHeight: '2.1',
+            borderBottom: '0 !important',
             color:
               bid !== undefined && oldBuyPrice !== undefined
                 ? bid > oldBuyPrice
@@ -86,9 +94,12 @@ export default function SymbolLiveTableRow({
         </TableCell>
         <TableCell
           sx={{
+            fontweight: '200',
             whiteSpace: 'nowrap',
             py: '0px',
             fontSize: '14px',
+            borderBottom: '0 !important',
+            lineHeight: '2.1',
             color:
               ask !== undefined && oldSellPrice !== undefined
                 ? ask > oldSellPrice
@@ -104,9 +115,12 @@ export default function SymbolLiveTableRow({
         </TableCell>
         <TableCell
           sx={{
+            fontweight: '200',
             whiteSpace: 'nowrap',
             py: '0px',
             fontSize: '14px',
+            borderBottom: '0 !important',
+            lineHeight: '2.1',
             color:
               dailyChange !== undefined && oldPercentage !== undefined
                 ? dailyChange > oldPercentage

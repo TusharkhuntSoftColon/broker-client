@@ -116,3 +116,19 @@
   outline: none !important;
   border: 0 !important;
 }
+.css-bi3doy-MuiTableRow-root.MuiTableRow-hover:hover {
+  background-color: white !important;
+}
+
+.css-7ed3vs-MuiTableRow-root:last-of-type > * {
+  background-color: white;
+  border-right: 1px solid #e8e8e8 !important;
+  border-bottom: 1px solid #e8e8e8 !important;
+  font-size: 12px !important;
+  color: black;
+  font-weight: 300;
+  padding: 3px 9px 3px 9px !important;
+}
+.css-287okb-MuiPaper-root-MuiCard-root {
+  box-shadow: none !important;
+}

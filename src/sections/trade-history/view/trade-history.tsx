@@ -107,11 +107,11 @@ export default function TradeHistory() {
 
   return (
     <Box display="flex" height="100%">
-      <Box sx={{ width: '58px', borderRight: '4px solid #e0e3eb' }} />
+      <Box sx={{ width: '58px', borderRight: '1px solid #e8e8e8' }} />
       <Card
         sx={{
           width: '100%',
-          borderTop: '2px solid #e0e3eb',
+          borderTop: '2px solid #e8e8e8',
           borderRadius: '0px',
           bgcolor: 'white',
         }}

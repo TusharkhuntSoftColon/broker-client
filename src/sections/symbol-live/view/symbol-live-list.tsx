@@ -39,10 +39,23 @@ import SymbolLiveTableRow from '../symbol-live-table-row';
 // ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
-  { id: 'symbol', label: 'Symbol', width: 100 },
-  { id: 'bid', label: 'Bid', width: 90, align: 'right' },
-  { id: 'ask', label: 'Ask', width: 90, align: 'right' },
-  { id: 'dailyChange', label: 'Daily Change', width: 150, align: 'right' },
+  {
+    id: 'symbol',
+    label: 'Symbol',
+    width: 100,
+    paddingY: 0,
+    paddingX: '9px',
+  },
+  { id: 'bid', label: 'Bid', width: 90, align: 'right', paddingY: 0, paddingX: '9px' },
+  { id: 'ask', label: 'Ask', width: 90, align: 'right', paddingY: 0, paddingX: '9px' },
+  {
+    id: 'dailyChange',
+    label: 'Daily Change',
+    width: 150,
+    align: 'right',
+    paddingY: 0,
+    paddingX: '9px',
+  },
 ];
 
 const defaultFilters: IUserTableFilters = {
@@ -72,7 +85,6 @@ export default function xxSymbolLiveList() {
   const [exchangeData, setExchangeData] = useState<formattedDataInterface[]>([]);
   const [activeSymbolData, setActiveSymbolData] = useState<any>([]);
   const [rows, setRow] = useState<any>([]);
-
   const { mutate } = useMutation(symbolService.getSymbolListByUser, {
     onSuccess: (data) => {
       const symbolnewData: any[] = data?.data?.rows;
@@ -243,7 +255,9 @@ export default function xxSymbolLiveList() {
       symbolTableDashboard.push({
         id: data.InstrumentIdentifier,
         symbol: symbolData.map((item: any) =>
-          item?.socketLiveName === data.InstrumentIdentifier ? item.name : null
+          item?.socketLiveName === data?.InstrumentIdentifier && item?.symbolType === data?.Exchange
+            ? item.name
+            : null
         ),
         bid: data.BuyPrice,
         ask: data.SellPrice,
@@ -309,7 +323,7 @@ export default function xxSymbolLiveList() {
 
   return (
     <>
-      <Box sx={{ height: '42px', borderBottom: '4px solid #e0e3eb' }}>
+      <Box sx={{ height: '42px', borderBottom: '1px solid #e8e8e8' }}>
         <TextField
           fullWidth
           autoComplete="off"
@@ -326,6 +340,10 @@ export default function xxSymbolLiveList() {
             borderRadius: '0px !important',
             '.MuiInputBase-input': { p: 1 },
             '.MuiInputBase-root': { borderRadius: '0px', height: '100%' },
+            '& input::placeholder': {
+              fontSize: '14px',
+              color: '#000',
+            },
           }}
           placeholder="Search symbol"
           InputProps={{
@@ -334,7 +352,7 @@ export default function xxSymbolLiveList() {
                 <Iconify
                   icon="eva:search-fill"
                   sx={{
-                    color: 'text.disabled',
+                    color: '#808080',
                   }}
                 />
               </InputAdornment>
@@ -352,14 +370,20 @@ export default function xxSymbolLiveList() {
                     height: '100%',
                     alignItems: 'center',
                     width: '100%',
+                    '&:hover': {
+                      color: '#0B71F3',
+                    },
                   }}
                   position="end"
                 >
                   <Iconify
                     icon="eva:close-fill"
                     sx={{
-                      color: 'text.disabled',
+                      color: '#808080',
                       cursor: 'pointer',
+                      '&:hover': {
+                        color: '#3183ff',
+                      },
                     }}
                   />
                 </InputAdornment>
@@ -506,10 +530,7 @@ export default function xxSymbolLiveList() {
             )}
           </Box>
         ) : (
-          <TableContainer
-            sx={{ position: 'relative', overflow: 'unset', height: '100%' }}
-            className="fonts-loaded"
-          >
+          <TableContainer sx={{ position: 'relative', overflow: 'unset', height: '100%' }}>
             <Scrollbar>
               <Table size={table.dense ? 'small' : 'medium'}>
                 <TableHeadCustom

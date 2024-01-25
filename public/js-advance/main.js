@@ -39,6 +39,7 @@ export function initOnReady() {
     intraday_multipliers: ['1', '5', '15'],
     time_frames: [
       { text: '1m', resolution: '1', title: '1 minutes' },
+      { text: '2m', resolution: '2', title: '2 minutes' },
       // { text: '5D', resolution: '15', title: '5D' },
       { text: '1M', resolution: 'D', title: '1M' },
       { text: '2M', resolution: 'D', title: '2M' },
@@ -71,7 +72,7 @@ export function initOnReady() {
     customPanes: [
       {
         name: "Trading Panel",
-        position: "bottom",
+        position: "top",
         class: "trading-panel",
       },
     ],
