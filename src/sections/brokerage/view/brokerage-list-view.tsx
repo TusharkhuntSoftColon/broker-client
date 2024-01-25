@@ -181,10 +181,11 @@ export default function BrokerageListView({ currentUser }: any) {
       setTableData(data?.data?.rows);
       dispatch(addBrokerage(data?.data?.rows));
     },
-    onError: (error) => {
+    onError: (error: any) => {
       if (isAxiosError(error)) {
         enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
       }
+      enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
 

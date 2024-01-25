@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Box, Checkbox } from '@mui/material';
+import { Box } from '@mui/material';
 
 interface ImportMonthListProps {
   checked: boolean;
@@ -12,26 +12,25 @@ interface ImportMonthListProps {
 }
 
 const ImportMonthList = ({ checked, item, handleChannge }: ImportMonthListProps) => {
-  const [isChecked, setIsChecked] = useState(checked);
+  const [isDisabled, setIsDisabled] = useState(false);
   return (
     <Box
       sx={{
         display: 'flex',
         justifyContent: 'space-between',
+        minHeight: '30px',
+        maxHeight: '44px',
+      }}
+      onClick={() => {
+        handleChannge();
+        setIsDisabled(true);
       }}
     >
-      <Box>{item?.label}</Box>
-      <Checkbox
-        onChange={() => {
-          if (isChecked) {
-            setIsChecked(false);
-          } else {
-            setIsChecked(true);
-            handleChannge();
-          }
-        }}
-        checked={isChecked}
-      />
+      {isDisabled ? (
+        <Box sx={{ color: 'text.disabled' }}>{item?.label}</Box>
+      ) : (
+        <Box>{item?.label}</Box>
+      )}
     </Box>
   );
 };

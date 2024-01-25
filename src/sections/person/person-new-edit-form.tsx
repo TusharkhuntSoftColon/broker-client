@@ -350,10 +350,11 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
       dispatch(addExchanges(data?.data?.rows));
       enqueueSnackbar(data?.message, { variant: 'success' });
     },
-    onError: (error) => {
+    onError: (error: any) => {
       if (isAxiosError(error)) {
         enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
       }
+      enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
 
@@ -375,10 +376,11 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
     onSuccess: (data) => {
       setBrokerageDataList(data?.data?.rows);
     },
-    onError: (error) => {
+    onError: (error: any) => {
       if (isAxiosError(error)) {
         enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
       }
+      enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
   const onSubmit = handleSubmit(async (data) => {

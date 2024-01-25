@@ -77,6 +77,7 @@ export default function ClassicLoginView() {
       if (isAxiosError(error)) {
         enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
       }
+      enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
 

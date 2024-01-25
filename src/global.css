@@ -94,3 +94,25 @@
 
   border: none !important;
 }
+.css-1rsuhj8-MuiInputBase-root-MuiOutlinedInput-root:hover .MuiOutlinedInput-notchedOutline {
+  border: 0 !important;
+}
+
+.css-1ebjqk4-MuiFormControl-root-MuiTextField-root .MuiInputBase-root {
+  border-radius: 0px !important;
+  border: 0 !important;
+  outline: none !important;
+}
+
+.css-1ebjqk4-MuiFormControl-root-MuiTextField-root .MuiInputBase-root:hover {
+  outline: none !important;
+  border: 0 !important;
+}
+.css-1ebjqk4-MuiFormControl-root-MuiTextField-root .MuiInputBase-root:focus {
+  outline: none !important;
+  border: 0 !important;
+}
+.css-1ebjqk4-MuiFormControl-root-MuiTextField-root .MuiInputBase-root:focus-visible {
+  outline: none !important;
+  border: 0 !important;
+}

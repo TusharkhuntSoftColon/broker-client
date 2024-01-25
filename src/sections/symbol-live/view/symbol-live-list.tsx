@@ -156,6 +156,8 @@ export default function xxSymbolLiveList() {
   const { mutate: updateSelectSymbol } = useMutation(symbolService.updateSelectSymbol, {
     onSuccess: (data) => {
       console.log({ data });
+      exchangeList();
+      mutate();
     },
     onError: (error) => {
       console.log('error', error);
@@ -171,6 +173,7 @@ export default function xxSymbolLiveList() {
           EIO: '4',
           authorization: token,
         },
+        auth: { authorization: token },
         extraHeaders: {
           Authorization: `Bearer ${token}`,
         },
@@ -335,17 +338,30 @@ export default function xxSymbolLiveList() {
               </InputAdornment>
             ),
             endAdornment: (
-              <InputAdornment position="end">
-                <Iconify
-                  icon="eva:close-fill"
+              <Box
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowExchange(false);
+                  setActiveExchange(undefined);
+                }}
+              >
+                <InputAdornment
                   sx={{
-                    color: 'text.disabled',
+                    height: '100%',
+                    alignItems: 'center',
+                    width: '100%',
                   }}
-                  onClick={() => {
-                    setShowExchange(false);
-                  }}
-                />
-              </InputAdornment>
+                  position="end"
+                >
+                  <Iconify
+                    icon="eva:close-fill"
+                    sx={{
+                      color: 'text.disabled',
+                      cursor: 'pointer',
+                    }}
+                  />
+                </InputAdornment>
+              </Box>
             ),
           }}
         />
@@ -358,11 +374,7 @@ export default function xxSymbolLiveList() {
         }}
       >
         {showExchange ? (
-          <Box
-          // sx={{
-          //   padding: 1,
-          // }}
-          >
+          <Box>
             {!activeExchange ? (
               <>
                 {exchangeData?.map((exchange: formattedDataInterface) => (
@@ -424,7 +436,8 @@ export default function xxSymbolLiveList() {
                 >
                   <Box
                     sx={{
-                      padding: 1,
+                      ml: 1,
+                      mt: 1,
                     }}
                     onClick={() => {
                       setActiveExchange(undefined);
@@ -451,7 +464,7 @@ export default function xxSymbolLiveList() {
                       fontSize: '14px',
                       fontWeight: 600,
                       color: '#0B71F3',
-                      padding: 1,
+                      mt: 1,
                       fontFamily:
                         'Roboto,Ubuntu,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif',
                     }}
@@ -463,11 +476,11 @@ export default function xxSymbolLiveList() {
                   sx={{
                     alignItems: 'center',
                     cursor: 'pointer',
-                    minHeight: '30px',
-                    maxHeight: '44px',
+                    // minHeight: '30px',
+                    // maxHeight: '44px',
                     fontSize: '14px',
                     fontWeight: 600,
-                    color: '#0B71F3',
+                    color: '#000000',
                     padding: 1,
                     fontFamily:
                       'Roboto,Ubuntu,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif',
