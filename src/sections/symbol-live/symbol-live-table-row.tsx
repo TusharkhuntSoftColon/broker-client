@@ -35,8 +35,8 @@ export default function SymbolLiveTableRow({
   const { symbol, bid, ask, dailyChange, oldBuyPrice, oldPercentage, oldSellPrice } = row;
 
   const confirm = useBoolean();
-  const handleBidData = bid !== undefined && oldBuyPrice !== undefined && bid > oldBuyPrice;
-  const handleAskData = ask !== undefined && oldSellPrice !== undefined && ask > oldSellPrice;
+  const handleBidData = bid !== undefined && oldSellPrice !== undefined && bid > oldSellPrice;
+  const handleAskData = ask !== undefined && oldBuyPrice !== undefined && ask > oldBuyPrice;
   const handlePercentageData =
     dailyChange !== undefined && oldPercentage !== undefined && dailyChange > oldPercentage;
 
@@ -72,10 +72,10 @@ export default function SymbolLiveTableRow({
             py: '0px',
             fontSize: '14px',
             color:
-              bid !== undefined && oldBuyPrice !== undefined
-                ? bid > oldBuyPrice
+              bid !== undefined && oldSellPrice !== undefined
+                ? bid > oldSellPrice
                   ? 'blue'
-                  : bid === oldBuyPrice
+                  : bid === oldSellPrice
                     ? 'black'
                     : 'red'
                 : 'red',
@@ -90,10 +90,10 @@ export default function SymbolLiveTableRow({
             py: '0px',
             fontSize: '14px',
             color:
-              ask !== undefined && oldSellPrice !== undefined
-                ? ask > oldSellPrice
+              ask !== undefined && oldBuyPrice !== undefined
+                ? ask > oldBuyPrice
                   ? 'blue'
-                  : ask === oldSellPrice
+                  : ask === oldBuyPrice
                     ? 'black'
                     : 'red'
                 : 'red',

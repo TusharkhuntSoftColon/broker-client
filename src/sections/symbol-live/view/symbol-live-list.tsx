@@ -73,6 +73,8 @@ export default function xxSymbolLiveList() {
   const [activeSymbolData, setActiveSymbolData] = useState<any>([]);
   const [rows, setRow] = useState<any>([]);
 
+  console.log({ symbolData });
+
   const { mutate } = useMutation(symbolService.getSymbolListByUser, {
     onSuccess: (data) => {
       const symbolnewData: any[] = data?.data?.rows;
@@ -243,13 +245,15 @@ export default function xxSymbolLiveList() {
     for (const data of tableData) {
       symbolTableDashboard.push({
         id: data.InstrumentIdentifier,
-        symbol: data.InstrumentIdentifier,
-        bid: data.BuyPrice,
-        ask: data.SellPrice,
+        symbol: symbolData.map((item: any) =>
+          item?.socketLiveName === data.InstrumentIdentifier ? item.name : null
+        ),
+        bid: data.SellPrice,
+        ask: data.BuyPrice,
         dailyChange: data.PriceChangePercentage,
 
-        oldBuyPrice: data.oldBuyPrice,
-        oldSellPrice: data.oldSellPrice,
+        oldBuyPrice: data.oldSellPrice,
+        oldSellPrice: data.oldBuyPrice,
         oldPercentage: data.oldPercentage,
       });
     }
