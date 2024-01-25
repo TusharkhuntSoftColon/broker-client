@@ -245,12 +245,12 @@ export default function xxSymbolLiveList() {
         symbol: symbolData.map((item: any) =>
           item?.socketLiveName === data.InstrumentIdentifier ? item.name : null
         ),
-        bid: data.SellPrice,
-        ask: data.BuyPrice,
+        bid: data.BuyPrice,
+        ask: data.SellPrice,
         dailyChange: data.PriceChangePercentage,
 
-        oldBuyPrice: data.oldSellPrice,
-        oldSellPrice: data.oldBuyPrice,
+        oldBuyPrice: data.oldBuyPrice,
+        oldSellPrice: data.oldSellPrice,
         oldPercentage: data.oldPercentage,
       });
     }
