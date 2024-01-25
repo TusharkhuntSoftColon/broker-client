@@ -380,7 +380,7 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
       if (isAxiosError(error)) {
         enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
       }
-      enqueueSnackbar(error?.message, { variant: 'error' });
+      // enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
   const onSubmit = handleSubmit(async (data) => {

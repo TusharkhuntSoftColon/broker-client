@@ -196,7 +196,7 @@ export default function PersonListView({ path }: { path: any }) {
       if (isAxiosError(error)) {
         enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
       }
-      enqueueSnackbar(error?.message, { variant: 'error' });
+      // enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
 
@@ -210,7 +210,7 @@ export default function PersonListView({ path }: { path: any }) {
       if (isAxiosError(error)) {
         enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
       }
-      enqueueSnackbar(error?.message, { variant: 'error' });
+      // enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
 

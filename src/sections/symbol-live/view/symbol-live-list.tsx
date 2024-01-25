@@ -73,8 +73,6 @@ export default function xxSymbolLiveList() {
   const [activeSymbolData, setActiveSymbolData] = useState<any>([]);
   const [rows, setRow] = useState<any>([]);
 
-  console.log({ symbolData });
-
   const { mutate } = useMutation(symbolService.getSymbolListByUser, {
     onSuccess: (data) => {
       const symbolnewData: any[] = data?.data?.rows;
@@ -159,7 +157,6 @@ export default function xxSymbolLiveList() {
     onSuccess: (data) => {
       exchangeList();
       mutate();
-      console.log({ data });
     },
     onError: (error) => {
       console.log('error', error);
@@ -182,7 +179,7 @@ export default function xxSymbolLiveList() {
       });
       const Symbols = activeSymbols.map((symbol: any) => symbol?.socketLiveName);
       const parseSymbol = JSON.stringify(Symbols);
-      console.log('parseSymbol', parseSymbol);
+
       socket.on('connect', () => {
         console.log('[socket] Connected');
         socket.emit('subscribeToUserServerMarket', parseSymbol);
@@ -198,7 +195,7 @@ export default function xxSymbolLiveList() {
       });
 
       socket.on('marketWatch', (data: any) => {
-        console.log('marketWatch', data);
+        // console.log('marketWatch', data);
         setTableData((prev: any) => {
           let index1 = -1;
 
