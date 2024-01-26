@@ -13,7 +13,6 @@ type Props = {
 
 const UserLayout = ({ children }: Props) => {
   useEffect(() => {
-    console.log(typeof window.initOnReady);
     typeof window.initOnReady === 'function' || window.initOnReady === 'undefined'
       ? window.initOnReady()
       : console.error('Error in getting chart');
