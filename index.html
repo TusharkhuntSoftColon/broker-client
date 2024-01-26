@@ -16,7 +16,9 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.4/socket.io.js"></script>
 
+  <!-- Load charting_library.standalone.js first -->
   <script type="text/javascript" src="/js-advance/charting_library.standalone.js"></script>
+  <!-- Then load other scripts -->
   <script type="text/javascript" src="/js-advance/bundle.js"></script>
   <script type="module" src="/js-advance/main.js"></script>
 
@@ -41,6 +43,7 @@
   <script>
     const global = globalThis;
   </script>
+  <!-- Load your React application script after other necessary scripts -->
   <script type="module" src="/src/main.tsx"></script>
 </body>
 
