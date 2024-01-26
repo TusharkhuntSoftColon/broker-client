@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { useEffect } from 'react';
 import { Resizable } from 're-resizable';
 
@@ -12,11 +13,9 @@ type Props = {
 
 const UserLayout = ({ children }: Props) => {
   useEffect(() => {
-    if (typeof window.initOnReady === 'function') {
-      window.initOnReady();
-    } else {
-      console.error('initOnReady is not defined or not a function');
-    }
+    typeof window.initOnReady === 'function'
+      ? window.initOnReady()
+      : console.error('Error in getting chart');
   }, []);
 
   const enable = {
