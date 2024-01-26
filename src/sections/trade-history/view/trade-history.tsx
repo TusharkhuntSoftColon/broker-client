@@ -23,7 +23,7 @@ import {
   TableSelectedAction,
 } from 'src/components/table';
 
-import { IUserItem, IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
+import { IUserItem, IUserTableFilters } from 'src/types/user';
 
 import TradeTableRow from '../trade-table-row';
 
@@ -64,7 +64,7 @@ export default function TradeHistory() {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const [filters, setFilters] = useState(defaultFilters);
+  const [filters] = useState(defaultFilters);
 
   const dataFiltered = applyFilter({
     inputData: newClientsTableData,
@@ -75,17 +75,6 @@ export default function TradeHistory() {
   const dataInPage = dataFiltered?.slice(
     table.page * table.rowsPerPage,
     table.page * table.rowsPerPage + table.rowsPerPage
-  );
-
-  const handleFilters = useCallback(
-    (name: string, value: IUserTableFilterValue) => {
-      table.onResetPage();
-      setFilters((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    },
-    [table]
   );
 
   const handleDeleteRow = useCallback(

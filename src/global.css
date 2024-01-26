@@ -120,7 +120,7 @@
   background-color: white !important;
 }
 
-.css-7ed3vs-MuiTableRow-root:last-of-type > * {
+/* .css-7ed3vs-MuiTableRow-root:last-of-type > * {
   background-color: white;
   border-right: 1px solid #e8e8e8 !important;
   border-bottom: 1px solid #e8e8e8 !important;
@@ -131,4 +131,4 @@
 }
 .css-287okb-MuiPaper-root-MuiCard-root {
   box-shadow: none !important;
-}
+} */

@@ -21,8 +21,6 @@ import { CustomDatePicker } from 'src/components/custom-datePicker';
 
 import { IBrokerage } from 'src/types/brokerage';
 
-import { useRouter } from '../../routes/hooks';
-import { useSnackbar } from '../../components/snackbar';
 import FormProvider, { RHFTextField, RHFAutocomplete } from '../../components/hook-form';
 
 // ----------------------------------------------------------------------
@@ -32,11 +30,11 @@ type Props = {
 };
 
 export default function BrokerageNewEditForm({ currentExchange }: Props) {
-  const router = useRouter();
+  // const router = useRouter();
   const location = useLocation();
 
   console.log({ location });
-  const { enqueueSnackbar } = useSnackbar();
+  // const { enqueueSnackbar } = useSnackbar();
   const ExchangeList = useSelector((data: any) => data?.admin?.exchangeList);
 
   const symbolList = useSelector((data: any) => data?.symbol?.symbolList);
@@ -127,7 +125,7 @@ export default function BrokerageNewEditForm({ currentExchange }: Props) {
     try {
       await new Promise((resolve) => setTimeout(resolve, 500));
       if (currentExchange) {
-        const adminID: any = currentExchange._id;
+        // const adminID: any = currentExchange._id;
         // updateBrokerage({ _id: adminID, data });
       } else {
         // dispatch(addAdmin(data));

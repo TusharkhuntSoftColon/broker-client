@@ -33,7 +33,7 @@ export default function UpdateTradeDialog({
   ...other
 }: any) {
   const [type, setType] = useState('instant-execution');
-  const [expiration, setExpiration] = useState('gtc');
+  // const [expiration, setExpiration] = useState('gtc');
   const [value1, setValue1] = useState({
     volume: isEdit ? row?.volume : 0,
     price: isEdit ? row?.price1 : 0,
@@ -42,7 +42,7 @@ export default function UpdateTradeDialog({
     takeProfit: 0,
     comment: '',
   });
-  const [isModified, setIsModified] = useState(false);
+  // const [isModified, setIsModified] = useState(false);
   const dummyTypes = [
     { label: 'Instant Execution', value: 'instant-execution' },
     { label: 'Buy Limit', value: 'buy-limit' },
@@ -74,16 +74,16 @@ export default function UpdateTradeDialog({
       [name]: value, // Update the specified property dynamically
     }));
 
-    if (value[name] !== value) {
-      setIsModified(true); // Enable the Modify button
-    } else {
-      setIsModified(false); // Disable the Modify button
-    }
+    // if (value[name] !== value) {
+    //   setIsModified(true); // Enable the Modify button
+    // } else {
+    //   setIsModified(false); // Disable the Modify button
+    // }
   };
 
   const handleChange = (event: SelectChangeEvent) => {
     setType(event.target.value as string);
-    setExpiration('gtc');
+    // setExpiration('gtc');
   };
 
   const handleModifyClick = () => {

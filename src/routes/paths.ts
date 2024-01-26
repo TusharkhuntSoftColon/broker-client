@@ -78,7 +78,7 @@ export const paths = {
   // },
   auth: {
     // classic: {
-    login: `${ROOTS.AUTH_DEMO}/user/login`,
+    login: `${ROOTS.AUTH_DEMO}/login`,
     register: `${ROOTS.AUTH_DEMO}/register`,
     forgotPassword: `${ROOTS.AUTH_DEMO}/forgot-password`,
     newPassword: `${ROOTS.AUTH_DEMO}/new-password`,

@@ -147,7 +147,7 @@ export default function BrokerageListView({ currentUser }: any) {
   const handleDeleteRow = (id: any) => {};
 
   const handleDeleteRows = useCallback(() => {
-    const deleteRows = table.selected;
+    // const deleteRows = table.selected;
     // deleteBrokerage(deleteRows);
   }, [table]);
 
@@ -242,7 +242,10 @@ export default function BrokerageListView({ currentUser }: any) {
               numSelected={table.selected.length}
               rowCount={tableData.length}
               onSelectAllRows={(checked) =>
-                table.onSelectAllRows(checked, tableData?.map((row: any) => row._id))
+                table.onSelectAllRows(
+                  checked,
+                  tableData?.map((row: any) => row._id)
+                )
               }
             />
 
@@ -256,7 +259,10 @@ export default function BrokerageListView({ currentUser }: any) {
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(checked, tableData?.map((row: any) => row._id))
+                    table.onSelectAllRows(
+                      checked,
+                      tableData?.map((row: any) => row._id)
+                    )
                   }
                 />
 

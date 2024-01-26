@@ -25,9 +25,7 @@ import { paths } from 'src/routes/paths';
 import { addUser } from 'src/store/slices/person';
 import adminService from 'src/services/adminService';
 import { addExchanges } from 'src/store/slices/admin';
-import masterService from 'src/services/masterService';
 import { EXCHANGE_GROUP, LEVERAGE_OPTIONS } from 'src/_mock';
-import superMasterService from 'src/services/superMasterService';
 import { ADMIN_ROLE, MASTER_ROLE, SUPER_MASTER_ROLE } from 'src/_mock/_person';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -251,7 +249,7 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
     name: 'exchangeList',
     control,
   });
-  const [brokerageDataList, setBrokerageDataList] = useState([]);
+  // const [brokerageDataList, setBrokerageDataList] = useState([]);
 
   const [components, setComponents] = useState([]);
 
@@ -358,31 +356,31 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
     },
   });
 
-  const getBrokerageByRole = (role: any) => {
-    switch (role) {
-      case 'ADMIN':
-        return adminService.getBrokerageList;
-      case 'SUPER_MASTER':
-        return superMasterService.getBrokerageList;
-      case 'MASTER':
-        return masterService.getBrokerageList;
-      default:
-        return masterService.getBrokerageList;
-    }
-  };
+  // const getBrokerageByRole = (role: any) => {
+  //   switch (role) {
+  //     case 'ADMIN':
+  //       return adminService.getBrokerageList;
+  //     case 'SUPER_MASTER':
+  //       return superMasterService.getBrokerageList;
+  //     case 'MASTER':
+  //       return masterService.getBrokerageList;
+  //     default:
+  //       return masterService.getBrokerageList;
+  //   }
+  // };
 
   // Get All Brokerage
-  const { mutate: brokerageList } = useMutation(getBrokerageByRole(role), {
-    onSuccess: (data) => {
-      setBrokerageDataList(data?.data?.rows);
-    },
-    onError: (error: any) => {
-      if (isAxiosError(error)) {
-        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-      }
-      // enqueueSnackbar(error?.message, { variant: 'error' });
-    },
-  });
+  // const { mutate: brokerageList } = useMutation(getBrokerageByRole(role), {
+  //   onSuccess: (data) => {
+  //     // setBrokerageDataList(data?.data?.rows);
+  //   },
+  //   onError: (error: any) => {
+  //     if (isAxiosError(error)) {
+  //       enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+  //     }
+  //     // enqueueSnackbar(error?.message, { variant: 'error' });
+  //   },
+  // });
   const onSubmit = handleSubmit(async (data) => {
     console.log({ data });
     try {
@@ -395,7 +393,7 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
 
   useEffect(() => {
     mutate();
-    brokerageList();
+    // brokerageList();
   }, []);
 
   const RolesOptions = (role: any) => {

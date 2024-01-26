@@ -27,6 +27,8 @@ function Container({ children }: Props) {
 
   const { token } = useAuth();
 
+  console.log({ token });
+
   const [checked, setChecked] = useState(false);
 
   const check = useCallback(() => {

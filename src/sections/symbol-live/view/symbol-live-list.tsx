@@ -83,7 +83,6 @@ export default function xxSymbolLiveList() {
   const [tableData, setTableData] = useState<any>([]);
   const [symbolData, setSymbolData] = useState<any>([]);
   const [exchangeData, setExchangeData] = useState<formattedDataInterface[]>([]);
-  const [activeSymbolData, setActiveSymbolData] = useState<any>([]);
   const [rows, setRow] = useState<any>([]);
   const { mutate } = useMutation(symbolService.getSymbolListByUser, {
     onSuccess: (data) => {
@@ -108,7 +107,7 @@ export default function xxSymbolLiveList() {
       }
       setRow(symbolTableDashboard);
 
-      setActiveSymbolData(symbolnewData);
+      // setActiveSymbolData(symbolnewData);
       socketConnection(symbolnewData);
     },
     onError: (error) => {
@@ -248,6 +247,8 @@ export default function xxSymbolLiveList() {
     mutate();
     exchangeList();
   }, []);
+
+  console.log({ symbolData });
 
   useEffect(() => {
     const symbolTableDashboard = [];

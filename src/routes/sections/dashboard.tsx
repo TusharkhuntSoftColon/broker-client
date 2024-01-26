@@ -17,8 +17,8 @@ const IndexPage = lazy(() => import('src/pages/dashboard/app'));
 
 // PERSON
 const PersonListPage = lazy(() => import('src/pages/dashboard/person/list'));
-const PersonEditPage = lazy(() => import('src/pages/dashboard/person/edit'));
-const PersonCreatePage = lazy(() => import('src/pages/dashboard/person/new'));
+// const PersonEditPage = lazy(() => import('src/pages/dashboard/person/edit'));
+// const PersonCreatePage = lazy(() => import('src/pages/dashboard/person/new'));
 
 // BROKERAGE
 const BrokerageListPage = lazy(() => import('src/pages/dashboard/brokerage/list'));

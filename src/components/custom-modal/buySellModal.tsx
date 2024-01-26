@@ -175,7 +175,7 @@ export default function BuySellDialog({
                 style={{ fontSize: '18px', borderRadius: '0px' }}
               >
                 {dummyTypes.map((data: any) => (
-                  <MenuItem sx={{ fontSize: '14px' }} value={data.value}>
+                  <MenuItem sx={{ fontSize: '14px' }} key={data?.value} value={data.value}>
                     {data.label}
                   </MenuItem>
                 ))}

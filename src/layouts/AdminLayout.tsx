@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import { useState } from 'react';
-import { Navigate } from 'react-router';
 import { useSelector } from 'react-redux';
+import { Navigate } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 
