@@ -12,7 +12,12 @@ type Props = {
 
 const UserLayout = ({ children }: Props) => {
   useEffect(() => {
-    window.initOnReady();
+    const waitForInit = setInterval(() => {
+      if (window.initOnReady) {
+        clearInterval(waitForInit);
+        window.initOnReady();
+      }
+    }, 100); // Check every 100 milliseconds
   }, []);
 
   const enable = {
