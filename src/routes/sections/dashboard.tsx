@@ -122,6 +122,7 @@ export const dashboardRoutes = [
       </AuthGuard>
     ),
     children: [
+      { element: <IndexPage />, index: true },
       {
         path: 'person',
         children: [
