@@ -12,12 +12,11 @@ type Props = {
 
 const UserLayout = ({ children }: Props) => {
   useEffect(() => {
-    const waitForInit = setInterval(() => {
-      if (window.initOnReady) {
-        clearInterval(waitForInit);
-        window.initOnReady();
-      }
-    }, 100); // Check every 100 milliseconds
+    if (typeof window.initOnReady === 'function') {
+      window.initOnReady();
+    } else {
+      console.error('initOnReady is not defined or not a function');
+    }
   }, []);
 
   const enable = {
