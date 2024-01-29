@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-nested-ternary */
 import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 
 import { styled } from '@mui/system';
 import Button from '@mui/material/Button';
@@ -11,6 +12,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import DialogContent from '@mui/material/DialogContent';
 import { Box, Select, MenuItem, FormControl, SelectChangeEvent } from '@mui/material';
+
+import tradeService from 'src/services/tradeService';
 
 // ----------------------------------------------------------------------
 
@@ -39,9 +42,18 @@ export default function BuySellDialog({
     volume: isEdit ? row?.volume : 0,
     price: isEdit ? row?.price1 : 0,
     stopLimitPrice: 0,
-    stopLoss: 0,
-    takeProfit: 0,
+    stopLoss: null,
+    takeProfit: null,
     comment: '',
+  });
+
+  const { mutate } = useMutation(tradeService.buyShare, {
+    onSuccess: (data: any) => {
+      console.log(data);
+    },
+    onError: (error: any) => {
+      console.log(error);
+    },
   });
 
   const dummyTypes = [
@@ -68,6 +80,42 @@ export default function BuySellDialog({
     }));
   };
 
+  const handleStopLossMinus = (field: any) => {
+    const decreaseAmount = 0.01 * (row?.bid || 0);
+
+    setValue((prevState: any) => ({
+      ...prevState,
+      [field]: prevState[field] != null ? prevState[field] - 0.01 : row?.bid - decreaseAmount,
+    }));
+  };
+
+  const handleStopLossPlus = (field: any) => {
+    const increaseAmount = 0.01 * (row?.bid || 0);
+
+    setValue((prevState: any) => ({
+      ...prevState,
+      [field]: prevState[field] != null ? prevState[field] + 0.01 : row?.bid + increaseAmount,
+    }));
+  };
+
+  const handleProfitMinus = (field: any) => {
+    const decreaseAmount = 0.01 * (row?.ask || 0);
+
+    setValue((prevState: any) => ({
+      ...prevState,
+      [field]: prevState[field] != null ? prevState[field] + 0.01 : row?.ask + decreaseAmount,
+    }));
+  };
+
+  const handleProfitPlus = (field: any) => {
+    const increaseAmount = 0.01 * (row?.ask || 0);
+
+    setValue((prevState: any) => ({
+      ...prevState,
+      [field]: row?.ask + increaseAmount >= 0 ? row?.ask + increaseAmount : 0,
+    }));
+  };
+
   const handlePlusClick = (field: any) => {
     setValue((prevState: any) => ({
       ...prevState,
@@ -83,9 +131,6 @@ export default function BuySellDialog({
     }));
   };
 
-  // console.log({ value });
-  // console.log({ row });
-
   const handleChange = (event: SelectChangeEvent) => {
     setType(event.target.value as string);
     setExpiration('gtc');
@@ -96,16 +141,27 @@ export default function BuySellDialog({
   };
 
   const handleSellClick = () => {
-    // console.log('Sell Clicked');
-
-    onClose();
+    console.log('Sell Clicked');
+    console.log('Type:', type);
+    console.log('Exp:', expiration);
+    console.log('Values:', value);
+    console.log('bid', row?.bid);
+    // onClose();
   };
 
   const handleBuyClick = () => {
-    // console.log('Buy Clicked');
-
-    onClose();
+    console.log('Buy Clicked');
+    console.log('Type:', type);
+    console.log('Exp:', expiration);
+    console.log('Values:', value);
+    console.log('bid', row?.ask);
+    // onClose();
   };
+
+  // useEffect(() => {
+  //   // mutate()
+  // }, []);
+
   return (
     <Dialog
       sx={{
@@ -325,14 +381,14 @@ export default function BuySellDialog({
           <Box>
             <Typography sx={{ mb: 1 }}>Stopp Loss</Typography>
             <Box display="flex" alignItems="center" sx={{ border: '1px solid #e8e8e8' }}>
-              <Button onClick={() => handleMinusClick('stopLoss')} sx={{ fontSize: '24px' }}>
+              <Button onClick={() => handleStopLossMinus('stopLoss')} sx={{ fontSize: '24px' }}>
                 -
               </Button>
               <CustomtextFields
                 type="number"
                 fullWidth
                 name="stopLoss"
-                value={value.stopLoss}
+                value={value?.stopLoss?.toFixed(2)}
                 onChange={handleInputChange}
                 //   style={{ margin: '0 10px' }}
                 sx={{
@@ -345,12 +401,13 @@ export default function BuySellDialog({
                 inputProps={{
                   style: {
                     fontSize: '14px', // Increase the font size to 20px or any desired size
+                    padding: '0px',
                     textAlign: 'center',
                     fontWeight: 600,
                   },
                 }}
               />
-              <Button onClick={() => handlePlusClick('stopLoss')} sx={{ fontSize: '24px' }}>
+              <Button onClick={() => handleStopLossPlus('stopLoss')} sx={{ fontSize: '24px' }}>
                 +
               </Button>
             </Box>
@@ -358,13 +415,13 @@ export default function BuySellDialog({
           <Box>
             <Typography sx={{ mb: 1 }}>Take Profit</Typography>
             <Box display="flex" alignItems="center" sx={{ border: '1px solid #e8e8e8' }}>
-              <Button onClick={() => handleMinusClick('takeProfit')} sx={{ fontSize: '24px' }}>
+              <Button onClick={() => handleProfitMinus('takeProfit')} sx={{ fontSize: '24px' }}>
                 -
               </Button>
               <CustomtextFields
                 type="number"
                 fullWidth
-                value={value.takeProfit}
+                value={value?.takeProfit?.toFixed(2)}
                 name="takeProfit"
                 onChange={handleInputChange}
                 //   style={{ margin: '0 10px' }}
@@ -380,10 +437,11 @@ export default function BuySellDialog({
                     fontSize: '14px', // Increase the font size to 20px or any desired size
                     textAlign: 'center',
                     fontWeight: 600,
+                    padding: '0px',
                   },
                 }}
               />
-              <Button onClick={() => handlePlusClick('takeProfit')} sx={{ fontSize: '24px' }}>
+              <Button onClick={() => handleProfitPlus('takeProfit')} sx={{ fontSize: '24px' }}>
                 +
               </Button>
             </Box>
@@ -479,10 +537,17 @@ export default function BuySellDialog({
                   textAlign: 'center',
                   fontSize: '14px',
                   fontWeight: 600,
-                  color: 'red',
+                  color:
+                    row?.bid !== undefined && row?.oldBuyPrice !== undefined
+                      ? row?.bid > row?.oldBuyPrice
+                        ? 'blue'
+                        : row?.bid === row?.oldBuyPrice
+                          ? 'black'
+                          : 'red'
+                      : 'red',
                 }}
               >
-                12029
+                {row?.bid ?? '0'}
               </Typography>
               <Typography
                 sx={{
@@ -492,10 +557,17 @@ export default function BuySellDialog({
                   textAlign: 'center',
                   fontSize: '14px',
                   fontWeight: 600,
-                  color: 'blue',
+                  color:
+                    row?.ask !== undefined && row?.oldSellPrice !== undefined
+                      ? row?.ask > row?.oldSellPrice
+                        ? 'blue'
+                        : row?.ask === row?.oldSellPrice
+                          ? 'black'
+                          : 'red'
+                      : 'red',
                 }}
               >
-                12029
+                {row?.ask ?? '0'}
               </Typography>
             </Box>
             <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>

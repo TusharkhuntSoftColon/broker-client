@@ -248,8 +248,6 @@ export default function xxSymbolLiveList() {
     exchangeList();
   }, []);
 
-  console.log({ symbolData });
-
   useEffect(() => {
     const symbolTableDashboard = [];
     for (const data of tableData) {
