@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 import { Controller, useFormContext } from 'react-hook-form';
 
 import TextField, { TextFieldProps } from '@mui/material/TextField';
@@ -7,10 +8,18 @@ import TextField, { TextFieldProps } from '@mui/material/TextField';
 type Props = TextFieldProps & {
   name: string;
   type?: any;
+  upperText?: any;
   isReadOnly?: any;
 };
 
-export default function RHFTextField({ name, helperText, type, isReadOnly, ...other }: Props) {
+export default function RHFTextField({
+  name,
+  upperText,
+  helperText,
+  type,
+  isReadOnly,
+  ...other
+}: Props) {
   const { control } = useFormContext();
 
   return (
@@ -28,7 +37,9 @@ export default function RHFTextField({ name, helperText, type, isReadOnly, ...ot
             if (type === 'number') {
               field.onChange(Number(event.target.value));
             } else {
-              field.onChange(event.target.value);
+              upperText
+                ? field.onChange(event.target.value.toUpperCase())
+                : field.onChange(event.target.value);
             }
           }}
           InputProps={{

@@ -113,7 +113,7 @@ export default function BrokerageListView({ currentUser }: any) {
   const [tableData, setTableData] = useState([]);
   const confirm = useBoolean();
   const defaultValues = {
-    template: '',
+    template: ClientList.find((item) => item.label === 'Template 1') || null,
   };
   const methods = useForm<any>({
     defaultValues,
@@ -213,14 +213,13 @@ export default function BrokerageListView({ currentUser }: any) {
                 id="template"
                 options={ClientList}
                 isLabled={false}
-                // value={value.template}
-                // data={ClientList}
                 getOptionLabel={(option: any) => option.label}
                 renderOption={(props, option) => (
                   <li {...props} key={option.label}>
                     {option.label}
                   </li>
                 )}
+                value={methods.watch('template')}
               />
             </Stack>
           </FormProvider>
@@ -242,10 +241,7 @@ export default function BrokerageListView({ currentUser }: any) {
               numSelected={table.selected.length}
               rowCount={tableData.length}
               onSelectAllRows={(checked) =>
-                table.onSelectAllRows(
-                  checked,
-                  tableData?.map((row: any) => row._id)
-                )
+                table.onSelectAllRows(checked, tableData?.map((row: any) => row._id))
               }
             />
 
@@ -259,10 +255,7 @@ export default function BrokerageListView({ currentUser }: any) {
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(
-                      checked,
-                      tableData?.map((row: any) => row._id)
-                    )
+                    table.onSelectAllRows(checked, tableData?.map((row: any) => row._id))
                   }
                 />
 

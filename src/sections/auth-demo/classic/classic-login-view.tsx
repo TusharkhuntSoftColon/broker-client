@@ -1,3 +1,4 @@
+/* eslint-disable consistent-return */
 import * as Yup from 'yup';
 import { isAxiosError } from 'axios';
 import { useSnackbar } from 'notistack';
@@ -82,10 +83,10 @@ export default function ClassicLoginView() {
   });
 
   const onSubmit = handleSubmit(async (data) => {
+    const uppercaseData = { ...data, id: data.id.toUpperCase() };
     try {
-      const res = await mutate(data);
-      console.log(res);
-      // Continue with your success logic
+      const res = await mutate(uppercaseData);
+      return res;
     } catch (error) {
       console.error(error);
       // Handle the error
@@ -100,7 +101,7 @@ export default function ClassicLoginView() {
 
   const renderForm = (
     <Stack spacing={2.5}>
-      <RHFTextField name="id" label="ID" />
+      <RHFTextField upperText name="id" label="ID" />
 
       <RHFTextField
         name="password"
