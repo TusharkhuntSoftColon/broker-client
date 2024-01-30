@@ -91,14 +91,14 @@ function a11yProps(index: number) {
   };
 }
 
-interface formattedDataInterface {
-  name: string;
-  _id: string;
-  importMonth: {
-    label: string;
-    value: string;
-  }[];
-}
+// interface formattedDataInterface {
+//   name: string;
+//   _id: string;
+//   importMonth: {
+//     label: string;
+//     value: string;
+//   }[];
+// }
 
 export default function SymbolTableDashboard() {
   const [value, setValue] = React.useState(0);
