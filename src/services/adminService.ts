@@ -52,10 +52,10 @@ export interface adminType {
 const adminService = {
   createSuperMaster: async (adminData: adminType): Promise<any> => {
     console.log('adminData', adminData);
-    const date = new Date(adminData?.date);
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
-    const day = date.getDate().toString().padStart(2, '0');
-    const year = date.getFullYear();
+    // const date = new Date(adminData?.date);
+    // const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
+    // const day = date.getDate().toString().padStart(2, '0');
+    // const year = date.getFullYear();
     const newExchangeList = [
       ...adminData.exchangeList,
       {
@@ -73,12 +73,12 @@ const adminService = {
         ...adminData,
         leverageXY: `[${adminData?.leverageXY.value}]`,
         role: adminData?.role?.value,
-        date: `${year}-${month}-${day}`,
-        template: adminData?.template?.value,
-        exchangeCode: adminData?.exchangeCode?.value,
-        bco: adminData?.bco?.value,
-        bcm: adminData?.bcm?.value,
-        symbol: adminData?.symbol?.value,
+        // date: `${year}-${month}-${day}`,
+        // template: adminData?.template?.value,
+        // exchangeCode: adminData?.exchangeCode?.value,
+        // bco: adminData?.bco?.value,
+        // bcm: adminData?.bcm?.value,
+        // symbol: adminData?.symbol?.value,
         exchangeList,
       });
       return response.data;

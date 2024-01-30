@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable consistent-return */
 /* eslint-disable no-plusplus */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -21,11 +22,13 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Accordion, Typography, AccordionDetails, AccordionSummary } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 
 import { addUser } from 'src/store/slices/person';
 import adminService from 'src/services/adminService';
 import { addExchanges } from 'src/store/slices/admin';
 import { EXCHANGE_GROUP, LEVERAGE_OPTIONS } from 'src/_mock';
+import superMasterService from 'src/services/superMasterService';
 import { ADMIN_ROLE, MASTER_ROLE, SUPER_MASTER_ROLE } from 'src/_mock/_person';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -51,6 +54,7 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
   const ExchangeOptions: any = [];
   const role = useSelector((data: any) => data.auth.role);
   const ExchangeList = useSelector((data: any) => data?.admin?.exchangeList);
+  const router = useRouter();
 
   const [exchangeData, setExchangeData] = useState<any>();
 
@@ -381,11 +385,103 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
   //     // enqueueSnackbar(error?.message, { variant: 'error' });
   //   },
   // });
+  const createMasterByRole: any = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.createMaster;
+      case 'SUPER_MASTER':
+        return superMasterService.createMaster;
+      default:
+        return paths;
+    }
+  };
+  const updateMasterByRole: any = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.updateMaster;
+      case 'SUPER_MASTER':
+        return superMasterService.updateMaster;
+      default:
+        return paths; // Return a default path if role doesn't match
+    }
+  };
+  // create SUPER_MASTER
+  const { mutate: createSuperMaster } = useMutation(adminService.createSuperMaster, {
+    onSuccess: (data) => {
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      router.push(paths.dashboard.person.root);
+      dispatch(addUser([]));
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+      enqueueSnackbar(error?.message, { variant: 'error' });
+    },
+  });
+  // update SUPER_MASTER
+  const { mutate: updateSuperMaster } = useMutation(adminService.updateSuperMaster, {
+    onSuccess: (data) => {
+      enqueueSnackbar(data?.message ?? 'Data Updated Successfully', { variant: 'success' });
+      router.push(paths.dashboard.person.root);
+      dispatch(addUser([]));
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+      enqueueSnackbar(error?.message, { variant: 'error' });
+    },
+  });
+  // create MASTER
+  const { mutate: createMaster } = useMutation(createMasterByRole(role), {
+    onSuccess: (data: any) => {
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      router.push(paths.dashboard.person.root);
+      dispatch(addUser([]));
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+      enqueueSnackbar(error?.message, { variant: 'error' });
+    },
+  });
+  // update MASTER
+  const { mutate: updateMaster }: any = useMutation(updateMasterByRole(role), {
+    onSuccess: (data: any) => {
+      enqueueSnackbar(data?.message ?? 'Data Updated Successfully', { variant: 'success' });
+      router.push(paths.dashboard.person.root);
+      dispatch(addUser([]));
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+      enqueueSnackbar(error?.message, { variant: 'error' });
+    },
+  });
   const onSubmit = handleSubmit(async (data) => {
     console.log({ data });
     try {
-      dispatch(addUser(data));
-      setTabValue(1);
+      if (roleOption === 'SUPER_MASTER') {
+        if (currentUser) {
+          await updateSuperMaster({ ...data, _id: currentUser?._id });
+        } else {
+          await createSuperMaster({ ...data });
+        }
+      }
+      if (roleOption === 'MASTER') {
+        if (currentUser) {
+          await updateMaster({ ...data, _id: currentUser?._id });
+        } else {
+          await createMaster({ ...data });
+        }
+      }
+      if (roleOption === 'USER') {
+        dispatch(addUser(data));
+        setTabValue(1);
+      }
     } catch (error) {
       console.log(error);
     }

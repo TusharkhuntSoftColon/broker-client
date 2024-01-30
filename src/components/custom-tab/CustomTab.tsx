@@ -54,7 +54,6 @@ export default function BasicTabs() {
 
   const adminData = useSelector((data: any) => data?.admin?.personList);
   const currentUser = adminData.find((user: any) => user._id === id);
-  console.log({ currentUser });
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -62,8 +61,6 @@ export default function BasicTabs() {
   };
 
   const role = useSelector((data: any) => data.auth.role);
-
-  console.log({ role });
 
   const getPath = (roleOfPerson: any) => {
     switch (roleOfPerson) {
@@ -77,7 +74,6 @@ export default function BasicTabs() {
         return paths.dashboard.person;
     }
   };
-
   return (
     <Box sx={{ width: '100%', ml: 2 }}>
       {currentUser ? <PersonEditView /> : <PersonCreateView />}
