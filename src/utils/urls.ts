@@ -2,6 +2,9 @@
 export const ADMIN_AUTH = '/auth/login';
 export const CREATE_ADMIN = '/auth/admin';
 
+// Trade
+export const BUY_TRADE = '/trade/buy';
+
 // ADMIN
 export const CREATE_SUPER_MASTER_BY_ADMIN = '/admin/super-master';
 export const CREATE_MASTER_BY_ADMIN = '/admin/master';

@@ -1,4 +1,6 @@
+/* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-nested-ternary */
+
 /* eslint-disable no-constant-condition */
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
@@ -45,7 +47,9 @@ export default function SymbolLiveTableRow({
       <TableRow
         hover
         selected={selected}
-        onClick={() => confirm.onTrue()}
+        onClick={() => {
+          confirm.onTrue();
+        }}
         sx={{ cursor: 'pointer' }}
       >
         <TableCell
