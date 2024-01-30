@@ -35,7 +35,7 @@ import adminService from 'src/services/adminService';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { useTable, TableHeadCustom } from 'src/components/table';
+import { TableHeadCustom } from 'src/components/table';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 // ----------------------------------------------------------------------
 
@@ -104,10 +104,8 @@ export default function SymbolTableDashboard() {
   const [value, setValue] = React.useState(0);
   const role = useSelector((data: any) => data.auth.role);
   const { token } = useAuth();
-  const table = useTable();
   const [tableData, setTableData] = useState<any>([]);
   const [symbolData, setSymbolData] = useState<any>([]);
-  const [exchangeData, setExchangeData] = useState<formattedDataInterface[]>([]);
   const [rows, setRow] = useState<any>([]);
 
   const getImportMonthList = (role: any) => {

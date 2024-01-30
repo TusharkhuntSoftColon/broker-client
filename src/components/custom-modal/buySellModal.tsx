@@ -2,7 +2,6 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-nested-ternary */
 import { useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
 
 import { styled } from '@mui/system';
 import Button from '@mui/material/Button';
@@ -12,8 +11,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import Typography from '@mui/material/Typography';
 import DialogContent from '@mui/material/DialogContent';
 import { Box, Select, MenuItem, FormControl, SelectChangeEvent } from '@mui/material';
-
-import tradeService from 'src/services/tradeService';
 
 // ----------------------------------------------------------------------
 
@@ -47,14 +44,14 @@ export default function BuySellDialog({
     comment: '',
   });
 
-  const { mutate } = useMutation(tradeService.buyShare, {
-    onSuccess: (data: any) => {
-      console.log(data);
-    },
-    onError: (error: any) => {
-      console.log(error);
-    },
-  });
+  // const { mutate } = useMutation(tradeService.buyShare, {
+  //   onSuccess: (data: any) => {
+  //     console.log(data);
+  //   },
+  //   onError: (error: any) => {
+  //     console.log(error);
+  //   },
+  // });
 
   const dummyTypes = [
     { label: 'Instant Execution', value: 'instant-execution' },
