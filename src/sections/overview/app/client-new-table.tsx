@@ -238,7 +238,7 @@ export default function ClientTableDashboard() {
                 label={data.label}
                 {...a11yProps(data.value)}
                 sx={{
-                  width: '10%',
+                  width: '15%',
                   marginRight: '0px !important',
                   borderTop: value === data.value ? 'none' : '1px solid #d3d3d3',
                   borderLeft: value === data.value ? 'none' : '0.5px solid #d3d3d3',

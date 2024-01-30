@@ -44,6 +44,15 @@ export default function BuySellDialog({
     comment: '',
   });
 
+  // const { mutate } = useMutation(tradeService.buyShare, {
+  //   onSuccess: (data: any) => {
+  //     console.log(data);
+  //   },
+  //   onError: (error: any) => {
+  //     console.log(error);
+  //   },
+  // });
+
   const dummyTypes = [
     { label: 'Instant Execution', value: 'instant-execution' },
     { label: 'Buy Limit', value: 'buy-limit' },
