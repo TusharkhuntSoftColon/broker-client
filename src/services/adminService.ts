@@ -20,6 +20,9 @@ import {
   GET_EXCHANGE_FOR_SUPERMASTER,
   UPDATE_SUPER_MASTER_BY_ADMIN,
   CREATE_SUPER_MASTER_BY_ADMIN,
+  GET_IMPORT_MONTH_LIST_BY_ADMIN,
+  GET_IMPORT_MONTH_LIST_BY_MASTER,
+  GET_IMPORT_MONTH_LIST_BY_SUPER_MASTER,
 } from '../utils/urls';
 
 export interface adminType {
@@ -369,6 +372,36 @@ const adminService = {
   getSymbolListAdmin: async (): Promise<any> => {
     try {
       const response: AxiosResponse<any> = await client.get(GET_SYMBOL_ADMIN);
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in symbolService.getSymbolList:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  getImportMonthListByAdmin: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(GET_IMPORT_MONTH_LIST_BY_ADMIN);
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in symbolService.getSymbolList:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  getImportMonthListBySuperMaster: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(GET_IMPORT_MONTH_LIST_BY_SUPER_MASTER);
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in symbolService.getSymbolList:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  getImportMonthListByMaster: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(GET_IMPORT_MONTH_LIST_BY_MASTER);
       return response.data;
     } catch (error) {
       // You can log the error here for debugging purposes

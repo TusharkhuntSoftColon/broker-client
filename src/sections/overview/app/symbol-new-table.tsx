@@ -1,5 +1,13 @@
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable no-nested-ternary */
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-plusplus */
+import { io } from 'socket.io-client';
+import { useSelector } from 'react-redux';
 /* eslint-disable import/no-extraneous-dependencies */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useMutation } from '@tanstack/react-query';
 
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -18,11 +26,16 @@ import TableContainer from '@mui/material/TableContainer';
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
 
+import useAuth from 'src/hooks/useAuth';
+
+import { SOCKET_URL } from 'src/utils/environments';
+
 import { newSymbolTableData } from 'src/_mock';
+import adminService from 'src/services/adminService';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { TableHeadCustom } from 'src/components/table';
+import { useTable, TableHeadCustom } from 'src/components/table';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 // ----------------------------------------------------------------------
 
@@ -78,12 +91,188 @@ function a11yProps(index: number) {
   };
 }
 
+interface formattedDataInterface {
+  name: string;
+  _id: string;
+  importMonth: {
+    label: string;
+    value: string;
+  }[];
+}
+
 export default function SymbolTableDashboard() {
   const [value, setValue] = React.useState(0);
+  const role = useSelector((data: any) => data.auth.role);
+  const { token } = useAuth();
+  const table = useTable();
+  const [tableData, setTableData] = useState<any>([]);
+  const [symbolData, setSymbolData] = useState<any>([]);
+  const [exchangeData, setExchangeData] = useState<formattedDataInterface[]>([]);
+  const [rows, setRow] = useState<any>([]);
+
+  const getImportMonthList = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.getImportMonthListByAdmin;
+      case 'SUPER_MASTER':
+        return adminService.getImportMonthListBySuperMaster;
+      case 'MASTER':
+        return adminService.getImportMonthListByMaster;
+      // Add other cases for different roles with their respective paths
+      default:
+        return adminService.getImportMonthListByMaster; // Return a default path if role doesn't match
+    }
+  };
+
+  const { mutate } = useMutation(getImportMonthList(role), {
+    onSuccess: (data) => {
+      const symbolnewData: any[] = data?.data?.rows;
+
+      setSymbolData(symbolnewData);
+
+      console.log({ symbolnewData });
+
+      // set table data with empty socket
+      const symbolTableDashboard = [];
+      for (const symbols of symbolnewData) {
+        symbolTableDashboard.push({
+          id: symbols?._id,
+          symbol: symbols?.name,
+          bid: 0,
+          ask: 0,
+          dailyChange: 0,
+
+          oldBuyPrice: 0,
+          oldSellPrice: 0,
+          oldPercentage: 0,
+        });
+      }
+      setRow(symbolTableDashboard);
+
+      // setActiveSymbolData(symbolnewData);
+      socketConnection(symbolnewData);
+    },
+    onError: (error) => {
+      console.log('error', error);
+    },
+  });
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+
+  const socketConnection = async (activeSymbols: any) => {
+    try {
+      const socket = io(SOCKET_URL, {
+        transports: ['websocket'],
+        query: {
+          transport: 'websocket',
+          EIO: '4',
+          authorization: token,
+        },
+        auth: { authorization: token },
+        extraHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const Symbols = activeSymbols.map((symbol: any) => symbol?.socketLiveName);
+      const parseSymbol = JSON.stringify(Symbols);
+
+      socket.on('connect', () => {
+        console.log('[socket] Connected');
+        socket.emit('subscribeToUserServerMarket', parseSymbol);
+      });
+
+      socket.emit('joinUserRoom', parseSymbol);
+
+      socket.on('disconnect', (reason: any) => {
+        console.log('[socket] Disconnected:', reason);
+      });
+      socket.on('error', (error: any) => {
+        console.log('[socket] Error:', error);
+      });
+
+      socket.on('marketWatch', (data: any) => {
+        // console.log('marketWatch', data);
+        setTableData((prev: any) => {
+          let index1 = -1;
+
+          for (let index = 0; index < prev.length; index++) {
+            const data1 = prev[index];
+            if (
+              data1.InstrumentIdentifier &&
+              data.InstrumentIdentifier &&
+              data1.InstrumentIdentifier === data.InstrumentIdentifier
+            ) {
+              index1 = index;
+
+              break;
+            }
+          }
+
+          if (index1 === -1) {
+            return [...prev, data];
+          }
+
+          const newObj = {
+            ...data,
+            oldBuyPrice: prev[index1].BuyPrice,
+            oldSellPrice: prev[index1].SellPrice,
+            oldPercentage: prev[index1].PriceChangePercentage,
+          };
+          prev[index1] = newObj;
+          return [...prev];
+        });
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  useEffect(() => {
+    // socketetConnection();
+    mutate();
+  }, []);
+
+  useEffect(() => {
+    const symbolTableDashboard = [];
+    for (const data of tableData) {
+      symbolTableDashboard.push({
+        id: data.InstrumentIdentifier,
+        symbol: symbolData.map((item: any) =>
+          item?.socketLiveName === data?.InstrumentIdentifier && item?.symbolType === data?.Exchange
+            ? item.name
+            : null
+        ),
+        bid: data.BuyPrice,
+        ask: data.SellPrice,
+        dailyChange: data.PriceChangePercentage,
+
+        oldBuyPrice: data.oldBuyPrice,
+        oldSellPrice: data.oldSellPrice,
+        oldPercentage: data.oldPercentage,
+      });
+    }
+    setRow(symbolTableDashboard);
+  }, [tableData]);
+
+  useEffect(() => {
+    console.log({ rows });
+  }, [rows]);
+
+  const rowData = rows?.map((row: any) => {
+    const { id, symbol, bid, ask, dailyChange, oldBuyPrice, oldSellPrice, oldPercentage } = row;
+    return {
+      id,
+      symbol,
+      bid,
+      ask,
+      dailyChange,
+      oldBuyPrice,
+      oldSellPrice,
+      oldPercentage,
+    };
+  });
 
   const tabs = [
     {
@@ -92,9 +281,27 @@ export default function SymbolTableDashboard() {
       title: 'Symbol Table',
       tableDatas: newSymbolTableData,
       tableLabel: [
-        { id: 'symbol', label: 'Symbol', align: 'left', border: '1px solid #dddddd !important' },
-        { id: 'bid', label: 'Bid', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'ask', label: 'Ask', align: 'right', border: '1px solid #dddddd !important' },
+        {
+          id: 'symbol',
+          label: 'Symbol',
+          align: 'left',
+          border: '1px solid #dddddd !important',
+          width: '80px',
+        },
+        {
+          id: 'bid',
+          label: 'Bid',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+          width: '80px',
+        },
+        {
+          id: 'ask',
+          label: 'Ask',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+          width: '80px',
+        },
       ],
     },
     {
@@ -143,7 +350,7 @@ export default function SymbolTableDashboard() {
                     />
 
                     <TableBody>
-                      {data.tableDatas.map((row, index) => (
+                      {rowData.map((row: any, index: any) => (
                         <SymbolNewRow key={row.id} row={row} index={index} value={value} />
                       ))}
                     </TableBody>
@@ -192,13 +399,18 @@ export default function SymbolTableDashboard() {
 // ----------------------------------------------------------------------
 
 type SymbolNewRowProps = {
-  row: RowProps;
+  row: RowProps | any;
   value?: any;
   index?: any;
 };
 
 function SymbolNewRow({ row, value, index }: SymbolNewRowProps) {
   const popover = usePopover();
+  const handleBidData =
+    row?.bid !== undefined && row?.oldBuyPrice !== undefined && row?.bid > row?.oldBuyPrice;
+
+  const handleAskData =
+    row?.ask !== undefined && row?.oldSellPrice !== undefined && row?.ask > row?.oldSellPrice;
 
   const handleDownload = () => {
     popover.onClose();
@@ -223,8 +435,9 @@ function SymbolNewRow({ row, value, index }: SymbolNewRowProps) {
   return (
     <>
       <StyledTableRow>
-        <StyledTableCell
+        <TableCell
           style={{
+            border: '1px solid #dddddd',
             textAlign: 'left',
             display: 'flex',
             alignItems: 'center',
@@ -233,16 +446,23 @@ function SymbolNewRow({ row, value, index }: SymbolNewRowProps) {
             borderLeft: 'none',
           }}
         >
-          {index % 2 === 0 ? (
-            <NorthEastIcon style={{ fontSize: '18px', color: 'green' }} />
+          {handleBidData || handleAskData ? (
+            <NorthEastIcon style={{ fontSize: '18px', color: 'blue' }} />
           ) : (
             <SouthEastIcon style={{ fontSize: '18px', color: 'red' }} />
           )}
           {row.symbol}
-        </StyledTableCell>
+        </TableCell>
         <StyledTableCell
           style={{
-            color: index % 2 === 0 ? 'blue' : 'red',
+            color:
+              row?.bid !== undefined && row?.oldBuyPrice !== undefined
+                ? row?.bid > row?.oldBuyPrice
+                  ? 'blue'
+                  : row?.bid === row?.oldBuyPrice
+                    ? 'black'
+                    : 'red'
+                : 'red',
             textAlign: 'right',
             width: '40px',
             padding: '9px',
@@ -252,7 +472,14 @@ function SymbolNewRow({ row, value, index }: SymbolNewRowProps) {
         </StyledTableCell>
         <StyledTableCell
           style={{
-            color: index % 2 === 0 ? 'blue' : 'red',
+            color:
+              row?.ask !== undefined && row?.oldSellPrice !== undefined
+                ? row?.ask > row?.oldSellPrice
+                  ? 'blue'
+                  : row?.ask === row?.oldSellPrice
+                    ? 'black'
+                    : 'red'
+                : 'red',
             textAlign: 'right',
             width: '40px',
             padding: '9px',

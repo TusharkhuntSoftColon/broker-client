@@ -84,11 +84,14 @@ export default function xxSymbolLiveList() {
   const [symbolData, setSymbolData] = useState<any>([]);
   const [exchangeData, setExchangeData] = useState<formattedDataInterface[]>([]);
   const [rows, setRow] = useState<any>([]);
+
   const { mutate } = useMutation(symbolService.getSymbolListByUser, {
     onSuccess: (data) => {
       const symbolnewData: any[] = data?.data?.rows;
 
       setSymbolData(symbolnewData);
+
+      console.log({ symbolnewData });
 
       // set table data with empty socket
       const symbolTableDashboard = [];
@@ -173,6 +176,8 @@ export default function xxSymbolLiveList() {
       console.log('error', error);
     },
   });
+
+  console.log({ token });
 
   const socketConnection = async (activeSymbols: any) => {
     try {
