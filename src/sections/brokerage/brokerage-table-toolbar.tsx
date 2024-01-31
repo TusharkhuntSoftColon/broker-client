@@ -150,17 +150,6 @@ export default function BrokerageTableToolbar({
     });
   }
 
-  const createMasterByRole: any = (role: any) => {
-    switch (role) {
-      case 'ADMIN':
-        return adminService.createMaster;
-      case 'SUPER_MASTER':
-        return superMasterService.createMaster;
-      default:
-        return paths;
-    }
-  };
-
   const createUserByRole: any = (role: any) => {
     switch (role) {
       case 'ADMIN':
@@ -171,17 +160,6 @@ export default function BrokerageTableToolbar({
         return masterService.createUser;
       default:
         return paths;
-    }
-  };
-
-  const updateMasterByRole: any = (role: any) => {
-    switch (role) {
-      case 'ADMIN':
-        return adminService.updateMaster;
-      case 'SUPER_MASTER':
-        return superMasterService.updateMaster;
-      default:
-        return paths; // Return a default path if role doesn't match
     }
   };
 
@@ -222,34 +200,7 @@ export default function BrokerageTableToolbar({
       enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
-  // create SUPER_MASTER
-  const { mutate: createSuperMaster } = useMutation(adminService.createSuperMaster, {
-    onSuccess: (data) => {
-      enqueueSnackbar(data?.message, { variant: 'success' });
-      router.push(paths.dashboard.person.root);
-      dispatch(addUser([]));
-    },
-    onError: (error: any) => {
-      if (isAxiosError(error)) {
-        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-      }
-      enqueueSnackbar(error?.message, { variant: 'error' });
-    },
-  });
-  // create MASTER
-  const { mutate: createMaster } = useMutation(createMasterByRole(role), {
-    onSuccess: (data: any) => {
-      enqueueSnackbar(data?.message, { variant: 'success' });
-      router.push(paths.dashboard.person.root);
-      dispatch(addUser([]));
-    },
-    onError: (error: any) => {
-      if (isAxiosError(error)) {
-        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-      }
-      enqueueSnackbar(error?.message, { variant: 'error' });
-    },
-  });
+
   // create USER
   const { mutate: createUser }: any = useMutation(createUserByRole(role), {
     onSuccess: (data: any) => {
@@ -274,34 +225,6 @@ export default function BrokerageTableToolbar({
     },
     onError: (error: any) => {
       console.log({ error });
-      if (isAxiosError(error)) {
-        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-      }
-      enqueueSnackbar(error?.message, { variant: 'error' });
-    },
-  });
-  // update MASTER
-  const { mutate: updateMaster }: any = useMutation(updateMasterByRole(role), {
-    onSuccess: (data: any) => {
-      enqueueSnackbar(data?.message ?? 'Data Updated Successfully', { variant: 'success' });
-      router.push(paths.dashboard.person.root);
-      dispatch(addUser([]));
-    },
-    onError: (error: any) => {
-      if (isAxiosError(error)) {
-        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-      }
-      enqueueSnackbar(error?.message, { variant: 'error' });
-    },
-  });
-  // update SUPER_MASTER
-  const { mutate: updateSuperMaster } = useMutation(adminService.updateSuperMaster, {
-    onSuccess: (data) => {
-      enqueueSnackbar(data?.message ?? 'Data Updated Successfully', { variant: 'success' });
-      router.push(paths.dashboard.person.root);
-      dispatch(addUser([]));
-    },
-    onError: (error: any) => {
       if (isAxiosError(error)) {
         enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
       }
