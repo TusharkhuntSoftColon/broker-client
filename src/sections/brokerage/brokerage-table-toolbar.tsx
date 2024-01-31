@@ -115,7 +115,7 @@ export default function BrokerageTableToolbar({
 
   const NewUserSchema = Yup.object().shape({
     exchangeCode: Yup.mixed<any>().nullable().required('Exchange is required'),
-    symbol: Yup.mixed<any>().nullable().required('Symbol is required'),
+    // symbol: Yup.mixed<any>().nullable().required('Symbol is required'),
     date: Yup.date().required('Date is required'),
     template: Yup.mixed<any>().nullable().required('Template is required'),
     bco: Yup.mixed<any>().nullable().required('Brokerage call option is required'),
@@ -311,20 +311,20 @@ export default function BrokerageTableToolbar({
 
   const onSubmit = handleSubmit(async (data) => {
     try {
-      if (roleOption === 'SUPER_MASTER') {
-        if (currentUser) {
-          await updateSuperMaster({ ...usersData, ...data, _id: currentUser?._id });
-        } else {
-          await createSuperMaster({ ...usersData, ...data });
-        }
-      }
-      if (roleOption === 'MASTER') {
-        if (currentUser) {
-          await updateMaster({ ...usersData, ...data, _id: currentUser?._id });
-        } else {
-          await createMaster({ ...usersData, ...data });
-        }
-      }
+      // if (roleOption === 'SUPER_MASTER') {
+      //   if (currentUser) {
+      //     await updateSuperMaster({ ...usersData, ...data, _id: currentUser?._id });
+      //   } else {
+      //     await createSuperMaster({ ...usersData, ...data });
+      //   }
+      // }
+      // if (roleOption === 'MASTER') {
+      //   if (currentUser) {
+      //     await updateMaster({ ...usersData, ...data, _id: currentUser?._id });
+      //   } else {
+      //     await createMaster({ ...usersData, ...data });
+      //   }
+      // }
       if (roleOption === 'USER') {
         if (currentUser) {
           await updateUser({ ...usersData, ...data, _id: currentUser?._id });
@@ -396,6 +396,12 @@ export default function BrokerageTableToolbar({
       });
     }
   }, [value.exchangeCode]);
+
+  const [addBrokerageClicked, setAddBrokerageClicked] = useState(false);
+
+  const handleAddBrokerageClick = () => {
+    setAddBrokerageClicked(true);
+  };
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
@@ -576,7 +582,15 @@ export default function BrokerageTableToolbar({
             <RHFTextField sx={{ width: '100%' }} type="number" name="brkgRate" label="BRKG Rate" />
             <RHFTextField sx={{ width: '100%' }} name="brkgRatePer" isReadOnly label="BRKG Per" />
           </Box>
-          <LoadingButton type="submit" variant="contained" loading={isSubmitting}>
+          <LoadingButton variant="contained" onClick={handleAddBrokerageClick}>
+            {currentUser ? 'Update Brokerage' : 'Add Brokerage'}
+          </LoadingButton>
+          <LoadingButton
+            type="submit"
+            variant="contained"
+            loading={isSubmitting}
+            disabled={!addBrokerageClicked}
+          >
             {currentUser ? 'Update User' : 'Create User'}
           </LoadingButton>
         </Stack>

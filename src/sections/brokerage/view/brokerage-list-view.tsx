@@ -8,8 +8,8 @@ import { useMutation } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect, useCallback } from 'react';
 
+import { Box } from '@mui/material';
 import Card from '@mui/material/Card';
-import { Stack } from '@mui/material';
 import Table from '@mui/material/Table';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
@@ -200,17 +200,20 @@ export default function BrokerageListView({ currentUser }: any) {
             setCurrentBrokerage={setCurrentBrokerage}
           />
           <FormProvider methods={methods}>
-            <Stack
-              spacing={1.5}
+            <Box
               sx={{
+                display: 'flex',
+                gap: 2,
                 p: 2,
-                width: 1,
               }}
             >
               <RHFAutocomplete
                 name="template"
                 label="Template"
                 id="template"
+                sx={{
+                  width: '100%',
+                }}
                 options={ClientList}
                 isLabled={false}
                 getOptionLabel={(option: any) => option.label}
@@ -221,7 +224,7 @@ export default function BrokerageListView({ currentUser }: any) {
                 )}
                 value={methods.watch('template')}
               />
-            </Stack>
+            </Box>
           </FormProvider>
           {canReset && (
             <BrokerageTableFiltersResult

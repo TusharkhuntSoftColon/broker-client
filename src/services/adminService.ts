@@ -52,10 +52,6 @@ export interface adminType {
 const adminService = {
   createSuperMaster: async (adminData: adminType): Promise<any> => {
     console.log('adminData', adminData);
-    // const date = new Date(adminData?.date);
-    // const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
-    // const day = date.getDate().toString().padStart(2, '0');
-    // const year = date.getFullYear();
     const newExchangeList = [
       ...adminData.exchangeList,
       {
@@ -73,12 +69,6 @@ const adminService = {
         ...adminData,
         leverageXY: `[${adminData?.leverageXY.value}]`,
         role: adminData?.role?.value,
-        // date: `${year}-${month}-${day}`,
-        // template: adminData?.template?.value,
-        // exchangeCode: adminData?.exchangeCode?.value,
-        // bco: adminData?.bco?.value,
-        // bcm: adminData?.bcm?.value,
-        // symbol: adminData?.symbol?.value,
         exchangeList,
       });
       return response.data;
@@ -89,10 +79,10 @@ const adminService = {
   },
   createMaster: async (data: any): Promise<any> => {
     console.log(data);
-    const date = new Date(data?.date);
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
-    const day = date.getDate().toString().padStart(2, '0');
-    const year = date.getFullYear();
+    // const date = new Date(data?.date);
+    // const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
+    // const day = date.getDate().toString().padStart(2, '0');
+    // const year = date.getFullYear();
     const newExchangeList = [
       ...data.exchangeList,
       {
@@ -107,12 +97,12 @@ const adminService = {
         ...data,
         leverageXY: `[${data?.leverageXY.value}]`,
         role: data?.role?.value,
-        date: `${year}-${month}-${day}`,
-        template: data?.template?.value,
-        exchangeCode: data?.exchangeCode?.value,
-        bco: data?.bco?.value,
-        bcm: data?.bcm?.value,
-        symbol: data?.symbol?.value,
+        // date: `${year}-${month}-${day}`,
+        // template: data?.template?.value,
+        // exchangeCode: data?.exchangeCode?.value,
+        // bco: data?.bco?.value,
+        // bcm: data?.bcm?.value,
+        // symbol: data?.symbol?.value,
         exchangeList,
       });
       return response.data;
@@ -196,10 +186,10 @@ const adminService = {
   },
   updateSuperMaster: async (SuperMasterData: any): Promise<any> => {
     console.log('SuperMasterData', SuperMasterData);
-    const date = new Date(SuperMasterData?.date);
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
-    const day = date.getDate().toString().padStart(2, '0');
-    const year = date.getFullYear();
+    // const date = new Date(SuperMasterData?.date);
+    // const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
+    // const day = date.getDate().toString().padStart(2, '0');
+    // const year = date.getFullYear();
     const newExchangeList = [
       ...SuperMasterData?.exchangeList,
       {
@@ -218,12 +208,12 @@ const adminService = {
           ...SuperMasterData,
           leverageXY: `[${SuperMasterData?.leverageXY.value}]`,
           role: SuperMasterData?.role?.value,
-          date: `${year}-${month}-${day}`,
-          template: SuperMasterData?.template?.value,
-          exchangeCode: SuperMasterData?.exchangeCode?.value,
-          bco: SuperMasterData?.bco?.value,
-          bcm: SuperMasterData?.bcm?.value,
-          symbol: SuperMasterData?.symbol?.value,
+          // date: `${year}-${month}-${day}`,
+          // template: SuperMasterData?.template?.value,
+          // exchangeCode: SuperMasterData?.exchangeCode?.value,
+          // bco: SuperMasterData?.bco?.value,
+          // bcm: SuperMasterData?.bcm?.value,
+          // symbol: SuperMasterData?.symbol?.value,
           exchangeList,
         }
       );
@@ -237,10 +227,10 @@ const adminService = {
   updateMaster: async (MasterData: any): Promise<any> => {
     console.log('MasterData', MasterData);
 
-    const date = new Date(MasterData?.date);
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
-    const day = date.getDate().toString().padStart(2, '0');
-    const year = date.getFullYear();
+    // const date = new Date(MasterData?.date);
+    // const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
+    // const day = date.getDate().toString().padStart(2, '0');
+    // const year = date.getFullYear();
     const newExchangeList = [
       ...MasterData?.exchangeList,
       {
@@ -259,12 +249,12 @@ const adminService = {
           ...MasterData,
           leverageXY: `[${MasterData?.leverageXY.value}]`,
           role: MasterData?.role?.value,
-          date: `${year}-${month}-${day}`,
-          template: MasterData?.template?.value,
-          exchangeCode: MasterData?.exchangeCode?.value,
-          bco: MasterData?.bco?.value,
-          bcm: MasterData?.bcm?.value,
-          symbol: MasterData?.symbol?.value,
+          // date: `${year}-${month}-${day}`,
+          // template: MasterData?.template?.value,
+          // exchangeCode: MasterData?.exchangeCode?.value,
+          // bco: MasterData?.bco?.value,
+          // bcm: MasterData?.bcm?.value,
+          // symbol: MasterData?.symbol?.value,
           exchangeList,
         }
       );
