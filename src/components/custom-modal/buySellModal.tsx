@@ -385,7 +385,7 @@ export default function BuySellDialog({
                 type="number"
                 fullWidth
                 name="stopLoss"
-                value={value?.stopLoss?.toFixed(2)}
+                value={value?.stopLoss}
                 onChange={handleInputChange}
                 //   style={{ margin: '0 10px' }}
                 sx={{
@@ -418,7 +418,7 @@ export default function BuySellDialog({
               <CustomtextFields
                 type="number"
                 fullWidth
-                value={value?.takeProfit?.toFixed(2)}
+                value={value?.takeProfit}
                 name="takeProfit"
                 onChange={handleInputChange}
                 //   style={{ margin: '0 10px' }}
