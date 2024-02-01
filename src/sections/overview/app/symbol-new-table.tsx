@@ -125,11 +125,7 @@ export default function SymbolTableDashboard() {
   const { mutate } = useMutation(getImportMonthList(role), {
     onSuccess: (data) => {
       const symbolnewData: any[] = data?.data?.rows;
-
       setSymbolData(symbolnewData);
-
-      console.log({ symbolnewData });
-
       // set table data with empty socket
       const symbolTableDashboard = [];
       for (const symbols of symbolnewData) {
@@ -146,7 +142,6 @@ export default function SymbolTableDashboard() {
         });
       }
       setRow(symbolTableDashboard);
-
       // setActiveSymbolData(symbolnewData);
       socketConnection(symbolnewData);
     },
@@ -238,8 +233,9 @@ export default function SymbolTableDashboard() {
       symbolTableDashboard.push({
         id: data.InstrumentIdentifier,
         symbol: symbolData.map((item: any) =>
-          item?.socketLiveName === data?.InstrumentIdentifier && item?.symbolType === data?.Exchange
-            ? item.name
+          item?.socketLiveName === data?.InstrumentIdentifier
+            ? //  && item?.exchange?.name === data?.Exchange
+              item.name
             : null
         ),
         bid: data.BuyPrice,
@@ -254,9 +250,7 @@ export default function SymbolTableDashboard() {
     setRow(symbolTableDashboard);
   }, [tableData]);
 
-  useEffect(() => {
-    console.log({ rows });
-  }, [rows]);
+  useEffect(() => {}, [rows]);
 
   const rowData = rows?.map((row: any) => {
     const { id, symbol, bid, ask, dailyChange, oldBuyPrice, oldSellPrice, oldPercentage } = row;
