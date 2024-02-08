@@ -169,7 +169,6 @@ export default function SymbolTableDashboard() {
       setSymbolData(symbolnewData);
       setCurrentSymbolList(symbolnewData);
 
-      // set table data with empty socket
       const symbolTableDashboard = [];
       for (const symbols of symbolnewData) {
         symbolTableDashboard.push({
@@ -214,13 +213,14 @@ export default function SymbolTableDashboard() {
       });
 
       const Symbols = activeSymbols.map((symbol: any) => symbol?.socketLiveName);
+      const parsedSymbols = JSON.stringify(Symbols);
 
       socket.on('connect', () => {
         console.log('[socket] Connected');
-        socket.emit('subscribeToAdministerServerMarket', Symbols);
+        socket.emit('subscribeToUserServerMarket', parsedSymbols);
       });
 
-      socket.emit('joinAdministerRoom', Symbols);
+      socket.emit('joinUserRoom', parsedSymbols);
 
       socket.on('disconnect', (reason: any) => {
         console.log('[socket] Disconnected:', reason);
@@ -230,7 +230,6 @@ export default function SymbolTableDashboard() {
       });
 
       socket.on('marketWatch', (data: any) => {
-        // console.log('data', data);
         setTableData((prev: any) => {
           let index1 = -1;
 
@@ -288,9 +287,11 @@ export default function SymbolTableDashboard() {
       )
       .filter(Boolean); // Filter out undefined values
     setRow(updatedArray);
-  }, [tableData, activeSymbolData, symbolData]);
+  }, [tableData]);
 
-  useEffect(() => {}, [rows]);
+  useEffect(() => {
+    console.log(rows);
+  }, [rows]);
 
   useEffect(() => {
     mutate();
@@ -379,29 +380,28 @@ export default function SymbolTableDashboard() {
                   }}
                 >
                   <CardHeader title={data.title} sx={{ mb: 4, mt: -1 }} />
-                  <Box>
-                    <IconButton
-                      color="default"
-                      sx={{ mb: 2 }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        addSymbolInDashboard.onTrue();
-                      }}
-                    >
-                      <AddIcon sx={{ fontSize: '28px', fontWeight: '800' }} />
-                    </IconButton>
 
-                    <IconButton
-                      color="default"
-                      sx={{ mb: 2, mr: 2 }}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        socketSymbol.onTrue();
-                      }}
-                    >
-                      <Iconify icon="solar:pen-bold" />
-                    </IconButton>
-                  </Box>
+                  <IconButton
+                    color="default"
+                    sx={{ mb: 2 }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      addSymbolInDashboard.onTrue();
+                    }}
+                  >
+                    <AddIcon sx={{ fontSize: '28px', fontWeight: '800' }} />
+                  </IconButton>
+
+                  <IconButton
+                    color="default"
+                    sx={{ mb: 2, mr: 2 }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      socketSymbol.onTrue();
+                    }}
+                  >
+                    <Iconify icon="solar:pen-bold" />
+                  </IconButton>
                 </Box>
                 <TableContainer
                   className="symbol-table-card"
@@ -413,7 +413,7 @@ export default function SymbolTableDashboard() {
                       headLabel={TABLE_HEAD}
                     />
                     <TableBody>
-                      {rowData.map((row: any, index: number) => (
+                      {rowData?.map((row: any, index: number) => (
                         <SymbolNewRow key={row.id} row={row} index={index} value={value} />
                       ))}
                     </TableBody>
