@@ -98,6 +98,10 @@
   border: 0 !important;
 }
 
+.symbol-table-card::-webkit-scrollbar {
+  display: none !important;
+}
+
 .css-1ebjqk4-MuiFormControl-root-MuiTextField-root .MuiInputBase-root {
   border-radius: 0px !important;
   border: 0 !important;

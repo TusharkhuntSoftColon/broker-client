@@ -113,6 +113,7 @@ export default function SymbolTableDashboard() {
   const [activeSymbolData] = useState<any>([]);
   const [rows, setRow] = useState<any>([]);
   const [assignedImportMonth, setAssignedImportMonth] = useState([]);
+  const [currentSymbolList, setCurrentSymbolList] = useState<any>([]);
 
   const getImportMonthList = (role: any) => {
     switch (role) {
@@ -161,14 +162,13 @@ export default function SymbolTableDashboard() {
       },
     }
   );
-
   const { mutate } = useMutation(getImportMonthList(role), {
     onSuccess: (data) => {
       const symbolnewData: any[] = data?.data?.rows;
 
-      console.log({ symbolnewData });
-
       setSymbolData(symbolnewData);
+      setCurrentSymbolList(symbolnewData);
+
       // set table data with empty socket
       const symbolTableDashboard = [];
       for (const symbols of symbolnewData) {
@@ -267,24 +267,28 @@ export default function SymbolTableDashboard() {
   };
 
   useEffect(() => {
-    const symbolTableDashboard = [];
+    const symbolTableDashboard: any[] = [];
     for (const data of tableData) {
       symbolTableDashboard.push({
         id: data?.InstrumentIdentifier,
-        symbol: symbolData.map(
-          (item: any) => item?.socketLiveName === data?.InstrumentIdentifier && item.name
-        ),
+        symbol: symbolData
+          .filter((item: any) => item?.socketLiveName === data?.InstrumentIdentifier)
+          .map((item: any) => item?.name),
         bid: data?.BuyPrice,
         ask: data?.SellPrice,
         dailyChange: data?.PriceChangePercentage,
-
         oldBuyPrice: data?.oldBuyPrice,
         oldSellPrice: data?.oldSellPrice,
         oldPercentage: data?.oldPercentage,
       });
     }
-    setRow(symbolTableDashboard);
-  }, [tableData, activeSymbolData]);
+    const updatedArray = symbolData
+      .map((data: any) =>
+        symbolTableDashboard.find((data1: any) => data1.id === data?.socketLiveName)
+      )
+      .filter(Boolean); // Filter out undefined values
+    setRow(updatedArray);
+  }, [tableData, activeSymbolData, symbolData]);
 
   useEffect(() => {}, [rows]);
 
@@ -375,28 +379,29 @@ export default function SymbolTableDashboard() {
                   }}
                 >
                   <CardHeader title={data.title} sx={{ mb: 4, mt: -1 }} />
+                  <Box>
+                    <IconButton
+                      color="default"
+                      sx={{ mb: 2 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        addSymbolInDashboard.onTrue();
+                      }}
+                    >
+                      <AddIcon sx={{ fontSize: '28px', fontWeight: '800' }} />
+                    </IconButton>
 
-                  <IconButton
-                    color="default"
-                    sx={{ mb: 2 }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      addSymbolInDashboard.onTrue();
-                    }}
-                  >
-                    <AddIcon sx={{ fontSize: '28px', fontWeight: '800' }} />
-                  </IconButton>
-
-                  <IconButton
-                    color="default"
-                    sx={{ mb: 2, mr: 2 }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      socketSymbol.onTrue();
-                    }}
-                  >
-                    <Iconify icon="solar:pen-bold" />
-                  </IconButton>
+                    <IconButton
+                      color="default"
+                      sx={{ mb: 2, mr: 2 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        socketSymbol.onTrue();
+                      }}
+                    >
+                      <Iconify icon="solar:pen-bold" />
+                    </IconButton>
+                  </Box>
                 </Box>
                 <TableContainer
                   className="symbol-table-card"
@@ -457,6 +462,7 @@ export default function SymbolTableDashboard() {
         onClose={addSymbolInDashboard.onFalse}
         symbolOptionList={assignedImportMonth}
         mutateSymbolData={mutate}
+        currentList={currentSymbolList}
       />
 
       <SocketSymbol

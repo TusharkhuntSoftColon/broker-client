@@ -17,6 +17,7 @@ interface AddSymbolInDashboardProps {
   onClose: () => void;
   symbolOptionList: any;
   mutateSymbolData: any;
+  currentList: any;
 }
 
 const AddSymbolInDashboard = ({
@@ -24,6 +25,7 @@ const AddSymbolInDashboard = ({
   onClose,
   symbolOptionList,
   mutateSymbolData,
+  currentList,
 }: AddSymbolInDashboardProps) => {
   const { enqueueSnackbar } = useSnackbar();
 
@@ -63,10 +65,16 @@ const AddSymbolInDashboard = ({
   };
 
   const SYMBOL_OPTIONS: any = [];
+  const CURRENT_SYMBOL_LIST: any = [];
 
   // creating options list for symbol selection
   for (let i = 0; i < symbolOptionList?.length; i++) {
     SYMBOL_OPTIONS.push({ value: symbolOptionList[i]?._id, label: symbolOptionList[i]?.name });
+  }
+
+  // current symbol list
+  for (let i = 0; i < currentList?.length; i++) {
+    CURRENT_SYMBOL_LIST.push({ value: currentList[i]?._id, label: currentList[i]?.name });
   }
 
   return (
@@ -90,7 +98,7 @@ const AddSymbolInDashboard = ({
             options={SYMBOL_OPTIONS}
             freeSolo
             disableCloseOnSelect
-            //   defaultValue={defaultOrderType}
+            defaultValue={CURRENT_SYMBOL_LIST}
             data={SYMBOL_OPTIONS}
             isLabled={false}
             multiple
