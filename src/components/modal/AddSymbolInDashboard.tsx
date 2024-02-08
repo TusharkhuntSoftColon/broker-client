@@ -92,6 +92,9 @@ const AddSymbolInDashboard = ({
         <DialogTitle>Add Symbol</DialogTitle>
         <DialogContent>
           <RHFAutocomplete
+            sx={{
+              m: 1,
+            }}
             name="symbolData"
             label="Add Symbols"
             isReadOnly={false}
