@@ -112,6 +112,7 @@ export default function SymbolTableDashboard() {
   const [symbolData, setSymbolData] = useState<any>([]);
   const [activeSymbolData] = useState<any>([]);
   const [rows, setRow] = useState<any>([]);
+  const [assignedImportMonth, setAssignedImportMonth] = useState([]);
 
   const getImportMonthList = (role: any) => {
     switch (role) {
@@ -143,6 +144,18 @@ export default function SymbolTableDashboard() {
     adminService.getupdatedImportMonthListByAdmin,
     {
       onSuccess: (data) => {},
+      onError: (error) => {
+        console.log('error', error);
+      },
+    }
+  );
+
+  const { mutate: getAssignedImportMonthList } = useMutation(
+    adminService.getassignedImportMonthListByAdmin,
+    {
+      onSuccess: (data) => {
+        setAssignedImportMonth(data?.data?.rows);
+      },
       onError: (error) => {
         console.log('error', error);
       },
@@ -277,7 +290,8 @@ export default function SymbolTableDashboard() {
 
   useEffect(() => {
     mutate();
-    // getUpdatedImportMonthList();
+    getUpdatedImportMonthList();
+    getAssignedImportMonthList();
     // getSymbolList();
   }, []);
 
@@ -441,7 +455,7 @@ export default function SymbolTableDashboard() {
       <AddSymbolInDashboard
         open={addSymbolInDashboard.value}
         onClose={addSymbolInDashboard.onFalse}
-        symbolOptionList={symbolData}
+        symbolOptionList={assignedImportMonth}
         mutateSymbolData={mutate}
       />
 
