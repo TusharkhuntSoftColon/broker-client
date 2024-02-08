@@ -110,7 +110,7 @@ export default function SymbolTableDashboard() {
   const [value, setValue] = React.useState(0);
   const [tableData, setTableData] = useState<any>([]);
   const [symbolData, setSymbolData] = useState<any>([]);
-  const [activeSymbolData] = useState<any>([]);
+  // const [activeSymbolData] = useState<any>([]);
   const [rows, setRow] = useState<any>([]);
   const [assignedImportMonth, setAssignedImportMonth] = useState([]);
   const [currentSymbolList, setCurrentSymbolList] = useState<any>([]);
