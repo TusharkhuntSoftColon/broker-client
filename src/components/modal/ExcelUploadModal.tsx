@@ -1,5 +1,3 @@
-import { useSnackbar } from 'notistack';
-import { useDispatch } from 'react-redux';
 import { useDropzone, FileRejection } from 'react-dropzone';
 import React, { useState, useEffect, useCallback } from 'react';
 
@@ -28,8 +26,6 @@ interface ExcelUploadModalProps {
 
 const ExcelUploadModal = ({ open, onClose }: ExcelUploadModalProps) => {
   const [file, setFile] = useState<File | null>(null);
-  const dispatch = useDispatch();
-  const { enqueueSnackbar } = useSnackbar();
 
   // const { mutate } = useMutation(adminService.getImportMonthList, {
   //   onSuccess: (data) => {
