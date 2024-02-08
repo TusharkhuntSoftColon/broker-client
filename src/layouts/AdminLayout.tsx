@@ -77,7 +77,7 @@ const AdminLayout = ({ children }: Props) => {
   if (isMini) {
     return (
       <>
-        <Header onOpenNav={nav.onTrue} />
+        {/* <Header onOpenNav={nav.onTrue} /> */}
 
         <Box
           sx={{
@@ -96,7 +96,7 @@ const AdminLayout = ({ children }: Props) => {
 
   return (
     <>
-      <Header onOpenNav={nav.onTrue} />
+      {/* <Header onOpenNav={nav.onTrue} /> */}
 
       <Box
         sx={{

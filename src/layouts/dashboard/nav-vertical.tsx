@@ -15,6 +15,8 @@ import { NavSectionVertical } from 'src/components/nav-section';
 
 import { NAV } from '../config-layout';
 import { NavItemBaseProps } from '../main/nav/types';
+import SettingsButton from '../common/settings-button';
+import AccountPopover from '../common/account-popover';
 import NavToggleButton from '../common/nav-toggle-button';
 
 // ----------------------------------------------------------------------
@@ -62,6 +64,12 @@ export default function NavVertical({ openNav, onCloseNav, nav }: Props) {
       />
 
       <Box sx={{ flexGrow: 1 }} />
+
+      <Box sx={{ margin: 2 }}>
+        <SettingsButton />
+
+        <AccountPopover />
+      </Box>
 
       {/* <NavUpgrade /> */}
     </Scrollbar>

@@ -10,6 +10,8 @@ import { NavSectionMini } from 'src/components/nav-section';
 
 import { NAV } from '../config-layout';
 import { NavItemBaseProps } from '../main/nav/types';
+import SettingsButton from '../common/settings-button';
+import AccountPopover from '../common/account-popover';
 import NavToggleButton from '../common/nav-toggle-button';
 
 // ----------------------------------------------------------------------
@@ -55,6 +57,12 @@ export default function NavMini({ nav }: Props) {
             currentRole: ADMIN?.role,
           }}
         />
+
+        <Box sx={{ margin: 2 }}>
+          <SettingsButton />
+
+          <AccountPopover />
+        </Box>
       </Stack>
     </Box>
   );

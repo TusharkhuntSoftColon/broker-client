@@ -20,8 +20,12 @@ import {
   GET_EXCHANGE_FOR_SUPERMASTER,
   UPDATE_SUPER_MASTER_BY_ADMIN,
   CREATE_SUPER_MASTER_BY_ADMIN,
+  IMPORT_MONTH_ORDER_FOR_ADMIN,
   GET_IMPORT_MONTH_LIST_BY_ADMIN,
   GET_IMPORT_MONTH_LIST_BY_MASTER,
+  UPDATED_SELECTED_LIST_FOR_ADMIN,
+  SET_IMPORT_MONTH_LIST_FOR_ADMIN,
+  IMPORT_MONTH_ORDER_LIST_FOR_ADMIN,
   GET_IMPORT_MONTH_LIST_BY_SUPER_MASTER,
 } from '../utils/urls';
 
@@ -396,6 +400,54 @@ const adminService = {
     } catch (error) {
       // You can log the error here for debugging purposes
       console.error('Error in symbolService.getSymbolList:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  getImportMonthOrderListByAdmin: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(IMPORT_MONTH_ORDER_LIST_FOR_ADMIN);
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in symbolService.getSymbolList:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  getupdatedImportMonthListByAdmin: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(UPDATED_SELECTED_LIST_FOR_ADMIN);
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in symbolService.getSymbolList:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  updateImportMonthOrder: async (symbolIds: any): Promise<any> => {
+    console.log({ symbolIds });
+
+    try {
+      const response: AxiosResponse<any> = await client.put(`${IMPORT_MONTH_ORDER_FOR_ADMIN}`, {
+        selectedImportMonth: symbolIds,
+      });
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in adminService.createAdmin:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  addSelectedImportMonth: async (symbolIds: any): Promise<any> => {
+    console.log({ symbolIds });
+
+    try {
+      const response: AxiosResponse<any> = await client.post(`${SET_IMPORT_MONTH_LIST_FOR_ADMIN}`, {
+        selectedImportMonth: symbolIds,
+      });
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in adminService.createAdmin:', error);
       throw error; // Re-throw the error to be caught by the caller
     }
   },

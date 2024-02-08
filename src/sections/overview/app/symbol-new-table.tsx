@@ -1,32 +1,38 @@
-/* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable no-restricted-syntax */
 /* eslint-disable no-plusplus */
-import { io } from 'socket.io-client';
-import { useSelector } from 'react-redux';
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-nested-ternary */
 /* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable @typescript-eslint/no-shadow */
+import { io } from 'socket.io-client';
+/* eslint-disable no-restricted-syntax */
 import React, { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
+// import { HTML5Backend } from 'react-dnd-html5-backend';
+// import { useDrag, useDrop, DndProvider, DragPreviewImage } from 'react-dnd';
+
+import { useSelector } from 'react-redux';
 
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import { styled } from '@mui/system';
-import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
+import Tabs from '@mui/material/Tabs';
 import Table from '@mui/material/Table';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
+import AddIcon from '@mui/icons-material/Add';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
-import TableContainer from '@mui/material/TableContainer';
+import { useTheme, IconButton } from '@mui/material';
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
+import TableContainer from '@mui/material/TableContainer';
 
 import useAuth from 'src/hooks/useAuth';
+import { useBoolean } from 'src/hooks/use-boolean';
 
 import { SOCKET_URL } from 'src/utils/environments';
 
@@ -34,17 +40,11 @@ import { newSymbolTableData } from 'src/_mock';
 import adminService from 'src/services/adminService';
 
 import Iconify from 'src/components/iconify';
-import Scrollbar from 'src/components/scrollbar';
 import { TableHeadCustom } from 'src/components/table';
+import SocketSymbol from 'src/components/modal/SocketSymbol';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import AddSymbolInDashboard from 'src/components/modal/AddSymbolInDashboard';
 // ----------------------------------------------------------------------
-
-type RowProps = {
-  id: any;
-  symbol: string;
-  bid: number;
-  ask: number;
-};
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -91,27 +91,32 @@ function a11yProps(index: number) {
   };
 }
 
-// interface formattedDataInterface {
-//   name: string;
-//   _id: string;
-//   importMonth: {
-//     label: string;
-//     value: string;
-//   }[];
-// }
+const TABLE_HEAD = [
+  {
+    id: 'symbol',
+    label: 'Symbol',
+    align: 'left',
+    border: '1px solid #dddddd !important',
+  },
+  { id: 'bid', label: 'Bid', align: 'right', border: '1px solid #dddddd !important' },
+  { id: 'ask', label: 'Ask', align: 'right', border: '1px solid #dddddd !important' },
+];
 
 export default function SymbolTableDashboard() {
-  const [value, setValue] = React.useState(0);
+  const socketSymbol = useBoolean();
+  const addSymbolInDashboard = useBoolean();
   const role = useSelector((data: any) => data.auth.role);
   const { token } = useAuth();
+  const [value, setValue] = React.useState(0);
   const [tableData, setTableData] = useState<any>([]);
   const [symbolData, setSymbolData] = useState<any>([]);
+  const [activeSymbolData] = useState<any>([]);
   const [rows, setRow] = useState<any>([]);
 
   const getImportMonthList = (role: any) => {
     switch (role) {
       case 'ADMIN':
-        return adminService.getImportMonthListByAdmin;
+        return adminService.getImportMonthOrderListByAdmin;
       case 'SUPER_MASTER':
         return adminService.getImportMonthListBySuperMaster;
       case 'MASTER':
@@ -122,9 +127,34 @@ export default function SymbolTableDashboard() {
     }
   };
 
+  // // list view page API
+  // const { mutate: getSymbolList } = useMutation(adminService.getImportMonthList, {
+  //   onSuccess: (data) => {
+  //     SymbolListForDashboardTable(data?.data?.rows);
+  //   },
+  //   onError: (error: any) => {
+  //     if (isAxiosError(error)) {
+  //       enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+  //     }
+  //   },
+  // });
+
+  const { mutate: getUpdatedImportMonthList } = useMutation(
+    adminService.getupdatedImportMonthListByAdmin,
+    {
+      onSuccess: (data) => {},
+      onError: (error) => {
+        console.log('error', error);
+      },
+    }
+  );
+
   const { mutate } = useMutation(getImportMonthList(role), {
     onSuccess: (data) => {
       const symbolnewData: any[] = data?.data?.rows;
+
+      console.log({ symbolnewData });
+
       setSymbolData(symbolnewData);
       // set table data with empty socket
       const symbolTableDashboard = [];
@@ -156,6 +186,7 @@ export default function SymbolTableDashboard() {
 
   const socketConnection = async (activeSymbols: any) => {
     try {
+      // const socket = io('wss://192.168.1.12:3000/');
       const socket = io(SOCKET_URL, {
         transports: ['websocket'],
         query: {
@@ -165,18 +196,18 @@ export default function SymbolTableDashboard() {
         },
         auth: { authorization: token },
         extraHeaders: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${token}`, // Add your auth token to the headers
         },
       });
+
       const Symbols = activeSymbols.map((symbol: any) => symbol?.socketLiveName);
-      const parseSymbol = JSON.stringify(Symbols);
 
       socket.on('connect', () => {
         console.log('[socket] Connected');
-        socket.emit('subscribeToUserServerMarket', parseSymbol);
+        socket.emit('subscribeToAdministerServerMarket', Symbols);
       });
 
-      socket.emit('joinUserRoom', parseSymbol);
+      socket.emit('joinAdministerRoom', Symbols);
 
       socket.on('disconnect', (reason: any) => {
         console.log('[socket] Disconnected:', reason);
@@ -186,7 +217,7 @@ export default function SymbolTableDashboard() {
       });
 
       socket.on('marketWatch', (data: any) => {
-        // console.log('marketWatch', data);
+        // console.log('data', data);
         setTableData((prev: any) => {
           let index1 = -1;
 
@@ -223,34 +254,32 @@ export default function SymbolTableDashboard() {
   };
 
   useEffect(() => {
-    // socketetConnection();
-    mutate();
-  }, []);
-
-  useEffect(() => {
     const symbolTableDashboard = [];
     for (const data of tableData) {
       symbolTableDashboard.push({
-        id: data.InstrumentIdentifier,
-        symbol: symbolData.map((item: any) =>
-          item?.socketLiveName === data?.InstrumentIdentifier
-            ? //  && item?.exchange?.name === data?.Exchange
-              item.name
-            : null
+        id: data?.InstrumentIdentifier,
+        symbol: symbolData.map(
+          (item: any) => item?.socketLiveName === data?.InstrumentIdentifier && item.name
         ),
-        bid: data.BuyPrice,
-        ask: data.SellPrice,
-        dailyChange: data.PriceChangePercentage,
+        bid: data?.BuyPrice,
+        ask: data?.SellPrice,
+        dailyChange: data?.PriceChangePercentage,
 
-        oldBuyPrice: data.oldBuyPrice,
-        oldSellPrice: data.oldSellPrice,
-        oldPercentage: data.oldPercentage,
+        oldBuyPrice: data?.oldBuyPrice,
+        oldSellPrice: data?.oldSellPrice,
+        oldPercentage: data?.oldPercentage,
       });
     }
     setRow(symbolTableDashboard);
-  }, [tableData]);
+  }, [tableData, activeSymbolData]);
 
   useEffect(() => {}, [rows]);
+
+  useEffect(() => {
+    mutate();
+    // getUpdatedImportMonthList();
+    // getSymbolList();
+  }, []);
 
   const rowData = rows?.map((row: any) => {
     const { id, symbol, bid, ask, dailyChange, oldBuyPrice, oldSellPrice, oldPercentage } = row;
@@ -266,6 +295,8 @@ export default function SymbolTableDashboard() {
     };
   });
 
+  console.log({ rows });
+
   const tabs = [
     {
       label: 'Symbols',
@@ -273,27 +304,9 @@ export default function SymbolTableDashboard() {
       title: 'Symbol Table',
       tableDatas: newSymbolTableData,
       tableLabel: [
-        {
-          id: 'symbol',
-          label: 'Symbol',
-          align: 'left',
-          border: '1px solid #dddddd !important',
-          width: '80px',
-        },
-        {
-          id: 'bid',
-          label: 'Bid',
-          align: 'right',
-          border: '1px solid #dddddd !important',
-          width: '80px',
-        },
-        {
-          id: 'ask',
-          label: 'Ask',
-          align: 'right',
-          border: '1px solid #dddddd !important',
-          width: '80px',
-        },
+        { id: 'symbol', label: 'Symbol', align: 'left', border: '1px solid #dddddd !important' },
+        { id: 'bid', label: 'Bid', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'ask', label: 'Ask', align: 'right', border: '1px solid #dddddd !important' },
       ],
     },
     {
@@ -319,85 +332,147 @@ export default function SymbolTableDashboard() {
       ],
     },
   ];
+
   return (
-    <Card
-      sx={{
-        borderRadius: 0,
-        height: 'inherit',
-        border: '1px solid #d3d3d3',
-        WebkitBorderRadius: '5px',
-      }}
-    >
-      <Box sx={{ margin: '5px', border: '1px solid #d3d3d3' }}>
-        <Box>
-          {tabs.map((data) => (
-            <CustomTabPanel value={value} index={data.value} styles={{ overflow: 'hidden' }}>
-              <CardHeader title={data.title} sx={{ mb: 4, mt: -1 }} />
-              <TableContainer sx={{ overflow: 'unset', height: '400px' }}>
-                <Scrollbar>
+    <>
+      <Card
+        sx={{
+          borderRadius: 0,
+          height: 'inherit',
+          border: '1px solid #d3d3d3',
+          WebkitBorderRadius: '5px',
+        }}
+      >
+        <Box sx={{ margin: '5px', border: '1px solid #d3d3d3' }}>
+          <Box>
+            {tabs.map((data) => (
+              <CustomTabPanel
+                key={data.value}
+                value={value}
+                index={data.value}
+                styles={{ overflow: 'hidden' }}
+              >
+                <Box
+                  sx={{
+                    display: 'flex',
+                    width: '100%',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                  }}
+                >
+                  <CardHeader title={data.title} sx={{ mb: 4, mt: -1 }} />
+
+                  <IconButton
+                    color="default"
+                    sx={{ mb: 2 }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      addSymbolInDashboard.onTrue();
+                    }}
+                  >
+                    <AddIcon sx={{ fontSize: '28px', fontWeight: '800' }} />
+                  </IconButton>
+
+                  <IconButton
+                    color="default"
+                    sx={{ mb: 2, mr: 2 }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      socketSymbol.onTrue();
+                    }}
+                  >
+                    <Iconify icon="solar:pen-bold" />
+                  </IconButton>
+                </Box>
+                <TableContainer
+                  className="symbol-table-card"
+                  sx={{ overflow: 'scroll', height: '400px' }}
+                >
                   <Table stickyHeader>
                     <TableHeadCustom
                       sx={{ textAlign: 'right', border: '1px solid #dddddd' }}
-                      headLabel={data.tableLabel}
+                      headLabel={TABLE_HEAD}
                     />
-
                     <TableBody>
-                      {rowData.map((row: any, index: any) => (
+                      {rowData.map((row: any, index: number) => (
                         <SymbolNewRow key={row.id} row={row} index={index} value={value} />
                       ))}
                     </TableBody>
                   </Table>
-                </Scrollbar>
-              </TableContainer>
-            </CustomTabPanel>
-          ))}
+                </TableContainer>
+              </CustomTabPanel>
+            ))}
+          </Box>
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            aria-label="basic tabs example"
+            sx={{
+              '& .MuiTabs-indicator': {
+                display: 'none',
+              },
+              '& .MuiTab-root': {
+                marginRight: 0,
+              },
+            }}
+          >
+            {tabs.map((data: any) => (
+              <Tab
+                key={data.value}
+                label={data.label}
+                {...a11yProps(data.value)}
+                sx={{
+                  // ml: 2,
+                  width: '20%',
+                  marginRight: '0px !important',
+                  borderTop: value === data.value ? 'none' : '1px solid #d3d3d3',
+                  borderLeft: value === data.value ? 'none' : '0.5px solid #d3d3d3',
+                  borderRight: value === data.value ? 'none' : '0.5px solid #d3d3d3',
+                  // borderBottom: value === data.value ? '1px solid #d3d3d3' : '1px solid #d3d3d3',
+                  borderTopLeftRadius: '10px',
+                  borderTopRightRadius: '10px',
+                }}
+              />
+            ))}
+          </Tabs>
         </Box>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-          sx={{
-            '& .MuiTabs-indicator': {
-              display: 'none',
-            },
-            '& .MuiTab-root': {
-              marginRight: 0, // Remove auto margin right for each tab
-            },
-          }}
-        >
-          {tabs.map((data: any) => (
-            <Tab
-              label={data.label}
-              {...a11yProps(data.value)}
-              sx={{
-                // ml: 2,
-                width: '20%',
-                marginRight: '0px !important',
-                borderTop: value === data.value ? 'none' : '1px solid #d3d3d3',
-                borderLeft: value === data.value ? 'none' : '0.5px solid #d3d3d3',
-                borderRight: value === data.value ? 'none' : '0.5px solid #d3d3d3',
-                // borderBottom: value === data.value ? '1px solid #d3d3d3' : '1px solid #d3d3d3',
-                borderTopLeftRadius: '10px',
-                borderTopRightRadius: '10px',
-              }}
-            />
-          ))}
-        </Tabs>
-      </Box>
-    </Card>
+      </Card>
+
+      <AddSymbolInDashboard
+        open={addSymbolInDashboard.value}
+        onClose={addSymbolInDashboard.onFalse}
+        symbolOptionList={symbolData}
+        mutateSymbolData={mutate}
+      />
+
+      <SocketSymbol
+        open={socketSymbol.value}
+        onClose={socketSymbol.onFalse}
+        symbolData={symbolData}
+        setSymbolData={setSymbolData}
+        mutateSymbolData={mutate}
+      />
+    </>
   );
 }
 
 // ----------------------------------------------------------------------
 
 type SymbolNewRowProps = {
-  row: RowProps | any;
+  row: any;
   value?: any;
   index?: any;
+  // moveRow: (fromIndex: number, toIndex: number) => void;
 };
 
-function SymbolNewRow({ row, value, index }: SymbolNewRowProps) {
+function SymbolNewRow({
+  row,
+  value,
+  index,
+  // moveRow
+}: SymbolNewRowProps) {
   const popover = usePopover();
+  const theme = useTheme();
   const handleBidData =
     row?.bid !== undefined && row?.oldBuyPrice !== undefined && row?.bid > row?.oldBuyPrice;
 
@@ -406,22 +481,18 @@ function SymbolNewRow({ row, value, index }: SymbolNewRowProps) {
 
   const handleDownload = () => {
     popover.onClose();
-    console.info('DOWNLOAD', row.id);
   };
 
   const handlePrint = () => {
     popover.onClose();
-    console.info('PRINT', row.id);
   };
 
   const handleShare = () => {
     popover.onClose();
-    console.info('SHARE', row.id);
   };
 
   const handleDelete = () => {
     popover.onClose();
-    console.info('DELETE', row.id);
   };
 
   return (
@@ -452,7 +523,9 @@ function SymbolNewRow({ row, value, index }: SymbolNewRowProps) {
                 ? row?.bid > row?.oldBuyPrice
                   ? 'blue'
                   : row?.bid === row?.oldBuyPrice
-                    ? 'black'
+                    ? theme.palette.mode === 'light'
+                      ? 'black'
+                      : 'white'
                     : 'red'
                 : 'red',
             textAlign: 'right',
@@ -469,7 +542,9 @@ function SymbolNewRow({ row, value, index }: SymbolNewRowProps) {
                 ? row?.ask > row?.oldSellPrice
                   ? 'blue'
                   : row?.ask === row?.oldSellPrice
-                    ? 'black'
+                    ? theme.palette.mode === 'light'
+                      ? 'black'
+                      : 'white'
                     : 'red'
                 : 'red',
             textAlign: 'right',

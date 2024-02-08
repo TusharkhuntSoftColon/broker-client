@@ -28,6 +28,12 @@ export const GET_BROKERAGE_LIST = '/admin/brockrage';
 
 export const GET_IMPORT_MONTH_LIST_BY_ADMIN = '/admin/exchange-list';
 
+export const IMPORT_MONTH_ORDER_FOR_ADMIN = '/admin/importmonth-position';
+export const IMPORT_MONTH_ORDER_LIST_FOR_ADMIN = '/admin/selected-importMonth';
+export const SET_IMPORT_MONTH_LIST_FOR_ADMIN = '/admin/select-assigne-importmonth';
+
+export const UPDATED_SELECTED_LIST_FOR_ADMIN = '/admin/user-select-importmonth';
+
 // SUPER MASTER
 export const CREATE_MASTER_BY_SUPER_MASTER = '/super-master/master';
 export const CREATE_USER_BY_SUPER_MASTER = '/super-master/user';
