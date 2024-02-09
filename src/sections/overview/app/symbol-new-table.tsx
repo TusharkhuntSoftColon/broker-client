@@ -116,6 +116,8 @@ export default function SymbolTableDashboard() {
   const [assignedExchanges, setAssignedExchanges] = useState([]);
   const [currentSymbolList, setCurrentSymbolList] = useState<any>([]);
 
+  const [defaultList, setDefaultList] = useState<any>();
+
   const getImportMonthList = (role: any) => {
     switch (role) {
       case 'ADMIN':
@@ -169,6 +171,24 @@ export default function SymbolTableDashboard() {
     adminService.getassignedExchangeListByAdmin,
     {
       onSuccess: (data) => {
+        //default selected symbols list
+        const DEFAULT_SELECTED_LIST: any = [];
+
+        for (let i = 0; i < data?.data?.rows.length; i++) {
+          for (
+            let j = 0;
+            j < data?.data?.rows[i]?.importMonth?.length &&
+            data?.data?.rows[i]?.importMonth?.length !== 0;
+            j++
+          ) {
+            DEFAULT_SELECTED_LIST.push({
+              label: data?.data?.rows[i]?.importMonth[j]?.name,
+              value: data?.data?.rows[i]?.importMonth[j]?._id,
+            });
+          }
+        }
+
+        setDefaultList(DEFAULT_SELECTED_LIST);
         setAssignedExchanges(data?.data?.rows);
       },
       onError: (error) => {
@@ -480,6 +500,7 @@ export default function SymbolTableDashboard() {
         symbolOptionList={assignedImportMonth}
         assignedExchangesList={assignedExchanges}
         mutateSymbolData={mutate}
+        defaultList={defaultList}
         currentList={currentSymbolList}
       />
 

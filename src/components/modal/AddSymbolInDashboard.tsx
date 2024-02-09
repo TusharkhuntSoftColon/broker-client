@@ -22,7 +22,6 @@ import {
 
 import adminService from 'src/services/adminService';
 
-import { RHFAutocomplete } from '../hook-form';
 import FormProvider from '../hook-form/form-provider';
 import { useState } from 'react';
 import TextField from '@mui/material/TextField';
@@ -35,6 +34,7 @@ interface AddSymbolInDashboardProps {
   mutateSymbolData: any;
   currentList: any;
   assignedExchangesList: any;
+  defaultList: any;
 }
 
 interface formattedDataInterface {
@@ -55,15 +55,16 @@ const AddSymbolInDashboard = ({
   mutateSymbolData,
   currentList,
   assignedExchangesList,
+  defaultList,
 }: AddSymbolInDashboardProps) => {
   const { enqueueSnackbar } = useSnackbar();
 
   const [activeExchange, setActiveExchange] = useState<formattedDataInterface | undefined>(
     undefined
   );
-  const [importMonthIds, setImportMonthIds] = useState<any>([]);
 
-  console.log({ importMonthIds });
+  const idsArray = currentList.map((data: any) => data?._id);
+  const [importMonthIds, setImportMonthIds] = useState<any>(idsArray);
 
   // close dailog function
   const handleClose = () => {
@@ -108,7 +109,7 @@ const AddSymbolInDashboard = ({
   // submit form
   const onSubmit = (data: any) => {
     console.log({ data });
-    const importMonths = data?.symbolData.map((data1: any) => data1.value);
+    // const importMonths = data?.symbolData.map((data1: any) => data1.value);
     // console.log({ importMonths });
     updateImportMonthList(importMonthIds);
 
@@ -200,7 +201,7 @@ const AddSymbolInDashboard = ({
                   }
                 }}
               >
-                {exchange?.importMonth?.length != 0 && (
+                {exchange?.importMonth?.length !== 0 && (
                   <>
                     <Box
                       sx={{
