@@ -1,3 +1,8 @@
+/* eslint-disable prefer-const */
+/* eslint-disable @typescript-eslint/no-shadow */
+/* eslint-disable react/self-closing-comp */
+/* eslint-disable perfectionist/sort-imports */
+/* eslint-disable arrow-body-style */
 /* eslint-disable no-plusplus */
 import { isAxiosError } from 'axios';
 /* eslint-disable import/order */
@@ -5,12 +10,13 @@ import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 
-import { Button, Dialog, DialogTitle, DialogActions, DialogContent } from '@mui/material';
+import { Box, Button, Dialog, DialogTitle, DialogActions, DialogContent } from '@mui/material';
 
 import adminService from 'src/services/adminService';
 
 import { RHFAutocomplete } from '../hook-form';
 import FormProvider from '../hook-form/form-provider';
+import { useState } from 'react';
 
 interface AddSymbolInDashboardProps {
   open: boolean;
@@ -18,6 +24,18 @@ interface AddSymbolInDashboardProps {
   symbolOptionList: any;
   mutateSymbolData: any;
   currentList: any;
+  assignedExchangesList: any;
+}
+
+interface formattedDataInterface {
+  name: string;
+  _id: string;
+  status: string;
+  isActive: boolean;
+  importMonth: {
+    label: string;
+    value: string;
+  }[];
 }
 
 const AddSymbolInDashboard = ({
@@ -26,8 +44,16 @@ const AddSymbolInDashboard = ({
   symbolOptionList,
   mutateSymbolData,
   currentList,
+  assignedExchangesList,
 }: AddSymbolInDashboardProps) => {
   const { enqueueSnackbar } = useSnackbar();
+
+  const [activeExchange, setActiveExchange] = useState<formattedDataInterface | undefined>(
+    undefined
+  );
+  const [importMonthIds, setImportMonthIds] = useState<any>([]);
+
+  console.log({ importMonthIds });
 
   // close dailog function
   const handleClose = () => {
@@ -45,6 +71,19 @@ const AddSymbolInDashboard = ({
       }
     },
   });
+
+  const onImportMonthClick = (id: string) => {
+    const isIdPresent = importMonthIds.includes(id);
+
+    // If the ID is already present, remove it from the array
+    if (isIdPresent) {
+      const updatedIds = importMonthIds.filter((existingId: string) => existingId !== id);
+      setImportMonthIds(updatedIds);
+    } else {
+      // If the ID is not present, add it to the array
+      setImportMonthIds([...importMonthIds, id]);
+    }
+  };
 
   const methods = useForm<any>({
     defaultValues: {
@@ -113,6 +152,76 @@ const AddSymbolInDashboard = ({
               </li>
             )}
           />
+
+          {assignedExchangesList?.map((exchange: formattedDataInterface) => (
+            <Box key={exchange?._id}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  cursor: 'pointer',
+                  width: '100%',
+                  '&:hover': {
+                    backgroundColor: '#F1F9FF',
+                  },
+                }}
+                onClick={() => {
+                  if (activeExchange === exchange) {
+                    setActiveExchange(undefined);
+                  } else {
+                    setActiveExchange(exchange);
+                  }
+                }}
+              >
+                <Box
+                  sx={{
+                    alignItems: 'center',
+                    cursor: 'pointer',
+                    minHeight: '30px',
+                    maxHeight: '44px',
+                    fontSize: '14px',
+                    fontWeight: 600,
+                    color: '#000000',
+                    padding: 1,
+                    fontFamily:
+                      'Roboto,Ubuntu,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif',
+                  }}
+                >
+                  {exchange?.name}
+                </Box>
+                <Box
+                  sx={{
+                    alignItems: 'center',
+                    cursor: 'pointer',
+                    minHeight: '30px',
+                    maxHeight: '44px',
+                    fontSize: '14px',
+                    fontWeight: 600,
+                    color: '#000000',
+                    padding: 1,
+                    fontFamily:
+                      'Roboto,Ubuntu,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif',
+                  }}
+                >
+                  {exchange?.importMonth?.length}
+                </Box>
+              </Box>
+              {activeExchange === exchange && exchange?.importMonth?.length > 0 && (
+                <Box>
+                  {exchange?.importMonth?.map((data: any) => (
+                    <Box
+                      key={data?._id}
+                      sx={{ color: importMonthIds.includes(data?._id) ? 'text.disabled' : '' }}
+                      onClick={() => onImportMonthClick(data?._id)}
+                    >
+                      {data?.name}
+                    </Box>
+                  ))}
+                </Box>
+              )}
+            </Box>
+          ))}
         </DialogContent>
 
         <DialogActions>

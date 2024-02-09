@@ -113,6 +113,7 @@ export default function SymbolTableDashboard() {
   // const [activeSymbolData] = useState<any>([]);
   const [rows, setRow] = useState<any>([]);
   const [assignedImportMonth, setAssignedImportMonth] = useState([]);
+  const [assignedExchanges, setAssignedExchanges] = useState([]);
   const [currentSymbolList, setCurrentSymbolList] = useState<any>([]);
 
   const getImportMonthList = (role: any) => {
@@ -128,6 +129,8 @@ export default function SymbolTableDashboard() {
         return adminService.getImportMonthListByMaster; // Return a default path if role doesn't match
     }
   };
+
+  console.log({ assignedExchanges });
 
   // // list view page API
   // const { mutate: getSymbolList } = useMutation(adminService.getImportMonthList, {
@@ -162,6 +165,18 @@ export default function SymbolTableDashboard() {
       },
     }
   );
+  const { mutate: getAssignedExchangeList } = useMutation(
+    adminService.getassignedExchangeListByAdmin,
+    {
+      onSuccess: (data) => {
+        setAssignedExchanges(data?.data?.rows);
+      },
+      onError: (error) => {
+        console.log('error', error);
+      },
+    }
+  );
+
   const { mutate } = useMutation(getImportMonthList(role), {
     onSuccess: (data) => {
       const symbolnewData: any[] = data?.data?.rows;
@@ -297,6 +312,7 @@ export default function SymbolTableDashboard() {
     mutate();
     getUpdatedImportMonthList();
     getAssignedImportMonthList();
+    getAssignedExchangeList();
     // getSymbolList();
   }, []);
 
@@ -380,28 +396,29 @@ export default function SymbolTableDashboard() {
                   }}
                 >
                   <CardHeader title={data.title} sx={{ mb: 4, mt: -1 }} />
+                  <Box>
+                    <IconButton
+                      color="default"
+                      sx={{ mb: 2 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        addSymbolInDashboard.onTrue();
+                      }}
+                    >
+                      <AddIcon sx={{ fontSize: '28px', fontWeight: '800' }} />
+                    </IconButton>
 
-                  <IconButton
-                    color="default"
-                    sx={{ mb: 2 }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      addSymbolInDashboard.onTrue();
-                    }}
-                  >
-                    <AddIcon sx={{ fontSize: '28px', fontWeight: '800' }} />
-                  </IconButton>
-
-                  <IconButton
-                    color="default"
-                    sx={{ mb: 2, mr: 2 }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      socketSymbol.onTrue();
-                    }}
-                  >
-                    <Iconify icon="solar:pen-bold" />
-                  </IconButton>
+                    <IconButton
+                      color="default"
+                      sx={{ mb: 2, mr: 2 }}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        socketSymbol.onTrue();
+                      }}
+                    >
+                      <Iconify icon="solar:pen-bold" />
+                    </IconButton>
+                  </Box>
                 </Box>
                 <TableContainer
                   className="symbol-table-card"
@@ -461,6 +478,7 @@ export default function SymbolTableDashboard() {
         open={addSymbolInDashboard.value}
         onClose={addSymbolInDashboard.onFalse}
         symbolOptionList={assignedImportMonth}
+        assignedExchangesList={assignedExchanges}
         mutateSymbolData={mutate}
         currentList={currentSymbolList}
       />
