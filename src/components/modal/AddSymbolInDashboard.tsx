@@ -10,13 +10,23 @@ import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 
-import { Box, Button, Dialog, DialogTitle, DialogActions, DialogContent } from '@mui/material';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogActions,
+  DialogContent,
+  InputAdornment,
+} from '@mui/material';
 
 import adminService from 'src/services/adminService';
 
 import { RHFAutocomplete } from '../hook-form';
 import FormProvider from '../hook-form/form-provider';
 import { useState } from 'react';
+import TextField from '@mui/material/TextField';
+import Iconify from 'src/components/iconify';
 
 interface AddSymbolInDashboardProps {
   open: boolean;
@@ -85,6 +95,8 @@ const AddSymbolInDashboard = ({
     }
   };
 
+  // console.log({ importMonthIds });
+
   const methods = useForm<any>({
     defaultValues: {
       symbolData: [],
@@ -98,7 +110,7 @@ const AddSymbolInDashboard = ({
     console.log({ data });
     const importMonths = data?.symbolData.map((data1: any) => data1.value);
     // console.log({ importMonths });
-    updateImportMonthList(importMonths);
+    updateImportMonthList(importMonthIds);
 
     // onClose();
   };
@@ -130,7 +142,21 @@ const AddSymbolInDashboard = ({
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <DialogTitle>Add Symbol</DialogTitle>
         <DialogContent>
-          <RHFAutocomplete
+          <TextField
+            sx={{ width: 1, mb: '1rem' }}
+            name="symbolData"
+            // value={}
+            onChange={() => {}}
+            placeholder="Search"
+            InputProps={{
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Iconify icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
+                </InputAdornment>
+              ),
+            }}
+          />
+          {/* <RHFAutocomplete
             sx={{
               m: 1,
             }}
@@ -151,7 +177,7 @@ const AddSymbolInDashboard = ({
                 {option.label}
               </li>
             )}
-          />
+          /> */}
 
           {assignedExchangesList?.map((exchange: formattedDataInterface) => (
             <Box key={exchange?._id}>
@@ -174,45 +200,54 @@ const AddSymbolInDashboard = ({
                   }
                 }}
               >
-                <Box
-                  sx={{
-                    alignItems: 'center',
-                    cursor: 'pointer',
-                    minHeight: '30px',
-                    maxHeight: '44px',
-                    fontSize: '14px',
-                    fontWeight: 600,
-                    color: '#000000',
-                    padding: 1,
-                    fontFamily:
-                      'Roboto,Ubuntu,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif',
-                  }}
-                >
-                  {exchange?.name}
-                </Box>
-                <Box
-                  sx={{
-                    alignItems: 'center',
-                    cursor: 'pointer',
-                    minHeight: '30px',
-                    maxHeight: '44px',
-                    fontSize: '14px',
-                    fontWeight: 600,
-                    color: '#000000',
-                    padding: 1,
-                    fontFamily:
-                      'Roboto,Ubuntu,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif',
-                  }}
-                >
-                  {exchange?.importMonth?.length}
-                </Box>
+                {exchange?.importMonth?.length != 0 && (
+                  <>
+                    <Box
+                      sx={{
+                        alignItems: 'center',
+                        cursor: 'pointer',
+                        minHeight: '30px',
+                        maxHeight: '44px',
+                        fontSize: '14px',
+                        fontWeight: 600,
+                        color: '#000000',
+                        padding: 1,
+                        fontFamily:
+                          'Roboto,Ubuntu,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif',
+                      }}
+                    >
+                      {exchange?.name}
+                    </Box>
+                    <Box
+                      sx={{
+                        alignItems: 'center',
+                        cursor: 'pointer',
+                        minHeight: '30px',
+                        maxHeight: '44px',
+                        fontSize: '14px',
+                        fontWeight: 600,
+                        color: '#000000',
+                        padding: 1,
+                        fontFamily:
+                          'Roboto,Ubuntu,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif',
+                      }}
+                    >
+                      {exchange?.importMonth?.length}
+                    </Box>
+                  </>
+                )}
               </Box>
               {activeExchange === exchange && exchange?.importMonth?.length > 0 && (
                 <Box>
                   {exchange?.importMonth?.map((data: any) => (
                     <Box
                       key={data?._id}
-                      sx={{ color: importMonthIds.includes(data?._id) ? 'text.disabled' : '' }}
+                      sx={{
+                        color: importMonthIds.includes(data?._id) ? 'text.disabled' : '',
+                        fontSize: '12px',
+                        cursor: 'pointer',
+                        ml: '1.5rem',
+                      }}
                       onClick={() => onImportMonthClick(data?._id)}
                     >
                       {data?.name}
