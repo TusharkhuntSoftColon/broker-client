@@ -41,8 +41,6 @@ import FormProvider, {
 
 import { IUserItem } from 'src/types/user';
 
-// ----------------------------------------------------------------------
-
 type Props = {
   currentUser?: IUserItem | any;
   isView?: any;
@@ -57,10 +55,7 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
   const router = useRouter();
 
   const [exchangeData, setExchangeData] = useState<any>();
-
   const personList = useSelector((data: any) => data?.person?.personData);
-  console.log('personList : ', personList);
-
   const Exchange: { label: any; value: any }[] = [];
   for (let i = 0; i < ExchangeList?.length; i++) {
     Exchange.push({
@@ -76,8 +71,6 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
     )[0];
   };
 
-  console.log({ currentUser });
-
   const defaultExchangeOptions = useMemo(
     () => (index: number) => {
       const data = currentUser
@@ -89,14 +82,10 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
               ? personList?.exchangeList?.exchangeGroup?.value === option?.value
               : personList?.exchangeGroup?.value === option?.value
           )[0];
-
-      console.log({ data });
       return data;
     },
     [currentUser, personList, EXCHANGE_GROUP]
   );
-
-  console.log({ defaultExchangeOptions });
 
   const defaultLeverageOptions = useMemo(() => {
     const data = currentUser
@@ -148,9 +137,7 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
     exchangeGroup: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
     allowedExchange: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
     leverageXY: Yup.mixed<any>().nullable().required('Leverage  is required'),
-    // brokerageTemplate:Yup.string().required('Brokerage Template is required'),
   });
-  console.log(personList);
 
   const defaultValues: any = useMemo(
     () => ({
@@ -180,7 +167,6 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
         sx={{ width: '100%' }}
         name="allowedExchange"
         label="Allowed Exchange"
-        // control={control}
         isReadOnly={!!isView}
         options={ExchangeOptions}
         freeSolo
@@ -253,7 +239,6 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
     name: 'exchangeList',
     control,
   });
-  // const [brokerageDataList, setBrokerageDataList] = useState([]);
 
   const [components, setComponents] = useState([]);
 
@@ -462,7 +447,6 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
     },
   });
   const onSubmit = handleSubmit(async (data) => {
-    console.log({ data });
     try {
       if (roleOption === 'SUPER_MASTER') {
         if (currentUser) {
@@ -489,7 +473,6 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
 
   useEffect(() => {
     mutate();
-    // brokerageList();
   }, []);
 
   const RolesOptions = (role: any) => {
@@ -500,9 +483,8 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
         return SUPER_MASTER_ROLE;
       case 'MASTER':
         return MASTER_ROLE;
-      // Add other cases for different roles with their respective paths
       default:
-        return paths; // Return a default path if role doesn't match
+        return paths;
     }
   };
 

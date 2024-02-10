@@ -33,7 +33,6 @@ export const IMPORT_MONTH_ORDER_LIST_FOR_ADMIN = '/admin/selected-importMonth';
 export const SET_IMPORT_MONTH_LIST_FOR_ADMIN = '/admin/select-assigne-importmonth';
 
 export const UPDATED_SELECTED_LIST_FOR_ADMIN = '/admin/user-select-importmonth';
-export const GET_ASSIGNED_IMPORT_MONTH_LIST_FOR_ADMIN = '/admin/assign/importmonth';
 export const GET_ASSIGNED_EXCHANGE_LIST_FOR_ADMIN = '/admin/all-exchanges';
 
 // SUPER MASTER

@@ -6,7 +6,6 @@ import * as Yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { useSelector } from 'react-redux';
 import { useMemo, useEffect } from 'react';
-import { useLocation } from 'react-router';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Box from '@mui/material/Box';
@@ -30,18 +29,13 @@ type Props = {
 };
 
 export default function BrokerageNewEditForm({ currentExchange }: Props) {
-  // const router = useRouter();
-  const location = useLocation();
-
-  console.log({ location });
-  // const { enqueueSnackbar } = useSnackbar();
   const ExchangeList = useSelector((data: any) => data?.admin?.exchangeList);
-
   const symbolList = useSelector((data: any) => data?.symbol?.symbolList);
 
   const NewUserSchema = Yup.object().shape({
     exchangeCode: Yup.mixed<any>().nullable().required('Exchange is required'),
   });
+
   const defaultValues = useMemo(
     () => ({
       date: currentExchange?.date || '',
@@ -95,46 +89,7 @@ export default function BrokerageNewEditForm({ currentExchange }: Props) {
     }
   }, [value.bcm]);
 
-  // const { mutate: CreateBrokerage } = useMutation(adminService.createBrokerage, {
-  //   onSuccess: (data) => {
-  //     enqueueSnackbar(data?.message, { variant: 'success' });
-  //     router.push(paths.dashboard.import_month.root);
-  //   },
-
-  //   onError: (error: any) => {
-  //     if (isAxiosError(error)) {
-  //       enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-  //     }
-  //   },
-  // });
-
-  // UPDATE IMPORT MONTH
-  // const { mutate: updateBrokerage } = useMutation(adminService.updateBrokerage, {
-  //   onSuccess: (data: any) => {
-  //     enqueueSnackbar(data?.message, { variant: 'success' });
-  //     router.push(paths.dashboard.import_month.root);
-  //   },
-  //   onError: (error: any) => {
-  //     if (isAxiosError(error)) {
-  //       enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-  //     }
-  //   },
-  // });
-
-  const onSubmit = handleSubmit(async (data) => {
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
-      if (currentExchange) {
-        // const adminID: any = currentExchange._id;
-        // updateBrokerage({ _id: adminID, data });
-      } else {
-        // dispatch(addAdmin(data));
-        // CreateBrokerage(data);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  });
+  const onSubmit = handleSubmit(async (data) => {});
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
@@ -155,21 +110,14 @@ export default function BrokerageNewEditForm({ currentExchange }: Props) {
                 label="Set Date"
                 name="date"
                 format="dd MMM yyyy"
-                // defaultValue={currentUser && new Date(currentUser?.date)}
                 onChange={(newValue) => {
                   setValue('date', newValue);
-
-                  // Handle the value change in the parent component state or context
                 }}
               />
               <RHFAutocomplete
                 name="exchangeCode"
                 label="Exchange"
-                // control={control}
-                // isReadOnly={!!isView || currentExchange}
                 options={Exchange}
-                // defaultValue={currentExchange && defaultExchangeOptions}
-                data={Exchange}
                 isLabled={false}
                 isOptionEqualToValue={(option, value) => option.value === value.value}
                 getOptionLabel={(option: any) => option.label}
@@ -182,10 +130,7 @@ export default function BrokerageNewEditForm({ currentExchange }: Props) {
               <RHFAutocomplete
                 name="symbol"
                 label="Symbol"
-                // control={control}
-                // isReadOnly={!!isView || currentExchange}
                 options={symbolOptions}
-                // defaultValue={currentExchange && defaultSymbolOptions}
                 data={symbolOptions}
                 isLabled={false}
                 isOptionEqualToValue={(option, value) => option.value === value.value}
@@ -199,10 +144,7 @@ export default function BrokerageNewEditForm({ currentExchange }: Props) {
               <RHFAutocomplete
                 name="bco"
                 label="Brokerage Call Option"
-                // control={control}
-                // isReadOnly={!!isView || currentExchange}
                 options={brokerageCallOptions}
-                // defaultValue={currentExchange && defaultSymbolOptions}
                 data={brokerageCallOptions}
                 isLabled={false}
                 isOptionEqualToValue={(option, value) => option.value === value.value}
@@ -217,10 +159,7 @@ export default function BrokerageNewEditForm({ currentExchange }: Props) {
               <RHFAutocomplete
                 name="bcm"
                 label="Brokerage Call Method"
-                // control={control}
-                // isReadOnly={!!isView || currentExchange}
                 options={brokerageCallMethod}
-                // defaultValue={currentExchange && defaultSymbolOptions}
                 data={brokerageCallMethod}
                 isLabled={false}
                 isOptionEqualToValue={(option, value) => option.value === value.value}

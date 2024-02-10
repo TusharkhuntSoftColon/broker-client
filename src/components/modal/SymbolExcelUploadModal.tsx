@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { isAxiosError } from 'axios';
 import { useSnackbar } from 'notistack';
@@ -106,7 +107,6 @@ const SymbolExcelUploadModal = ({ open, onClose }: ExcelUploadModalProps) => {
       });
       mutate();
       handleClose();
-      console.log(response.data);
     } catch (error) {
       console.error('Error uploading file:', error);
     }

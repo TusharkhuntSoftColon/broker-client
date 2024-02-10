@@ -87,8 +87,6 @@ export default function UpdateTradeDialog({
   };
 
   const handleModifyClick = () => {
-    // console.log('Buy Clicked');
-
     onClose();
   };
   return (

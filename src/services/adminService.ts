@@ -28,7 +28,6 @@ import {
   IMPORT_MONTH_ORDER_LIST_FOR_ADMIN,
   GET_ASSIGNED_EXCHANGE_LIST_FOR_ADMIN,
   GET_IMPORT_MONTH_LIST_BY_SUPER_MASTER,
-  GET_ASSIGNED_IMPORT_MONTH_LIST_FOR_ADMIN,
 } from '../utils/urls';
 
 export interface adminType {
@@ -453,18 +452,7 @@ const adminService = {
       throw error; // Re-throw the error to be caught by the caller
     }
   },
-  getassignedImportMonthListByAdmin: async (): Promise<any> => {
-    try {
-      const response: AxiosResponse<any> = await client.get(
-        GET_ASSIGNED_IMPORT_MONTH_LIST_FOR_ADMIN
-      );
-      return response.data;
-    } catch (error) {
-      // You can log the error here for debugging purposes
-      console.error('Error in symbolService.getSymbolList:', error);
-      throw error; // Re-throw the error to be caught by the caller
-    }
-  },
+
   getassignedExchangeListByAdmin: async (): Promise<any> => {
     try {
       const response: AxiosResponse<any> = await client.get(GET_ASSIGNED_EXCHANGE_LIST_FOR_ADMIN);

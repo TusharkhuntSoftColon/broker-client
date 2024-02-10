@@ -1,3 +1,4 @@
+/* eslint-disable perfectionist/sort-imports */
 /* eslint-disable no-plusplus */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-nested-ternary */
@@ -9,9 +10,7 @@ import React, { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 // import { HTML5Backend } from 'react-dnd-html5-backend';
 // import { useDrag, useDrop, DndProvider, DragPreviewImage } from 'react-dnd';
-
 import { useSelector } from 'react-redux';
-
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import { styled } from '@mui/system';
@@ -110,13 +109,9 @@ export default function SymbolTableDashboard() {
   const [value, setValue] = React.useState(0);
   const [tableData, setTableData] = useState<any>([]);
   const [symbolData, setSymbolData] = useState<any>([]);
-  // const [activeSymbolData] = useState<any>([]);
   const [rows, setRow] = useState<any>([]);
-  const [assignedImportMonth, setAssignedImportMonth] = useState([]);
   const [assignedExchanges, setAssignedExchanges] = useState([]);
   const [currentSymbolList, setCurrentSymbolList] = useState<any>([]);
-
-  const [defaultList, setDefaultList] = useState<any>();
 
   const getImportMonthList = (role: any) => {
     switch (role) {
@@ -132,20 +127,6 @@ export default function SymbolTableDashboard() {
     }
   };
 
-  console.log({ assignedExchanges });
-
-  // // list view page API
-  // const { mutate: getSymbolList } = useMutation(adminService.getImportMonthList, {
-  //   onSuccess: (data) => {
-  //     SymbolListForDashboardTable(data?.data?.rows);
-  //   },
-  //   onError: (error: any) => {
-  //     if (isAxiosError(error)) {
-  //       enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-  //     }
-  //   },
-  // });
-
   const { mutate: getUpdatedImportMonthList } = useMutation(
     adminService.getupdatedImportMonthListByAdmin,
     {
@@ -156,39 +137,10 @@ export default function SymbolTableDashboard() {
     }
   );
 
-  const { mutate: getAssignedImportMonthList } = useMutation(
-    adminService.getassignedImportMonthListByAdmin,
-    {
-      onSuccess: (data) => {
-        setAssignedImportMonth(data?.data?.rows);
-      },
-      onError: (error) => {
-        console.log('error', error);
-      },
-    }
-  );
   const { mutate: getAssignedExchangeList } = useMutation(
     adminService.getassignedExchangeListByAdmin,
     {
       onSuccess: (data) => {
-        //default selected symbols list
-        const DEFAULT_SELECTED_LIST: any = [];
-
-        for (let i = 0; i < data?.data?.rows.length; i++) {
-          for (
-            let j = 0;
-            j < data?.data?.rows[i]?.importMonth?.length &&
-            data?.data?.rows[i]?.importMonth?.length !== 0;
-            j++
-          ) {
-            DEFAULT_SELECTED_LIST.push({
-              label: data?.data?.rows[i]?.importMonth[j]?.name,
-              value: data?.data?.rows[i]?.importMonth[j]?._id,
-            });
-          }
-        }
-
-        setDefaultList(DEFAULT_SELECTED_LIST);
         setAssignedExchanges(data?.data?.rows);
       },
       onError: (error) => {
@@ -200,10 +152,8 @@ export default function SymbolTableDashboard() {
   const { mutate } = useMutation(getImportMonthList(role), {
     onSuccess: (data) => {
       const symbolnewData: any[] = data?.data?.rows;
-
       setSymbolData(symbolnewData);
       setCurrentSymbolList(symbolnewData);
-
       const symbolTableDashboard = [];
       for (const symbols of symbolnewData) {
         symbolTableDashboard.push({
@@ -219,7 +169,6 @@ export default function SymbolTableDashboard() {
         });
       }
       setRow(symbolTableDashboard);
-      // setActiveSymbolData(symbolnewData);
       socketConnection(symbolnewData);
     },
     onError: (error) => {
@@ -233,7 +182,6 @@ export default function SymbolTableDashboard() {
 
   const socketConnection = async (activeSymbols: any) => {
     try {
-      // const socket = io('wss://192.168.1.12:3000/');
       const socket = io(SOCKET_URL, {
         transports: ['websocket'],
         query: {
@@ -243,7 +191,7 @@ export default function SymbolTableDashboard() {
         },
         auth: { authorization: token },
         extraHeaders: {
-          Authorization: `Bearer ${token}`, // Add your auth token to the headers
+          Authorization: `Bearer ${token}`,
         },
       });
 
@@ -324,16 +272,12 @@ export default function SymbolTableDashboard() {
     setRow(updatedArray);
   }, [tableData]);
 
-  useEffect(() => {
-    console.log(rows);
-  }, [rows]);
+  useEffect(() => {}, [rows]);
 
   useEffect(() => {
     mutate();
     getUpdatedImportMonthList();
-    getAssignedImportMonthList();
     getAssignedExchangeList();
-    // getSymbolList();
   }, []);
 
   const rowData = rows?.map((row: any) => {
@@ -349,8 +293,6 @@ export default function SymbolTableDashboard() {
       oldPercentage,
     };
   });
-
-  console.log({ rows });
 
   const tabs = [
     {
@@ -497,10 +439,8 @@ export default function SymbolTableDashboard() {
       <AddSymbolInDashboard
         open={addSymbolInDashboard.value}
         onClose={addSymbolInDashboard.onFalse}
-        symbolOptionList={assignedImportMonth}
         assignedExchangesList={assignedExchanges}
         mutateSymbolData={mutate}
-        defaultList={defaultList}
         currentList={currentSymbolList}
       />
 
@@ -521,15 +461,9 @@ type SymbolNewRowProps = {
   row: any;
   value?: any;
   index?: any;
-  // moveRow: (fromIndex: number, toIndex: number) => void;
 };
 
-function SymbolNewRow({
-  row,
-  value,
-  index,
-  // moveRow
-}: SymbolNewRowProps) {
+function SymbolNewRow({ row, value, index }: SymbolNewRowProps) {
   const popover = usePopover();
   const theme = useTheme();
   const handleBidData =

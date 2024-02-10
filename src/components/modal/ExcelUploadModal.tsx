@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useDropzone, FileRejection } from 'react-dropzone';
 import React, { useState, useEffect, useCallback } from 'react';
 
@@ -70,23 +71,16 @@ const ExcelUploadModal = ({ open, onClose }: ExcelUploadModalProps) => {
     formData.append('importMonth', file);
 
     try {
-      // Send the FormData to the backend
       const response = await client.post('/import-month/bulk/import-data', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      // mutate();
       handleClose();
-      console.log(response.data);
     } catch (error) {
       console.error('Error uploading file:', error);
     }
   };
-
-  // useEffect(() => {
-  //   mutate();
-  // }, []);
 
   useEffect(() => {
     if (open) {

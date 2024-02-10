@@ -42,14 +42,9 @@ export default function PersonTableRow({
   index,
 }: Props) {
   const { name, exchangeList, ID, isActive, role } = row;
-  console.log({ row });
-
   const confirm = useBoolean();
-
   const quickEdit = useBoolean();
-
   const popover = usePopover();
-
   const exchangeData = useSelector((data: any) => data?.admin?.exchangeList);
 
   return (

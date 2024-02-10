@@ -1,3 +1,5 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable array-callback-return */
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable react/self-closing-comp */
@@ -23,18 +25,16 @@ import {
 import adminService from 'src/services/adminService';
 
 import FormProvider from '../hook-form/form-provider';
-import { useState } from 'react';
-import TextField from '@mui/material/TextField';
-import Iconify from 'src/components/iconify';
+import { useState, useEffect } from 'react';
+import { RHFTextField } from '../hook-form';
+import Iconify from '../iconify';
 
 interface AddSymbolInDashboardProps {
   open: boolean;
   onClose: () => void;
-  symbolOptionList: any;
   mutateSymbolData: any;
   currentList: any;
   assignedExchangesList: any;
-  defaultList: any;
 }
 
 interface formattedDataInterface {
@@ -51,11 +51,9 @@ interface formattedDataInterface {
 const AddSymbolInDashboard = ({
   open,
   onClose,
-  symbolOptionList,
   mutateSymbolData,
   currentList,
   assignedExchangesList,
-  defaultList,
 }: AddSymbolInDashboardProps) => {
   const { enqueueSnackbar } = useSnackbar();
 
@@ -65,11 +63,15 @@ const AddSymbolInDashboard = ({
 
   const idsArray = currentList.map((data: any) => data?._id);
   const [importMonthIds, setImportMonthIds] = useState<any>(idsArray);
+  const [assignedExchanges, setAssignedExchanges] = useState<any>(assignedExchangesList);
 
-  // close dailog function
   const handleClose = () => {
     onClose();
   };
+
+  useEffect(() => {
+    setImportMonthIds(idsArray);
+  }, [currentList]);
 
   const { mutate: updateImportMonthList } = useMutation(adminService.addSelectedImportMonth, {
     onSuccess: (data) => {
@@ -85,49 +87,35 @@ const AddSymbolInDashboard = ({
 
   const onImportMonthClick = (id: string) => {
     const isIdPresent = importMonthIds.includes(id);
-
-    // If the ID is already present, remove it from the array
     if (isIdPresent) {
       const updatedIds = importMonthIds.filter((existingId: string) => existingId !== id);
       setImportMonthIds(updatedIds);
     } else {
-      // If the ID is not present, add it to the array
       setImportMonthIds([...importMonthIds, id]);
     }
   };
 
-  // console.log({ importMonthIds });
-
   const methods = useForm<any>({
     defaultValues: {
-      symbolData: [],
+      symbolData: '',
     },
   });
 
-  const { handleSubmit } = methods;
+  const { handleSubmit, watch } = methods;
 
-  // submit form
+  const value = watch();
   const onSubmit = (data: any) => {
-    console.log({ data });
-    // const importMonths = data?.symbolData.map((data1: any) => data1.value);
-    // console.log({ importMonths });
     updateImportMonthList(importMonthIds);
-
-    // onClose();
   };
 
-  const SYMBOL_OPTIONS: any = [];
-  const CURRENT_SYMBOL_LIST: any = [];
-
-  // creating options list for symbol selection
-  for (let i = 0; i < symbolOptionList?.length; i++) {
-    SYMBOL_OPTIONS.push({ value: symbolOptionList[i]?._id, label: symbolOptionList[i]?.name });
-  }
-
-  // current symbol list
-  for (let i = 0; i < currentList?.length; i++) {
-    CURRENT_SYMBOL_LIST.push({ value: currentList[i]?._id, label: currentList[i]?.name });
-  }
+  useEffect(() => {
+    const filteredArray = assignedExchangesList?.filter((exchange: formattedDataInterface) =>
+      exchange.importMonth.some((month: any) =>
+        month.name.includes((value?.symbolData).toUpperCase())
+      )
+    );
+    setAssignedExchanges(filteredArray);
+  }, [value?.symbolData, assignedExchangesList]);
 
   return (
     <Dialog
@@ -143,12 +131,10 @@ const AddSymbolInDashboard = ({
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
         <DialogTitle>Add Symbol</DialogTitle>
         <DialogContent>
-          <TextField
-            sx={{ width: 1, mb: '1rem' }}
+          <RHFTextField
+            sx={{ width: '100%' }}
             name="symbolData"
-            // value={}
-            onChange={() => {}}
-            placeholder="Search"
+            placeholder="Search Symbol"
             InputProps={{
               startAdornment: (
                 <InputAdornment position="start">
@@ -157,30 +143,8 @@ const AddSymbolInDashboard = ({
               ),
             }}
           />
-          {/* <RHFAutocomplete
-            sx={{
-              m: 1,
-            }}
-            name="symbolData"
-            label="Add Symbols"
-            isReadOnly={false}
-            options={SYMBOL_OPTIONS}
-            freeSolo
-            disableCloseOnSelect
-            defaultValue={CURRENT_SYMBOL_LIST}
-            data={SYMBOL_OPTIONS}
-            isLabled={false}
-            multiple
-            isOptionEqualToValue={(option, value) => option.value === value.value}
-            getOptionLabel={(option: any) => option.label}
-            renderOption={(props, option, { selected }) => (
-              <li {...props} key={option.label}>
-                {option.label}
-              </li>
-            )}
-          /> */}
 
-          {assignedExchangesList?.map((exchange: formattedDataInterface) => (
+          {assignedExchanges?.map((exchange: formattedDataInterface) => (
             <Box key={exchange?._id}>
               <Box
                 sx={{
@@ -245,7 +209,7 @@ const AddSymbolInDashboard = ({
                       key={data?._id}
                       sx={{
                         color: importMonthIds.includes(data?._id) ? 'text.disabled' : '',
-                        fontSize: '12px',
+                        fontSize: '13px',
                         cursor: 'pointer',
                         ml: '1.5rem',
                       }}

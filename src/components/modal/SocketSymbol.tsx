@@ -37,9 +37,6 @@ const SocketSymbol = ({
   setSymbolData,
 }: SocketSymbolProps) => {
   const { enqueueSnackbar } = useSnackbar();
-  // const router = useRouter();
-
-  console.log({ symbolData });
 
   const handleClose = () => {
     onClose();
@@ -61,7 +58,6 @@ const SocketSymbol = ({
     if (!result.destination) {
       return;
     }
-
     const reorderedSymbols = Array.from(symbolData);
     const [movedSymbol] = reorderedSymbols.splice(result.source.index, 1);
     reorderedSymbols.splice(result.destination.index, 0, movedSymbol);
@@ -69,15 +65,11 @@ const SocketSymbol = ({
     setSymbolData(reorderedSymbols);
   };
 
-  console.log({ symbolData });
-
   const onSubmit = () => {
     const ids = symbolData.map((item: any) => item._id);
-
-    console.log({ ids });
-
     updateSymbolOrder(ids);
   };
+
   return (
     <Dialog
       fullWidth

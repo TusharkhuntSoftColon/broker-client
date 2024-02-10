@@ -48,10 +48,6 @@ import {
   TableSelectedAction,
   TablePaginationCustom,
 } from '../../../components/table';
-// import ProductTableToolbar from '../product-table-toolbar';
-// import ProductTableFiltersResult from '../product-table-filters-result';
-
-// ----------------------------------------------------------------------
 
 const TABLE_HEAD = [
   { id: 'template', label: 'Template', width: 160 },
@@ -62,17 +58,8 @@ const TABLE_HEAD = [
   { is: 'brokerage_call_method', label: 'BCM' },
   { is: 'brokerage_rate', label: 'BRKG Rate' },
   { is: 'brokerage_per', label: 'BRKG Per' },
-  // { id: 'createdAt', label: 'Create at', width: 160 },
-  // { id: 'inventoryType', label: 'Stock', width: 160 },
-  // { id: 'price', label: 'Price', width: 140 },
-  // { id: 'publish', label: 'Publish', width: 110 },
   { id: '', width: 88 },
 ];
-
-// const PUBLISH_OPTIONS = [
-//   { value: 'published', label: 'Published' },
-//   { value: 'draft', label: 'Draft' },
-// ];
 
 const defaultFilters: IProductTableFilters = {
   name: '',
@@ -85,32 +72,25 @@ const defaultFilters: IProductTableFilters = {
 // ----------------------------------------------------------------------
 
 export default function BrokerageListView({ currentUser }: any) {
+  const table = useTable();
+  const quickEdit = useBoolean();
+  const dispatch = useDispatch();
+  const settings = useSettingsContext();
   const router = useRouter();
   const role = useSelector((data: any) => data.auth.role);
+  const [filters, setFilters] = useState(defaultFilters);
+  const [currentBrokerage, setCurrentBrokerage] = useState();
 
+  const [tableData, setTableData] = useState([]);
+
+  const exchangeList = useSelector((data: any) => data?.exchange?.exchangeList);
+  const brokerageList = useSelector((data: any) => data?.admin?.brokerageList);
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     mutate();
   }, []);
 
-  const table = useTable();
-
-  const quickEdit = useBoolean();
-
-  const dispatch = useDispatch();
-
-  const settings = useSettingsContext();
-
-  const exchangeList = useSelector((data: any) => data?.exchange?.exchangeList);
-  const brokerageList = useSelector((data: any) => data?.admin?.brokerageList);
-
-  console.log({ brokerageList });
-
-  const [filters, setFilters] = useState(defaultFilters);
-  const [currentBrokerage, setCurrentBrokerage] = useState();
-
-  const [tableData, setTableData] = useState([]);
   const confirm = useBoolean();
   const defaultValues = {
     template: ClientList.find((item) => item.label === 'Template 1') || null,
@@ -175,7 +155,6 @@ export default function BrokerageListView({ currentUser }: any) {
     }
   };
 
-  // get exchange list
   const { mutate } = useMutation(getBrokerageByRole(role), {
     onSuccess: (data) => {
       setTableData(data?.data?.rows);
@@ -244,7 +223,10 @@ export default function BrokerageListView({ currentUser }: any) {
               numSelected={table.selected.length}
               rowCount={tableData.length}
               onSelectAllRows={(checked) =>
-                table.onSelectAllRows(checked, tableData?.map((row: any) => row._id))
+                table.onSelectAllRows(
+                  checked,
+                  tableData?.map((row: any) => row._id)
+                )
               }
             />
 
@@ -258,7 +240,10 @@ export default function BrokerageListView({ currentUser }: any) {
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
-                    table.onSelectAllRows(checked, tableData?.map((row: any) => row._id))
+                    table.onSelectAllRows(
+                      checked,
+                      tableData?.map((row: any) => row._id)
+                    )
                   }
                 />
 
@@ -348,8 +333,6 @@ function applyFilter({
   comparator: (a: any, b: any) => number;
   value: any;
 }) {
-  console.log(value);
-
   const stabilizedThis = inputData?.map((el: any, index: any) => [el, index] as const);
 
   stabilizedThis?.sort((a: any, b: any) => {

@@ -44,15 +44,6 @@ export default function BuySellDialog({
     comment: '',
   });
 
-  // const { mutate } = useMutation(tradeService.buyShare, {
-  //   onSuccess: (data: any) => {
-  //     console.log(data);
-  //   },
-  //   onError: (error: any) => {
-  //     console.log(error);
-  //   },
-  // });
-
   const dummyTypes = [
     { label: 'Instant Execution', value: 'instant-execution' },
     { label: 'Buy Limit', value: 'buy-limit' },
@@ -138,20 +129,20 @@ export default function BuySellDialog({
   };
 
   const handleSellClick = () => {
-    console.log('Sell Clicked');
-    console.log('Type:', type);
-    console.log('Exp:', expiration);
-    console.log('Values:', value);
-    console.log('bid', row?.bid);
-    // onClose();
+    // console.log('Sell Clicked');
+    // console.log('Type:', type);
+    // console.log('Exp:', expiration);
+    // console.log('Values:', value);
+    // console.log('bid', row?.bid);
+    // // onClose();
   };
 
   const handleBuyClick = () => {
-    console.log('Buy Clicked');
-    console.log('Type:', type);
-    console.log('Exp:', expiration);
-    console.log('Values:', value);
-    console.log('bid', row?.ask);
+    // console.log('Buy Clicked');
+    // console.log('Type:', type);
+    // console.log('Exp:', expiration);
+    // console.log('Values:', value);
+    // console.log('bid', row?.ask);
     // onClose();
   };
 

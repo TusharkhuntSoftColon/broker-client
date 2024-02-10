@@ -24,8 +24,7 @@ type Props = {
 const AdminLayout = ({ children }: Props) => {
   const role = useSelector((data: any) => data.auth.role);
 
-  const [manager, setmaneger] = useState(true);
-  console.log(setmaneger);
+  const [manager] = useState(true);
   const adminNav = useNavData();
   const superMasterNav = useSuperMasterNav();
   const masterNav = useMasterNav();
@@ -38,9 +37,8 @@ const AdminLayout = ({ children }: Props) => {
         return superMasterNav;
       case 'MASTER':
         return masterNav;
-      // Add other cases for different roles with their respective paths
       default:
-        return masterNav; // Return a default path if role doesn't match
+        return masterNav;
     }
   };
 
