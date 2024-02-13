@@ -133,6 +133,7 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     ID: Yup.string().required('User Id is required'),
+    balance: Yup.number().required('User Balance is required'),
     role: Yup.mixed<any>().nullable().required('Role is required'),
     exchangeGroup: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
     allowedExchange: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
@@ -150,6 +151,7 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
       insertCustomBet: currentUser?.insertCustomBet || personList?.insertCustomBet || false,
       exchangeList: [],
       editBet: currentUser?.editBet || personList?.editBet || false,
+      balance: 0,
       role: currentUser?.role || personList?.role?.label,
       deleteBet: currentUser?.deleteBet || personList?.deleteBet || false,
       leverageXY: defaultLeverageOptions || '',
@@ -559,6 +561,9 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
                   type="number"
                   label="Limit Of Add User"
                 />
+              )}
+              {roleOption === 'USER' && (
+                <RHFTextField isReadOnly={!!isView} name="balance" type="number" label="Balance" />
               )}
               <RHFAutocomplete
                 name="leverageXY"

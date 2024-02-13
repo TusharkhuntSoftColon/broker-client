@@ -21,13 +21,10 @@ import {
   UPDATE_SUPER_MASTER_BY_ADMIN,
   CREATE_SUPER_MASTER_BY_ADMIN,
   IMPORT_MONTH_ORDER_FOR_ADMIN,
-  GET_IMPORT_MONTH_LIST_BY_ADMIN,
-  GET_IMPORT_MONTH_LIST_BY_MASTER,
   UPDATED_SELECTED_LIST_FOR_ADMIN,
   SET_IMPORT_MONTH_LIST_FOR_ADMIN,
   IMPORT_MONTH_ORDER_LIST_FOR_ADMIN,
   GET_ASSIGNED_EXCHANGE_LIST_FOR_ADMIN,
-  GET_IMPORT_MONTH_LIST_BY_SUPER_MASTER,
 } from '../utils/urls';
 
 export interface adminType {
@@ -56,7 +53,6 @@ export interface adminType {
 
 const adminService = {
   createSuperMaster: async (adminData: adminType): Promise<any> => {
-    console.log('adminData', adminData);
     const newExchangeList = [
       ...adminData.exchangeList,
       {
@@ -83,7 +79,6 @@ const adminService = {
     }
   },
   createMaster: async (data: any): Promise<any> => {
-    console.log(data);
     // const date = new Date(data?.date);
     // const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
     // const day = date.getDate().toString().padStart(2, '0');
@@ -117,7 +112,6 @@ const adminService = {
     }
   },
   createUser: async (data: any): Promise<any> => {
-    console.log('data', data);
     const date = new Date(data?.date);
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
     const day = date.getDate().toString().padStart(2, '0');
@@ -190,7 +184,6 @@ const adminService = {
     }
   },
   updateSuperMaster: async (SuperMasterData: any): Promise<any> => {
-    console.log('SuperMasterData', SuperMasterData);
     // const date = new Date(SuperMasterData?.date);
     // const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
     // const day = date.getDate().toString().padStart(2, '0');
@@ -230,8 +223,6 @@ const adminService = {
     }
   },
   updateMaster: async (MasterData: any): Promise<any> => {
-    console.log('MasterData', MasterData);
-
     // const date = new Date(MasterData?.date);
     // const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
     // const day = date.getDate().toString().padStart(2, '0');
@@ -270,7 +261,6 @@ const adminService = {
     }
   },
   updateUser: async (UserData: any): Promise<any> => {
-    console.log(UserData);
     const date = new Date(UserData?.date);
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
     const day = date.getDate().toString().padStart(2, '0');
@@ -374,36 +364,6 @@ const adminService = {
       throw error; // Re-throw the error to be caught by the caller
     }
   },
-  getImportMonthListByAdmin: async (): Promise<any> => {
-    try {
-      const response: AxiosResponse<any> = await client.get(GET_IMPORT_MONTH_LIST_BY_ADMIN);
-      return response.data;
-    } catch (error) {
-      // You can log the error here for debugging purposes
-      console.error('Error in symbolService.getSymbolList:', error);
-      throw error; // Re-throw the error to be caught by the caller
-    }
-  },
-  getImportMonthListBySuperMaster: async (): Promise<any> => {
-    try {
-      const response: AxiosResponse<any> = await client.get(GET_IMPORT_MONTH_LIST_BY_SUPER_MASTER);
-      return response.data;
-    } catch (error) {
-      // You can log the error here for debugging purposes
-      console.error('Error in symbolService.getSymbolList:', error);
-      throw error; // Re-throw the error to be caught by the caller
-    }
-  },
-  getImportMonthListByMaster: async (): Promise<any> => {
-    try {
-      const response: AxiosResponse<any> = await client.get(GET_IMPORT_MONTH_LIST_BY_MASTER);
-      return response.data;
-    } catch (error) {
-      // You can log the error here for debugging purposes
-      console.error('Error in symbolService.getSymbolList:', error);
-      throw error; // Re-throw the error to be caught by the caller
-    }
-  },
   getImportMonthOrderListByAdmin: async (): Promise<any> => {
     try {
       const response: AxiosResponse<any> = await client.get(IMPORT_MONTH_ORDER_LIST_FOR_ADMIN);
@@ -425,8 +385,6 @@ const adminService = {
     }
   },
   updateImportMonthOrder: async (symbolIds: any): Promise<any> => {
-    console.log({ symbolIds });
-
     try {
       const response: AxiosResponse<any> = await client.put(`${IMPORT_MONTH_ORDER_FOR_ADMIN}`, {
         selectedImportMonth: symbolIds,
@@ -439,8 +397,6 @@ const adminService = {
     }
   },
   addSelectedImportMonth: async (symbolIds: any): Promise<any> => {
-    console.log({ symbolIds });
-
     try {
       const response: AxiosResponse<any> = await client.post(`${SET_IMPORT_MONTH_LIST_FOR_ADMIN}`, {
         selectedImportMonth: symbolIds,

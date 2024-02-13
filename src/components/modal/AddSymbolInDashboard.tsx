@@ -28,6 +28,9 @@ import FormProvider from '../hook-form/form-provider';
 import { useState, useEffect } from 'react';
 import { RHFTextField } from '../hook-form';
 import Iconify from '../iconify';
+import { useSelector } from 'react-redux';
+import superMasterService from 'src/services/superMasterService';
+import masterService from 'src/services/masterService';
 
 interface AddSymbolInDashboardProps {
   open: boolean;
@@ -61,6 +64,10 @@ const AddSymbolInDashboard = ({
     undefined
   );
 
+  console.log({ assignedExchangesList });
+
+  const role = useSelector((data: any) => data.auth.role);
+
   const idsArray = currentList.map((data: any) => data?._id);
   const [importMonthIds, setImportMonthIds] = useState<any>(idsArray);
   const [assignedExchanges, setAssignedExchanges] = useState<any>(assignedExchangesList);
@@ -73,9 +80,25 @@ const AddSymbolInDashboard = ({
     setImportMonthIds(idsArray);
   }, [currentList]);
 
-  const { mutate: updateImportMonthList } = useMutation(adminService.addSelectedImportMonth, {
+  const updateImportMonthListByRole = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.addSelectedImportMonth;
+      case 'SUPER_MASTER':
+        return superMasterService.addSelectedImportMonth;
+      case 'MASTER':
+        return masterService.addSelectedImportMonth;
+      // Add other cases for different roles with their respective paths
+      default:
+        return masterService.addSelectedImportMonth; // Return a default path if role doesn't match
+    }
+  };
+
+  const { mutate: updateImportMonthList } = useMutation(updateImportMonthListByRole(role), {
     onSuccess: (data) => {
       mutateSymbolData();
+      setActiveExchange(undefined);
+      reset();
       onClose();
     },
     onError: (error: any) => {
@@ -101,7 +124,7 @@ const AddSymbolInDashboard = ({
     },
   });
 
-  const { handleSubmit, watch } = methods;
+  const { reset, handleSubmit, watch } = methods;
 
   const value = watch();
   const onSubmit = (data: any) => {
@@ -110,8 +133,8 @@ const AddSymbolInDashboard = ({
 
   useEffect(() => {
     const filteredArray = assignedExchangesList?.filter((exchange: formattedDataInterface) =>
-      exchange.importMonth.some((month: any) =>
-        month.name.includes((value?.symbolData).toUpperCase())
+      exchange.importMonth?.some((month: any) =>
+        month.name?.includes((value?.symbolData).toUpperCase())
       )
     );
     setAssignedExchanges(filteredArray);
@@ -132,7 +155,7 @@ const AddSymbolInDashboard = ({
         <DialogTitle>Add Symbol</DialogTitle>
         <DialogContent>
           <RHFTextField
-            sx={{ width: '100%' }}
+            sx={{ width: '100%', mb: 1 }}
             name="symbolData"
             placeholder="Search Symbol"
             InputProps={{

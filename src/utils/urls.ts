@@ -26,7 +26,7 @@ export const DELETE_USER_BY_ADMIN = '/admin/user/remove/';
 
 export const GET_BROKERAGE_LIST = '/admin/brockrage';
 
-export const GET_IMPORT_MONTH_LIST_BY_ADMIN = '/admin/exchange-list';
+// export const GET_IMPORT_MONTH_LIST_BY_ADMIN = '/admin/exchange-list';
 
 export const IMPORT_MONTH_ORDER_FOR_ADMIN = '/admin/importmonth-position';
 export const IMPORT_MONTH_ORDER_LIST_FOR_ADMIN = '/admin/selected-importMonth';
@@ -54,6 +54,13 @@ export const GET_SYMBOL_SUPER_MASTER = '/super-master/all-symbols';
 
 export const GET_IMPORT_MONTH_LIST_BY_SUPER_MASTER = '/super-master/exchange-list';
 
+export const IMPORT_MONTH_ORDER_FOR_SUPER_MASTER = '/super-master/importmonth-position';
+export const IMPORT_MONTH_ORDER_LIST_FOR_SUPER_MASTER = '/super-master/selected-importMonth';
+export const SET_IMPORT_MONTH_LIST_FOR_SUPER_MASTER = '/super-master/select-assigne-importmonth';
+
+export const UPDATED_SELECTED_LIST_FOR_SUPER_MASTER = '/super-master/user-select-importmonth';
+export const GET_ASSIGNED_EXCHANGE_LIST_FOR_SUPER_MASTER = '/super-master/all-exchanges';
+
 // MASTER
 export const CREATE_USER_BY_MASTER = '/master/user';
 export const GET_ALL_PERSONS_BY_MASTER = '/master/person';
@@ -67,6 +74,13 @@ export const GET_SYMBOL_MASTER = '/master/all-symbols';
 export const DELETE_USER_BY_MASTER = '/master/user/remove/';
 
 export const GET_IMPORT_MONTH_LIST_BY_MASTER = '/master/exchange-list';
+
+export const IMPORT_MONTH_ORDER_FOR_MASTER = '/master/importmonth-position';
+export const IMPORT_MONTH_ORDER_LIST_FOR_MASTER = '/master/selected-importMonth';
+export const SET_IMPORT_MONTH_LIST_FOR_MASTER = '/master/select-assigne-importmonth';
+
+export const UPDATED_SELECTED_LIST_FOR_MASTER = '/master/user-select-importmonth';
+export const GET_ASSIGNED_EXCHANGE_LIST_FOR_MASTER = '/master/all-exchanges';
 
 // Exchange
 export const EXCHANGE_CREATE = '/exchange/create';

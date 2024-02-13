@@ -177,8 +177,6 @@ export default function xxSymbolLiveList() {
     },
   });
 
-  console.log({ token });
-
   const socketConnection = async (activeSymbols: any) => {
     try {
       const socket = io(SOCKET_URL, {
@@ -211,7 +209,6 @@ export default function xxSymbolLiveList() {
       });
 
       socket.on('marketWatch', (data: any) => {
-        // console.log('marketWatch', data);
         setTableData((prev: any) => {
           let index1 = -1;
 
@@ -292,7 +289,6 @@ export default function xxSymbolLiveList() {
 
   const handleDeleteRow = useCallback(
     (id: string) => {
-      console.log('delete row works');
       dispatch(deleteAdmin(id));
       enqueueSnackbar('Deleted Successfully', { variant: 'success' });
       table.onUpdatePageDeleteRow(dataInPage.length);

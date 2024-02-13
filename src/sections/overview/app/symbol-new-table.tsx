@@ -43,6 +43,8 @@ import { TableHeadCustom } from 'src/components/table';
 import SocketSymbol from 'src/components/modal/SocketSymbol';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import AddSymbolInDashboard from 'src/components/modal/AddSymbolInDashboard';
+import superMasterService from 'src/services/superMasterService';
+import masterService from 'src/services/masterService';
 // ----------------------------------------------------------------------
 
 interface TabPanelProps {
@@ -118,36 +120,57 @@ export default function SymbolTableDashboard() {
       case 'ADMIN':
         return adminService.getImportMonthOrderListByAdmin;
       case 'SUPER_MASTER':
-        return adminService.getImportMonthListBySuperMaster;
+        return superMasterService.getImportMonthOrderListBySuperMaster;
       case 'MASTER':
-        return adminService.getImportMonthListByMaster;
+        return masterService.getImportMonthOrderListByMaster;
       // Add other cases for different roles with their respective paths
       default:
-        return adminService.getImportMonthListByMaster; // Return a default path if role doesn't match
+        return masterService.getImportMonthOrderListByMaster; // Return a default path if role doesn't match
     }
   };
 
-  const { mutate: getUpdatedImportMonthList } = useMutation(
-    adminService.getupdatedImportMonthListByAdmin,
-    {
-      onSuccess: (data) => {},
-      onError: (error) => {
-        console.log('error', error);
-      },
+  const getUpdatedImportMonthByRole = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.getupdatedImportMonthListByAdmin;
+      case 'SUPER_MASTER':
+        return superMasterService.getupdatedImportMonthListBySuperMaster;
+      case 'MASTER':
+        return masterService.getupdatedImportMonthListByMaster;
+      // Add other cases for different roles with their respective paths
+      default:
+        return masterService.getupdatedImportMonthListByMaster; // Return a default path if role doesn't match
     }
-  );
+  };
+  const getAssignedExchangeByRole = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.getassignedExchangeListByAdmin;
+      case 'SUPER_MASTER':
+        return superMasterService.getassignedExchangeListBySuperMaster;
+      case 'MASTER':
+        return masterService.getassignedExchangeListByMaster;
+      // Add other cases for different roles with their respective paths
+      default:
+        return masterService.getassignedExchangeListByMaster; // Return a default path if role doesn't match
+    }
+  };
 
-  const { mutate: getAssignedExchangeList } = useMutation(
-    adminService.getassignedExchangeListByAdmin,
-    {
-      onSuccess: (data) => {
-        setAssignedExchanges(data?.data?.rows);
-      },
-      onError: (error) => {
-        console.log('error', error);
-      },
-    }
-  );
+  const { mutate: getUpdatedImportMonthList } = useMutation(getUpdatedImportMonthByRole(role), {
+    onSuccess: (data) => {},
+    onError: (error) => {
+      console.log('error', error);
+    },
+  });
+
+  const { mutate: getAssignedExchangeList } = useMutation(getAssignedExchangeByRole(role), {
+    onSuccess: (data) => {
+      setAssignedExchanges(data?.data?.rows);
+    },
+    onError: (error) => {
+      console.log('error', error);
+    },
+  });
 
   const { mutate } = useMutation(getImportMonthList(role), {
     onSuccess: (data) => {

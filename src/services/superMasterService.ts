@@ -12,6 +12,11 @@ import {
   UPDATE_MASTER_BY_SUPER_MASTER,
   GET_ALL_PERSONS_BY_SUPER_MASTER,
   GET_BROKERAGE_LIST_FOR_SUPER_MASTER,
+  IMPORT_MONTH_ORDER_FOR_SUPER_MASTER,
+  UPDATED_SELECTED_LIST_FOR_SUPER_MASTER,
+  SET_IMPORT_MONTH_LIST_FOR_SUPER_MASTER,
+  IMPORT_MONTH_ORDER_LIST_FOR_SUPER_MASTER,
+  GET_ASSIGNED_EXCHANGE_LIST_FOR_SUPER_MASTER,
 } from '../utils/urls';
 
 export interface adminType {
@@ -24,7 +29,6 @@ export interface adminType {
 
 const superMasterService = {
   createMaster: async (data: any): Promise<any> => {
-    console.log(data);
     const date = new Date(data?.date);
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
     const day = date.getDate().toString().padStart(2, '0');
@@ -59,7 +63,6 @@ const superMasterService = {
     }
   },
   createUser: async (data: any): Promise<any> => {
-    console.log(data);
     const date = new Date(data?.date);
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
     const day = date.getDate().toString().padStart(2, '0');
@@ -107,7 +110,6 @@ const superMasterService = {
     }
   },
   updateMaster: async (MasterData: any): Promise<any> => {
-    console.log(MasterData);
     const date = new Date(MasterData?.date);
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
     const day = date.getDate().toString().padStart(2, '0');
@@ -147,7 +149,6 @@ const superMasterService = {
     }
   },
   updateUser: async (UserData: any): Promise<any> => {
-    console.log(UserData);
     const date = new Date(UserData?.date);
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
     const day = date.getDate().toString().padStart(2, '0');
@@ -222,6 +223,70 @@ const superMasterService = {
   getSymbolListSuperMaster: async (): Promise<any> => {
     try {
       const response: AxiosResponse<any> = await client.get(GET_SYMBOL_SUPER_MASTER);
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in symbolService.getSymbolList:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  getImportMonthOrderListBySuperMaster: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(
+        IMPORT_MONTH_ORDER_LIST_FOR_SUPER_MASTER
+      );
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in symbolService.getSymbolList:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  updateImportMonthOrder: async (symbolIds: any): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.put(
+        `${IMPORT_MONTH_ORDER_FOR_SUPER_MASTER}`,
+        {
+          selectedImportMonth: symbolIds,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in adminService.createAdmin:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  getupdatedImportMonthListBySuperMaster: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(UPDATED_SELECTED_LIST_FOR_SUPER_MASTER);
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in symbolService.getSymbolList:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  addSelectedImportMonth: async (symbolIds: any): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.post(
+        `${SET_IMPORT_MONTH_LIST_FOR_SUPER_MASTER}`,
+        {
+          selectedImportMonth: symbolIds,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in adminService.createAdmin:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  getassignedExchangeListBySuperMaster: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(
+        GET_ASSIGNED_EXCHANGE_LIST_FOR_SUPER_MASTER
+      );
       return response.data;
     } catch (error) {
       // You can log the error here for debugging purposes

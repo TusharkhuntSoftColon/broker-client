@@ -20,6 +20,9 @@ import DragHandleIcon from '@mui/icons-material/DragHandle';
 import adminService from 'src/services/adminService';
 import { useMutation } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
+import { useSelector } from 'react-redux';
+import superMasterService from 'src/services/superMasterService';
+import masterService from 'src/services/masterService';
 
 interface SocketSymbolProps {
   open: boolean;
@@ -37,12 +40,27 @@ const SocketSymbol = ({
   setSymbolData,
 }: SocketSymbolProps) => {
   const { enqueueSnackbar } = useSnackbar();
+  const role = useSelector((data: any) => data.auth.role);
 
   const handleClose = () => {
     onClose();
   };
 
-  const { mutate: updateSymbolOrder } = useMutation(adminService.updateImportMonthOrder, {
+  const updateSymbolOrderByRole = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.addSelectedImportMonth;
+      case 'SUPER_MASTER':
+        return superMasterService.addSelectedImportMonth;
+      case 'MASTER':
+        return masterService.addSelectedImportMonth;
+      // Add other cases for different roles with their respective paths
+      default:
+        return masterService.addSelectedImportMonth; // Return a default path if role doesn't match
+    }
+  };
+
+  const { mutate: updateSymbolOrder } = useMutation(updateSymbolOrderByRole(role), {
     onSuccess: (data: any) => {
       mutateSymbolData();
       onClose();

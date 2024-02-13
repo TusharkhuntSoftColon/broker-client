@@ -11,7 +11,6 @@ export interface LoginTypes {
 
 const tradeService = {
   buyShare: async (data: any): Promise<any> => {
-    console.log('data', data);
     try {
       const response: AxiosResponse<any> = await client.post(BUY_TRADE, {
         data,
