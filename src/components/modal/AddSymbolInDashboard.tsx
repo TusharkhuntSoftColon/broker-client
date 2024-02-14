@@ -70,6 +70,7 @@ const AddSymbolInDashboard = ({
 
   const idsArray = currentList.map((data: any) => data?._id);
   const [importMonthIds, setImportMonthIds] = useState<any>(idsArray);
+
   const [assignedExchanges, setAssignedExchanges] = useState<any>(assignedExchangesList);
 
   const handleClose = () => {

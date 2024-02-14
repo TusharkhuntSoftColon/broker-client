@@ -19,7 +19,16 @@ import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { Accordion, Typography, AccordionDetails, AccordionSummary } from '@mui/material';
+import {
+  Accordion,
+  Typography,
+  AccordionDetails,
+  AccordionSummary,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+} from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -55,6 +64,8 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
   const router = useRouter();
 
   const [exchangeData, setExchangeData] = useState<any>();
+  const [selectedValues, setSelectedValues] = useState<string[]>([]);
+
   const personList = useSelector((data: any) => data?.person?.personData);
   const Exchange: { label: any; value: any }[] = [];
   for (let i = 0; i < ExchangeList?.length; i++) {
@@ -70,6 +81,8 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
       (option: any) => currentUser?.exchangeList[index]?.allowedExchange === option.value
     )[0];
   };
+
+  const [newExchangeOptions] = useState(Exchange);
 
   const defaultExchangeOptions = useMemo(
     () => (index: number) => {
@@ -163,47 +176,105 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
     [defaultAllowedExchange, defaultExchangeOptions]
   );
 
-  const allowedExchangeComponent = (index: any) => (
-    <Box sx={{ display: 'flex', gap: 2, width: '100%' }}>
-      <RHFAutocomplete
-        sx={{ width: '100%' }}
-        name="allowedExchange"
-        label="Allowed Exchange"
-        isReadOnly={!!isView}
-        options={ExchangeOptions}
-        freeSolo
-        data={ExchangeOptions}
-        defaultValue={currentUser && defaultAllowedExchange(index)}
-        isLabled={false}
-        isOptionEqualToValue={(option, value) => option.value === value.value}
-        getOptionLabel={(option: any) => option.label}
-        renderOption={(props, option, { selected }) => (
-          <li {...props} key={option.value}>
-            {option.label}
-          </li>
-        )}
-      />
-      <RHFAutocomplete
-        sx={{ width: '100%' }}
-        name="exchangeGroup"
-        label="Exchange Group"
-        // control={control}
-        isReadOnly={!!isView}
-        options={EXCHANGE_GROUP}
-        freeSolo
-        defaultValue={currentUser && defaultExchangeOptions(index)}
-        data={EXCHANGE_GROUP}
-        isLabled={false}
-        isOptionEqualToValue={(option, value) => option.value === value.value}
-        getOptionLabel={(option: any) => option.label}
-        renderOption={(props, option, { selected }) => (
-          <li {...props} key={option.value}>
-            {option.label}
-          </li>
-        )}
-      />
-    </Box>
-  );
+  const [fields, setFields] = useState(() => {
+    if (currentUser) {
+      // If in create mode, initialize fields with values from exchangeList
+      return currentUser?.exchangeList.map(({ allowedExchange, exchangeGroup }: any) => ({
+        allowedExchange,
+        exchangeGroup,
+      })); // Fallback to default if exchangeList is not available
+    } else {
+      // If in edit mode, initialize with default values
+      return [{ allowedExchange: '', exchangeGroup: '' }];
+    }
+  });
+
+  const handleChange = (index: number, event: any) => {
+    const { name, value } = event.target;
+    const newFields: any = [...fields];
+    newFields[index][name as string] = value;
+    setFields(newFields);
+
+    // Check if the selected value is already selected in another field
+    const selectedValue = value as string;
+    const alreadySelected = selectedValues.some((val) => val === selectedValue);
+    if (!alreadySelected) {
+      setSelectedValues((prev) => {
+        const updatedSelectedValues = [...prev];
+        updatedSelectedValues[index] = selectedValue;
+        return updatedSelectedValues;
+      });
+    }
+  };
+
+  const handleAddField = () => {
+    setFields([...fields, { allowedExchange: '', exchangeGroup: '' }]);
+  };
+
+  const handleRemoveLast = () => {
+    const lastField = fields[fields.length - 1];
+    if (lastField) {
+      const updatedOptions: any = [...selectedValues];
+      updatedOptions.push({ label: lastField.allowedExchange, value: lastField.allowedExchange });
+      updatedOptions.push({ label: lastField.exchangeGroup, value: lastField.exchangeGroup });
+      setSelectedValues(updatedOptions);
+      setFields(fields.slice(0, -1));
+    }
+  };
+
+  const allowedExchangeComponent = (index: number) => {
+    const exchangeListItem = currentUser?.exchangeList[index];
+
+    // Find the corresponding default values from newExchangeOptions based on allowedExchange and exchangeGroup values
+    const defaultAllowedExchange = newExchangeOptions.find(
+      (option) => option.value === exchangeListItem?.allowedExchange
+    );
+    const defaultExchangeGroup = EXCHANGE_GROUP.find(
+      (option) => option.value === exchangeListItem?.exchangeGroup
+    );
+
+    // const defaultAllowExchange = newExchangeOptions.find((data)=>data?.value === fields[index].valu)
+    return (
+      <Box sx={{ display: 'flex', gap: 2, width: '100%' }} key={index}>
+        <FormControl fullWidth>
+          <InputLabel id={`allowedExchange-label-${index}`}>Allowed Exchange</InputLabel>
+          <Select
+            name="allowedExchange"
+            labelId={`allowedExchange-label-${index}`}
+            label="Allowed Exchange"
+            sx={{ width: '100%' }}
+            defaultValue={defaultAllowedExchange?.value || ''}
+            value={fields[index].allowedExchange}
+            onChange={(event) => handleChange(index, event)}
+          >
+            {newExchangeOptions.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+        <FormControl fullWidth>
+          <InputLabel id={`exchangeGroup-label-${index}`}>Exchange Group</InputLabel>
+          <Select
+            name="exchangeGroup"
+            labelId={`exchangeGroup-label-${index}`}
+            label="Exchange Group"
+            sx={{ width: '100%' }}
+            defaultValue={defaultExchangeGroup?.value || ''}
+            value={fields[index].exchangeGroup}
+            onChange={(event) => handleChange(index, event)}
+          >
+            {EXCHANGE_GROUP.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
+      </Box>
+    );
+  };
 
   const getValidationSchema = (role: any) => {
     switch (role) {
@@ -448,6 +519,7 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
       enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
+
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (roleOption === 'SUPER_MASTER') {
@@ -621,10 +693,11 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
                 <AccordionDetails>
                   <Grid container spacing={1}>
                     <Box sx={{ display: 'flex', gap: 2, width: '100%', flexWrap: 'wrap' }}>
-                      {allowedExchangeComponent(0)}
+                      {/* {allowedExchangeComponent(0)}
                       {value?.exchangeList?.map((data: any, index: any) =>
                         allowedExchangeComponent(index + 1)
-                      )}
+                      )} */}
+                      {fields?.map((data: any, index: any) => allowedExchangeComponent(index))}
                     </Box>
                     <Grid xs={6}>
                       <Box
@@ -637,15 +710,15 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
                       >
                         <LoadingButton
                           variant="contained"
-                          disabled={!(Exchange.length - 1 > value.exchangeList?.length)}
-                          onClick={() => addNewComponent()}
+                          disabled={!(newExchangeOptions.length - 1 >= fields?.length)}
+                          onClick={() => handleAddField()}
                         >
                           ADD EXCHANGE
                         </LoadingButton>
                         <LoadingButton
-                          disabled={!(value.exchangeList?.length >= 1)}
+                          disabled={!(fields.length > 1)}
                           variant="contained"
-                          onClick={() => removeComponent()}
+                          onClick={() => handleRemoveLast()}
                         >
                           REMOVE EXCHANGE
                         </LoadingButton>
