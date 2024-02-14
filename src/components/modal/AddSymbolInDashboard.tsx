@@ -12,6 +12,8 @@ import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 
+import FolderCopyIcon from '@mui/icons-material/FolderCopy';
+
 import {
   Box,
   Button,
@@ -31,6 +33,8 @@ import Iconify from '../iconify';
 import { useSelector } from 'react-redux';
 import superMasterService from 'src/services/superMasterService';
 import masterService from 'src/services/masterService';
+import { set } from 'nprogress';
+import Folder from '@mui/icons-material/Folder';
 
 interface AddSymbolInDashboardProps {
   open: boolean;
@@ -64,18 +68,12 @@ const AddSymbolInDashboard = ({
     undefined
   );
 
-  console.log({ assignedExchangesList });
-
   const role = useSelector((data: any) => data.auth.role);
 
   const idsArray = currentList.map((data: any) => data?._id);
   const [importMonthIds, setImportMonthIds] = useState<any>(idsArray);
 
   const [assignedExchanges, setAssignedExchanges] = useState<any>(assignedExchangesList);
-
-  const handleClose = () => {
-    onClose();
-  };
 
   useEffect(() => {
     setImportMonthIds(idsArray);
@@ -125,7 +123,12 @@ const AddSymbolInDashboard = ({
     },
   });
 
-  const { reset, handleSubmit, watch } = methods;
+  const { reset, handleSubmit, watch, setValue } = methods;
+
+  const handleClose = () => {
+    setValue('symbolData', '');
+    onClose();
+  };
 
   const value = watch();
   const onSubmit = (data: any) => {
@@ -205,7 +208,14 @@ const AddSymbolInDashboard = ({
                           'Roboto,Ubuntu,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif',
                       }}
                     >
-                      {exchange?.name}
+                      <Box display={'flex'} gap={0.5} alignItems={'center'}>
+                        {activeExchange === exchange ? (
+                          <FolderCopyIcon sx={{ fontSize: '19px' }} />
+                        ) : (
+                          <Folder sx={{ fontSize: '19px' }} />
+                        )}{' '}
+                        {exchange?.name}{' '}
+                      </Box>
                     </Box>
                     <Box
                       sx={{
