@@ -18,9 +18,8 @@ import {
   GET_ALL_PERSONS_BY_ADMIN,
   DELETE_SUPER_MASTER_BY_ADMIN,
   GET_EXCHANGE_FOR_SUPERMASTER,
-  UPDATE_SUPER_MASTER_BY_ADMIN,
-  CREATE_SUPER_MASTER_BY_ADMIN,
   IMPORT_MONTH_ORDER_FOR_ADMIN,
+  CREATE_SUPER_MASTER_BY_ADMIN,
   UPDATED_SELECTED_LIST_FOR_ADMIN,
   SET_IMPORT_MONTH_LIST_FOR_ADMIN,
   IMPORT_MONTH_ORDER_LIST_FOR_ADMIN,
@@ -36,6 +35,7 @@ export interface adminType {
   leverageXY: any;
   allowedExchange: any;
   deleteBet: any;
+  fields: any;
   editBet: any;
   insertCustomBet: any;
   name: string;
@@ -53,24 +53,12 @@ export interface adminType {
 
 const adminService = {
   createSuperMaster: async (adminData: adminType): Promise<any> => {
-    const newExchangeList = [
-      ...adminData.exchangeList,
-      {
-        allowedExchange: adminData.allowedExchange.value,
-        exchangeGroup: adminData.exchangeGroup?.value,
-      },
-    ];
-    const exchangeList =
-      adminData.allowedExchange.value && adminData.exchangeGroup.value
-        ? newExchangeList
-        : adminData?.exchangeList;
-
     try {
       const response: AxiosResponse<any> = await client.post(CREATE_SUPER_MASTER_BY_ADMIN, {
         ...adminData,
         leverageXY: `[${adminData?.leverageXY.value}]`,
         role: adminData?.role?.value,
-        exchangeList,
+        exchangeList: adminData.fields,
       });
       return response.data;
     } catch (error) {
@@ -103,7 +91,7 @@ const adminService = {
         // bco: data?.bco?.value,
         // bcm: data?.bcm?.value,
         // symbol: data?.symbol?.value,
-        exchangeList,
+        exchangeList: data?.fields,
       });
       return response.data;
     } catch (error) {
@@ -188,6 +176,9 @@ const adminService = {
     // const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
     // const day = date.getDate().toString().padStart(2, '0');
     // const year = date.getFullYear();
+
+    console.log({ SuperMasterData });
+
     const newExchangeList = [
       ...SuperMasterData?.exchangeList,
       {
@@ -200,23 +191,22 @@ const adminService = {
         ? newExchangeList
         : SuperMasterData?.exchangeList;
     try {
-      const response: AxiosResponse<any> = await client.put(
-        `${UPDATE_SUPER_MASTER_BY_ADMIN}/${SuperMasterData._id}`,
-        {
-          ...SuperMasterData,
-          leverageXY: `[${SuperMasterData?.leverageXY.value}]`,
-          role: SuperMasterData?.role?.value,
-          // date: `${year}-${month}-${day}`,
-          // template: SuperMasterData?.template?.value,
-          // exchangeCode: SuperMasterData?.exchangeCode?.value,
-          // bco: SuperMasterData?.bco?.value,
-          // bcm: SuperMasterData?.bcm?.value,
-          // symbol: SuperMasterData?.symbol?.value,
-          exchangeList,
-        }
-      );
-
-      return response.data;
+      // const response: AxiosResponse<any> = await client.put(
+      //   `${UPDATE_SUPER_MASTER_BY_ADMIN}/${SuperMasterData._id}`,
+      //   {
+      //     ...SuperMasterData,
+      //     leverageXY: `[${SuperMasterData?.leverageXY.value}]`,
+      //     role: SuperMasterData?.role?.value,
+      //     // date: `${year}-${month}-${day}`,
+      //     // template: SuperMasterData?.template?.value,
+      //     // exchangeCode: SuperMasterData?.exchangeCode?.value,
+      //     // bco: SuperMasterData?.bco?.value,
+      //     // bcm: SuperMasterData?.bcm?.value,
+      //     // symbol: SuperMasterData?.symbol?.value,
+      //     exchangeList,
+      //   }
+      // );
+      // return response.data;
     } catch (error) {
       console.error('Error in exchangeService.getExchangeList:', error);
       throw error;

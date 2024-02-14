@@ -188,6 +188,8 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
     return [{ allowedExchange: '', exchangeGroup: '' }];
   });
 
+  console.log({ fields });
+
   const handleChange = (index: number, event: any) => {
     const { name, value } = event.target;
     const newFields: any = [...fields];
@@ -429,7 +431,7 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
   const { mutate: createSuperMaster } = useMutation(adminService.createSuperMaster, {
     onSuccess: (data) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
-      router.push(paths.dashboard.person.root);
+      // router.push(paths.dashboard.person.root);
       dispatch(addUser([]));
     },
     onError: (error: any) => {
@@ -443,7 +445,7 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
   const { mutate: updateSuperMaster } = useMutation(adminService.updateSuperMaster, {
     onSuccess: (data) => {
       enqueueSnackbar(data?.message ?? 'Data Updated Successfully', { variant: 'success' });
-      router.push(paths.dashboard.person.root);
+      // router.push(paths.dashboard.person.root);
       dispatch(addUser([]));
     },
     onError: (error: any) => {
@@ -486,16 +488,16 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
     try {
       if (roleOption === 'SUPER_MASTER') {
         if (currentUser) {
-          await updateSuperMaster({ ...data, _id: currentUser?._id });
+          await updateSuperMaster({ ...data, _id: currentUser?._id, fields });
         } else {
-          await createSuperMaster({ ...data });
+          await createSuperMaster({ ...data, fields });
         }
       }
       if (roleOption === 'MASTER') {
         if (currentUser) {
-          await updateMaster({ ...data, _id: currentUser?._id });
+          await updateMaster({ ...data, _id: currentUser?._id, fields });
         } else {
-          await createMaster({ ...data });
+          await createMaster({ ...data, fields });
         }
       }
       if (roleOption === 'USER') {
