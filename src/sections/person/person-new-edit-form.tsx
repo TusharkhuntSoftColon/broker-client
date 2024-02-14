@@ -7,11 +7,11 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import * as Yup from 'yup';
 import { isAxiosError } from 'axios';
+import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
 import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useDispatch, useSelector } from 'react-redux';
-import { useForm, useFieldArray } from 'react-hook-form';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -309,12 +309,12 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
     }
   }, []);
 
-  const { append, remove } = useFieldArray({
-    name: 'exchangeList',
-    control,
-  });
+  // const { append, remove } = useFieldArray({
+  //   name: 'exchangeList',
+  //   control,
+  // });
 
-  const [components, setComponents] = useState([]);
+  // const [components, setComponents] = useState([]);
 
   useEffect(() => {
     const fieldsToReset: any = [

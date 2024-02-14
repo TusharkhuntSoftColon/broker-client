@@ -78,8 +78,8 @@ const adminService = {
         exchangeGroup: data.exchangeGroup?.value,
       },
     ];
-    const exchangeList =
-      data.allowedExchange.value && data.exchangeGroup.value ? newExchangeList : data?.exchangeList;
+    // const exchangeList =
+    //   data.allowedExchange.value && data.exchangeGroup.value ? newExchangeList : data?.exchangeList;
     try {
       const response: AxiosResponse<any> = await client.post(CREATE_MASTER_BY_ADMIN, {
         ...data,
@@ -186,10 +186,10 @@ const adminService = {
         exchangeGroup: SuperMasterData?.exchangeGroup?.value,
       },
     ];
-    const exchangeList =
-      SuperMasterData?.allowedExchange.value && SuperMasterData?.exchangeGroup.value
-        ? newExchangeList
-        : SuperMasterData?.exchangeList;
+    // const exchangeList =
+    //   SuperMasterData?.allowedExchange.value && SuperMasterData?.exchangeGroup.value
+    //     ? newExchangeList
+    //     : SuperMasterData?.exchangeList;
     try {
       // const response: AxiosResponse<any> = await client.put(
       //   `${UPDATE_SUPER_MASTER_BY_ADMIN}/${SuperMasterData._id}`,

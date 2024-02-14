@@ -33,7 +33,6 @@ import Iconify from '../iconify';
 import { useSelector } from 'react-redux';
 import superMasterService from 'src/services/superMasterService';
 import masterService from 'src/services/masterService';
-import { set } from 'nprogress';
 import Folder from '@mui/icons-material/Folder';
 
 interface AddSymbolInDashboardProps {
@@ -208,7 +207,7 @@ const AddSymbolInDashboard = ({
                           'Roboto,Ubuntu,-apple-system,BlinkMacSystemFont,Segoe UI,Helvetica Neue,Arial,sans-serif',
                       }}
                     >
-                      <Box display={'flex'} gap={0.5} alignItems={'center'}>
+                      <Box display="flex" gap={0.5} alignItems="center">
                         {activeExchange === exchange ? (
                           <FolderCopyIcon sx={{ fontSize: '19px' }} />
                         ) : (
