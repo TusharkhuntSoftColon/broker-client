@@ -20,14 +20,14 @@ import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import {
-  Accordion,
-  Typography,
-  AccordionDetails,
-  AccordionSummary,
-  FormControl,
-  InputLabel,
   Select,
   MenuItem,
+  Accordion,
+  Typography,
+  InputLabel,
+  FormControl,
+  AccordionDetails,
+  AccordionSummary,
 } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
@@ -183,10 +183,9 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
         allowedExchange,
         exchangeGroup,
       })); // Fallback to default if exchangeList is not available
-    } else {
-      // If in edit mode, initialize with default values
-      return [{ allowedExchange: '', exchangeGroup: '' }];
     }
+    // If in edit mode, initialize with default values
+    return [{ allowedExchange: '', exchangeGroup: '' }];
   });
 
   const handleChange = (index: number, event: any) => {
@@ -314,43 +313,6 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
   });
 
   const [components, setComponents] = useState([]);
-
-  const addNewComponent = () => {
-    const newComponents: any = [...components];
-    if (value.allowedExchange?.label && value?.exchangeGroup.label) {
-      append({
-        allowedExchange: value?.allowedExchange?.value,
-        exchangeGroup: value?.exchangeGroup?.value,
-      });
-      setValue('allowedExchange', {});
-      setValue('exchangeGroup', {});
-      setComponents(newComponents);
-    }
-  };
-
-  const removeComponent = () => {
-    const lastPos = value?.exchangeList[value?.exchangeList.length - 1];
-
-    const lastValueOfAllowedExchange = Exchange.filter(
-      (data) => data.value === lastPos.allowedExchange
-    )[0];
-    const lastValueOfExchangeGroup = Exchange.filter(
-      (data) => data.value === lastPos.exchangeGroup
-    )[0];
-
-    if (value.exchangeList?.length >= 1) {
-      if (
-        !(value.exchangeList.length < components.length) ||
-        value.exchangeList.length === components.length
-      ) {
-        setValue('allowedExchange', lastValueOfAllowedExchange);
-        setValue('exchangeGroup', lastValueOfExchangeGroup);
-        remove(value.exchangeList.length - 1);
-      }
-    } else {
-      alert('At least one component must remain!');
-    }
-  };
 
   useEffect(() => {
     const fieldsToReset: any = [
