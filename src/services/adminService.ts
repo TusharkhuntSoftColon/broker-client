@@ -71,13 +71,13 @@ const adminService = {
     // const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
     // const day = date.getDate().toString().padStart(2, '0');
     // const year = date.getFullYear();
-    const newExchangeList = [
-      ...data.exchangeList,
-      {
-        allowedExchange: data.allowedExchange.value,
-        exchangeGroup: data.exchangeGroup?.value,
-      },
-    ];
+    // const newExchangeList = [
+    //   ...data.exchangeList,
+    //   {
+    //     allowedExchange: data.allowedExchange.value,
+    //     exchangeGroup: data.exchangeGroup?.value,
+    //   },
+    // ];
     // const exchangeList =
     //   data.allowedExchange.value && data.exchangeGroup.value ? newExchangeList : data?.exchangeList;
     try {
@@ -179,13 +179,13 @@ const adminService = {
 
     console.log({ SuperMasterData });
 
-    const newExchangeList = [
-      ...SuperMasterData?.exchangeList,
-      {
-        allowedExchange: SuperMasterData?.allowedExchange.value,
-        exchangeGroup: SuperMasterData?.exchangeGroup?.value,
-      },
-    ];
+    // const newExchangeList = [
+    //   ...SuperMasterData?.exchangeList,
+    //   {
+    //     allowedExchange: SuperMasterData?.allowedExchange.value,
+    //     exchangeGroup: SuperMasterData?.exchangeGroup?.value,
+    //   },
+    // ];
     // const exchangeList =
     //   SuperMasterData?.allowedExchange.value && SuperMasterData?.exchangeGroup.value
     //     ? newExchangeList

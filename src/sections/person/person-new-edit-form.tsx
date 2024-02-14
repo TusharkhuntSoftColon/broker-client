@@ -296,7 +296,6 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
   });
   const {
     watch,
-    control,
     setValue,
     handleSubmit,
     formState: { isSubmitting },
