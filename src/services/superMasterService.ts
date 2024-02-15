@@ -101,22 +101,14 @@ const superMasterService = {
       throw error; // Re-throw the error to be caught by the caller
     }
   },
+
   updateMaster: async (MasterData: any): Promise<any> => {
+    console.log({ MasterData });
     const date = new Date(MasterData?.date);
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
     const day = date.getDate().toString().padStart(2, '0');
     const year = date.getFullYear();
-    const newExchangeList = [
-      ...MasterData.exchangeList,
-      {
-        allowedExchange: MasterData.allowedExchange.value,
-        exchangeGroup: MasterData.exchangeGroup?.value,
-      },
-    ];
-    const exchangeList =
-      MasterData.allowedExchange.value && MasterData.exchangeGroup.value
-        ? newExchangeList
-        : MasterData?.exchangeList;
+
     try {
       const response: AxiosResponse<any> = await client.put(
         `${UPDATE_MASTER_BY_SUPER_MASTER}/${MasterData._id}`,
@@ -130,7 +122,7 @@ const superMasterService = {
           bco: MasterData?.bco?.value,
           bcm: MasterData?.bcm?.value,
           symbol: MasterData?.symbol?.value,
-          exchangeList,
+          exchangeList: MasterData?.fields,
         }
       );
       return response.data;

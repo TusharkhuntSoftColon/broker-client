@@ -178,8 +178,6 @@ const adminService = {
     // const day = date.getDate().toString().padStart(2, '0');
     // const year = date.getFullYear();
 
-    console.log({ SuperMasterData });
-
     // const newExchangeList = [
     //   ...SuperMasterData?.exchangeList,
     //   {

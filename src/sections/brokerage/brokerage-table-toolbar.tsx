@@ -41,10 +41,10 @@ type Props = {
 };
 
 export default function BrokerageTableToolbar({
-  mutate,
+  // mutate,
   currentUser,
   currentBrokerage,
-  setCurrentBrokerage,
+  // setCurrentBrokerage,
 }: Props) {
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
@@ -79,8 +79,8 @@ export default function BrokerageTableToolbar({
   const defaultExchnageCode = Exchange.filter(
     (data: any) => data?.value === currentBrokerage?.exchangeCode
   )[0];
+
   const defaultSymbol = Symbol.find((data: any) => data?.value === currentBrokerage?.symbol);
-  console.log({ defaultSymbol });
   const defaultBcm = brokerageCallMethod.find((data: any) => data?.value === currentBrokerage?.bcm);
 
   const defaultBco = brokerageCallOptions.find(
@@ -188,6 +188,7 @@ export default function BrokerageTableToolbar({
         return paths; // Return a default path if role doesn't match
     }
   };
+
   // get symbol list
   const { mutate: getSymbol } = useMutation(getSymbolByRole(role), {
     onSuccess: (data: any) => {
@@ -215,6 +216,7 @@ export default function BrokerageTableToolbar({
       enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
+
   // update USER
   const { mutate: updateUser }: any = useMutation(updateUserByRole(role), {
     onSuccess: (data: any) => {
@@ -233,6 +235,7 @@ export default function BrokerageTableToolbar({
   });
 
   const onSubmit = handleSubmit(async (data) => {
+    console.log({ data });
     try {
       // if (roleOption === 'SUPER_MASTER') {
       //   if (currentUser) {

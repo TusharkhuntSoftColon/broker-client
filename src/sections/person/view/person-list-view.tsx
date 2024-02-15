@@ -418,7 +418,6 @@ export default function PersonListView({ path }: { path: any }) {
                         onViewRow={() => handleViewRow(row._id)}
                         onGetPersonRow={() => handleGetUsers(row._id)}
                         index={personData?.map((data: any, index: number) => {
-                          console.log(data, index, row);
                           if (data?._id === row?._id) {
                             return Number(index + 1);
                           }

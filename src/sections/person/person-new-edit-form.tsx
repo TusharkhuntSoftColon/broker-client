@@ -294,12 +294,14 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
     resolver: yupResolver(getValidationSchema(roleOption)),
     defaultValues,
   });
+
   const {
     watch,
     setValue,
     handleSubmit,
     formState: { isSubmitting },
   } = methods;
+
   const value = watch();
 
   useEffect(() => {
@@ -416,6 +418,7 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
         return paths;
     }
   };
+
   const updateMasterByRole: any = (role: any) => {
     switch (role) {
       case 'ADMIN':
@@ -426,6 +429,7 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
         return paths; // Return a default path if role doesn't match
     }
   };
+
   // create SUPER_MASTER
   const { mutate: createSuperMaster } = useMutation(adminService.createSuperMaster, {
     onSuccess: (data) => {
@@ -440,6 +444,7 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
       enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
+
   // update SUPER_MASTER
   const { mutate: updateSuperMaster } = useMutation(adminService.updateSuperMaster, {
     onSuccess: (data) => {
@@ -454,6 +459,7 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
       enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
+
   // create MASTER
   const { mutate: createMaster } = useMutation(createMasterByRole(role), {
     onSuccess: (data: any) => {
@@ -468,9 +474,11 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
       enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
+
   // update MASTER
   const { mutate: updateMaster }: any = useMutation(updateMasterByRole(role), {
     onSuccess: (data: any) => {
+      console.log('CODE IS EXECUTED');
       enqueueSnackbar(data?.message ?? 'Data Updated Successfully', { variant: 'success' });
       router.push(paths.dashboard.person.root);
       dispatch(addUser([]));
@@ -508,6 +516,7 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
     }
   });
 
+  //get exchange api call useeffect
   useEffect(() => {
     mutate();
   }, []);
