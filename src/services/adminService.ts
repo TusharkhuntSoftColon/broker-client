@@ -20,6 +20,7 @@ import {
   GET_EXCHANGE_FOR_SUPERMASTER,
   IMPORT_MONTH_ORDER_FOR_ADMIN,
   CREATE_SUPER_MASTER_BY_ADMIN,
+  UPDATE_SUPER_MASTER_BY_ADMIN,
   UPDATED_SELECTED_LIST_FOR_ADMIN,
   SET_IMPORT_MONTH_LIST_FOR_ADMIN,
   IMPORT_MONTH_ORDER_LIST_FOR_ADMIN,
@@ -191,22 +192,22 @@ const adminService = {
     //     ? newExchangeList
     //     : SuperMasterData?.exchangeList;
     try {
-      // const response: AxiosResponse<any> = await client.put(
-      //   `${UPDATE_SUPER_MASTER_BY_ADMIN}/${SuperMasterData._id}`,
-      //   {
-      //     ...SuperMasterData,
-      //     leverageXY: `[${SuperMasterData?.leverageXY.value}]`,
-      //     role: SuperMasterData?.role?.value,
-      //     // date: `${year}-${month}-${day}`,
-      //     // template: SuperMasterData?.template?.value,
-      //     // exchangeCode: SuperMasterData?.exchangeCode?.value,
-      //     // bco: SuperMasterData?.bco?.value,
-      //     // bcm: SuperMasterData?.bcm?.value,
-      //     // symbol: SuperMasterData?.symbol?.value,
-      //     exchangeList,
-      //   }
-      // );
-      // return response.data;
+      const response: AxiosResponse<any> = await client.put(
+        `${UPDATE_SUPER_MASTER_BY_ADMIN}/${SuperMasterData._id}`,
+        {
+          ...SuperMasterData,
+          leverageXY: `[${SuperMasterData?.leverageXY.value}]`,
+          role: SuperMasterData?.role?.value,
+          // date: `${year}-${month}-${day}`,
+          // template: SuperMasterData?.template?.value,
+          // exchangeCode: SuperMasterData?.exchangeCode?.value,
+          // bco: SuperMasterData?.bco?.value,
+          // bcm: SuperMasterData?.bcm?.value,
+          // symbol: SuperMasterData?.symbol?.value,
+          exchangeList: SuperMasterData?.fields,
+        }
+      );
+      return response.data;
     } catch (error) {
       console.error('Error in exchangeService.getExchangeList:', error);
       throw error;
@@ -217,17 +218,7 @@ const adminService = {
     // const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
     // const day = date.getDate().toString().padStart(2, '0');
     // const year = date.getFullYear();
-    const newExchangeList = [
-      ...MasterData?.exchangeList,
-      {
-        allowedExchange: MasterData?.allowedExchange.value,
-        exchangeGroup: MasterData?.exchangeGroup?.value,
-      },
-    ];
-    const exchangeList =
-      MasterData?.allowedExchange.value && MasterData?.exchangeGroup.value
-        ? newExchangeList
-        : MasterData?.exchangeList;
+
     try {
       const response: AxiosResponse<any> = await client.put(
         `${UPDATE_MASTER_BY_ADMIN}/${MasterData?._id}`,
@@ -241,7 +232,7 @@ const adminService = {
           // bco: MasterData?.bco?.value,
           // bcm: MasterData?.bcm?.value,
           // symbol: MasterData?.symbol?.value,
-          exchangeList,
+          exchangeList: MasterData?.fields,
         }
       );
       return response.data;

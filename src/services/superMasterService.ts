@@ -33,15 +33,7 @@ const superMasterService = {
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
     const day = date.getDate().toString().padStart(2, '0');
     const year = date.getFullYear();
-    const newExchangeList = [
-      ...data.exchangeList,
-      {
-        allowedExchange: data.allowedExchange.value,
-        exchangeGroup: data.exchangeGroup?.value,
-      },
-    ];
-    const exchangeList =
-      data.allowedExchange.value && data.exchangeGroup.value ? newExchangeList : data?.exchangeList;
+
     try {
       const response: AxiosResponse<any> = await client.post(CREATE_MASTER_BY_SUPER_MASTER, {
         ...data,
@@ -53,7 +45,7 @@ const superMasterService = {
         bco: data?.bco?.value,
         bcm: data?.bcm?.value,
         symbol: data?.symbol?.value,
-        exchangeList,
+        exchangeList: data?.fields,
       });
       return response.data;
     } catch (error) {
