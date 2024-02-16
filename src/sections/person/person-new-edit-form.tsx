@@ -434,7 +434,7 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
   const { mutate: createSuperMaster } = useMutation(adminService.createSuperMaster, {
     onSuccess: (data) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
-      // router.push(paths.dashboard.person.root);
+      router.push(paths.dashboard.person.root);
       dispatch(addUser([]));
     },
     onError: (error: any) => {
@@ -449,7 +449,7 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
   const { mutate: updateSuperMaster } = useMutation(adminService.updateSuperMaster, {
     onSuccess: (data) => {
       enqueueSnackbar(data?.message ?? 'Data Updated Successfully', { variant: 'success' });
-      // router.push(paths.dashboard.person.root);
+      router.push(paths.dashboard.person.root);
       dispatch(addUser([]));
     },
     onError: (error: any) => {
@@ -478,7 +478,6 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
   // update MASTER
   const { mutate: updateMaster }: any = useMutation(updateMasterByRole(role), {
     onSuccess: (data: any) => {
-      console.log('CODE IS EXECUTED');
       enqueueSnackbar(data?.message ?? 'Data Updated Successfully', { variant: 'success' });
       router.push(paths.dashboard.person.root);
       dispatch(addUser([]));
@@ -516,7 +515,7 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
     }
   });
 
-  //get exchange api call useeffect
+  // get exchange api call useeffect
   useEffect(() => {
     mutate();
   }, []);
