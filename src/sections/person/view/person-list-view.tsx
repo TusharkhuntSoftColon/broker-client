@@ -1,3 +1,4 @@
+/* eslint-disable arrow-body-style */
 /* eslint-disable array-callback-return */
 /* eslint-disable consistent-return */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -88,7 +89,11 @@ export default function PersonListView({ path }: { path: any }) {
 
   const personData = useSelector((data: any) => data?.admin?.personList);
 
+  console.log({ personData });
+
   const [tableData, setTableData] = useState([]);
+
+  console.log({ tableData });
 
   const [exchangeData, setExchangeData] = useState<any>();
 
@@ -407,7 +412,7 @@ export default function PersonListView({ path }: { path: any }) {
                       table.page * table.rowsPerPage,
                       table.page * table.rowsPerPage + table.rowsPerPage
                     )
-                    .map((row: any) => (
+                    .map((row: any, index: any) => (
                       <PersonTableRow
                         key={row._id}
                         row={row}

@@ -38,6 +38,7 @@ type Props = {
   currentBrokerage: any;
   setCurrentBrokerage: any;
   currentUser: any;
+  fields?: any;
 };
 
 export default function BrokerageTableToolbar({
@@ -45,6 +46,7 @@ export default function BrokerageTableToolbar({
   currentUser,
   currentBrokerage,
   // setCurrentBrokerage,
+  fields,
 }: Props) {
   const { enqueueSnackbar } = useSnackbar();
   const router = useRouter();
@@ -253,9 +255,9 @@ export default function BrokerageTableToolbar({
       // }
       if (roleOption === 'USER') {
         if (currentUser) {
-          await updateUser({ ...usersData, ...data, _id: currentUser?._id });
+          await updateUser({ ...usersData, ...data, _id: currentUser?._id, fields });
         } else {
-          await createUser({ ...usersData, ...data });
+          await createUser({ ...usersData, ...data, fields });
         }
       }
     } catch (error) {

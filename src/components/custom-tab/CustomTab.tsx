@@ -55,6 +55,9 @@ export default function BasicTabs() {
   const adminData = useSelector((data: any) => data?.admin?.personList);
   const currentUser = adminData.find((user: any) => user._id === id);
   const [value, setValue] = React.useState(0);
+  const [fields, setFields] = React.useState<any>([]);
+
+  console.log({ fields });
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -89,10 +92,11 @@ export default function BasicTabs() {
           currentUser={currentUser}
           path={getPath(role)}
           setTabValue={setValue}
+          setFieldsValue={setFields}
         />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-        <BrokeragePage currentUser={currentUser} />
+        <BrokeragePage fields={fields} currentUser={currentUser} />
       </CustomTabPanel>
     </Box>
   );

@@ -71,7 +71,7 @@ const defaultFilters: IProductTableFilters = {
 
 // ----------------------------------------------------------------------
 
-export default function BrokerageListView({ currentUser }: any) {
+export default function BrokerageListView({ currentUser, fields }: any) {
   const table = useTable();
   const quickEdit = useBoolean();
   const dispatch = useDispatch();
@@ -177,6 +177,7 @@ export default function BrokerageListView({ currentUser }: any) {
             currentUser={currentUser}
             currentBrokerage={currentBrokerage}
             setCurrentBrokerage={setCurrentBrokerage}
+            fields={fields}
           />
           <FormProvider methods={methods}>
             <Box

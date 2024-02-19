@@ -4,14 +4,14 @@ import { BrokerageListView } from 'src/sections/brokerage/view';
 
 // ----------------------------------------------------------------------
 
-export default function BrokeragePage({ currentUser }: any) {
+export default function BrokeragePage({ currentUser, fields }: any) {
   return (
     <>
       <Helmet>
         <title> Dashboard: Brokerage</title>
       </Helmet>
 
-      <BrokerageListView currentUser={currentUser} />
+      <BrokerageListView fields={fields} currentUser={currentUser} />
     </>
   );
 }

@@ -101,6 +101,8 @@ const adminService = {
     }
   },
   createUser: async (data: any): Promise<any> => {
+    console.log({ data });
+
     const date = new Date(data?.date);
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
     const day = date.getDate().toString().padStart(2, '0');
@@ -240,21 +242,12 @@ const adminService = {
     }
   },
   updateUser: async (UserData: any): Promise<any> => {
+    console.log({ UserData });
+
     const date = new Date(UserData?.date);
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
     const day = date.getDate().toString().padStart(2, '0');
     const year = date.getFullYear();
-    const newExchangeList = [
-      ...UserData?.exchangeList,
-      {
-        allowedExchange: UserData?.allowedExchange.value,
-        exchangeGroup: UserData?.exchangeGroup?.value,
-      },
-    ];
-    const exchangeList =
-      UserData?.allowedExchange.value && UserData?.exchangeGroup.value
-        ? newExchangeList
-        : UserData?.exchangeList;
     try {
       const response: AxiosResponse<any> = await client.put(
         `${UPDATE_USER_BY_ADMIN}/${UserData._id}`,
@@ -268,7 +261,7 @@ const adminService = {
           bco: UserData?.bco?.value,
           bcm: UserData?.bcm?.value,
           symbol: UserData?.symbol?.value,
-          exchangeList,
+          exchangeList: UserData.fields,
         }
       );
       return response.data;

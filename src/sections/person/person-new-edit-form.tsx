@@ -55,9 +55,16 @@ type Props = {
   isView?: any;
   path?: any;
   setTabValue?: any;
+  setFieldsValue?: any;
 };
 
-export default function PersonNewEditForm({ currentUser, isView, path, setTabValue }: Props) {
+export default function PersonNewEditForm({
+  currentUser,
+  isView,
+  path,
+  setTabValue,
+  setFieldsValue,
+}: Props) {
   const ExchangeOptions: any = [];
   const role = useSelector((data: any) => data.auth.role);
   const ExchangeList = useSelector((data: any) => data?.admin?.exchangeList);
@@ -508,6 +515,7 @@ export default function PersonNewEditForm({ currentUser, isView, path, setTabVal
       }
       if (roleOption === 'USER') {
         dispatch(addUser(data));
+        setFieldsValue(fields);
         setTabValue(1);
       }
     } catch (error) {
