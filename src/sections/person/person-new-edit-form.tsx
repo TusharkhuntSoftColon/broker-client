@@ -171,7 +171,7 @@ export default function PersonNewEditForm({
       insertCustomBet: currentUser?.insertCustomBet || personList?.insertCustomBet || false,
       exchangeList: [],
       editBet: currentUser?.editBet || personList?.editBet || false,
-      balance: 0,
+      balance: currentUser?.balance || 0,
       role: currentUser?.role || personList?.role?.label,
       deleteBet: currentUser?.deleteBet || personList?.deleteBet || false,
       leverageXY: defaultLeverageOptions || '',

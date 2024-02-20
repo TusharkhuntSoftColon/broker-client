@@ -53,7 +53,7 @@ const masterService = {
         bco: data?.bco?.value,
         bcm: data?.bcm?.value,
         symbol: data?.symbol?.value,
-        exchangeList,
+        exchangeList: data?.fields,
       });
       return response.data;
     } catch (error) {
@@ -101,7 +101,7 @@ const masterService = {
           bco: UserData?.bco?.value,
           bcm: UserData?.bcm?.value,
           symbol: UserData?.symbol?.value,
-          exchangeList,
+          exchangeList: UserData.fields,
         }
       );
       return response.data;
