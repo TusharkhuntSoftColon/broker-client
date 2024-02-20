@@ -59,17 +59,6 @@ const superMasterService = {
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
     const day = date.getDate().toString().padStart(2, '0');
     const year = date.getFullYear();
-    const newExchangeList = [
-      ...data?.exchangeList,
-      {
-        allowedExchange: data?.allowedExchange.value,
-        exchangeGroup: data?.exchangeGroup?.value,
-      },
-    ];
-    const exchangeList =
-      data?.allowedExchange.value && data?.exchangeGroup.value
-        ? newExchangeList
-        : data?.exchangeList;
 
     try {
       const response: AxiosResponse<any> = await client.post(CREATE_USER_BY_SUPER_MASTER, {
@@ -137,17 +126,7 @@ const superMasterService = {
     const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
     const day = date.getDate().toString().padStart(2, '0');
     const year = date.getFullYear();
-    const newExchangeList = [
-      ...UserData?.exchangeList,
-      {
-        allowedExchange: UserData?.allowedExchange.value,
-        exchangeGroup: UserData?.exchangeGroup?.value,
-      },
-    ];
-    const exchangeList =
-      UserData?.allowedExchange.value && UserData?.exchangeGroup.value
-        ? newExchangeList
-        : UserData?.exchangeList;
+
     try {
       const response: AxiosResponse<any> = await client.put(
         `${UPDATE_USER_BY_SUPER_MASTER}/${UserData._id}`,
