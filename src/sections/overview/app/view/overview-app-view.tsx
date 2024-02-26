@@ -1,6 +1,7 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable arrow-body-style */
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 import { LoadingButton } from '@mui/lab';
 import { Box, Grid } from '@mui/material';
@@ -25,6 +26,19 @@ const OverviewAppView = () => {
     'Exchange',
   ]);
 
+  // current table list
+  const [currentTableCount, setCurrentTableCount] = useState<any | number>();
+  // managing the width of the tables
+  useEffect(() => {
+    const listArray = ['Symbol', 'Users', 'Margin Call'];
+
+    // Count the elements from the list array that are not present in selectedButtons
+    const count = listArray.filter((item) => selectedButtons.includes(item)).length;
+    setCurrentTableCount(count);
+  }, [selectedButtons, currentTableCount]);
+
+  console.log({ currentTableCount });
+
   const handleButtonClick = (tableName: string) => {
     if (selectedButtons.includes(tableName)) {
       setSelectedButtons(selectedButtons.filter((item) => item !== tableName));
@@ -40,6 +54,8 @@ const OverviewAppView = () => {
     }
     return null;
   };
+  console.log({ selectedButtons, currentTableCount });
+
   return (
     <Box width="100%">
       <Box sx={{ margin: 3 }}>
@@ -63,13 +79,30 @@ const OverviewAppView = () => {
           );
         })}
       </Box>
-      <Grid container style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)' }}>
+
+      {/* <Grid
+        width={'100%'}
+        style={{
+          display: 'grid',
+          // gridTemplateColumns: `${currentTableCount === 2 ? 'repeat(3, 1fr)' : currentTableCount === 1 ? 'repeat(1, 1fr)' : 'repeat(3, 1fr)'}`,
+          // gridTemplateColumns: currentTableCount === 2 ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
+        }}
+      > */}
+
+      <Box width="100%" display="flex">
         {TableComponents.slice(0, 3).map((table) => (
-          <Grid item xs={12} key={table.name}>
+          <Box
+            // width={['Symbol', 'Margin Call'].includes(table.name) ? '28%' : '44%'}
+            display={selectedButtons.includes(table.name) ? 'block' : 'none'}
+            key={table.name}
+            width={currentTableCount === 2 ? '50%' : currentTableCount === 1 ? '100%' : '33%'}
+          >
             {renderComponent(table.name)}
-          </Grid>
+          </Box>
         ))}
-      </Grid>
+      </Box>
+
+      {/* </Grid> */}
       <Grid container>
         {TableComponents.slice(3).map((table) => (
           <Grid item xs={12} key={table.name}>

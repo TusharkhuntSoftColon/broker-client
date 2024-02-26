@@ -57,7 +57,7 @@ const adminService = {
     try {
       const response: AxiosResponse<any> = await client.post(CREATE_SUPER_MASTER_BY_ADMIN, {
         ...adminData,
-        leverageXY: `[${adminData?.leverageXY.value}]`,
+        leverageXY: adminData?.leverageXY.value,
         role: adminData?.role?.value,
         exchangeList: adminData.fields,
       });
@@ -84,7 +84,7 @@ const adminService = {
     try {
       const response: AxiosResponse<any> = await client.post(CREATE_MASTER_BY_ADMIN, {
         ...data,
-        leverageXY: `[${data?.leverageXY.value}]`,
+        leverageXY: data?.leverageXY.value,
         role: data?.role?.value,
         // date: `${year}-${month}-${day}`,
         // template: data?.template?.value,
@@ -109,7 +109,7 @@ const adminService = {
     try {
       const response: AxiosResponse<any> = await client.post(CREATE_USER_BY_ADMIN, {
         ...data,
-        leverageXY: `[${data?.leverageXY?.value}]`,
+        leverageXY: data?.leverageXY?.value,
         date: `${year}-${month}-${day}`,
         template: data?.template?.value,
         role: data?.role?.value,
@@ -162,35 +162,13 @@ const adminService = {
     }
   },
   updateSuperMaster: async (SuperMasterData: any): Promise<any> => {
-    // const date = new Date(SuperMasterData?.date);
-    // const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
-    // const day = date.getDate().toString().padStart(2, '0');
-    // const year = date.getFullYear();
-
-    // const newExchangeList = [
-    //   ...SuperMasterData?.exchangeList,
-    //   {
-    //     allowedExchange: SuperMasterData?.allowedExchange.value,
-    //     exchangeGroup: SuperMasterData?.exchangeGroup?.value,
-    //   },
-    // ];
-    // const exchangeList =
-    //   SuperMasterData?.allowedExchange.value && SuperMasterData?.exchangeGroup.value
-    //     ? newExchangeList
-    //     : SuperMasterData?.exchangeList;
     try {
       const response: AxiosResponse<any> = await client.put(
         `${UPDATE_SUPER_MASTER_BY_ADMIN}/${SuperMasterData._id}`,
         {
           ...SuperMasterData,
-          leverageXY: `[${SuperMasterData?.leverageXY.value}]`,
+          leverageXY: SuperMasterData?.leverageXY.value,
           role: SuperMasterData?.role?.value,
-          // date: `${year}-${month}-${day}`,
-          // template: SuperMasterData?.template?.value,
-          // exchangeCode: SuperMasterData?.exchangeCode?.value,
-          // bco: SuperMasterData?.bco?.value,
-          // bcm: SuperMasterData?.bcm?.value,
-          // symbol: SuperMasterData?.symbol?.value,
           exchangeList: SuperMasterData?.fields,
         }
       );
@@ -211,7 +189,7 @@ const adminService = {
         `${UPDATE_MASTER_BY_ADMIN}/${MasterData?._id}`,
         {
           ...MasterData,
-          leverageXY: `[${MasterData?.leverageXY.value}]`,
+          leverageXY: MasterData?.leverageXY.value,
           role: MasterData?.role?.value,
           // date: `${year}-${month}-${day}`,
           // template: MasterData?.template?.value,
@@ -240,7 +218,7 @@ const adminService = {
         `${UPDATE_USER_BY_ADMIN}/${UserData._id}`,
         {
           ...UserData,
-          leverageXY: `[${UserData?.leverageXY.value}]`,
+          leverageXY: UserData?.leverageXY.value,
           role: UserData?.role?.value,
           date: `${year}-${month}-${day}`,
           template: UserData?.template?.value,

@@ -34,7 +34,7 @@ const masterService = {
     try {
       const response: AxiosResponse<any> = await client.post(CREATE_USER_BY_MASTER, {
         ...data,
-        leverageXY: `[${data?.leverageXY?.value}]`,
+        leverageXY: data?.leverageXY?.value,
         date: `${year}-${month}-${day}`,
         template: data?.template?.value,
         role: data?.role?.value,
@@ -72,7 +72,7 @@ const masterService = {
         `${UPDATE_USER_BY_MASTER}/${UserData._id}`,
         {
           ...UserData,
-          leverageXY: `[${UserData?.leverageXY.value}]`,
+          leverageXY: UserData?.leverageXY.value,
           role: UserData?.role?.value,
           date: `${year}-${month}-${day}`,
           template: UserData?.template?.value,

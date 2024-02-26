@@ -37,7 +37,7 @@ const superMasterService = {
     try {
       const response: AxiosResponse<any> = await client.post(CREATE_MASTER_BY_SUPER_MASTER, {
         ...data,
-        leverageXY: `[${data?.leverageXY.value}]`,
+        leverageXY: data?.leverageXY.value,
         role: data?.role?.value,
         date: `${year}-${month}-${day}`,
         template: data?.template?.value,
@@ -63,7 +63,7 @@ const superMasterService = {
     try {
       const response: AxiosResponse<any> = await client.post(CREATE_USER_BY_SUPER_MASTER, {
         ...data,
-        leverageXY: `[${data?.leverageXY?.value}]`,
+        leverageXY: data?.leverageXY?.value,
         role: data?.role?.value,
         date: `${year}-${month}-${day}`,
         template: data?.template?.value,
@@ -103,7 +103,7 @@ const superMasterService = {
         `${UPDATE_MASTER_BY_SUPER_MASTER}/${MasterData._id}`,
         {
           ...MasterData,
-          leverageXY: `[${MasterData?.leverageXY.value}]`,
+          leverageXY: MasterData?.leverageXY.value,
           role: MasterData?.role?.value,
           date: `${year}-${month}-${day}`,
           template: MasterData?.template?.value,
@@ -132,7 +132,7 @@ const superMasterService = {
         `${UPDATE_USER_BY_SUPER_MASTER}/${UserData._id}`,
         {
           ...UserData,
-          leverageXY: `[${UserData?.leverageXY.value}]`,
+          leverageXY: UserData?.leverageXY.value,
           role: UserData?.role?.value,
           date: `${year}-${month}-${day}`,
           template: UserData?.template?.value,

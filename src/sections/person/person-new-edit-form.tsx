@@ -109,9 +109,7 @@ export default function PersonNewEditForm({
 
   const defaultLeverageOptions = useMemo(() => {
     const data = currentUser
-      ? LEVERAGE_OPTIONS.filter(
-          (option: any) => currentUser?.leverageXY.slice(1, -1) === option.value
-        )[0]
+      ? LEVERAGE_OPTIONS.filter((option: any) => currentUser?.leverageXY === option.value)[0]
       : LEVERAGE_OPTIONS.filter(
           (option: any) => personList?.leverageXY?.value === option?.value
         )[0];
