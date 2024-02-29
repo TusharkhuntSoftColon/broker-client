@@ -127,7 +127,6 @@ export default function ClientTableDashboard() {
         { id: 'price1', label: 'Price', align: 'right', border: '1px solid #dddddd !important' },
         { id: 'price2', label: 'Price', align: 'right', border: '1px solid #dddddd !important' },
         { id: 'reason', label: 'Reason', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'swap', label: 'Swap', align: 'right', border: '1px solid #dddddd !important' },
       ],
     },
     {
@@ -178,6 +177,7 @@ export default function ClientTableDashboard() {
       ],
     },
   ];
+
   return (
     <Card
       sx={{
@@ -196,6 +196,7 @@ export default function ClientTableDashboard() {
         View All
         </Button>
       </Box> */}
+
       <Box sx={{ margin: '5px', border: '1px solid #d3d3d3' }}>
         <Box>
           {tabs.map((data) => {

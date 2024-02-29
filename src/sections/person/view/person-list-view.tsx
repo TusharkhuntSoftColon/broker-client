@@ -89,11 +89,7 @@ export default function PersonListView({ path }: { path: any }) {
 
   const personData = useSelector((data: any) => data?.admin?.personList);
 
-  console.log({ personData });
-
   const [tableData, setTableData] = useState([]);
-
-  console.log({ tableData });
 
   const [exchangeData, setExchangeData] = useState<any>();
 
@@ -323,6 +319,8 @@ export default function PersonListView({ path }: { path: any }) {
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
+
+  console.log({ tableData, personData });
 
   return (
     <>

@@ -817,7 +817,6 @@ export const clientsTableDashboard = [...Array(10)].map((_, index) => {
     price1,
     price2,
     reason,
-    swap: 0.0,
   };
 });
 
@@ -832,7 +831,6 @@ export const newClientsTableData = [
     price1: 186.05,
     price2: 185.25,
     reason: 'Mobile',
-    swap: 0.0,
   },
   {
     id: 1,
@@ -844,7 +842,6 @@ export const newClientsTableData = [
     price1: 43965.7,
     price2: 44282.7,
     reason: 'Client',
-    swap: 0.0,
   },
   {
     id: 2,
@@ -856,7 +853,6 @@ export const newClientsTableData = [
     price1: 1720.25,
     price2: 1700.25,
     reason: 'Client',
-    swap: 0.0,
   },
   {
     id: 3,
@@ -868,7 +864,6 @@ export const newClientsTableData = [
     price1: 186.05,
     price2: 185.25,
     reason: 'Mobile',
-    swap: 0.0,
   },
   {
     id: 4,
@@ -880,7 +875,6 @@ export const newClientsTableData = [
     price1: 186.05,
     price2: 185.25,
     reason: 'Mobile',
-    swap: 0.0,
   },
   {
     id: 5,
@@ -892,7 +886,6 @@ export const newClientsTableData = [
     price1: 186.05,
     price2: 185.25,
     reason: 'Mobile',
-    swap: 0.0,
   },
   {
     id: 6,
@@ -904,7 +897,6 @@ export const newClientsTableData = [
     price1: 186.05,
     price2: 185.25,
     reason: 'Mobile',
-    swap: 0.0,
   },
   {
     id: 7,
@@ -916,7 +908,6 @@ export const newClientsTableData = [
     price1: 186.05,
     price2: 185.25,
     reason: 'Mobile',
-    swap: 0.0,
   },
   {
     id: 8,
@@ -928,7 +919,6 @@ export const newClientsTableData = [
     price1: 186.05,
     price2: 185.25,
     reason: 'Mobile',
-    swap: 0.0,
   },
   {
     id: 9,
@@ -940,7 +930,6 @@ export const newClientsTableData = [
     price1: 186.05,
     price2: 185.25,
     reason: 'Mobile',
-    swap: 0.0,
   },
 ];
 

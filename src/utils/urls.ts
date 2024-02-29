@@ -107,3 +107,8 @@ export const GET_EXCHANGE_LIST_BY_USER = 'user/exchange-list';
 
 // import month
 export const GET_USER_IMPORT_MONTH = '/admin/importmonth';
+
+// over-view app view (dashboard  api)
+export const GET_USER_POSITIONS = '/admin/open-positions';
+export const GET_USER_ACCOUNTS = '/admin/trading-accounts';
+export const GET_USER_ORDERS = '/admin/pending-position';

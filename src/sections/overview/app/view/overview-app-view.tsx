@@ -2,9 +2,12 @@
 /* eslint-disable arrow-body-style */
 
 import { useState, useEffect } from 'react';
+import { useMutation } from '@tanstack/react-query';
 
 import { LoadingButton } from '@mui/lab';
 import { Box, Grid } from '@mui/material';
+
+import overviewService from 'src/services/overviewAppViewService';
 
 import AppNewInvoice from '../app-new-invoice';
 import ClientTableDashboard from '../client-new-table';
@@ -26,8 +29,14 @@ const OverviewAppView = () => {
     'Exchange',
   ]);
 
+  // User Tables Data
+  const [userPostions, setUserPosition] = useState<any>();
+  const [userAccounts, setUserAccounts] = useState<any>();
+  const [userOrders, setUserOrders] = useState<any>();
+
   // current table list
   const [currentTableCount, setCurrentTableCount] = useState<any | number>();
+
   // managing the width of the tables
   useEffect(() => {
     const listArray = ['Symbol', 'Users', 'Margin Call'];
@@ -36,8 +45,6 @@ const OverviewAppView = () => {
     const count = listArray.filter((item) => selectedButtons.includes(item)).length;
     setCurrentTableCount(count);
   }, [selectedButtons, currentTableCount]);
-
-  console.log({ currentTableCount });
 
   const handleButtonClick = (tableName: string) => {
     if (selectedButtons.includes(tableName)) {
@@ -54,7 +61,50 @@ const OverviewAppView = () => {
     }
     return null;
   };
-  console.log({ selectedButtons, currentTableCount });
+
+  // User : -   table api's
+
+  // POSITIONS
+  const { mutate: getUserPositions } = useMutation(overviewService.getUserPositions, {
+    onSuccess: (data) => {
+      setUserPosition(data?.data?.rows);
+    },
+    onError: (error) => {
+      console.log({ 'POSTIONS ERROR :- ': error });
+    },
+  });
+
+  // ACCOUNTS
+  const { mutate: getUserAccounts } = useMutation(overviewService.getUserAccounts, {
+    onSuccess: (data) => {
+      setUserAccounts(data?.data?.rows);
+    },
+    onError: (error) => {
+      console.log({ 'ACCOUNTS ERROR :- ': error });
+    },
+  });
+
+  // ORDERS
+  const { mutate: getUserOrders } = useMutation(overviewService.getUserOrders, {
+    onSuccess: (data) => {
+      setUserOrders(data?.data?.rows);
+    },
+    onError: (error) => {
+      console.log({ 'ORDERS ERROR :- ': error });
+    },
+  });
+
+  // table data logs
+  console.log({ 'POSITIONS DATA ': userPostions });
+  console.log({ 'ACCOUNTS DATA': userAccounts });
+  console.log({ 'ORDERS DATA': userOrders });
+
+  // useeffect to call apis
+  useEffect(() => {
+    getUserPositions();
+    getUserAccounts();
+    getUserOrders();
+  }, [getUserPositions, getUserAccounts, getUserOrders]);
 
   return (
     <Box width="100%">
