@@ -33,8 +33,6 @@ import TableContainer from '@mui/material/TableContainer';
 import useAuth from 'src/hooks/useAuth';
 import { useBoolean } from 'src/hooks/use-boolean';
 
-import { SOCKET_URL } from 'src/utils/environments';
-
 import { newSymbolTableData } from 'src/_mock';
 import adminService from 'src/services/adminService';
 
@@ -45,6 +43,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import AddSymbolInDashboard from 'src/components/modal/AddSymbolInDashboard';
 import superMasterService from 'src/services/superMasterService';
 import masterService from 'src/services/masterService';
+import { SOCKET_URL } from 'src/utils/environments';
 // ----------------------------------------------------------------------
 
 interface TabPanelProps {

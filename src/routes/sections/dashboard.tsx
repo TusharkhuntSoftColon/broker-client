@@ -2,15 +2,11 @@ import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 
 import { AuthGuard } from 'src/auth/guard';
-import UserLayout from 'src/layouts/UserLayout';
-// import UserLayout from 'src/layouts/UserLayout';
 import AdminLayout from 'src/layouts/AdminLayout';
 import PersonDetailsPage from 'src/pages/dashboard/person/details';
 
 import BasicTabs from 'src/components/custom-tab/CustomTab';
 import { LoadingScreen } from 'src/components/loading-screen';
-
-// ----------------------------------------------------------------------
 
 // OVERVIEW
 const IndexPage = lazy(() => import('src/pages/dashboard/app'));
@@ -144,17 +140,5 @@ export const dashboardRoutes = [
         ],
       },
     ],
-  },
-  {
-    path: '/user',
-    element: (
-      <AuthGuard>
-        <UserLayout>
-          <Suspense fallback={<LoadingScreen />}>
-            <Outlet />
-          </Suspense>
-        </UserLayout>
-      </AuthGuard>
-    ),
   },
 ];

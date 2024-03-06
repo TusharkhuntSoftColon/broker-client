@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable no-nested-ternary */
 
@@ -8,8 +9,6 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 import { useBoolean } from 'src/hooks/use-boolean';
-
-import BuySellDialog from 'src/components/custom-modal/buySellModal';
 
 import { ITrade } from 'src/types/trade';
 
@@ -139,8 +138,6 @@ export default function SymbolLiveTableRow({
           {`${dailyChange.toFixed(3)}%`}
         </TableCell>
       </TableRow>
-
-      <BuySellDialog open={confirm.value} onClose={confirm.onFalse} row={row} />
     </>
   );
 }

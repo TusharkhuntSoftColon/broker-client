@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useSelector } from 'react-redux';
 
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
@@ -38,17 +37,10 @@ export default function BrokerageTableRow({
   onViewRow,
   exchangeList,
 }: Props) {
-  const { date, exchangeCode, symbol, bco, bcm, brkgRate, brkgRatePer, template } = row;
-
-  const exchanges = useSelector((state: any) => state?.admin?.exchangeList);
-  const ExchnageName = exchanges?.filter((data: any) => data?._id === exchangeCode)[0]?.name;
-  const symbolList = useSelector((data: any) => data?.symbol?.symbolList);
-  const SymbolName = symbolList?.filter((data: any) => data?._id === symbol)[0]?.name;
+  const { date, exchangeName, symbolName, bco, bcm, brkgRate, brkgRatePer, template } = row;
 
   const confirm = useBoolean();
-
   const quickEdit = useBoolean();
-
   const popover = usePopover();
 
   return (
@@ -58,16 +50,27 @@ export default function BrokerageTableRow({
           <Checkbox checked={selected} onClick={onSelectRow} />
         </TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{template}</TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{date.substring(0, 10) || '-'}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{date?.substring(0, 10) || '-'}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>
-          <Label>{ExchnageName}</Label>
+          <Label>{exchangeName}</Label>
         </TableCell>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{SymbolName}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{symbolName}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{bco}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{bcm}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{brkgRate}</TableCell>
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{brkgRatePer}</TableCell>
         <TableCell align="right" sx={{ display: 'flex' }}>
+          <IconButton
+            color={popover.open ? 'primary' : 'default'}
+            onClick={() => {
+              popover.onClose();
+
+              confirm.onTrue();
+            }}
+            sx={{ color: 'error.main' }}
+          >
+            <Iconify icon="solar:trash-bin-trash-bold" />
+          </IconButton>
           <IconButton
             color={popover.open ? 'primary' : 'default'}
             onClick={() => {

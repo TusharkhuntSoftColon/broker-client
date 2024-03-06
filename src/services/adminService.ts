@@ -7,8 +7,8 @@ import {
   GET_ALL_USER_BYID,
   GET_BROKERAGE_LIST,
   DELETE_USER_BY_ADMIN,
-  UPDATE_USER_BY_ADMIN,
   CREATE_USER_BY_ADMIN,
+  UPDATE_USER_BY_ADMIN,
   GET_EXCHANGE_FOR_USER,
   GET_USER_IMPORT_MONTH,
   CREATE_MASTER_BY_ADMIN,
@@ -25,6 +25,7 @@ import {
   SET_IMPORT_MONTH_LIST_FOR_ADMIN,
   IMPORT_MONTH_ORDER_LIST_FOR_ADMIN,
   GET_ASSIGNED_EXCHANGE_LIST_FOR_ADMIN,
+  GET_BROKERAGE_LIST_FOR_USER_UPDATE_BY_ADMIN,
 } from '../utils/urls';
 
 export interface adminType {
@@ -68,30 +69,11 @@ const adminService = {
     }
   },
   createMaster: async (data: any): Promise<any> => {
-    // const date = new Date(data?.date);
-    // const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
-    // const day = date.getDate().toString().padStart(2, '0');
-    // const year = date.getFullYear();
-    // const newExchangeList = [
-    //   ...data.exchangeList,
-    //   {
-    //     allowedExchange: data.allowedExchange.value,
-    //     exchangeGroup: data.exchangeGroup?.value,
-    //   },
-    // ];
-    // const exchangeList =
-    //   data.allowedExchange.value && data.exchangeGroup.value ? newExchangeList : data?.exchangeList;
     try {
       const response: AxiosResponse<any> = await client.post(CREATE_MASTER_BY_ADMIN, {
         ...data,
         leverageXY: data?.leverageXY.value,
         role: data?.role?.value,
-        // date: `${year}-${month}-${day}`,
-        // template: data?.template?.value,
-        // exchangeCode: data?.exchangeCode?.value,
-        // bco: data?.bco?.value,
-        // bcm: data?.bcm?.value,
-        // symbol: data?.symbol?.value,
         exchangeList: data?.fields,
       });
       return response.data;
@@ -101,24 +83,36 @@ const adminService = {
     }
   },
   createUser: async (data: any): Promise<any> => {
-    const date = new Date(data?.date);
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
-    const day = date.getDate().toString().padStart(2, '0');
-    const year = date.getFullYear();
+    const withoutBrokerageData = {
+      ID: data?.ID,
+      name: data?.name,
+      password: data?.password,
+      exchangeList: data?.fields,
+      role: data?.role?.value,
+      balance: data?.balance,
+      leverageXY: data?.leverageXY?.value,
+      isBrokerageAllowed: data?.isBrokerageAllowed,
+      isActive: data?.isActive,
+      investorPassword: data?.investorPassword,
+    };
 
+    const brokerageData = {
+      ...withoutBrokerageData,
+      brockrageTamplates: data?.tableData?.map((item: any) => ({
+        date: item.date,
+        template: item.template,
+        exchangeId: item.exchangeId,
+        symbol: item.symbol,
+        bco: item.bco,
+        bcm: item.bcm,
+        brkgRate: item.brkgRate,
+        brkgRatePer: item.brkgRatePer,
+      })),
+    };
+
+    const usersData = data?.isBrokerageAllowed ? brokerageData : withoutBrokerageData;
     try {
-      const response: AxiosResponse<any> = await client.post(CREATE_USER_BY_ADMIN, {
-        ...data,
-        leverageXY: data?.leverageXY?.value,
-        date: `${year}-${month}-${day}`,
-        template: data?.template?.value,
-        role: data?.role?.value,
-        exchangeCode: data?.exchangeCode?.value,
-        bco: data?.bco?.value,
-        bcm: data?.bcm?.value,
-        symbol: data?.symbol?.value,
-        exchangeList: data?.fields,
-      });
+      const response: AxiosResponse<any> = await client.post(CREATE_USER_BY_ADMIN, usersData);
       return response.data;
     } catch (error) {
       console.error('Error in adminService.createMaster:', error);
@@ -179,11 +173,6 @@ const adminService = {
     }
   },
   updateMaster: async (MasterData: any): Promise<any> => {
-    // const date = new Date(MasterData?.date);
-    // const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
-    // const day = date.getDate().toString().padStart(2, '0');
-    // const year = date.getFullYear();
-
     try {
       const response: AxiosResponse<any> = await client.put(
         `${UPDATE_MASTER_BY_ADMIN}/${MasterData?._id}`,
@@ -191,12 +180,6 @@ const adminService = {
           ...MasterData,
           leverageXY: MasterData?.leverageXY.value,
           role: MasterData?.role?.value,
-          // date: `${year}-${month}-${day}`,
-          // template: MasterData?.template?.value,
-          // exchangeCode: MasterData?.exchangeCode?.value,
-          // bco: MasterData?.bco?.value,
-          // bcm: MasterData?.bcm?.value,
-          // symbol: MasterData?.symbol?.value,
           exchangeList: MasterData?.fields,
         }
       );
@@ -206,28 +189,40 @@ const adminService = {
       throw error;
     }
   },
-  updateUser: async (UserData: any): Promise<any> => {
-    console.log({ UserData });
+  updateUser: async (data: any): Promise<any> => {
+    const withoutBrokerageData = {
+      ID: data?.ID,
+      name: data?.name,
+      password: data?.password,
+      exchangeList: data?.fields,
+      role: data?.role?.value,
+      balance: data?.balance,
+      leverageXY: data?.leverageXY?.value,
+      isBrokerageAllowed: data?.isBrokerageAllowed,
+      isActive: data?.isActive,
+      investorPassword: data?.investorPassword,
+    };
 
-    const date = new Date(UserData?.date);
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
-    const day = date.getDate().toString().padStart(2, '0');
-    const year = date.getFullYear();
+    const brokerageData = {
+      ...withoutBrokerageData,
+      brockrageTamplates: data?.tableData?.map((item: any) => ({
+        date: item.date,
+        template: item.template,
+        exchangeId: item.exchangeId,
+        symbol: item.symbol,
+        bco: item.bco,
+        bcm: item.bcm,
+        brkgRate: item.brkgRate,
+        brkgRatePer: item.brkgRatePer,
+      })),
+    };
+
+    const usersData = data?.isBrokerageAllowed ? brokerageData : withoutBrokerageData;
+
     try {
       const response: AxiosResponse<any> = await client.put(
-        `${UPDATE_USER_BY_ADMIN}/${UserData._id}`,
-        {
-          ...UserData,
-          leverageXY: UserData?.leverageXY.value,
-          role: UserData?.role?.value,
-          date: `${year}-${month}-${day}`,
-          template: UserData?.template?.value,
-          exchangeCode: UserData?.exchangeCode?.value,
-          bco: UserData?.bco?.value,
-          bcm: UserData?.bcm?.value,
-          symbol: UserData?.symbol?.value,
-          exchangeList: UserData.fields,
-        }
+        `${UPDATE_USER_BY_ADMIN}/${data._id}`,
+        usersData
       );
       return response.data;
     } catch (error) {
@@ -273,7 +268,7 @@ const adminService = {
       throw error;
     }
   },
-  getBrokerageList: async (): Promise<any> => {
+  getBrokerageList: async (id: string): Promise<any> => {
     try {
       const response: AxiosResponse<any> = await client.get(GET_BROKERAGE_LIST);
       return response.data;
@@ -354,6 +349,17 @@ const adminService = {
       // You can log the error here for debugging purposes
       console.error('Error in symbolService.getSymbolList:', error);
       throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  getBrokerageListForUserUpdate: async (id?: string): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(
+        `${GET_BROKERAGE_LIST_FOR_USER_UPDATE_BY_ADMIN}/${id}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error in exchangeService.getExchangeList:', error);
+      throw error;
     }
   },
 };

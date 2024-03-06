@@ -1,6 +1,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable arrow-body-style */
 
+import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 
@@ -14,13 +15,6 @@ import ClientTableDashboard from '../client-new-table';
 import SymbolTableDashboard from '../symbol-new-table';
 import MarginCallTableDashboard from '../margin-call-table';
 
-const TableComponents = [
-  { name: 'Symbol', component: <SymbolTableDashboard /> },
-  { name: 'Users', component: <ClientTableDashboard /> },
-  { name: 'Margin Call', component: <MarginCallTableDashboard /> },
-  { name: 'Exchange', component: <AppNewInvoice /> },
-];
-
 const OverviewAppView = () => {
   const [selectedButtons, setSelectedButtons] = useState<string[]>([
     'Symbol',
@@ -29,10 +23,28 @@ const OverviewAppView = () => {
     'Exchange',
   ]);
 
+  const role = useSelector((data: any) => data.auth.role);
+
   // User Tables Data
   const [userPostions, setUserPosition] = useState<any>();
   const [userAccounts, setUserAccounts] = useState<any>();
   const [userOrders, setUserOrders] = useState<any>();
+
+  const TableComponents = [
+    { name: 'Symbol', component: <SymbolTableDashboard /> },
+    {
+      name: 'Users',
+      component: (
+        <ClientTableDashboard
+          accountData={userAccounts}
+          ordersData={userOrders}
+          positionsData={userPostions}
+        />
+      ),
+    },
+    { name: 'Margin Call', component: <MarginCallTableDashboard /> },
+    { name: 'Exchange', component: <AppNewInvoice /> },
+  ];
 
   // current table list
   const [currentTableCount, setCurrentTableCount] = useState<any | number>();
@@ -64,8 +76,46 @@ const OverviewAppView = () => {
 
   // User : -   table api's
 
+  const getUserPositionsByRole = (role1: any) => {
+    switch (role1) {
+      case 'ADMIN':
+        return overviewService.getUserPositionsByAdmin;
+      case 'SUPER_MASTER':
+        return overviewService.getUserPositionsBySuperMaster;
+      case 'MASTER':
+        return overviewService.getUserPositionsByMaster;
+      default:
+        return overviewService.getUserPositionsByMaster;
+    }
+  };
+
+  const getUserAccountsByRole = (role1: any) => {
+    switch (role1) {
+      case 'ADMIN':
+        return overviewService.getUserAccountsByAdmin;
+      case 'SUPER_MASTER':
+        return overviewService.getUserAccountsBySuperMaster;
+      case 'MASTER':
+        return overviewService.getUserAccountsByMaster;
+      default:
+        return overviewService.getUserAccountsByMaster;
+    }
+  };
+  const getUserOrdersByRole = (role1: any) => {
+    switch (role1) {
+      case 'ADMIN':
+        return overviewService.getUserOrdersByAdmin;
+      case 'SUPER_MASTER':
+        return overviewService.getUserOrdersBySuperMaster;
+      case 'MASTER':
+        return overviewService.getUserOrdersByMaster;
+      default:
+        return overviewService.getUserOrdersByMaster;
+    }
+  };
+
   // POSITIONS
-  const { mutate: getUserPositions } = useMutation(overviewService.getUserPositions, {
+  const { mutate: getUserPositions } = useMutation(getUserPositionsByRole(role), {
     onSuccess: (data) => {
       setUserPosition(data?.data?.rows);
     },
@@ -75,7 +125,7 @@ const OverviewAppView = () => {
   });
 
   // ACCOUNTS
-  const { mutate: getUserAccounts } = useMutation(overviewService.getUserAccounts, {
+  const { mutate: getUserAccounts } = useMutation(getUserAccountsByRole(role), {
     onSuccess: (data) => {
       setUserAccounts(data?.data?.rows);
     },
@@ -85,7 +135,7 @@ const OverviewAppView = () => {
   });
 
   // ORDERS
-  const { mutate: getUserOrders } = useMutation(overviewService.getUserOrders, {
+  const { mutate: getUserOrders } = useMutation(getUserOrdersByRole(role), {
     onSuccess: (data) => {
       setUserOrders(data?.data?.rows);
     },
@@ -93,11 +143,6 @@ const OverviewAppView = () => {
       console.log({ 'ORDERS ERROR :- ': error });
     },
   });
-
-  // table data logs
-  console.log({ 'POSITIONS DATA ': userPostions });
-  console.log({ 'ACCOUNTS DATA': userAccounts });
-  console.log({ 'ORDERS DATA': userOrders });
 
   // useeffect to call apis
   useEffect(() => {

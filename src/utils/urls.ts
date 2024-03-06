@@ -24,7 +24,9 @@ export const DELETE_SUPER_MASTER_BY_ADMIN = '/admin/super-master/remove/';
 export const DELETE_MASTER_BY_ADMIN = '/admin/master/remove/';
 export const DELETE_USER_BY_ADMIN = '/admin/user/remove/';
 
-export const GET_BROKERAGE_LIST = '/admin/brockrage';
+export const GET_BROKERAGE_LIST = '/admin/user-brockrages';
+export const GET_BROKERAGE_LIST_FOR_USER_UPDATE_BY_ADMIN = '/admin/brockrages-forupdate';
+export const CREATE_BROKERAGE_BY_ADMIN = '/admin/create-userbrockrages';
 
 // export const GET_IMPORT_MONTH_LIST_BY_ADMIN = '/admin/exchange-list';
 
@@ -60,6 +62,8 @@ export const SET_IMPORT_MONTH_LIST_FOR_SUPER_MASTER = '/super-master/select-assi
 
 export const UPDATED_SELECTED_LIST_FOR_SUPER_MASTER = '/super-master/user-select-importmonth';
 export const GET_ASSIGNED_EXCHANGE_LIST_FOR_SUPER_MASTER = '/super-master/all-exchanges';
+export const GET_BROKERAGE_LIST_FOR_USER_UPDATE_BY_SUPERMASTER =
+  '/super-master/brockrages-forupdate';
 
 // MASTER
 export const CREATE_USER_BY_MASTER = '/master/user';
@@ -81,6 +85,7 @@ export const SET_IMPORT_MONTH_LIST_FOR_MASTER = '/master/select-assigne-importmo
 
 export const UPDATED_SELECTED_LIST_FOR_MASTER = '/master/user-select-importmonth';
 export const GET_ASSIGNED_EXCHANGE_LIST_FOR_MASTER = '/master/all-exchanges';
+export const GET_BROKERAGE_LIST_FOR_USER_UPDATE_BY_MASTER = '/master/brockrages-forupdate';
 
 // Exchange
 export const EXCHANGE_CREATE = '/exchange/create';
@@ -109,6 +114,14 @@ export const GET_EXCHANGE_LIST_BY_USER = 'user/exchange-list';
 export const GET_USER_IMPORT_MONTH = '/admin/importmonth';
 
 // over-view app view (dashboard  api)
-export const GET_USER_POSITIONS = '/admin/open-positions';
-export const GET_USER_ACCOUNTS = '/admin/trading-accounts';
-export const GET_USER_ORDERS = '/admin/pending-position';
+export const GET_USER_POSITIONS_BY_ADMIN = '/admin/open-positions';
+export const GET_USER_ACCOUNTS_BY_ADMIN = '/admin/trading-accounts';
+export const GET_USER_ORDERS_BY_ADMIN = '/admin/pending-position';
+
+export const GET_USER_POSITIONS_BY_SUPER_MASTER = '/super-master/open-positions';
+export const GET_USER_ACCOUNTS_BY_SUPER_MASTER = '/super-master/trading-accounts';
+export const GET_USER_ORDERS_BY_SUPER_MASTER = '/super-master/pending-position';
+
+export const GET_USER_POSITIONS_BY_MASTER = '/master/open-positions';
+export const GET_USER_ACCOUNTS_BY_MASTER = '/master/trading-accounts';
+export const GET_USER_ORDERS_BY_MASTER = '/master/pending-position';

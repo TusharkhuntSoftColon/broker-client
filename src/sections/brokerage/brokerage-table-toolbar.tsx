@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-plusplus */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -38,12 +39,16 @@ type Props = {
   currentBrokerage: any;
   setCurrentBrokerage: any;
   currentUser: any;
+  tableData?: any;
+  setTableData?: any;
   fields?: any;
 };
 
 export default function BrokerageTableToolbar({
   // mutate,
   currentUser,
+  tableData,
+  setTableData,
   currentBrokerage,
   // setCurrentBrokerage,
   fields,
@@ -79,7 +84,7 @@ export default function BrokerageTableToolbar({
   }
 
   const defaultExchnageCode = Exchange.filter(
-    (data: any) => data?.value === currentBrokerage?.exchangeCode
+    (data: any) => data?.value === currentBrokerage?.exchangeId
   )[0];
 
   const defaultSymbol = Symbol.find((data: any) => data?.value === currentBrokerage?.symbol);
@@ -88,8 +93,7 @@ export default function BrokerageTableToolbar({
   const defaultBco = brokerageCallOptions.find(
     (data: any) => data?.value === currentBrokerage?.bco
   );
-
-  const defaultValues = {
+  const defaultValues: any = {
     date: new Date(),
     template: {
       label: '',
@@ -111,13 +115,12 @@ export default function BrokerageTableToolbar({
       label: '',
       value: '',
     },
-    brkgRate: currentBrokerage?.brkgRate || '',
+    brkgRate: currentBrokerage?.brkgRate || 0,
     brkgRatePer: currentBrokerage?.brkgRatePer || 0,
   };
 
   const NewUserSchema = Yup.object().shape({
     exchangeCode: Yup.mixed<any>().nullable().required('Exchange is required'),
-    // symbol: Yup.mixed<any>().nullable().required('Symbol is required'),
     date: Yup.date().required('Date is required'),
     template: Yup.mixed<any>().nullable().required('Template is required'),
     bco: Yup.mixed<any>().nullable().required('Brokerage call option is required'),
@@ -132,6 +135,7 @@ export default function BrokerageTableToolbar({
   });
 
   const {
+    reset,
     watch,
     setValue,
     handleSubmit,
@@ -174,7 +178,7 @@ export default function BrokerageTableToolbar({
       case 'MASTER':
         return masterService.updateUser;
       default:
-        return paths; // Return a default path if role doesn't match
+        return paths;
     }
   };
 
@@ -187,7 +191,7 @@ export default function BrokerageTableToolbar({
       case 'MASTER':
         return masterService.getSymbolListMaster;
       default:
-        return paths; // Return a default path if role doesn't match
+        return paths;
     }
   };
 
@@ -222,10 +226,9 @@ export default function BrokerageTableToolbar({
   // update USER
   const { mutate: updateUser }: any = useMutation(updateUserByRole(role), {
     onSuccess: (data: any) => {
-      console.log({ data });
       enqueueSnackbar(data?.message ?? 'Data Updated Successfully', { variant: 'success' });
       router.push(paths.dashboard.person.root);
-      dispatch(addUser([]));
+      // dispatch(addUser([]));
     },
     onError: (error: any) => {
       console.log({ error });
@@ -237,27 +240,12 @@ export default function BrokerageTableToolbar({
   });
 
   const onSubmit = handleSubmit(async (data) => {
-    console.log({ data });
     try {
-      // if (roleOption === 'SUPER_MASTER') {
-      //   if (currentUser) {
-      //     await updateSuperMaster({ ...usersData, ...data, _id: currentUser?._id });
-      //   } else {
-      //     await createSuperMaster({ ...usersData, ...data });
-      //   }
-      // }
-      // if (roleOption === 'MASTER') {
-      //   if (currentUser) {
-      //     await updateMaster({ ...usersData, ...data, _id: currentUser?._id });
-      //   } else {
-      //     await createMaster({ ...usersData, ...data });
-      //   }
-      // }
       if (roleOption === 'USER') {
         if (currentUser) {
-          await updateUser({ ...usersData, ...data, _id: currentUser?._id, fields });
+          await updateUser({ ...usersData, tableData, _id: currentUser?._id, fields });
         } else {
-          await createUser({ ...usersData, ...data, fields });
+          await createUser({ ...usersData, tableData, fields });
         }
       }
     } catch (error) {
@@ -274,7 +262,7 @@ export default function BrokerageTableToolbar({
   }, [value.bcm]);
 
   useEffect(() => {
-    setValue('brkgRate', currentBrokerage?.brkgRate || '');
+    setValue('brkgRate', currentBrokerage?.brkgRate || 0);
     setValue(
       'template',
       defaultTemplate || {
@@ -327,10 +315,73 @@ export default function BrokerageTableToolbar({
 
   const [addBrokerageClicked, setAddBrokerageClicked] = useState(false);
 
-  const handleAddBrokerageClick = () => {
-    setAddBrokerageClicked(true);
-  };
+  useEffect(() => {
+    const updateTableData = () => {
+      const index = tableData.findIndex(
+        (item: any) =>
+          item?.exchangeId === currentBrokerage?.exchangeId &&
+          item.symbol === currentBrokerage.symbol &&
+          item.template === currentBrokerage.template
+      );
+      if (index !== -1) {
+        const updatedTableData = [...tableData]; // Create a shallow copy of tableData
+        updatedTableData[index] = {
+          ...updatedTableData[index],
+          brkgRate: value?.brkgRate,
+          brkgRatePer: value?.brkgRatePer,
+          bcm: value?.bcm?.value,
+          bco: value?.bco?.value,
+          exchangeId: value?.exchangeCode?.value,
+          symbol: value?.symbol?.value,
+          template: value?.template?.value,
+          date: (value?.date).toISOString(),
+        };
+        if (addBrokerageClicked) {
+          setTableData(updatedTableData);
+          setAddBrokerageClicked(false);
+        }
+      }
+    };
+    if (currentBrokerage) {
+      updateTableData();
+    }
+  }, [tableData, value]);
 
+  const handleAddBrokerageClick = () => {
+    if (currentBrokerage) {
+      setAddBrokerageClicked(true);
+    } else {
+      const shouldAdd = !tableData.some(
+        (obj: any) =>
+          obj.exchangeId === value.exchangeCode.value &&
+          obj.symbol === value.symbol.value &&
+          obj.template === value.template.value
+      );
+
+      if (shouldAdd) {
+        const newTableData = [
+          ...tableData,
+          {
+            date: value.date.toISOString(),
+            template: value.template.value,
+            exchangeId: value.exchangeCode.value,
+            exchangeName: value.exchangeCode.label,
+            symbol: value.symbol.value,
+            symbolName: value.symbol.label,
+            bco: value.bco.value,
+            bcm: value.bcm.value,
+            brkgRate: value.brkgRate,
+            brkgRatePer: value.brkgRatePer,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            __v: 0,
+          },
+        ];
+        reset();
+        setTableData(newTableData);
+      }
+    }
+  };
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack
@@ -511,13 +562,13 @@ export default function BrokerageTableToolbar({
             <RHFTextField sx={{ width: '100%' }} name="brkgRatePer" isReadOnly label="BRKG Per" />
           </Box>
           <LoadingButton variant="contained" onClick={handleAddBrokerageClick}>
-            {currentUser ? 'Update Brokerage' : 'Add Brokerage'}
+            {currentBrokerage ? 'Update Brokerage' : 'Add Brokerage'}
           </LoadingButton>
           <LoadingButton
             type="submit"
             variant="contained"
             loading={isSubmitting}
-            disabled={!addBrokerageClicked}
+            // disabled={!addBrokerageClicked}
           >
             {currentUser ? 'Update User' : 'Create User'}
           </LoadingButton>

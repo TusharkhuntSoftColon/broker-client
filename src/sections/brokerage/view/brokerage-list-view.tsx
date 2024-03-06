@@ -78,17 +78,21 @@ export default function BrokerageListView({ currentUser, fields }: any) {
   const settings = useSettingsContext();
   const router = useRouter();
   const role = useSelector((data: any) => data.auth.role);
+
   const [filters, setFilters] = useState(defaultFilters);
-  const [currentBrokerage, setCurrentBrokerage] = useState();
+  const [currentBrokerage, setCurrentBrokerage] = useState<any>();
 
   const [tableData, setTableData] = useState([]);
 
   const exchangeList = useSelector((data: any) => data?.exchange?.exchangeList);
-  const brokerageList = useSelector((data: any) => data?.admin?.brokerageList);
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
-    mutate();
+    if (currentUser) {
+      getAllBrokerages(currentUser?._id);
+    } else {
+      getAllBrokerages('d');
+    }
   }, []);
 
   const confirm = useBoolean();
@@ -110,7 +114,6 @@ export default function BrokerageListView({ currentUser, fields }: any) {
   });
 
   const denseHeight = table.dense ? 60 : 80;
-
   const canReset = !isEqual(defaultFilters, filters);
 
   const handleFilters = useCallback(
@@ -124,15 +127,31 @@ export default function BrokerageListView({ currentUser, fields }: any) {
     [table]
   );
 
-  const handleDeleteRow = (id: any) => {};
+  const handleDeleteRow = (data: any) => {
+    const filteredData = tableData.filter(
+      (item: any) =>
+        !(
+          item.exchangeId === data.exchangeId &&
+          item.symbol === data.symbol &&
+          item.template === data.template
+        )
+    );
+    setTableData(filteredData);
+  };
 
   const handleDeleteRows = useCallback(() => {
     // const deleteRows = table.selected;
     // deleteBrokerage(deleteRows);
   }, [table]);
 
-  const handleEditRow = (id: string) => {
-    const SelectedBrokerage = brokerageList?.find((item: any) => item?._id === id);
+  const handleEditRow = (data: any) => {
+    const SelectedBrokerage = tableData.find(
+      (obj: any) =>
+        obj.exchangeId === data.exchangeId &&
+        obj.symbol === data.symbol &&
+        obj.template === data.template
+    );
+
     setCurrentBrokerage(SelectedBrokerage);
   };
 
@@ -145,17 +164,25 @@ export default function BrokerageListView({ currentUser, fields }: any) {
   const getBrokerageByRole = (role: any) => {
     switch (role) {
       case 'ADMIN':
-        return adminService.getBrokerageList;
+        return currentUser
+          ? adminService.getBrokerageListForUserUpdate
+          : adminService.getBrokerageList;
       case 'SUPER_MASTER':
-        return superMasterService.getBrokerageList;
+        return currentUser
+          ? superMasterService.getBrokerageListForUserUpdate
+          : superMasterService.getBrokerageList;
       case 'MASTER':
-        return masterService.getBrokerageList;
+        return currentUser
+          ? masterService.getBrokerageListForUserUpdate
+          : masterService.getBrokerageList;
       default:
-        return masterService.getBrokerageList;
+        return currentUser
+          ? masterService.getBrokerageListForUserUpdate
+          : masterService.getBrokerageList;
     }
   };
 
-  const { mutate } = useMutation(getBrokerageByRole(role), {
+  const { mutate: getAllBrokerages } = useMutation(getBrokerageByRole(role), {
     onSuccess: (data) => {
       setTableData(data?.data?.rows);
       dispatch(addBrokerage(data?.data?.rows));
@@ -173,11 +200,13 @@ export default function BrokerageListView({ currentUser, fields }: any) {
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
         <Card>
           <BrokerageTableToolbar
-            mutate={mutate}
+            mutate={getAllBrokerages}
             currentUser={currentUser}
             currentBrokerage={currentBrokerage}
             setCurrentBrokerage={setCurrentBrokerage}
             fields={fields}
+            tableData={tableData}
+            setTableData={setTableData}
           />
           <FormProvider methods={methods}>
             <Box
@@ -261,8 +290,8 @@ export default function BrokerageListView({ currentUser, fields }: any) {
                         exchangeList={exchangeList}
                         selected={table.selected.includes(row?._id)}
                         onSelectRow={() => table.onSelectRow(row?._id)}
-                        onDeleteRow={() => handleDeleteRow(row?._id)}
-                        onEditRow={() => handleEditRow(row?._id)}
+                        onDeleteRow={() => handleDeleteRow(row)}
+                        onEditRow={() => handleEditRow(row)}
                         onViewRow={() => handleViewRow(row?._id)}
                       />
                     ))}
@@ -292,7 +321,7 @@ export default function BrokerageListView({ currentUser, fields }: any) {
       </Container>
 
       <BrokerageQuickEditForm
-        getFunction={() => mutate()}
+        // getFunction={() => getAllBrokerages()}
         open={quickEdit.value}
         onClose={quickEdit.onFalse}
       />

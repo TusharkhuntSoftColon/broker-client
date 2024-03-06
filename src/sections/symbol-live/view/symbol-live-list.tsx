@@ -91,9 +91,6 @@ export default function xxSymbolLiveList() {
 
       setSymbolData(symbolnewData);
 
-      console.log({ symbolnewData });
-
-      // set table data with empty socket
       const symbolTableDashboard = [];
       for (const symbols of symbolnewData) {
         symbolTableDashboard.push({

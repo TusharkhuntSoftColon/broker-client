@@ -1,5 +1,5 @@
 export type IBrokerage = {
-  _id: any;
+  _id: string;
   date: string;
   exchangeCode: string;
   symbol: string;
@@ -9,4 +9,6 @@ export type IBrokerage = {
   brkgRatePer: number;
   currentUser?: any;
   template?: any;
+  symbolName?: string;
+  exchangeName?: string;
 };

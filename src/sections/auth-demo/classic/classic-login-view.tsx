@@ -101,7 +101,7 @@ export default function ClassicLoginView() {
 
   const renderForm = (
     <Stack spacing={2.5}>
-      <RHFTextField upperText name="id" label="ID" />
+      <RHFTextField name="id" label="ID" />
 
       <RHFTextField
         name="password"

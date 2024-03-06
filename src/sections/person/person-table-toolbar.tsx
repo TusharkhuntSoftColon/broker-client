@@ -107,8 +107,6 @@ export default function PersonTableToolbar({
     }
   });
 
-  console.log('Working ToolBar');
-
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack

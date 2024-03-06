@@ -320,8 +320,6 @@ export default function PersonListView({ path }: { path: any }) {
     setFilters(defaultFilters);
   }, []);
 
-  console.log({ tableData, personData });
-
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>
@@ -491,15 +489,15 @@ function applyFilter({
 }) {
   const { name, status, exchange, dateRange } = filters;
 
-  const stabilizedThis = inputData?.map((el: any, index: any) => [el, index] as const);
+  // const stabilizedThis = inputData?.map((el: any, index: any) => [el, index] as const);
 
-  stabilizedThis?.sort((a: any, b: any) => {
-    const order = comparator(a[0], b[0]);
-    if (order !== 0) return order;
-    return a[1] - b[1];
-  });
+  // stabilizedThis?.sort((a: any, b: any) => {
+  //   const order = comparator(a[0], b[0]);
+  //   if (order !== 0) return order;
+  //   return a[1] - b[1];
+  // });
 
-  inputData = stabilizedThis?.map((el: any) => el[0]);
+  // inputData = stabilizedThis?.map((el: any) => el[0]);
 
   if (name) {
     inputData = inputData.filter(

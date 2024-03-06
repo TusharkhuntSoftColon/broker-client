@@ -14,6 +14,7 @@ import {
   SET_IMPORT_MONTH_LIST_FOR_MASTER,
   IMPORT_MONTH_ORDER_LIST_FOR_MASTER,
   GET_ASSIGNED_EXCHANGE_LIST_FOR_MASTER,
+  GET_BROKERAGE_LIST_FOR_USER_UPDATE_BY_MASTER,
 } from '../utils/urls';
 
 export interface adminType {
@@ -26,24 +27,37 @@ export interface adminType {
 
 const masterService = {
   createUser: async (data: any): Promise<any> => {
-    const date = new Date(data?.date);
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
-    const day = date.getDate().toString().padStart(2, '0');
-    const year = date.getFullYear();
+    const withoutBrokerageData = {
+      ID: data?.ID,
+      name: data?.name,
+      password: data?.password,
+      exchangeList: data?.fields,
+      role: data?.role?.value,
+      balance: data?.balance,
+      leverageXY: data?.leverageXY?.value,
+      isBrokerageAllowed: data?.isBrokerageAllowed,
+      isActive: data?.isActive,
+      investorPassword: data?.investorPassword,
+    };
+
+    const brokerageData = {
+      ...withoutBrokerageData,
+      brockrageTamplates: data?.tableData?.map((item: any) => ({
+        date: item.date,
+        template: item.template,
+        exchangeId: item.exchangeId,
+        symbol: item.symbol,
+        bco: item.bco,
+        bcm: item.bcm,
+        brkgRate: item.brkgRate,
+        brkgRatePer: item.brkgRatePer,
+      })),
+    };
+
+    const usersData = data?.isBrokerageAllowed ? brokerageData : withoutBrokerageData;
 
     try {
-      const response: AxiosResponse<any> = await client.post(CREATE_USER_BY_MASTER, {
-        ...data,
-        leverageXY: data?.leverageXY?.value,
-        date: `${year}-${month}-${day}`,
-        template: data?.template?.value,
-        role: data?.role?.value,
-        exchangeCode: data?.exchangeCode?.value,
-        bco: data?.bco?.value,
-        bcm: data?.bcm?.value,
-        symbol: data?.symbol?.value,
-        exchangeList: data?.fields,
-      });
+      const response: AxiosResponse<any> = await client.post(CREATE_USER_BY_MASTER, usersData);
       return response.data;
     } catch (error) {
       // You can log the error here for debugging purposes
@@ -61,27 +75,39 @@ const masterService = {
       throw error; // Re-throw the error to be caught by the caller
     }
   },
-  updateUser: async (UserData: any): Promise<any> => {
-    const date = new Date(UserData?.date);
-    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // Adding 1 because getMonth() returns zero-based month index
-    const day = date.getDate().toString().padStart(2, '0');
-    const year = date.getFullYear();
+  updateUser: async (data: any): Promise<any> => {
+    const withoutBrokerageData = {
+      ID: data?.ID,
+      name: data?.name,
+      password: data?.password,
+      exchangeList: data?.fields,
+      role: data?.role?.value,
+      balance: data?.balance,
+      leverageXY: data?.leverageXY?.value,
+      isBrokerageAllowed: data?.isBrokerageAllowed,
+      isActive: data?.isActive,
+      investorPassword: data?.investorPassword,
+    };
 
+    const brokerageData = {
+      ...withoutBrokerageData,
+      brockrageTamplates: data?.tableData?.map((item: any) => ({
+        date: item.date,
+        template: item.template,
+        exchangeId: item.exchangeId,
+        symbol: item.symbol,
+        bco: item.bco,
+        bcm: item.bcm,
+        brkgRate: item.brkgRate,
+        brkgRatePer: item.brkgRatePer,
+      })),
+    };
+
+    const usersData = data?.isBrokerageAllowed ? brokerageData : withoutBrokerageData;
     try {
       const response: AxiosResponse<any> = await client.put(
-        `${UPDATE_USER_BY_MASTER}/${UserData._id}`,
-        {
-          ...UserData,
-          leverageXY: UserData?.leverageXY.value,
-          role: UserData?.role?.value,
-          date: `${year}-${month}-${day}`,
-          template: UserData?.template?.value,
-          exchangeCode: UserData?.exchangeCode?.value,
-          bco: UserData?.bco?.value,
-          bcm: UserData?.bcm?.value,
-          symbol: UserData?.symbol?.value,
-          exchangeList: UserData.fields,
-        }
+        `${UPDATE_USER_BY_MASTER}/${data._id}`,
+        usersData
       );
       return response.data;
     } catch (error) {
@@ -174,6 +200,17 @@ const masterService = {
       // You can log the error here for debugging purposes
       console.error('Error in symbolService.getSymbolList:', error);
       throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  getBrokerageListForUserUpdate: async (id?: string): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(
+        `${GET_BROKERAGE_LIST_FOR_USER_UPDATE_BY_MASTER}/${id}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error in exchangeService.getExchangeList:', error);
+      throw error;
     }
   },
 };

@@ -1,3 +1,5 @@
+/* eslint-disable no-lonely-if */
+/* eslint-disable arrow-body-style */
 /* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable consistent-return */
 /* eslint-disable no-plusplus */
@@ -36,6 +38,7 @@ import { useRouter } from 'src/routes/hooks';
 import { addUser } from 'src/store/slices/person';
 import adminService from 'src/services/adminService';
 import { addExchanges } from 'src/store/slices/admin';
+import masterService from 'src/services/masterService';
 import { EXCHANGE_GROUP, LEVERAGE_OPTIONS } from 'src/_mock';
 import superMasterService from 'src/services/superMasterService';
 import { ADMIN_ROLE, MASTER_ROLE, SUPER_MASTER_ROLE } from 'src/_mock/_person';
@@ -174,6 +177,7 @@ export default function PersonNewEditForm({
       deleteBet: currentUser?.deleteBet || personList?.deleteBet || false,
       leverageXY: defaultLeverageOptions || '',
       isActive: currentUser?.isActive || null,
+      isBrokerageAllowed: currentUser?.isBrokerageAllowed || false,
       limitOfAddUser: currentUser?.limitOfAddUser || personList?.limitOfAddUser || null,
       limitOfAddMaster: currentUser?.limitOfAddMaster || personList?.limitOfAddMaster || null,
       brokerageTemplate: currentUser?.brokerageTemplate || personList?.brokerageTemplate || null,
@@ -183,17 +187,38 @@ export default function PersonNewEditForm({
 
   const [fields, setFields] = useState(() => {
     if (currentUser) {
-      // If in create mode, initialize fields with values from exchangeList
       return currentUser?.exchangeList.map(({ allowedExchange, exchangeGroup }: any) => ({
         allowedExchange,
         exchangeGroup,
       })); // Fallback to default if exchangeList is not available
     }
-    // If in edit mode, initialize with default values
     return [{ allowedExchange: '', exchangeGroup: '' }];
   });
 
-  console.log({ fields });
+  const [demoArray, setDemoArray] = useState<any>([]);
+  // const [selectedExchangeLabels, setSelectedExchangeLabels] = useState<{ [key: string]: string }>(
+  //   {}
+  // );
+
+  // useEffect(() => {
+  //   const selectedLabels: { [key: string]: string } = {};
+  //   fields.forEach((field: any) => {
+  //     const selectedOption = newExchangeOptions.find(
+  //       (option: any) => option.value === field.allowedExchange
+  //     );
+  //     if (selectedOption) {
+  //       selectedLabels[field.allowedExchange] = selectedOption.label;
+  //     }
+  //   });
+  //   setSelectedExchangeLabels(selectedLabels);
+  // }, [fields, newExchangeOptions]);
+
+  useEffect(() => {
+    const filteredArray = Exchange.filter((item) => {
+      return !fields.some((field: any) => field.allowedExchange === item.value);
+    });
+    setDemoArray(filteredArray);
+  }, [fields]);
 
   const handleChange = (index: number, event: any) => {
     const { name, value } = event.target;
@@ -201,7 +226,6 @@ export default function PersonNewEditForm({
     newFields[index][name as string] = value;
     setFields(newFields);
 
-    // Check if the selected value is already selected in another field
     const selectedValue = value as string;
     const alreadySelected = selectedValues.some((val) => val === selectedValue);
     if (!alreadySelected) {
@@ -231,7 +255,6 @@ export default function PersonNewEditForm({
   const allowedExchangeComponent = (index: number) => {
     const exchangeListItem = currentUser?.exchangeList[index];
 
-    // Find the corresponding default values from newExchangeOptions based on allowedExchange and exchangeGroup values
     const defaultAllowedExchange = newExchangeOptions.find(
       (option) => option.value === exchangeListItem?.allowedExchange
     );
@@ -239,7 +262,6 @@ export default function PersonNewEditForm({
       (option) => option.value === exchangeListItem?.exchangeGroup
     );
 
-    // const defaultAllowExchange = newExchangeOptions.find((data)=>data?.value === fields[index].valu)
     return (
       <Box sx={{ display: 'flex', gap: 2, width: '100%' }} key={index}>
         <FormControl fullWidth>
@@ -259,6 +281,9 @@ export default function PersonNewEditForm({
               </MenuItem>
             ))}
           </Select>
+          {/* <Typography variant="subtitle2" color="textSecondary">
+            {selectedExchangeLabels[fields[index].allowedExchange] || ''}
+          </Typography> */}
         </FormControl>
         <FormControl fullWidth>
           <InputLabel id={`exchangeGroup-label-${index}`}>Exchange Group</InputLabel>
@@ -315,13 +340,6 @@ export default function PersonNewEditForm({
     }
   }, []);
 
-  // const { append, remove } = useFieldArray({
-  //   name: 'exchangeList',
-  //   control,
-  // });
-
-  // const [components, setComponents] = useState([]);
-
   useEffect(() => {
     const fieldsToReset: any = [
       'name',
@@ -367,9 +385,8 @@ export default function PersonNewEditForm({
         return adminService.getExchangeListForMaster;
       case 'MASTER':
         return adminService.getExchangeListForUser;
-      // Add other cases for different roles with their respective paths
       default:
-        return paths; // Return a default path if role doesn't match
+        return paths;
     }
   };
 
@@ -384,35 +401,8 @@ export default function PersonNewEditForm({
       if (isAxiosError(error)) {
         enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
       }
-      // enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
-
-  // const getBrokerageByRole = (role: any) => {
-  //   switch (role) {
-  //     case 'ADMIN':
-  //       return adminService.getBrokerageList;
-  //     case 'SUPER_MASTER':
-  //       return superMasterService.getBrokerageList;
-  //     case 'MASTER':
-  //       return masterService.getBrokerageList;
-  //     default:
-  //       return masterService.getBrokerageList;
-  //   }
-  // };
-
-  // Get All Brokerage
-  // const { mutate: brokerageList } = useMutation(getBrokerageByRole(role), {
-  //   onSuccess: (data) => {
-  //     // setBrokerageDataList(data?.data?.rows);
-  //   },
-  //   onError: (error: any) => {
-  //     if (isAxiosError(error)) {
-  //       enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-  //     }
-  //     // enqueueSnackbar(error?.message, { variant: 'error' });
-  //   },
-  // });
   const createMasterByRole: any = (role: any) => {
     switch (role) {
       case 'ADMIN':
@@ -432,6 +422,31 @@ export default function PersonNewEditForm({
         return superMasterService.updateMaster;
       default:
         return paths; // Return a default path if role doesn't match
+    }
+  };
+
+  const createUserByRole: any = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.createUser;
+      case 'SUPER_MASTER':
+        return superMasterService.createUser;
+      case 'MASTER':
+        return masterService.createUser;
+      default:
+        return paths;
+    }
+  };
+  const updateUserByRole: any = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.updateUser;
+      case 'SUPER_MASTER':
+        return superMasterService.updateUser;
+      case 'MASTER':
+        return masterService.updateUser;
+      default:
+        return paths;
     }
   };
 
@@ -495,6 +510,33 @@ export default function PersonNewEditForm({
     },
   });
 
+  const { mutate: createUser }: any = useMutation(createUserByRole(role), {
+    onSuccess: (data: any) => {
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      router.push(paths.dashboard.person.root);
+      dispatch(addUser([]));
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+      enqueueSnackbar(error?.message, { variant: 'error' });
+    },
+  });
+  const { mutate: updateUser }: any = useMutation(updateUserByRole(role), {
+    onSuccess: (data: any) => {
+      enqueueSnackbar(data?.message, { variant: 'success' });
+      router.push(paths.dashboard.person.root);
+      dispatch(addUser([]));
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+      enqueueSnackbar(error?.message, { variant: 'error' });
+    },
+  });
+
   const onSubmit = handleSubmit(async (data) => {
     try {
       if (roleOption === 'SUPER_MASTER') {
@@ -512,9 +554,17 @@ export default function PersonNewEditForm({
         }
       }
       if (roleOption === 'USER') {
-        dispatch(addUser(data));
-        setFieldsValue(fields);
-        setTabValue(1);
+        if (value.isBrokerageAllowed) {
+          setFieldsValue(fields);
+          dispatch(addUser(data));
+          setTabValue(1);
+        } else {
+          if (currentUser) {
+            updateUser({ ...data, _id: currentUser?._id, fields });
+          } else {
+            createUser({ ...data, fields });
+          }
+        }
       }
     } catch (error) {
       console.log(error);
@@ -631,6 +681,19 @@ export default function PersonNewEditForm({
                   </li>
                 )}
               />
+
+              {roleOption === 'USER' && (
+                <RHFSwitch
+                  name="isBrokerageAllowed"
+                  labelPlacement="start"
+                  label={
+                    <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
+                      Brokerage
+                    </Typography>
+                  }
+                  sx={{ mx: 0, width: 1 }}
+                />
+              )}
 
               {roleOption !== 'USER' && (
                 <>
