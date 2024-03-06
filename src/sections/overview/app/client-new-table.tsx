@@ -1,7 +1,11 @@
+/* eslint-disable no-nested-ternary */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable no-else-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-plusplus */
+import { io } from 'socket.io-client';
 /* eslint-disable arrow-body-style */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -18,14 +22,16 @@ import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 
+import useAuth from 'src/hooks/useAuth';
+
+import { SOCKET_URL } from 'src/utils/environments';
+
 import { newClientsOnlineTableData } from 'src/_mock';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { TableHeadCustom } from 'src/components/table';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
-
-// ----------------------------------------------------------------------
 
 type RowProps = {
   id: any;
@@ -107,99 +113,126 @@ export default function ClientTableDashboard({
   positionsData: any;
 }) {
   const [value, setValue] = useState(0);
-  // const [tableData, setTableData] = useState<any>([]);
-  // const { token } = useAuth();
+  const [tableData, setTableData] = useState<any>([]);
+  const { token } = useAuth();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-  // const [positions, setPositions] = useState([]);
 
-  // console.log({ positions });
+  const [updatedPositionsData, setUpdatedPositionsData] = useState([]);
+  const [updatedOrdersData, setUpdatedOrdersData] = useState([]);
 
-  // console.log({ positionsData });
+  useEffect(() => {
+    const userTableData = value === 0 ? positionsData : value === 3 ? ordersData : [];
+    socketConnection(userTableData);
+  }, [positionsData, ordersData, value]);
 
-  // console.log({ tableData });
+  useEffect(() => {
+    const updateLivePrice = async (socketData: any) => {
+      const userTableData = value === 0 ? positionsData : value === 3 ? ordersData : [];
+      const updatedPositions = userTableData?.map((position: any) => {
+        const socketItem = socketData.find(
+          (item: any) => item.InstrumentIdentifier === position.scriptName
+        );
+        if (socketItem) {
+          if (position.positionType === 'BUY') {
+            return { ...position, livePrice: socketItem.SellPrice };
+          } else if (position.positionType === 'SELL') {
+            return { ...position, livePrice: socketItem.BuyPrice };
+          }
+        }
+        return position;
+      });
+      if (updatedPositions !== undefined && value === 0) {
+        setUpdatedPositionsData(updatedPositions);
+      } else if (updatedPositions !== undefined && value === 3) {
+        setUpdatedOrdersData(updatedPositions);
+      }
+    };
+    updateLivePrice(tableData);
+  }, [tableData, value]);
 
-  // useEffect(() => {
-  //   socketConnection(positionsData);
-  // }, []);
+  const socketConnection = async (activeSymbols: any) => {
+    try {
+      const socket = io(SOCKET_URL, {
+        transports: ['websocket'],
+        query: {
+          transport: 'websocket',
+          EIO: '4',
+          authorization: token,
+        },
+        auth: { authorization: token },
+        extraHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-  // const socketConnection = async (activeSymbols: any) => {
-  //   try {
-  //     const socket = io(SOCKET_URL, {
-  //       transports: ['websocket'],
-  //       query: {
-  //         transport: 'websocket',
-  //         EIO: '4',
-  //         authorization: token,
-  //       },
-  //       auth: { authorization: token },
-  //       extraHeaders: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
+      const Symbols = activeSymbols.map((symbol: any) => symbol?.scriptName);
+      const parsedSymbols = JSON.stringify(Symbols);
 
-  //     const Symbols = activeSymbols.map((symbol: any) => symbol?.scriptName);
-  //     const parsedSymbols = JSON.stringify(Symbols);
+      socket.on('connect', () => {
+        console.log('[socket] Connected');
+        socket.emit('subscribeToUserServerMarket', parsedSymbols);
+      });
 
-  //     socket.on('connect', () => {
-  //       console.log('[socket] Connected');
-  //       socket.emit('subscribeToUserServerMarket', parsedSymbols);
-  //     });
+      socket.emit('joinUserRoom', parsedSymbols);
 
-  //     socket.emit('joinUserRoom', parsedSymbols);
+      socket.on('disconnect', (reason: any) => {
+        console.log('[socket] Disconnected:', reason);
+      });
+      socket.on('error', (error: any) => {
+        console.log('[socket] Error:', error);
+      });
 
-  //     socket.on('disconnect', (reason: any) => {
-  //       console.log('[socket] Disconnected:', reason);
-  //     });
-  //     socket.on('error', (error: any) => {
-  //       console.log('[socket] Error:', error);
-  //     });
+      socket.on('marketWatch', (data: any) => {
+        setTableData((prev: any) => {
+          let index1 = -1;
 
-  //     socket.on('marketWatch', (data: any) => {
-  //       console.log({ data });
+          for (let index = 0; index < prev.length; index++) {
+            const data1 = prev[index];
+            if (
+              data1.InstrumentIdentifier &&
+              data.InstrumentIdentifier &&
+              data1.InstrumentIdentifier === data.InstrumentIdentifier
+            ) {
+              index1 = index;
 
-  //       setTableData((prev: any) => {
-  //         let index1 = -1;
+              break;
+            }
+          }
 
-  //         for (let index = 0; index < prev.length; index++) {
-  //           const data1 = prev[index];
-  //           if (
-  //             data1.InstrumentIdentifier &&
-  //             data.InstrumentIdentifier &&
-  //             data1.InstrumentIdentifier === data.InstrumentIdentifier
-  //           ) {
-  //             index1 = index;
+          if (index1 === -1) {
+            return [...prev, data];
+          }
 
-  //             break;
-  //           }
-  //         }
+          const newObj = {
+            ...data,
+            oldBuyPrice: prev[index1].BuyPrice,
+            oldSellPrice: prev[index1].SellPrice,
+            oldPercentage: prev[index1].PriceChangePercentage,
+          };
+          prev[index1] = newObj;
+          return [...prev];
+        });
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
-  //         if (index1 === -1) {
-  //           return [...prev, data];
-  //         }
+  // const newPositionData = positionsData.map((data)=>{
+  //   return(
 
-  //         const newObj = {
-  //           ...data,
-  //           oldBuyPrice: prev[index1].BuyPrice,
-  //           oldSellPrice: prev[index1].SellPrice,
-  //         };
-  //         prev[index1] = newObj;
-  //         return [...prev];
-  //       });
-  //     });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
+  //   )
+  // })
 
   const tabs = [
     {
       label: 'Positions',
       value: 0,
       title: 'Users',
-      tableDatas: positionsData,
+      tableDatas: tableData.length > 0 ? updatedPositionsData : positionsData,
       tableLabel: [
         { id: 'login', label: 'Login', align: 'left', border: '1px solid #dddddd !important' },
         {
@@ -212,7 +245,12 @@ export default function ClientTableDashboard({
         { id: 'type', label: 'Type', align: 'right', border: '1px solid #dddddd !important' },
         { id: 'volume', label: 'Volume', align: 'right', border: '1px solid #dddddd !important' },
         { id: 'price1', label: 'Price', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'price2', label: 'Price', align: 'right', border: '1px solid #dddddd !important' },
+        {
+          id: 'livePrice',
+          label: 'Current Price',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
       ],
     },
     {
@@ -247,7 +285,7 @@ export default function ClientTableDashboard({
       label: 'Orders',
       value: 3,
       title: 'Orders Table',
-      tableDatas: ordersData,
+      tableDatas: tableData.length > 0 ? updatedOrdersData : ordersData,
       tableLabel: [
         { id: 'ID', label: 'Login', align: 'left', border: '1px solid #dddddd !important' },
         { id: 'order', label: 'Order', align: 'left', border: '1px solid #dddddd !important' },
@@ -256,7 +294,12 @@ export default function ClientTableDashboard({
         { id: 'type', label: 'Type', align: 'right', border: '1px solid #dddddd !important' },
         { id: 'volume', label: 'Volume', align: 'right', border: '1px solid #dddddd !important' },
         { id: 'price1', label: 'Price', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'price2', label: 'Price', align: 'right', border: '1px solid #dddddd !important' },
+        {
+          id: 'livePrice',
+          label: 'Current Price',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
       ],
     },
   ];
@@ -391,7 +434,7 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
             {row.positionType === 'BUY' ? row.buyPrice : row.sellPrice}
           </StyledTableCell>
           <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
-            {row.price2}
+            {row?.livePrice}
           </StyledTableCell>
         </StyledTableRow>
       )}
@@ -456,7 +499,7 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
             {row.positionType === 'BUY' ? row.buyPrice : row.sellPrice}
           </StyledTableCell>
           <StyledTableCell sx={{ textAlign: 'right', padding: '9px', borderRight: 'none' }}>
-            {row.price2}
+            {row.livePrice}
           </StyledTableCell>
         </StyledTableRow>
       )}
