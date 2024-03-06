@@ -192,9 +192,9 @@ export default function ClientTableDashboard({
           for (let index = 0; index < prev.length; index++) {
             const data1 = prev[index];
             if (
-              data1.InstrumentIdentifier &&
-              data.InstrumentIdentifier &&
-              data1.InstrumentIdentifier === data.InstrumentIdentifier
+              data1?.InstrumentIdentifier &&
+              data?.InstrumentIdentifier &&
+              data1?.InstrumentIdentifier === data?.InstrumentIdentifier
             ) {
               index1 = index;
 
