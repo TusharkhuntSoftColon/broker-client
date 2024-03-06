@@ -195,7 +195,7 @@ export default function PersonNewEditForm({
     return [{ allowedExchange: '', exchangeGroup: '' }];
   });
 
-  const [demoArray, setDemoArray] = useState<any>([]);
+  // const [demoArray, setDemoArray] = useState<any>([]);
   // const [selectedExchangeLabels, setSelectedExchangeLabels] = useState<{ [key: string]: string }>(
   //   {}
   // );
@@ -213,12 +213,12 @@ export default function PersonNewEditForm({
   //   setSelectedExchangeLabels(selectedLabels);
   // }, [fields, newExchangeOptions]);
 
-  useEffect(() => {
-    const filteredArray = Exchange.filter((item) => {
-      return !fields.some((field: any) => field.allowedExchange === item.value);
-    });
-    setDemoArray(filteredArray);
-  }, [fields]);
+  // useEffect(() => {
+  //   const filteredArray = Exchange.filter((item) => {
+  //     return !fields.some((field: any) => field.allowedExchange === item.value);
+  //   });
+  //   setDemoArray(filteredArray);
+  // }, [fields]);
 
   const handleChange = (index: number, event: any) => {
     const { name, value } = event.target;
