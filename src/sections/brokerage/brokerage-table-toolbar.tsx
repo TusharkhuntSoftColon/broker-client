@@ -139,10 +139,12 @@ export default function BrokerageTableToolbar({
     watch,
     setValue,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: { isSubmitting, isDirty },
   } = methods;
 
   const value: any = watch();
+
+  console.log({ value });
 
   const symbolOptionsArray = symbolList?.filter(
     (data: any) => data.exchange === value.exchangeCode?.value
@@ -348,40 +350,58 @@ export default function BrokerageTableToolbar({
   }, [tableData, value]);
 
   const handleAddBrokerageClick = () => {
-    if (currentBrokerage) {
-      setAddBrokerageClicked(true);
-    } else {
-      const shouldAdd = !tableData.some(
-        (obj: any) =>
-          obj.exchangeId === value.exchangeCode.value &&
-          obj.symbol === value.symbol.value &&
-          obj.template === value.template.value
-      );
+    // Check if all form fields are filled
+    if (
+      value.date &&
+      value.template &&
+      value.exchangeCode &&
+      value.symbol &&
+      value.bco &&
+      value.bcm &&
+      value.brkgRate &&
+      value.brkgRatePer
+    ) {
+      // Add the item to the array
+      if (currentBrokerage) {
+        setAddBrokerageClicked(true);
+      } else {
+        const shouldAdd = !tableData.some(
+          (obj: any) =>
+            obj.exchangeId === value.exchangeCode.value &&
+            obj.symbol === value.symbol.value &&
+            obj.template === value.template.value
+        );
 
-      if (shouldAdd) {
-        const newTableData = [
-          ...tableData,
-          {
-            date: value.date.toISOString(),
-            template: value.template.value,
-            exchangeId: value.exchangeCode.value,
-            exchangeName: value.exchangeCode.label,
-            symbol: value.symbol.value,
-            symbolName: value.symbol.label,
-            bco: value.bco.value,
-            bcm: value.bcm.value,
-            brkgRate: value.brkgRate,
-            brkgRatePer: value.brkgRatePer,
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            __v: 0,
-          },
-        ];
-        reset();
-        setTableData(newTableData);
+        if (shouldAdd) {
+          const newTableData = [
+            ...tableData,
+            {
+              date: value.date.toISOString(),
+              template: value.template.value,
+              exchangeId: value.exchangeCode.value,
+              exchangeName: value.exchangeCode.label,
+              symbol: value.symbol.value,
+              symbolName: value.symbol.label,
+              bco: value.bco.value,
+              bcm: value.bcm.value,
+              brkgRate: value.brkgRate,
+              brkgRatePer: value.brkgRatePer,
+              createdAt: new Date(),
+              updatedAt: new Date(),
+              __v: 0,
+            },
+          ];
+          reset();
+          setTableData(newTableData);
+        } else {
+          enqueueSnackbar('Brokerage Already Exist', { variant: 'error' });
+        }
       }
+    } else {
+      enqueueSnackbar('Please fill in all the fields.', { variant: 'error' });
     }
   };
+
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
       <Stack

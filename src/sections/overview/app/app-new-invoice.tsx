@@ -1,3 +1,6 @@
+/* eslint-disable object-shorthand */
+/* eslint-disable no-plusplus */
+/* eslint-disable no-restricted-syntax */
 /* eslint-disable arrow-body-style */
 import React from 'react';
 
@@ -56,6 +59,63 @@ interface TabPanelProps {
   styles: any;
 }
 
+interface BuyData {
+  average: number;
+  totalQuantity: number;
+}
+
+interface SellData {
+  average: number;
+  totalQuantity: number;
+}
+
+interface BuyPosition {
+  [symbol: string]: number;
+}
+
+interface SellPosition {
+  [symbol: string]: number;
+}
+
+interface Buy {
+  allBuyAverages: { [symbol: string]: BuyData };
+  buyPosition: BuyPosition;
+}
+
+interface Sell {
+  allSellAverages: { [symbol: string]: SellData };
+  sellPosition: SellPosition;
+}
+
+interface Item {
+  buy: Buy;
+  sell: Sell;
+}
+
+interface SummaryRow {
+  id: string;
+  symbol: string;
+  positions: string;
+  buy_volume: string;
+  buy_price: string;
+  sell_volume: string;
+  sell_price: string;
+  net_volume: string;
+  profit: string;
+  unCovered: string;
+}
+
+interface TransformedData {
+  result: SummaryRow[];
+  totalBuyVolume: number;
+  totalBuyPrice: number;
+  totalSellVolume: number;
+  totalSellPrice: number;
+  totalNetVolume: number;
+  totalProfit: number;
+  totalPositions: number;
+}
+
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   '&:nth-of-type(even)': {
     backgroundColor: theme.palette.action.hover,
@@ -94,19 +154,167 @@ function a11yProps(index: number) {
   };
 }
 
-export default function AppNewInvoice() {
+export default function AppNewInvoice({
+  exchangeTableSummaryData,
+}: {
+  exchangeTableSummaryData: any;
+}) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
+  console.log({ exchangeTableSummaryData });
+
+  // function transformData(data: any) {
+  //   const result = [];
+
+  //   for (const item of data) {
+  //     const buyEntries = Object.entries(item.buy.buyPosition);
+  //     const sellEntries = Object.entries(item.sell.sellPosition);
+
+  //     const allKeys: any = new Set([
+  //       ...buyEntries.map(([key]) => key),
+  //       ...sellEntries.map(([key]) => key),
+  //     ]);
+
+  //     for (const key of allKeys.values()) {
+  //       const buySymbol = buyEntries.find(([k]) => k === key);
+  //       const sellSymbol = sellEntries.find(([k]) => k === key);
+
+  //       if (buySymbol) {
+  //         const buy = item.buy.allBuyAverages[buySymbol[0]];
+  //         result.push({
+  //           id: buySymbol[1],
+  //           symbol: buySymbol[0],
+  //           positions: `${buySymbol[1]} / ${sellSymbol ? sellSymbol[1] : 0}`,
+  //           buy_volume: `${buy.totalQuantity} / 0`,
+  //           buy_price: `${buy.average.toFixed(2)} / 0.00`,
+  //           sell_volume: `${sellSymbol ? item.sell.allSellAverages[key].totalQuantity : 0} / 0`,
+  //           sell_price: `${sellSymbol ? item.sell.allSellAverages[key].average.toFixed(2) : 0.0} / 0.00`,
+  //           net_volume: `${buy.totalQuantity - (sellSymbol ? item.sell.allSellAverages[key].totalQuantity : 0)}`,
+  //           profit: `${(buy.totalQuantity * buy.average - (sellSymbol ? item.sell.allSellAverages[key].totalQuantity * item.sell.allSellAverages[key].average : 0)).toFixed(2)} / 0.00`,
+  //           unCovered: `${(buy.totalQuantity * buy.average - (sellSymbol ? item.sell.allSellAverages[key].totalQuantity * item.sell.allSellAverages[key].average : 0)).toFixed(2)}`,
+  //         });
+  //       }
+
+  //       if (sellSymbol && !result.find((obj) => obj.symbol === sellSymbol[0])) {
+  //         const sell = item.sell.allSellAverages[sellSymbol[0]];
+  //         result.push({
+  //           id: sellSymbol[1],
+  //           symbol: sellSymbol[0],
+  //           positions: `0 / ${sellSymbol[1]}`,
+  //           buy_volume: `0 / 0`,
+  //           buy_price: `0.00 / 0.00`,
+  //           sell_volume: `${sell.totalQuantity} / 0`,
+  //           sell_price: `${sell.average.toFixed(2)} / 0.00`,
+  //           net_volume: `${-sell.totalQuantity}`,
+  //           profit: `0.00 / ${(sell.totalQuantity * sell.average).toFixed(2)}`,
+  //           unCovered: `${(sell.totalQuantity * sell.average).toFixed(2)}`,
+  //         });
+  //       }
+  //     }
+  //   }
+
+  //   return result;
+  // }
+
+  function transformData(data: Item[]): TransformedData {
+    const result: SummaryRow[] = [];
+    const positionsMap: { [symbol: string]: number } = {};
+    let totalBuyVolume = 0;
+    let totalBuyPrice = 0;
+    let totalSellVolume = 0;
+    let totalSellPrice = 0;
+    let totalPositions = 0;
+
+    for (const item of data) {
+      const buyEntries = Object.entries(item.buy.buyPosition);
+      const sellEntries = Object.entries(item.sell.sellPosition);
+
+      const allKeys: any = new Set<string>([
+        ...buyEntries.map(([key]) => key),
+        ...sellEntries.map(([key]) => key),
+      ]);
+
+      for (const key of allKeys.values()) {
+        const buySymbol = buyEntries.find(([k]) => k === key);
+        const sellSymbol = sellEntries.find(([k]) => k === key);
+
+        // Calculate total positions
+        const positions = (buySymbol ? buySymbol[1] : 0) + (sellSymbol ? sellSymbol[1] : 0);
+        totalPositions += positions;
+
+        if (buySymbol) {
+          const buy = item.buy.allBuyAverages[buySymbol[0]];
+          result.push({
+            id: buySymbol[1].toString(),
+            symbol: buySymbol[0],
+            positions: positions.toString(),
+            buy_volume: `${buy.totalQuantity} / 0`,
+            buy_price: `${buy.average.toFixed(2)} / 0.00`,
+            sell_volume: `${sellSymbol ? item.sell.allSellAverages[key].totalQuantity : 0} / 0`,
+            sell_price: `${sellSymbol ? item.sell.allSellAverages[key].average.toFixed(2) : 0.0} / 0.00`,
+            net_volume: `${buy.totalQuantity - (sellSymbol ? item.sell.allSellAverages[key].totalQuantity : 0)}`,
+            profit: `${(buy.totalQuantity * buy.average - (sellSymbol ? item.sell.allSellAverages[key].totalQuantity * item.sell.allSellAverages[key].average : 0)).toFixed(2)} / 0.00`,
+            unCovered: `${(buy.totalQuantity * buy.average - (sellSymbol ? item.sell.allSellAverages[key].totalQuantity * item.sell.allSellAverages[key].average : 0)).toFixed(2)}`,
+          });
+
+          totalBuyVolume += buy.totalQuantity;
+          totalBuyPrice += buy.totalQuantity * buy.average;
+        }
+
+        if (sellSymbol) {
+          if (!result.some((obj) => obj.symbol === sellSymbol[0])) {
+            const sell = item.sell.allSellAverages[sellSymbol[0]];
+            result.push({
+              id: sellSymbol[1].toString(),
+              symbol: sellSymbol[0],
+              positions: positions.toString(),
+              buy_volume: `0 / 0`,
+              buy_price: `0.00 / 0.00`,
+              sell_volume: `${sell.totalQuantity} / 0`,
+              sell_price: `${sell.average.toFixed(2)} / 0.00`,
+              net_volume: `${-sell.totalQuantity}`,
+              profit: `0.00 / ${(sell.totalQuantity * sell.average).toFixed(2)}`,
+              unCovered: `${(sell.totalQuantity * sell.average).toFixed(2)}`,
+            });
+
+            // Update total sell volume and price
+            totalSellVolume += sell.totalQuantity;
+            totalSellPrice += sell.totalQuantity * sell.average;
+          }
+        }
+
+        positionsMap[key] = (positionsMap[key] || 0) + positions;
+      }
+    }
+
+    const totalNetVolume = totalBuyVolume - totalSellVolume;
+    const totalProfit = totalBuyPrice - totalSellPrice;
+    return {
+      result,
+      totalBuyVolume,
+      totalBuyPrice,
+      totalSellVolume,
+      totalSellPrice,
+      totalNetVolume,
+      totalProfit,
+      totalPositions,
+    };
+  }
+
+  const finalArray = transformData(exchangeTableSummaryData);
+
+  console.log({ finalArray });
+
   const tabs = [
     {
       label: 'Summary',
       value: 0,
       title: 'Exchange Table',
-      tableDatas: newInvoiceData,
+      tableDatas: finalArray.result,
       tableLabel: [
         { id: 'symbol', label: 'Symbol', align: 'left', border: '1px solid #dddddd !important' },
         {
@@ -192,7 +400,7 @@ export default function AppNewInvoice() {
         },
         {
           id: 'netTotal',
-          label: 'Net Total  INR)',
+          label: 'Net Total (INR)',
           align: 'right',
           border: '1px solid #dddddd !important',
         },
@@ -313,9 +521,54 @@ export default function AppNewInvoice() {
                     <Table stickyHeader sx={{ minWidth: 680 }}>
                       <TableHeadCustom headLabel={data.tableLabel} />
                       <TableBody>
-                        {data.tableDatas.map((row) => (
-                          <AppNewInvoiceRow key={row.id} row={row} value={value} />
+                        {data.tableDatas?.map((row, index) => (
+                          <AppNewInvoiceRow key={index} row={row} value={value} />
                         ))}
+                        {data?.label === 'Summary' && (
+                          <StyledTableRow>
+                            <StyledTableCell sx={{ fontWeight: 'bold' }}>Summary</StyledTableCell>
+                            <StyledTableCell
+                              sx={{ textAlign: 'right', padding: '9px', fontWeight: 'bold' }}
+                            >
+                              {finalArray.totalPositions}
+                            </StyledTableCell>
+                            <StyledTableCell
+                              sx={{ textAlign: 'right', padding: '9px', fontWeight: 'bold' }}
+                            >
+                              {finalArray.totalBuyVolume}
+                            </StyledTableCell>
+                            <StyledTableCell
+                              sx={{ textAlign: 'right', padding: '9px', fontWeight: 'bold' }}
+                            >
+                              {finalArray.totalBuyPrice}
+                            </StyledTableCell>
+                            <StyledTableCell
+                              sx={{ textAlign: 'right', padding: '9px', fontWeight: 'bold' }}
+                            >
+                              {finalArray.totalSellVolume}
+                            </StyledTableCell>
+                            <StyledTableCell
+                              sx={{ textAlign: 'right', padding: '9px', fontWeight: 'bold' }}
+                            >
+                              {finalArray.totalSellPrice}
+                            </StyledTableCell>
+                            <StyledTableCell
+                              sx={{ textAlign: 'right', padding: '9px', fontWeight: 'bold' }}
+                            >
+                              {finalArray.totalNetVolume}
+                            </StyledTableCell>
+                            <StyledTableCell
+                              sx={{ textAlign: 'right', padding: '9px', fontWeight: 'bold' }}
+                            >
+                              {finalArray.totalProfit}
+                            </StyledTableCell>
+                            <StyledTableCell
+                              sx={{ textAlign: 'right', padding: '9px', fontWeight: 'bold' }}
+                            >
+                              {finalArray.totalProfit}
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        )}
                       </TableBody>
                     </Table>
                   </Scrollbar>

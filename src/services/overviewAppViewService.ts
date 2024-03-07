@@ -10,6 +10,9 @@ import {
   GET_USER_ORDERS_BY_SUPER_MASTER,
   GET_USER_ACCOUNTS_BY_SUPER_MASTER,
   GET_USER_POSITIONS_BY_SUPER_MASTER,
+  GET_EXCHANGE_TABLE_SUMMARY_DATA_BY_ADMIN,
+  GET_EXCHANGE_TABLE_SUMMARY_DATA_BY_MASTER,
+  GET_EXCHANGE_TABLE_SUMMARY_DATA_BY_SUPER_MASTER,
 } from 'src/utils/urls';
 
 import client from 'src/lib/client';
@@ -93,6 +96,36 @@ const overviewService = {
   getUserOrdersByMaster: async (): Promise<any> => {
     try {
       const response: AxiosResponse<any> = await client.get(GET_USER_ORDERS_BY_MASTER);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  getExchangeTableSummaryByAdmin: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(
+        GET_EXCHANGE_TABLE_SUMMARY_DATA_BY_ADMIN
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  getExchangeTableSummaryBySuperMaster: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(
+        GET_EXCHANGE_TABLE_SUMMARY_DATA_BY_SUPER_MASTER
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  getExchangeTableSummaryByMaster: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(
+        GET_EXCHANGE_TABLE_SUMMARY_DATA_BY_MASTER
+      );
       return response.data;
     } catch (error) {
       throw error;

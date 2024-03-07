@@ -190,35 +190,10 @@ export default function PersonNewEditForm({
       return currentUser?.exchangeList.map(({ allowedExchange, exchangeGroup }: any) => ({
         allowedExchange,
         exchangeGroup,
-      })); // Fallback to default if exchangeList is not available
+      }));
     }
     return [{ allowedExchange: '', exchangeGroup: '' }];
   });
-
-  // const [demoArray, setDemoArray] = useState<any>([]);
-  // const [selectedExchangeLabels, setSelectedExchangeLabels] = useState<{ [key: string]: string }>(
-  //   {}
-  // );
-
-  // useEffect(() => {
-  //   const selectedLabels: { [key: string]: string } = {};
-  //   fields.forEach((field: any) => {
-  //     const selectedOption = newExchangeOptions.find(
-  //       (option: any) => option.value === field.allowedExchange
-  //     );
-  //     if (selectedOption) {
-  //       selectedLabels[field.allowedExchange] = selectedOption.label;
-  //     }
-  //   });
-  //   setSelectedExchangeLabels(selectedLabels);
-  // }, [fields, newExchangeOptions]);
-
-  // useEffect(() => {
-  //   const filteredArray = Exchange.filter((item) => {
-  //     return !fields.some((field: any) => field.allowedExchange === item.value);
-  //   });
-  //   setDemoArray(filteredArray);
-  // }, [fields]);
 
   const handleChange = (index: number, event: any) => {
     const { name, value } = event.target;
@@ -281,9 +256,6 @@ export default function PersonNewEditForm({
               </MenuItem>
             ))}
           </Select>
-          {/* <Typography variant="subtitle2" color="textSecondary">
-            {selectedExchangeLabels[fields[index].allowedExchange] || ''}
-          </Typography> */}
         </FormControl>
         <FormControl fullWidth>
           <InputLabel id={`exchangeGroup-label-${index}`}>Exchange Group</InputLabel>
@@ -326,6 +298,7 @@ export default function PersonNewEditForm({
   });
 
   const {
+    reset,
     watch,
     setValue,
     handleSubmit,
@@ -565,13 +538,13 @@ export default function PersonNewEditForm({
             createUser({ ...data, fields });
           }
         }
+        reset();
       }
     } catch (error) {
       console.log(error);
     }
   });
 
-  // get exchange api call useeffect
   useEffect(() => {
     mutate();
   }, []);

@@ -221,12 +221,6 @@ export default function ClientTableDashboard({
     }
   };
 
-  // const newPositionData = positionsData.map((data)=>{
-  //   return(
-
-  //   )
-  // })
-
   const tabs = [
     {
       label: 'Positions',
@@ -243,7 +237,13 @@ export default function ClientTableDashboard({
         },
         { id: 'symbol', label: 'Symbol', align: 'left', border: '1px solid #dddddd !important' },
         { id: 'type', label: 'Type', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'volume', label: 'Volume', align: 'right', border: '1px solid #dddddd !important' },
+        {
+          id: 'volume',
+          label: 'Volume',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+          width: '10px',
+        },
         { id: 'price1', label: 'Price', align: 'right', border: '1px solid #dddddd !important' },
         {
           id: 'livePrice',
@@ -338,6 +338,11 @@ export default function ClientTableDashboard({
                         {data.tableDatas?.map((row: any) => (
                           <ClientNewRow key={row.id} row={row} value={value} />
                         ))}
+                        {data?.tableDatas?.length === 0 && (
+                          <Box sx={{ margin: 'auto', width: '100%' }}>
+                            {`No ${data?.label}data found`}
+                          </Box>
+                        )}
                       </TableBody>
                     </Table>
                   </Scrollbar>
@@ -427,7 +432,7 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
           <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
             {row.positionType}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px', width: '10px' }}>
             {row.quantity}
           </StyledTableCell>
           <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>

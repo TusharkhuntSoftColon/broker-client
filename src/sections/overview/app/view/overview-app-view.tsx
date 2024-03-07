@@ -29,6 +29,7 @@ const OverviewAppView = () => {
   const [userPostions, setUserPosition] = useState<any>();
   const [userAccounts, setUserAccounts] = useState<any>();
   const [userOrders, setUserOrders] = useState<any>();
+  const [exchangeTableSummaryData, setExchangeTableSummary] = useState<any>([]);
 
   const TableComponents = [
     { name: 'Symbol', component: <SymbolTableDashboard /> },
@@ -43,7 +44,10 @@ const OverviewAppView = () => {
       ),
     },
     { name: 'Margin Call', component: <MarginCallTableDashboard /> },
-    { name: 'Exchange', component: <AppNewInvoice /> },
+    {
+      name: 'Exchange',
+      component: <AppNewInvoice exchangeTableSummaryData={exchangeTableSummaryData} />,
+    },
   ];
 
   // current table list
@@ -113,6 +117,18 @@ const OverviewAppView = () => {
         return overviewService.getUserOrdersByMaster;
     }
   };
+  const getExchangeTableSummaryDataByRole = (role1: any) => {
+    switch (role1) {
+      case 'ADMIN':
+        return overviewService.getExchangeTableSummaryByAdmin;
+      case 'SUPER_MASTER':
+        return overviewService.getExchangeTableSummaryBySuperMaster;
+      case 'MASTER':
+        return overviewService.getExchangeTableSummaryByMaster;
+      default:
+        return overviewService.getExchangeTableSummaryByMaster;
+    }
+  };
 
   // POSITIONS
   const { mutate: getUserPositions } = useMutation(getUserPositionsByRole(role), {
@@ -143,13 +159,25 @@ const OverviewAppView = () => {
       console.log({ 'ORDERS ERROR :- ': error });
     },
   });
+  const { mutate: getAllExchangeSummaryData } = useMutation(
+    getExchangeTableSummaryDataByRole(role),
+    {
+      onSuccess: (data) => {
+        setExchangeTableSummary(data?.data?.rows);
+      },
+      onError: (error) => {
+        console.log({ 'ORDERS ERROR :- ': error });
+      },
+    }
+  );
 
   // useeffect to call apis
   useEffect(() => {
     getUserPositions();
     getUserAccounts();
     getUserOrders();
-  }, [getUserPositions, getUserAccounts, getUserOrders]);
+    getAllExchangeSummaryData();
+  }, [getUserPositions, getUserAccounts, getUserOrders, getAllExchangeSummaryData]);
 
   return (
     <Box width="100%">

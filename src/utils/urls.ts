@@ -117,11 +117,14 @@ export const GET_USER_IMPORT_MONTH = '/admin/importmonth';
 export const GET_USER_POSITIONS_BY_ADMIN = '/admin/open-positions';
 export const GET_USER_ACCOUNTS_BY_ADMIN = '/admin/trading-accounts';
 export const GET_USER_ORDERS_BY_ADMIN = '/admin/pending-position';
+export const GET_EXCHANGE_TABLE_SUMMARY_DATA_BY_ADMIN = '/admin/symbol-positions';
 
 export const GET_USER_POSITIONS_BY_SUPER_MASTER = '/super-master/open-positions';
 export const GET_USER_ACCOUNTS_BY_SUPER_MASTER = '/super-master/trading-accounts';
 export const GET_USER_ORDERS_BY_SUPER_MASTER = '/super-master/pending-position';
+export const GET_EXCHANGE_TABLE_SUMMARY_DATA_BY_SUPER_MASTER = '/super-master/symbol-positions';
 
 export const GET_USER_POSITIONS_BY_MASTER = '/master/open-positions';
 export const GET_USER_ACCOUNTS_BY_MASTER = '/master/trading-accounts';
 export const GET_USER_ORDERS_BY_MASTER = '/master/pending-position';
+export const GET_EXCHANGE_TABLE_SUMMARY_DATA_BY_MASTER = '/master/symbol-positions';
