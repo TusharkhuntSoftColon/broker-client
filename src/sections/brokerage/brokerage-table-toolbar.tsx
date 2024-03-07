@@ -139,7 +139,7 @@ export default function BrokerageTableToolbar({
     watch,
     setValue,
     handleSubmit,
-    formState: { isSubmitting, isDirty },
+    formState: { isSubmitting },
   } = methods;
 
   const value: any = watch();
