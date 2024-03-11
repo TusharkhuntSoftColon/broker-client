@@ -124,6 +124,10 @@
   background-color: white !important;
 }
 
+.css-1bqify2-MuiTableRow-root:last-of-type .MuiTableCell-root{
+  border-color: #dddddd !important;
+}
+
 /* .css-7ed3vs-MuiTableRow-root:last-of-type > * {
   background-color: white;
   border-right: 1px solid #e8e8e8 !important;

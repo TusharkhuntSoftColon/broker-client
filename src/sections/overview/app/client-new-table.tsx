@@ -30,7 +30,7 @@ import { newClientsOnlineTableData } from 'src/_mock';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
-import { TableHeadCustom } from 'src/components/table';
+import { TableNoData, TableHeadCustom } from 'src/components/table';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
 
 type RowProps = {
@@ -123,10 +123,10 @@ export default function ClientTableDashboard({
   const [updatedPositionsData, setUpdatedPositionsData] = useState([]);
   const [updatedOrdersData, setUpdatedOrdersData] = useState([]);
 
-  useEffect(() => {
-    const userTableData = value === 0 ? positionsData : value === 3 ? ordersData : [];
-    socketConnection(userTableData);
-  }, [positionsData, ordersData, value]);
+  // useEffect(() => {
+  //   const userTableData = value === 0 ? positionsData : value === 3 ? ordersData : [];
+  //   socketConnection(userTableData);
+  // }, [positionsData, ordersData, value]);
 
   useEffect(() => {
     const updateLivePrice = async (socketData: any) => {
@@ -339,9 +339,7 @@ export default function ClientTableDashboard({
                           <ClientNewRow key={row.id} row={row} value={value} />
                         ))}
                         {data?.tableDatas?.length === 0 && (
-                          <Box sx={{ margin: 'auto', width: '100%' }}>
-                            {`No ${data?.label}data found`}
-                          </Box>
+                          <TableNoData notFound={data?.tableDatas?.length === 0} />
                         )}
                       </TableBody>
                     </Table>

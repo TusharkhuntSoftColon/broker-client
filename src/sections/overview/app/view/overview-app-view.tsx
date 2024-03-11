@@ -23,6 +23,8 @@ const OverviewAppView = () => {
     'Exchange',
   ]);
 
+  console.log({ selectedButtons });
+
   const role = useSelector((data: any) => data.auth.role);
 
   // User Tables Data

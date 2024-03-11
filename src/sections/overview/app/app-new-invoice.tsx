@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable object-shorthand */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-restricted-syntax */
+import { io } from 'socket.io-client';
 /* eslint-disable arrow-body-style */
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -18,6 +20,10 @@ import TableCell from '@mui/material/TableCell';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
+
+import useAuth from 'src/hooks/useAuth';
+
+import { SOCKET_URL } from 'src/utils/environments';
 
 import { newInvoiceData, newInvoiceJournalData, newInvoiceExposureData } from 'src/_mock';
 
@@ -103,6 +109,8 @@ interface SummaryRow {
   net_volume: string;
   profit: string;
   unCovered: string;
+  socketLiveName?: string;
+  tickValue?: number;
 }
 
 interface TransformedData {
@@ -124,6 +132,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   border: '1px solid #dddddd',
+  borderColor: '#dddddd',
 }));
 
 function CustomTabPanel(props: TabPanelProps) {
@@ -160,74 +169,29 @@ export default function AppNewInvoice({
   exchangeTableSummaryData: any;
 }) {
   const [value, setValue] = React.useState(0);
+  const { token } = useAuth();
+  const [tableData, setTableData] = useState<any>([]);
+  const finalArray = transformData(exchangeTableSummaryData);
+
+  const [updatedExchangeArray, setupdatedExchangeArray] = useState(finalArray.result);
+
+  console.log({ tableData });
+  console.log({ exchangeTableSummaryData });
+
+  console.log({ updatedExchangeArray });
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
-  console.log({ exchangeTableSummaryData });
-
-  // function transformData(data: any) {
-  //   const result = [];
-
-  //   for (const item of data) {
-  //     const buyEntries = Object.entries(item.buy.buyPosition);
-  //     const sellEntries = Object.entries(item.sell.sellPosition);
-
-  //     const allKeys: any = new Set([
-  //       ...buyEntries.map(([key]) => key),
-  //       ...sellEntries.map(([key]) => key),
-  //     ]);
-
-  //     for (const key of allKeys.values()) {
-  //       const buySymbol = buyEntries.find(([k]) => k === key);
-  //       const sellSymbol = sellEntries.find(([k]) => k === key);
-
-  //       if (buySymbol) {
-  //         const buy = item.buy.allBuyAverages[buySymbol[0]];
-  //         result.push({
-  //           id: buySymbol[1],
-  //           symbol: buySymbol[0],
-  //           positions: `${buySymbol[1]} / ${sellSymbol ? sellSymbol[1] : 0}`,
-  //           buy_volume: `${buy.totalQuantity} / 0`,
-  //           buy_price: `${buy.average.toFixed(2)} / 0.00`,
-  //           sell_volume: `${sellSymbol ? item.sell.allSellAverages[key].totalQuantity : 0} / 0`,
-  //           sell_price: `${sellSymbol ? item.sell.allSellAverages[key].average.toFixed(2) : 0.0} / 0.00`,
-  //           net_volume: `${buy.totalQuantity - (sellSymbol ? item.sell.allSellAverages[key].totalQuantity : 0)}`,
-  //           profit: `${(buy.totalQuantity * buy.average - (sellSymbol ? item.sell.allSellAverages[key].totalQuantity * item.sell.allSellAverages[key].average : 0)).toFixed(2)} / 0.00`,
-  //           unCovered: `${(buy.totalQuantity * buy.average - (sellSymbol ? item.sell.allSellAverages[key].totalQuantity * item.sell.allSellAverages[key].average : 0)).toFixed(2)}`,
-  //         });
-  //       }
-
-  //       if (sellSymbol && !result.find((obj) => obj.symbol === sellSymbol[0])) {
-  //         const sell = item.sell.allSellAverages[sellSymbol[0]];
-  //         result.push({
-  //           id: sellSymbol[1],
-  //           symbol: sellSymbol[0],
-  //           positions: `0 / ${sellSymbol[1]}`,
-  //           buy_volume: `0 / 0`,
-  //           buy_price: `0.00 / 0.00`,
-  //           sell_volume: `${sell.totalQuantity} / 0`,
-  //           sell_price: `${sell.average.toFixed(2)} / 0.00`,
-  //           net_volume: `${-sell.totalQuantity}`,
-  //           profit: `0.00 / ${(sell.totalQuantity * sell.average).toFixed(2)}`,
-  //           unCovered: `${(sell.totalQuantity * sell.average).toFixed(2)}`,
-  //         });
-  //       }
-  //     }
-  //   }
-
-  //   return result;
-  // }
-
   function transformData(data: Item[]): TransformedData {
     const result: SummaryRow[] = [];
-    const positionsMap: { [symbol: string]: number } = {};
+    const positionsMap: { [symbol: string]: number } = {}; // To store positions sum for each symbol
     let totalBuyVolume = 0;
     let totalBuyPrice = 0;
     let totalSellVolume = 0;
     let totalSellPrice = 0;
-    let totalPositions = 0;
+    let totalPositions = 0; // Sum of all positions
 
     for (const item of data) {
       const buyEntries = Object.entries(item.buy.buyPosition);
@@ -252,15 +216,16 @@ export default function AppNewInvoice({
             id: buySymbol[1].toString(),
             symbol: buySymbol[0],
             positions: positions.toString(),
-            buy_volume: `${buy.totalQuantity} / 0`,
-            buy_price: `${buy.average.toFixed(2)} / 0.00`,
-            sell_volume: `${sellSymbol ? item.sell.allSellAverages[key].totalQuantity : 0} / 0`,
-            sell_price: `${sellSymbol ? item.sell.allSellAverages[key].average.toFixed(2) : 0.0} / 0.00`,
+            buy_volume: `${buy.totalQuantity}`,
+            buy_price: `${(buy.totalQuantity * buy.average).toFixed(2)}`,
+            sell_volume: `${sellSymbol ? item.sell.allSellAverages[key].totalQuantity : 0}`,
+            sell_price: `${sellSymbol ? (item.sell.allSellAverages[key].totalQuantity * item.sell.allSellAverages[key].average).toFixed(2) : 0.0}`,
             net_volume: `${buy.totalQuantity - (sellSymbol ? item.sell.allSellAverages[key].totalQuantity : 0)}`,
-            profit: `${(buy.totalQuantity * buy.average - (sellSymbol ? item.sell.allSellAverages[key].totalQuantity * item.sell.allSellAverages[key].average : 0)).toFixed(2)} / 0.00`,
+            profit: `${(buy.totalQuantity * buy.average - (sellSymbol ? item.sell.allSellAverages[key].totalQuantity * item.sell.allSellAverages[key].average : 0)).toFixed(2)}`,
             unCovered: `${(buy.totalQuantity * buy.average - (sellSymbol ? item.sell.allSellAverages[key].totalQuantity * item.sell.allSellAverages[key].average : 0)).toFixed(2)}`,
           });
 
+          // Update total buy volume and price
           totalBuyVolume += buy.totalQuantity;
           totalBuyPrice += buy.totalQuantity * buy.average;
         }
@@ -275,9 +240,9 @@ export default function AppNewInvoice({
               buy_volume: `0 / 0`,
               buy_price: `0.00 / 0.00`,
               sell_volume: `${sell.totalQuantity} / 0`,
-              sell_price: `${sell.average.toFixed(2)} / 0.00`,
+              sell_price: `${(sell.totalQuantity * sell.average).toFixed(2)}`,
               net_volume: `${-sell.totalQuantity}`,
-              profit: `0.00 / ${(sell.totalQuantity * sell.average).toFixed(2)}`,
+              profit: `${(sell.totalQuantity * sell.average).toFixed(2)}`,
               unCovered: `${(sell.totalQuantity * sell.average).toFixed(2)}`,
             });
 
@@ -287,12 +252,29 @@ export default function AppNewInvoice({
           }
         }
 
+        // Update positions map
         positionsMap[key] = (positionsMap[key] || 0) + positions;
       }
     }
 
+    // Calculate total net volume and profit
     const totalNetVolume = totalBuyVolume - totalSellVolume;
     const totalProfit = totalBuyPrice - totalSellPrice;
+
+    // Add socketLiveName and tickValue for all symbols in result
+    for (const row of result) {
+      const { symbol }: any = row;
+      const buySocket: any = data[0].buy.allBuyAverages[symbol];
+      const sellSocket: any = data[0].sell.allSellAverages[symbol];
+      if (buySocket) {
+        row.socketLiveName = buySocket.socketLiveName;
+        row.tickValue = buySocket.tickValue;
+      } else if (sellSocket) {
+        row.socketLiveName = sellSocket.socketLiveName;
+        row.tickValue = sellSocket.tickValue;
+      }
+    }
+
     return {
       result,
       totalBuyVolume,
@@ -305,9 +287,101 @@ export default function AppNewInvoice({
     };
   }
 
-  const finalArray = transformData(exchangeTableSummaryData);
+  useEffect(() => {
+    const updatedFinalArray = finalArray.result?.map((finalItem: any) => {
+      const correspondingTableItem = tableData?.find(
+        (tableItem: any) => finalItem.socketLiveName === tableItem.InstrumentIdentifier
+      );
+
+      if (correspondingTableItem) {
+        const updatedProfit =
+          (parseFloat(correspondingTableItem.BuyPrice) - parseFloat(finalItem.buy_price)) *
+            finalItem.tickValue +
+          (parseFloat(finalItem.sell_price) - parseFloat(correspondingTableItem.SellPrice)) *
+            finalItem.tickValue;
+
+        return { ...finalItem, profit: updatedProfit.toFixed(2) };
+      }
+
+      return finalItem;
+    });
+
+    setupdatedExchangeArray(updatedFinalArray);
+  }, [tableData]);
 
   console.log({ finalArray });
+
+  // useEffect(() => {
+  //   socketConnection(finalArray.result);
+  // }, [finalArray.result]);
+
+  const socketConnection = async (activeSymbols: any) => {
+    try {
+      const socket = io(SOCKET_URL, {
+        transports: ['websocket'],
+        query: {
+          transport: 'websocket',
+          EIO: '4',
+          authorization: token,
+        },
+        auth: { authorization: token },
+        extraHeaders: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const Symbols = finalArray.result.map((symbol: any) => symbol?.socketLiveName);
+      const parsedSymbols = JSON.stringify(Symbols);
+
+      socket.on('connect', () => {
+        console.log('[socket] Connected');
+        socket.emit('subscribeToUserServerMarket', parsedSymbols);
+      });
+
+      socket.emit('joinUserRoom', parsedSymbols);
+
+      socket.on('disconnect', (reason: any) => {
+        console.log('[socket] Disconnected:', reason);
+      });
+      socket.on('error', (error: any) => {
+        console.log('[socket] Error:', error);
+      });
+
+      socket.on('marketWatch', (data: any) => {
+        setTableData((prev: any) => {
+          let index1 = -1;
+
+          for (let index = 0; index < prev.length; index++) {
+            const data1 = prev[index];
+            if (
+              data1?.InstrumentIdentifier &&
+              data?.InstrumentIdentifier &&
+              data1?.InstrumentIdentifier === data?.InstrumentIdentifier
+            ) {
+              index1 = index;
+
+              break;
+            }
+          }
+
+          if (index1 === -1) {
+            return [...prev, data];
+          }
+
+          const newObj = {
+            ...data,
+            oldBuyPrice: prev[index1].BuyPrice,
+            oldSellPrice: prev[index1].SellPrice,
+            oldPercentage: prev[index1].PriceChangePercentage,
+          };
+          prev[index1] = newObj;
+          return [...prev];
+        });
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   const tabs = [
     {

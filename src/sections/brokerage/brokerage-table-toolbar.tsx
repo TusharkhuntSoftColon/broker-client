@@ -144,8 +144,6 @@ export default function BrokerageTableToolbar({
 
   const value: any = watch();
 
-  console.log({ value });
-
   const symbolOptionsArray = symbolList?.filter(
     (data: any) => data.exchange === value.exchangeCode?.value
   );

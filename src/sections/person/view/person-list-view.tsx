@@ -300,8 +300,9 @@ export default function PersonListView({ path }: { path: any }) {
 
   const { mutate: getPerson } = useMutation(adminService.getAllPersonById, {
     onSuccess: (data) => {
-      // enqueueSnackbar(data?.message, { variant: 'success' });
+      // if (data?.data?.rows?.length === 0) enqueueSnackbar('Data is not', { variant: 'info' });
       setTableData(data?.data?.rows);
+
       dispatch(addPerson(data?.data?.rows));
     },
     onError: (error: any) => {
@@ -312,13 +313,17 @@ export default function PersonListView({ path }: { path: any }) {
     },
   });
 
-  const handleGetUsers = (userId: string) => {
-    getPerson(userId);
+  const handleGetUsers = (rowData: any) => {
+    if (rowData?.role !== 'USER') {
+      getPerson(rowData._id);
+    }
   };
 
   const handleResetFilters = useCallback(() => {
     setFilters(defaultFilters);
   }, []);
+
+  console.log({ dataFiltered });
 
   return (
     <>
@@ -417,7 +422,7 @@ export default function PersonListView({ path }: { path: any }) {
                         onDeleteRow={() => handleDeleteRow(row._id, row.role)}
                         onEditRow={() => handleEditRow(row._id)}
                         onViewRow={() => handleViewRow(row._id)}
-                        onGetPersonRow={() => handleGetUsers(row._id)}
+                        onGetPersonRow={() => handleGetUsers(row)}
                         index={personData?.map((data: any, index: number) => {
                           if (data?._id === row?._id) {
                             return Number(index + 1);
@@ -431,7 +436,7 @@ export default function PersonListView({ path }: { path: any }) {
                     emptyRows={emptyRows(table.page, table.rowsPerPage, personData?.length)}
                   />
 
-                  <TableNoData notFound={notFound} />
+                  <TableNoData notFound={notFound} sx={{ py: 10 }} />
                 </TableBody>
               </Table>
             </Scrollbar>

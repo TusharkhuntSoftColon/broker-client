@@ -20,7 +20,6 @@ export default function TableNoData({ notFound, sx }: Props) {
             filled
             title="No Data"
             sx={{
-              py: 10,
               ...sx,
             }}
           />
