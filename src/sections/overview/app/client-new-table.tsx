@@ -123,16 +123,16 @@ export default function ClientTableDashboard({
   const [updatedPositionsData, setUpdatedPositionsData] = useState([]);
   const [updatedOrdersData, setUpdatedOrdersData] = useState([]);
 
-  // useEffect(() => {
-  //   const userTableData = value === 0 ? positionsData : value === 3 ? ordersData : [];
-  //   socketConnection(userTableData);
-  // }, [positionsData, ordersData, value]);
+  useEffect(() => {
+    const subscribingData = value === 0 ? positionsData : value === 3 ? ordersData : [];
+    socketConnection(subscribingData);
+  }, [positionsData, ordersData, tableData]);
 
   useEffect(() => {
     const updateLivePrice = async (socketData: any) => {
       const userTableData = value === 0 ? positionsData : value === 3 ? ordersData : [];
       const updatedPositions = userTableData?.map((position: any) => {
-        const socketItem = socketData.find(
+        const socketItem = socketData?.find(
           (item: any) => item.InstrumentIdentifier === position.scriptName
         );
         if (socketItem) {
@@ -220,6 +220,8 @@ export default function ClientTableDashboard({
       console.log(e);
     }
   };
+
+  console.log({ updatedPositionsData, positionsData });
 
   const tabs = [
     {

@@ -23,8 +23,6 @@ const OverviewAppView = () => {
     'Exchange',
   ]);
 
-  console.log({ selectedButtons });
-
   const role = useSelector((data: any) => data.auth.role);
 
   // User Tables Data
@@ -220,7 +218,15 @@ const OverviewAppView = () => {
             // width={['Symbol', 'Margin Call'].includes(table.name) ? '28%' : '44%'}
             display={selectedButtons.includes(table.name) ? 'block' : 'none'}
             key={table.name}
-            width={currentTableCount === 2 ? '50%' : currentTableCount === 1 ? '100%' : '33%'}
+            width={
+              currentTableCount === 2
+                ? '50%'
+                : currentTableCount === 1
+                  ? '100%'
+                  : table.name !== 'Users'
+                    ? '25%'
+                    : '50%'
+            }
           >
             {renderComponent(table.name)}
           </Box>

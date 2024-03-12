@@ -1,3 +1,4 @@
+/* eslint-disable no-unneeded-ternary */
 import { forwardRef } from 'react';
 
 import Link from '@mui/material/Link';
@@ -10,10 +11,11 @@ import { RouterLink } from 'src/routes/components';
 
 export interface LogoProps extends BoxProps {
   disabledLink?: boolean;
+  path?: string;
 }
 
 const Logo = forwardRef<HTMLDivElement, LogoProps>(
-  ({ disabledLink = false, sx, ...other }, ref) => {
+  ({ disabledLink = false, path, sx, ...other }, ref) => {
     const theme = useTheme();
 
     const PRIMARY_LIGHT = theme.palette.primary.light;
@@ -85,7 +87,7 @@ const Logo = forwardRef<HTMLDivElement, LogoProps>(
     }
 
     return (
-      <Link component={RouterLink} href="/" sx={{ display: 'contents' }}>
+      <Link component={RouterLink} href={path ? path : '/'} sx={{ display: 'contents' }}>
         {logo}
       </Link>
     );

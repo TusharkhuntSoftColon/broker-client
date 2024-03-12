@@ -217,7 +217,7 @@ export default function AppNewInvoice({
             symbol: buySymbol[0],
             positions: positions.toString(),
             buy_volume: `${buy.totalQuantity}`,
-            buy_price: `${(buy.totalQuantity * buy.average).toFixed(2)}`,
+            buy_price: `${buy.average.toFixed(2)}`,
             sell_volume: `${sellSymbol ? item.sell.allSellAverages[key].totalQuantity : 0}`,
             sell_price: `${sellSymbol ? (item.sell.allSellAverages[key].totalQuantity * item.sell.allSellAverages[key].average).toFixed(2) : 0.0}`,
             net_volume: `${buy.totalQuantity - (sellSymbol ? item.sell.allSellAverages[key].totalQuantity : 0)}`,
@@ -237,10 +237,10 @@ export default function AppNewInvoice({
               id: sellSymbol[1].toString(),
               symbol: sellSymbol[0],
               positions: positions.toString(),
-              buy_volume: `0 / 0`,
+              buy_volume: `0`,
               buy_price: `0.00 / 0.00`,
-              sell_volume: `${sell.totalQuantity} / 0`,
-              sell_price: `${(sell.totalQuantity * sell.average).toFixed(2)}`,
+              sell_volume: `${sell.totalQuantity}`,
+              sell_price: `${sell.average.toFixed(2)}`,
               net_volume: `${-sell.totalQuantity}`,
               profit: `${(sell.totalQuantity * sell.average).toFixed(2)}`,
               unCovered: `${(sell.totalQuantity * sell.average).toFixed(2)}`,
@@ -289,20 +289,28 @@ export default function AppNewInvoice({
 
   useEffect(() => {
     const updatedFinalArray = finalArray.result?.map((finalItem: any) => {
+      console.log({ finalItem });
+
       const correspondingTableItem = tableData?.find(
         (tableItem: any) => finalItem.socketLiveName === tableItem.InstrumentIdentifier
       );
 
       if (correspondingTableItem) {
-        const updatedProfit =
-          (parseFloat(correspondingTableItem.BuyPrice) - parseFloat(finalItem.buy_price)) *
-            finalItem.tickValue +
-          (parseFloat(finalItem.sell_price) - parseFloat(correspondingTableItem.SellPrice)) *
-            finalItem.tickValue;
+        let buyProfit = 0;
+        let sellProfit = 0;
+
+        if (Number(finalItem.buy_volume) > 0) {
+          buyProfit = parseFloat(correspondingTableItem.BuyPrice) - parseFloat(finalItem.buy_price);
+        }
+        if (Number(finalItem.sell_volume) > 0) {
+          sellProfit =
+            parseFloat(finalItem.sell_price) - parseFloat(correspondingTableItem.SellPrice);
+        }
+
+        const updatedProfit = (buyProfit + sellProfit) * finalItem?.tickValue;
 
         return { ...finalItem, profit: updatedProfit.toFixed(2) };
       }
-
       return finalItem;
     });
 
@@ -311,9 +319,9 @@ export default function AppNewInvoice({
 
   console.log({ finalArray });
 
-  // useEffect(() => {
-  //   socketConnection(finalArray.result);
-  // }, [finalArray.result]);
+  useEffect(() => {
+    socketConnection(finalArray.result);
+  }, [finalArray.result]);
 
   const socketConnection = async (activeSymbols: any) => {
     try {
@@ -388,7 +396,7 @@ export default function AppNewInvoice({
       label: 'Summary',
       value: 0,
       title: 'Exchange Table',
-      tableDatas: finalArray.result,
+      tableDatas: updatedExchangeArray,
       tableLabel: [
         { id: 'symbol', label: 'Symbol', align: 'left', border: '1px solid #dddddd !important' },
         {
@@ -598,7 +606,7 @@ export default function AppNewInvoice({
                         {data.tableDatas?.map((row, index) => (
                           <AppNewInvoiceRow key={index} row={row} value={value} />
                         ))}
-                        {data?.label === 'Summary' && (
+                        {data?.label === 'Summary' && tableData.length > 0 && (
                           <StyledTableRow>
                             <StyledTableCell sx={{ fontWeight: 'bold' }}>Summary</StyledTableCell>
                             <StyledTableCell

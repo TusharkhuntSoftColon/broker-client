@@ -4,7 +4,8 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Drawer from '@mui/material/Drawer';
 
-import { usePathname } from 'src/routes/hooks';
+import { paths } from 'src/routes/paths';
+import { useRouter, usePathname } from 'src/routes/hooks';
 
 import { useResponsive } from 'src/hooks/use-responsive';
 import { useMockedUser } from 'src/hooks/use-mocked-user';
@@ -36,6 +37,8 @@ export default function NavVertical({ openNav, onCloseNav, nav }: Props) {
 
   const lgUp = useResponsive('up', 'lg');
 
+  const router = useRouter();
+
   useEffect(() => {
     if (openNav) {
       onCloseNav();
@@ -54,7 +57,7 @@ export default function NavVertical({ openNav, onCloseNav, nav }: Props) {
         },
       }}
     >
-      <Logo sx={{ mt: 3, ml: 4, mb: 1 }} />
+      <Logo sx={{ mt: 3, ml: 4, mb: 1 }} path={paths.dashboard.root} />
 
       <NavSectionVertical
         data={nav}
