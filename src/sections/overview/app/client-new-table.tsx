@@ -126,15 +126,18 @@ export default function ClientTableDashboard({
   useEffect(() => {
     const subscribingData = value === 0 ? positionsData : value === 3 ? ordersData : [];
     socketConnection(subscribingData);
-  }, [positionsData, ordersData, tableData]);
+  }, [positionsData, ordersData]);
 
   useEffect(() => {
     const updateLivePrice = async (socketData: any) => {
       const userTableData = value === 0 ? positionsData : value === 3 ? ordersData : [];
       const updatedPositions = userTableData?.map((position: any) => {
+        console.log({ position, socketData });
+
         const socketItem = socketData?.find(
           (item: any) => item.InstrumentIdentifier === position.scriptName
         );
+
         if (socketItem) {
           if (position.positionType === 'BUY') {
             return { ...position, livePrice: socketItem.SellPrice };
@@ -418,6 +421,10 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
     console.info('DELETE', row.id);
   };
 
+  const time = row?.time;
+
+  console.log(new Date(time).toDateString());
+
   return (
     <>
       {value === 0 && (
@@ -493,7 +500,9 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
           <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
             {row.importMonthName}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.time}</StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row?.time && new Date(row?.time).toDateString()}
+          </StyledTableCell>
           <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
             {row.positionType}
           </StyledTableCell>

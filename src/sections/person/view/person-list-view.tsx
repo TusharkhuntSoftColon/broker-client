@@ -374,11 +374,11 @@ export default function PersonListView({ path }: { path: any }) {
             <TableSelectedAction
               dense={table.dense}
               numSelected={table.selected.length}
-              rowCount={personData?.length}
+              rowCount={dataFiltered?.length}
               onSelectAllRows={(checked) =>
                 table.onSelectAllRows(
                   checked,
-                  personData.map((row: any) => row._id)
+                  dataFiltered.map((row: any) => row._id)
                 )
               }
               action={
@@ -396,13 +396,13 @@ export default function PersonListView({ path }: { path: any }) {
                   order={table.order}
                   orderBy={table.orderBy}
                   headLabel={TABLE_HEAD}
-                  rowCount={personData?.length}
+                  rowCount={dataFiltered?.length}
                   numSelected={table.selected.length}
                   onSort={table.onSort}
                   onSelectAllRows={(checked) =>
                     table.onSelectAllRows(
                       checked,
-                      personData.map((row: any) => row._id)
+                      dataFiltered.map((row: any) => row._id)
                     )
                   }
                 />
@@ -433,7 +433,7 @@ export default function PersonListView({ path }: { path: any }) {
 
                   <TableEmptyRows
                     height={denseHeight}
-                    emptyRows={emptyRows(table.page, table.rowsPerPage, personData?.length)}
+                    emptyRows={emptyRows(table.page, table.rowsPerPage, dataFiltered?.length)}
                   />
 
                   <TableNoData notFound={notFound} sx={{ py: 10 }} />

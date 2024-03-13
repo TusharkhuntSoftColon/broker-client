@@ -175,11 +175,6 @@ export default function AppNewInvoice({
 
   const [updatedExchangeArray, setupdatedExchangeArray] = useState(finalArray.result);
 
-  console.log({ tableData });
-  console.log({ exchangeTableSummaryData });
-
-  console.log({ updatedExchangeArray });
-
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -191,7 +186,7 @@ export default function AppNewInvoice({
     let totalBuyPrice = 0;
     let totalSellVolume = 0;
     let totalSellPrice = 0;
-    let totalPositions = 0; // Sum of all positions
+    let totalPositions = 0;
 
     for (const item of data) {
       const buyEntries = Object.entries(item.buy.buyPosition);
@@ -219,7 +214,7 @@ export default function AppNewInvoice({
             buy_volume: `${buy.totalQuantity}`,
             buy_price: `${buy.average.toFixed(2)}`,
             sell_volume: `${sellSymbol ? item.sell.allSellAverages[key].totalQuantity : 0}`,
-            sell_price: `${sellSymbol ? (item.sell.allSellAverages[key].totalQuantity * item.sell.allSellAverages[key].average).toFixed(2) : 0.0}`,
+            sell_price: `${sellSymbol ? item.sell.allSellAverages[key].average.toFixed(2) : 0.0}`,
             net_volume: `${buy.totalQuantity - (sellSymbol ? item.sell.allSellAverages[key].totalQuantity : 0)}`,
             profit: `${(buy.totalQuantity * buy.average - (sellSymbol ? item.sell.allSellAverages[key].totalQuantity * item.sell.allSellAverages[key].average : 0)).toFixed(2)}`,
             unCovered: `${(buy.totalQuantity * buy.average - (sellSymbol ? item.sell.allSellAverages[key].totalQuantity * item.sell.allSellAverages[key].average : 0)).toFixed(2)}`,
@@ -238,7 +233,7 @@ export default function AppNewInvoice({
               symbol: sellSymbol[0],
               positions: positions.toString(),
               buy_volume: `0`,
-              buy_price: `0.00 / 0.00`,
+              buy_price: `0`,
               sell_volume: `${sell.totalQuantity}`,
               sell_price: `${sell.average.toFixed(2)}`,
               net_volume: `${-sell.totalQuantity}`,
@@ -441,12 +436,6 @@ export default function AppNewInvoice({
           align: 'right',
           border: '1px solid #dddddd !important',
         },
-        {
-          id: 'unCovered',
-          label: 'Uncovered (INR)',
-          align: 'right',
-          border: '1px solid #dddddd !important',
-        },
       ],
     },
     {
@@ -644,11 +633,6 @@ export default function AppNewInvoice({
                             >
                               {finalArray.totalProfit}
                             </StyledTableCell>
-                            <StyledTableCell
-                              sx={{ textAlign: 'right', padding: '9px', fontWeight: 'bold' }}
-                            >
-                              {finalArray.totalProfit}
-                            </StyledTableCell>
                           </StyledTableRow>
                         )}
                       </TableBody>
@@ -754,9 +738,6 @@ function AppNewInvoiceRow({ row, value }: AppNewInvoiceRowProps) {
           </StyledTableCell>
           <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
             {row.profit}
-          </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px', borderRight: 'none' }}>
-            {row.unCovered}
           </StyledTableCell>
         </StyledTableRow>
       )}
