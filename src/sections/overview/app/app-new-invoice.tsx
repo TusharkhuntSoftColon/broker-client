@@ -22,6 +22,7 @@ import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 
 import useAuth from 'src/hooks/useAuth';
+import { useSocket } from 'src/hooks/use-socket';
 
 import { SOCKET_URL } from 'src/utils/environments';
 
@@ -173,6 +174,10 @@ export default function AppNewInvoice({
   const [tableData, setTableData] = useState<any>([]);
   const finalArray = transformData(exchangeTableSummaryData);
 
+  const tableDataUpdated = useSocket(finalArray.result);
+
+  console.log({ tableDataUpdated });
+
   const [updatedExchangeArray, setupdatedExchangeArray] = useState(finalArray.result);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -314,9 +319,9 @@ export default function AppNewInvoice({
 
   console.log({ finalArray });
 
-  useEffect(() => {
-    socketConnection(finalArray.result);
-  }, [finalArray.result]);
+  // useEffect(() => {
+  //   socketConnection(finalArray.result);
+  // }, [finalArray.result]);
 
   const socketConnection = async (activeSymbols: any) => {
     try {

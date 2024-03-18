@@ -132,8 +132,6 @@ export default function ClientTableDashboard({
     const updateLivePrice = async (socketData: any) => {
       const userTableData = value === 0 ? positionsData : value === 3 ? ordersData : [];
       const updatedPositions = userTableData?.map((position: any) => {
-        console.log({ position, socketData });
-
         const socketItem = socketData?.find(
           (item: any) => item.InstrumentIdentifier === position.scriptName
         );
@@ -223,8 +221,6 @@ export default function ClientTableDashboard({
       console.log(e);
     }
   };
-
-  console.log({ updatedPositionsData, positionsData });
 
   const tabs = [
     {
@@ -420,11 +416,6 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
     popover.onClose();
     console.info('DELETE', row.id);
   };
-
-  const time = row?.time;
-
-  console.log(new Date(time).toDateString());
-
   return (
     <>
       {value === 0 && (
