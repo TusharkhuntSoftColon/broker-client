@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useState } from 'react';
 /* eslint-disable no-plusplus */
 import { io } from 'socket.io-client';
+import { useState, useEffect } from 'react';
 
 import { SOCKET_URL } from 'src/utils/environments';
 
@@ -20,9 +20,9 @@ export function useSocket(defaultValue?: any): ReturnType {
 
   console.log({ tableData });
 
-  //   useEffect(() => {
-  //     socketConnection(defaultValue);
-  //   }, []);
+  useEffect(() => {
+    socketConnection(defaultValue);
+  }, [tableData]);
 
   const socketConnection = async (activeSymbols: any) => {
     try {

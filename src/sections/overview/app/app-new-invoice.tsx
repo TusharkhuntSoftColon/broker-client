@@ -2,7 +2,6 @@
 /* eslint-disable object-shorthand */
 /* eslint-disable no-plusplus */
 /* eslint-disable no-restricted-syntax */
-import { io } from 'socket.io-client';
 /* eslint-disable arrow-body-style */
 import React, { useState, useEffect } from 'react';
 
@@ -23,8 +22,6 @@ import TableContainer from '@mui/material/TableContainer';
 
 import useAuth from 'src/hooks/useAuth';
 import { useSocket } from 'src/hooks/use-socket';
-
-import { SOCKET_URL } from 'src/utils/environments';
 
 import { newInvoiceData, newInvoiceJournalData, newInvoiceExposureData } from 'src/_mock';
 
@@ -323,73 +320,73 @@ export default function AppNewInvoice({
   //   socketConnection(finalArray.result);
   // }, [finalArray.result]);
 
-  const socketConnection = async (activeSymbols: any) => {
-    try {
-      const socket = io(SOCKET_URL, {
-        transports: ['websocket'],
-        query: {
-          transport: 'websocket',
-          EIO: '4',
-          authorization: token,
-        },
-        auth: { authorization: token },
-        extraHeaders: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  // const socketConnection = async (activeSymbols: any) => {
+  //   try {
+  //     const socket = io(SOCKET_URL, {
+  //       transports: ['websocket'],
+  //       query: {
+  //         transport: 'websocket',
+  //         EIO: '4',
+  //         authorization: token,
+  //       },
+  //       auth: { authorization: token },
+  //       extraHeaders: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
 
-      const Symbols = finalArray.result.map((symbol: any) => symbol?.socketLiveName);
-      const parsedSymbols = JSON.stringify(Symbols);
+  //     const Symbols = finalArray.result.map((symbol: any) => symbol?.socketLiveName);
+  //     const parsedSymbols = JSON.stringify(Symbols);
 
-      socket.on('connect', () => {
-        console.log('[socket] Connected');
-        socket.emit('subscribeToUserServerMarket', parsedSymbols);
-      });
+  //     socket.on('connect', () => {
+  //       console.log('[socket] Connected');
+  //       socket.emit('subscribeToUserServerMarket', parsedSymbols);
+  //     });
 
-      socket.emit('joinUserRoom', parsedSymbols);
+  //     socket.emit('joinUserRoom', parsedSymbols);
 
-      socket.on('disconnect', (reason: any) => {
-        console.log('[socket] Disconnected:', reason);
-      });
-      socket.on('error', (error: any) => {
-        console.log('[socket] Error:', error);
-      });
+  //     socket.on('disconnect', (reason: any) => {
+  //       console.log('[socket] Disconnected:', reason);
+  //     });
+  //     socket.on('error', (error: any) => {
+  //       console.log('[socket] Error:', error);
+  //     });
 
-      socket.on('marketWatch', (data: any) => {
-        setTableData((prev: any) => {
-          let index1 = -1;
+  //     socket.on('marketWatch', (data: any) => {
+  //       setTableData((prev: any) => {
+  //         let index1 = -1;
 
-          for (let index = 0; index < prev.length; index++) {
-            const data1 = prev[index];
-            if (
-              data1?.InstrumentIdentifier &&
-              data?.InstrumentIdentifier &&
-              data1?.InstrumentIdentifier === data?.InstrumentIdentifier
-            ) {
-              index1 = index;
+  //         for (let index = 0; index < prev.length; index++) {
+  //           const data1 = prev[index];
+  //           if (
+  //             data1?.InstrumentIdentifier &&
+  //             data?.InstrumentIdentifier &&
+  //             data1?.InstrumentIdentifier === data?.InstrumentIdentifier
+  //           ) {
+  //             index1 = index;
 
-              break;
-            }
-          }
+  //             break;
+  //           }
+  //         }
 
-          if (index1 === -1) {
-            return [...prev, data];
-          }
+  //         if (index1 === -1) {
+  //           return [...prev, data];
+  //         }
 
-          const newObj = {
-            ...data,
-            oldBuyPrice: prev[index1].BuyPrice,
-            oldSellPrice: prev[index1].SellPrice,
-            oldPercentage: prev[index1].PriceChangePercentage,
-          };
-          prev[index1] = newObj;
-          return [...prev];
-        });
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  //         const newObj = {
+  //           ...data,
+  //           oldBuyPrice: prev[index1].BuyPrice,
+  //           oldSellPrice: prev[index1].SellPrice,
+  //           oldPercentage: prev[index1].PriceChangePercentage,
+  //         };
+  //         prev[index1] = newObj;
+  //         return [...prev];
+  //       });
+  //     });
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   const tabs = [
     {

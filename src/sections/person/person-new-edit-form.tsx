@@ -154,7 +154,8 @@ export default function PersonNewEditForm({
   const NewUserSchema = Yup.object().shape({
     name: Yup.string().required('Name is required'),
     ID: Yup.string().required('User Id is required'),
-    balance: Yup.number().required('User Balance is required'),
+    creditLimit: Yup.number().required('User creditLimit is required'),
+    positionMinTime: Yup.number().required('Position min time is required'),
     role: Yup.mixed<any>().nullable().required('Role is required'),
     exchangeGroup: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
     allowedExchange: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
@@ -167,12 +168,13 @@ export default function PersonNewEditForm({
       investorPassword: personList?.investorPassword || '',
       name: currentUser?.name || personList?.name || '',
       ID: currentUser?.ID || personList?.ID || '',
+      positionMinTime: currentUser?.positionMinTime || personList?.positionMinTime || '',
       exchangeGroup: defaultExchangeOptions || '',
       allowedExchange: defaultAllowedExchange || [],
       insertCustomBet: currentUser?.insertCustomBet || personList?.insertCustomBet || false,
       exchangeList: [],
       editBet: currentUser?.editBet || personList?.editBet || false,
-      balance: currentUser?.balance || 0,
+      creditLimit: currentUser?.creditLimit || 0,
       role: currentUser?.role || personList?.role?.label,
       deleteBet: currentUser?.deleteBet || personList?.deleteBet || false,
       leverageXY: defaultLeverageOptions || '',
@@ -538,7 +540,7 @@ export default function PersonNewEditForm({
             createUser({ ...data, fields });
           }
         }
-        reset();
+        // reset();
       }
     } catch (error) {
       console.log(error);
@@ -635,7 +637,20 @@ export default function PersonNewEditForm({
                 />
               )}
               {roleOption === 'USER' && (
-                <RHFTextField isReadOnly={!!isView} name="balance" type="number" label="Balance" />
+                <>
+                  <RHFTextField
+                    isReadOnly={!!isView}
+                    name="creditLimit"
+                    type="number"
+                    label="Credit"
+                  />
+                  <RHFTextField
+                    isReadOnly={!!isView}
+                    name="positionMinTime"
+                    type="number"
+                    label="Position Min Tme"
+                  />
+                </>
               )}
               <RHFAutocomplete
                 name="leverageXY"
