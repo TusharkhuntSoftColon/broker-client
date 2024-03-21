@@ -2,8 +2,6 @@ import { Helmet } from 'react-helmet-async';
 
 import { useParams } from 'src/routes/hooks';
 
-import { PersonDetailsView } from 'src/sections/person/view';
-
 // ----------------------------------------------------------------------
 
 export default function PersonDetailsPage() {
@@ -17,7 +15,7 @@ export default function PersonDetailsPage() {
         <title> Dashboard: Master Detail</title>
       </Helmet>
 
-      <PersonDetailsView id={`${id}`} />
+      {/* <PersonDetailsView id={`${id}`} /> */}
     </>
   );
 }

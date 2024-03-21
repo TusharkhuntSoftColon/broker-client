@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 export { default as PersonEditView } from './person-edit-view';
 export { default as PersonListView } from './person-list-view';
 export { default as PersonCreateView } from './person-create-view';

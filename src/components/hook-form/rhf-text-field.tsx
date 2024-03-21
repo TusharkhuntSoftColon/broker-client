@@ -37,9 +37,7 @@ export default function RHFTextField({
             if (type === 'number') {
               field.onChange(Number(event.target.value));
             } else {
-              upperText
-                ? field.onChange(event.target.value.toUpperCase())
-                : field.onChange(event.target.value);
+              field.onChange(event.target.value);
             }
           }}
           InputProps={{

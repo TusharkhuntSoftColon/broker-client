@@ -167,19 +167,28 @@ export default function AppNewInvoice({
   exchangeTableSummaryData: any;
 }) {
   const [value, setValue] = React.useState(0);
+
   const { token } = useAuth();
-  const [tableData, setTableData] = useState<any>([]);
+  const [tableData1, setTableData] = useState<any>([]);
+
   const finalArray = transformData(exchangeTableSummaryData);
 
-  const tableDataUpdated = useSocket(finalArray.result);
+  const { tableData, socketConnection } = useSocket(finalArray.result);
 
-  console.log({ tableDataUpdated });
+  console.log({ tableData });
 
   const [updatedExchangeArray, setupdatedExchangeArray] = useState(finalArray.result);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      await socketConnection(finalArray?.result);
+    };
+    fetchData();
+  }, [finalArray?.result, socketConnection]);
 
   function transformData(data: Item[]): TransformedData {
     const result: SummaryRow[] = [];
@@ -286,8 +295,6 @@ export default function AppNewInvoice({
 
   useEffect(() => {
     const updatedFinalArray = finalArray.result?.map((finalItem: any) => {
-      console.log({ finalItem });
-
       const correspondingTableItem = tableData?.find(
         (tableItem: any) => finalItem.socketLiveName === tableItem.InstrumentIdentifier
       );
@@ -313,8 +320,6 @@ export default function AppNewInvoice({
 
     setupdatedExchangeArray(updatedFinalArray);
   }, [tableData]);
-
-  console.log({ finalArray });
 
   // useEffect(() => {
   //   socketConnection(finalArray.result);
@@ -597,7 +602,7 @@ export default function AppNewInvoice({
                         {data.tableDatas?.map((row, index) => (
                           <AppNewInvoiceRow key={index} row={row} value={value} />
                         ))}
-                        {data?.label === 'Summary' && tableData.length > 0 && (
+                        {data?.label === 'Summary' && tableData?.length > 0 && (
                           <StyledTableRow>
                             <StyledTableCell sx={{ fontWeight: 'bold' }}>Summary</StyledTableCell>
                             <StyledTableCell

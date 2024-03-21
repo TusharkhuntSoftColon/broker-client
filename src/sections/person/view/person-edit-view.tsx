@@ -20,7 +20,6 @@ export default function PersonEditView() {
             name: 'User',
             href: paths.dashboard.person.root,
           },
-          { name: 'Edit' },
         ]}
         sx={{
           mb: { xs: 3, md: 5 },

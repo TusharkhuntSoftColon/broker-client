@@ -11,14 +11,13 @@ import useAuth from './useAuth';
 
 interface ReturnType {
   tableData: any;
+  socketConnection: any;
+  tableDataUpdated?: any;
 }
 
 export function useSocket(defaultValue?: any): ReturnType {
-  console.log({ defaultValue });
   const [tableData, setTableData] = useState<any>([]);
   const { token } = useAuth();
-
-  console.log({ tableData });
 
   useEffect(() => {
     socketConnection(defaultValue);
@@ -96,5 +95,6 @@ export function useSocket(defaultValue?: any): ReturnType {
 
   return {
     tableData,
+    socketConnection,
   };
 }

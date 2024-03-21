@@ -1,16 +1,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import logger from "redux-logger";
-import { persistStore } from "redux-persist";
-import { configureStore } from "@reduxjs/toolkit";
+import { persistStore } from 'redux-persist';
+import { configureStore } from '@reduxjs/toolkit';
 
-import rootReducer from "./slices";
+import rootReducer from './slices';
 
-const middleWares: any = [import.meta.env.VITE_NODE_ENV === "development" && logger].filter(Boolean);
+// const middleWares: any = [import.meta.env.VITE_NODE_ENV === 'development' && logger].filter(
+//   Boolean
+// );
 
 export const store = configureStore({
-    reducer: rootReducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false,}).concat(middleWares),
-    devTools: import.meta.env.VITE_NODE_ENV !== "production"
+  reducer: rootReducer,
+  // middleware: (getDefaultMiddleware) => getDefaultMiddleware({ serializableCheck: false,}).concat(middleWares),
+  devTools: import.meta.env.VITE_NODE_ENV !== 'production',
 });
 
 export const persistor = persistStore(store);

@@ -172,7 +172,7 @@ export default function SymbolTableDashboard() {
   });
 
   const { mutate } = useMutation(getImportMonthList(role), {
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       const symbolnewData: any[] = data?.data?.rows;
       setSymbolData(symbolnewData);
       setCurrentSymbolList(symbolnewData);
@@ -191,7 +191,7 @@ export default function SymbolTableDashboard() {
         });
       }
       setRow(symbolTableDashboard);
-      socketConnection(symbolnewData);
+      await socketConnection(symbolnewData);
     },
     onError: (error) => {
       console.log('error', error);

@@ -42,6 +42,7 @@ import masterService from 'src/services/masterService';
 import { EXCHANGE_GROUP, LEVERAGE_OPTIONS } from 'src/_mock';
 import superMasterService from 'src/services/superMasterService';
 import { ADMIN_ROLE, MASTER_ROLE, SUPER_MASTER_ROLE } from 'src/_mock/_person';
+import { NewUserSchema, NewMasterSchema, NewSuperMasterSchema } from 'src/schema/personSchema';
 
 import { useSnackbar } from 'src/components/snackbar';
 import FormProvider, {
@@ -132,36 +133,6 @@ export default function PersonNewEditForm({
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const NewSuperMasterSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    ID: Yup.string().required('User Id is required'),
-    role: Yup.mixed<any>().nullable().required('Role is required'),
-    exchangeGroup: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
-    allowedExchange: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
-    limitOfAddMaster: Yup.number().required('Limit Of Add Master is required'),
-    limitOfAddUser: Yup.number().required('Limit Of Add User is required'),
-    leverageXY: Yup.mixed<any>().nullable().required('Leverage  is required'),
-  });
-  const NewMasterSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    ID: Yup.string().required('User Id is required'),
-    role: Yup.mixed<any>().nullable().required('Role is required'),
-    exchangeGroup: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
-    allowedExchange: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
-    limitOfAddUser: Yup.number().required('Limit Of Add User is required'),
-    leverageXY: Yup.mixed<any>().nullable().required('Leverage  is required'),
-  });
-  const NewUserSchema = Yup.object().shape({
-    name: Yup.string().required('Name is required'),
-    ID: Yup.string().required('User Id is required'),
-    creditLimit: Yup.number().required('User creditLimit is required'),
-    positionMinTime: Yup.number().required('Position min time is required'),
-    role: Yup.mixed<any>().nullable().required('Role is required'),
-    exchangeGroup: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
-    allowedExchange: Yup.mixed<any>().nullable().required('Must have at least 1 exchange'),
-    leverageXY: Yup.mixed<any>().nullable().required('Leverage  is required'),
-  });
-
   const defaultValues: any = useMemo(
     () => ({
       password: personList?.password || '',
@@ -174,7 +145,7 @@ export default function PersonNewEditForm({
       insertCustomBet: currentUser?.insertCustomBet || personList?.insertCustomBet || false,
       exchangeList: [],
       editBet: currentUser?.editBet || personList?.editBet || false,
-      creditLimit: currentUser?.creditLimit || 0,
+      creditLimit: currentUser?.user_balance?.creditLimit || 0,
       role: currentUser?.role || personList?.role?.label,
       deleteBet: currentUser?.deleteBet || personList?.deleteBet || false,
       leverageXY: defaultLeverageOptions || '',
@@ -300,7 +271,6 @@ export default function PersonNewEditForm({
   });
 
   const {
-    reset,
     watch,
     setValue,
     handleSubmit,

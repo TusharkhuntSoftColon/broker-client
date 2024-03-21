@@ -9,9 +9,10 @@ import Typography from '@mui/material/Typography';
 import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 
-import BrokeragePage from 'src/pages/dashboard/brokerage/list';
+import UserFinantials from 'src/sections/person/User/UserFinantials/userFinantials';
+import { PersonEditView, PersonCreateView, PersonDetailsView } from 'src/sections/person/view';
 
-import PersonNewEditForm from 'src/sections/person/person-new-edit-form';
+import BasicTabs from './CustomTab';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -46,7 +47,7 @@ function a11yProps(index: number) {
   };
 }
 
-export default function BasicTabs() {
+export default function PersonTabsPanel() {
   const params = useParams();
 
   const { id } = params;
@@ -56,10 +57,12 @@ export default function BasicTabs() {
   const [value, setValue] = React.useState(0);
   const [fields, setFields] = React.useState<any>([]);
 
+  console.log({ currentUser });
+
   console.log({ fields });
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    if (fields.length > 0) setValue(newValue);
+    setValue(newValue);
   };
 
   const role = useSelector((data: any) => data.auth.role);
@@ -78,25 +81,44 @@ export default function BasicTabs() {
   };
   return (
     <Box sx={{ width: '100%', ml: 2 }}>
-      {/* {currentUser ? <PersonEditView /> : <PersonCreateView />} */}
+      {currentUser ? <PersonEditView /> : <PersonCreateView />}
+
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange}>
-          <Tab label="User" {...a11yProps(0)} />
-          <Tab label="Brokerage" {...a11yProps(1)} />
+          {currentUser && <Tab label="Overview" {...a11yProps(0)} />}
+          <Tab label="Personal" {...a11yProps(1)} />
+          {currentUser && <Tab label="Balance" {...a11yProps(2)} />}
+          {currentUser && <Tab label="History" {...a11yProps(3)} />}
         </Tabs>
       </Box>
-      <CustomTabPanel value={value} index={0}>
-        <PersonNewEditForm
+      {currentUser && (
+        <CustomTabPanel value={value} index={0}>
+          {/* <PersonNewEditForm
           isView={false}
           currentUser={currentUser}
           path={getPath(role)}
           setTabValue={setValue}
           setFieldsValue={setFields}
-        />
+        /> */}
+          <PersonDetailsView currentUser={currentUser} />
+        </CustomTabPanel>
+      )}
+      <CustomTabPanel value={value} index={currentUser ? 1 : 0}>
+        {/* <BrokeragePage fields={fields} currentUser={currentUser} /> */}
+        <BasicTabs />
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={1}>
-        <BrokeragePage fields={fields} currentUser={currentUser} />
-      </CustomTabPanel>
+      {currentUser && (
+        <CustomTabPanel value={value} index={2}>
+          {/* <BrokeragePage fields={fields} currentUser={currentUser} /> */}
+          <UserFinantials />
+        </CustomTabPanel>
+      )}
+      {currentUser && (
+        <CustomTabPanel value={value} index={3}>
+          {/* <BrokeragePage fields={fields} currentUser={currentUser} /> */}
+          <Box>History</Box>
+        </CustomTabPanel>
+      )}
     </Box>
   );
 }

@@ -7,6 +7,7 @@ import PersonDetailsPage from 'src/pages/dashboard/person/details';
 
 import BasicTabs from 'src/components/custom-tab/CustomTab';
 import { LoadingScreen } from 'src/components/loading-screen';
+import PersonTabsPanel from 'src/components/custom-tab/PersonTabs';
 
 // OVERVIEW
 const IndexPage = lazy(() => import('src/pages/dashboard/app'));
@@ -51,9 +52,9 @@ export const dashboardRoutes = [
         children: [
           { element: <PersonListPage />, index: true },
           { path: 'list', element: <PersonListPage /> },
-          { path: 'new', element: <BasicTabs /> },
+          { path: 'new', element: <PersonTabsPanel /> },
           { path: ':id', element: <PersonDetailsPage /> },
-          { path: ':id/edit', element: <BasicTabs /> },
+          { path: ':id/edit', element: <PersonTabsPanel /> },
         ],
       },
       {

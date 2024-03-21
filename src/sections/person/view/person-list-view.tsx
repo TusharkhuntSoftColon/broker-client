@@ -1,3 +1,5 @@
+/* eslint-disable import/no-cycle */
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable arrow-body-style */
 /* eslint-disable array-callback-return */
 /* eslint-disable consistent-return */
@@ -36,6 +38,7 @@ import Scrollbar from 'src/components/scrollbar';
 import { ConfirmDialog } from 'src/components/custom-dialog';
 import { useSettingsContext } from 'src/components/settings';
 import CustomBreadcrumbs from 'src/components/custom-breadcrumbs';
+import UserDetailsModal from 'src/components/modal/UserDetailsModal';
 import {
   useTable,
   emptyRows,
@@ -85,6 +88,8 @@ export default function PersonListView({ path }: { path: any }) {
 
   const confirm = useBoolean();
 
+  const useDetailsModalValue = useBoolean();
+
   const { enqueueSnackbar } = useSnackbar();
 
   const personData = useSelector((data: any) => data?.admin?.personList);
@@ -94,6 +99,8 @@ export default function PersonListView({ path }: { path: any }) {
   const [exchangeData, setExchangeData] = useState<any>();
 
   const [filters, setFilters] = useState(defaultFilters);
+
+  const [currentUser] = useState();
 
   const dataFiltered = applyFilter({
     inputData: tableData,
@@ -317,6 +324,11 @@ export default function PersonListView({ path }: { path: any }) {
     if (rowData?.role !== 'USER') {
       getPerson(rowData._id);
     }
+    // else {
+    //   console.log('USER CLICKED');
+    //   useDetailsModalValue.onTrue();
+    //   setCurrentUser(rowData);
+    // }
   };
 
   const handleResetFilters = useCallback(() => {
@@ -454,6 +466,12 @@ export default function PersonListView({ path }: { path: any }) {
           />
         </Card>
       </Container>
+
+      <UserDetailsModal
+        open={useDetailsModalValue.value}
+        onClose={useDetailsModalValue.onFalse}
+        currentUser={currentUser}
+      />
 
       <ConfirmDialog
         open={confirm.value}

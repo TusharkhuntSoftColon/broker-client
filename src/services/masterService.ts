@@ -12,6 +12,7 @@ import {
   IMPORT_MONTH_ORDER_FOR_MASTER,
   UPDATED_SELECTED_LIST_FOR_MASTER,
   SET_IMPORT_MONTH_LIST_FOR_MASTER,
+  GET_USERS_BET_POSITIONS_BY_MASTER,
   IMPORT_MONTH_ORDER_LIST_FOR_MASTER,
   GET_ASSIGNED_EXCHANGE_LIST_FOR_MASTER,
   GET_BROKERAGE_LIST_FOR_USER_UPDATE_BY_MASTER,
@@ -208,6 +209,17 @@ const masterService = {
     try {
       const response: AxiosResponse<any> = await client.get(
         `${GET_BROKERAGE_LIST_FOR_USER_UPDATE_BY_MASTER}/${id}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error in exchangeService.getExchangeList:', error);
+      throw error;
+    }
+  },
+  getUserBetPositions: async (id?: string): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(
+        `${GET_USERS_BET_POSITIONS_BY_MASTER}/${id}`
       );
       return response.data;
     } catch (error) {

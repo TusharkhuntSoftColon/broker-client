@@ -37,6 +37,8 @@ export const SET_IMPORT_MONTH_LIST_FOR_ADMIN = '/admin/select-assigne-importmont
 export const UPDATED_SELECTED_LIST_FOR_ADMIN = '/admin/user-select-importmonth';
 export const GET_ASSIGNED_EXCHANGE_LIST_FOR_ADMIN = '/admin/all-exchanges';
 
+export const GET_USERS_BET_POSITIONS_BY_ADMIN = '/admin/user-positions';
+
 // SUPER MASTER
 export const CREATE_MASTER_BY_SUPER_MASTER = '/super-master/master';
 export const CREATE_USER_BY_SUPER_MASTER = '/super-master/user';
@@ -65,6 +67,8 @@ export const GET_ASSIGNED_EXCHANGE_LIST_FOR_SUPER_MASTER = '/super-master/all-ex
 export const GET_BROKERAGE_LIST_FOR_USER_UPDATE_BY_SUPERMASTER =
   '/super-master/brockrages-forupdate';
 
+export const GET_USERS_BET_POSITIONS_BY_SUPER_MASTER = '/super-master/user-positions';
+
 // MASTER
 export const CREATE_USER_BY_MASTER = '/master/user';
 export const GET_ALL_PERSONS_BY_MASTER = '/master/person';
@@ -86,6 +90,8 @@ export const SET_IMPORT_MONTH_LIST_FOR_MASTER = '/master/select-assigne-importmo
 export const UPDATED_SELECTED_LIST_FOR_MASTER = '/master/user-select-importmonth';
 export const GET_ASSIGNED_EXCHANGE_LIST_FOR_MASTER = '/master/all-exchanges';
 export const GET_BROKERAGE_LIST_FOR_USER_UPDATE_BY_MASTER = '/master/brockrages-forupdate';
+
+export const GET_USERS_BET_POSITIONS_BY_MASTER = '/master/user-positions';
 
 // Exchange
 export const EXCHANGE_CREATE = '/exchange/create';

@@ -23,6 +23,7 @@ import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 
 import useAuth from 'src/hooks/useAuth';
+import { useSocket } from 'src/hooks/use-socket';
 
 import { SOCKET_URL } from 'src/utils/environments';
 
@@ -113,7 +114,7 @@ export default function ClientTableDashboard({
   positionsData: any;
 }) {
   const [value, setValue] = useState(0);
-  const [tableData, setTableData] = useState<any>([]);
+  const [tableData1, setTableData] = useState<any>([]);
   const { token } = useAuth();
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -123,10 +124,21 @@ export default function ClientTableDashboard({
   const [updatedPositionsData, setUpdatedPositionsData] = useState([]);
   const [updatedOrdersData, setUpdatedOrdersData] = useState([]);
 
-  useEffect(() => {
-    const subscribingData = value === 0 ? positionsData : value === 3 ? ordersData : [];
-    socketConnection(subscribingData);
-  }, [positionsData, ordersData]);
+  const { tableData, socketConnection } = useSocket(positionsData);
+
+  console.log('CLIENT TABLE DTAA', tableData);
+
+  // useEffect(() => {
+  //   const fetchSocketData = async () => {
+  //     await socketConnection();
+  //   };
+  //   fetchSocketData();
+  // }, [positionsData, socketConnection]);
+
+  // useEffect(() => {
+  //   const subscribingData = value === 0 ? positionsData : value === 3 ? ordersData : [];
+  //   socketConnection1(subscribingData);
+  // }, [positionsData, ordersData]);
 
   useEffect(() => {
     const updateLivePrice = async (socketData: any) => {
@@ -151,10 +163,10 @@ export default function ClientTableDashboard({
         setUpdatedOrdersData(updatedPositions);
       }
     };
-    updateLivePrice(tableData);
-  }, [tableData, value]);
+    updateLivePrice(tableData1);
+  }, [tableData1, value]);
 
-  const socketConnection = async (activeSymbols: any) => {
+  const socketConnection1 = async (activeSymbols: any) => {
     try {
       const socket = io(SOCKET_URL, {
         transports: ['websocket'],
@@ -227,7 +239,7 @@ export default function ClientTableDashboard({
       label: 'Positions',
       value: 0,
       title: 'Users',
-      tableDatas: tableData.length > 0 ? updatedPositionsData : positionsData,
+      tableDatas: tableData1?.length > 0 ? updatedPositionsData : positionsData,
       tableLabel: [
         { id: 'login', label: 'Login', align: 'left', border: '1px solid #dddddd !important' },
         {
@@ -286,7 +298,7 @@ export default function ClientTableDashboard({
       label: 'Orders',
       value: 3,
       title: 'Orders Table',
-      tableDatas: tableData.length > 0 ? updatedOrdersData : ordersData,
+      tableDatas: tableData1?.length > 0 ? updatedOrdersData : ordersData,
       tableLabel: [
         { id: 'ID', label: 'Login', align: 'left', border: '1px solid #dddddd !important' },
         { id: 'order', label: 'Order', align: 'left', border: '1px solid #dddddd !important' },
