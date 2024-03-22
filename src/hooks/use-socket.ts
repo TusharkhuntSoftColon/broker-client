@@ -1,7 +1,8 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable react-hooks/exhaustive-deps */
+import { useState } from 'react';
 /* eslint-disable no-plusplus */
 import { io } from 'socket.io-client';
-import { useState, useEffect } from 'react';
 
 import { SOCKET_URL } from 'src/utils/environments';
 
@@ -16,12 +17,16 @@ interface ReturnType {
 }
 
 export function useSocket(defaultValue?: any): ReturnType {
+  console.log({ defaultValue });
+
   const [tableData, setTableData] = useState<any>([]);
   const { token } = useAuth();
 
-  useEffect(() => {
-    socketConnection(defaultValue);
-  }, [tableData]);
+  console.log({ tableData });
+
+  // useEffect(() => {
+  //   socketConnection(defaultValue);
+  // }, [tableData]);
 
   const socketConnection = async (activeSymbols: any) => {
     try {
@@ -40,8 +45,15 @@ export function useSocket(defaultValue?: any): ReturnType {
 
       console.log({ activeSymbols });
 
-      const Symbols = activeSymbols.map((symbol: any) => symbol?.socketLiveName);
+      const Symbols =
+        defaultValue === 'client'
+          ? activeSymbols.map((symbol: any) => symbol?.scriptName)
+          : defaultValue === 'expense'
+            ? activeSymbols.map((symbol: any) => symbol?.socketLiveName)
+            : '';
       const parsedSymbols = JSON.stringify(Symbols);
+
+      console.log({ parsedSymbols });
 
       socket.on('connect', () => {
         console.log('[socket] Connected');

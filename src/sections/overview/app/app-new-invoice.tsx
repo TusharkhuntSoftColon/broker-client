@@ -20,7 +20,6 @@ import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 
-import useAuth from 'src/hooks/useAuth';
 import { useSocket } from 'src/hooks/use-socket';
 
 import { newInvoiceData, newInvoiceJournalData, newInvoiceExposureData } from 'src/_mock';
@@ -167,17 +166,9 @@ export default function AppNewInvoice({
   exchangeTableSummaryData: any;
 }) {
   const [value, setValue] = React.useState(0);
-
-  const { token } = useAuth();
-  const [tableData1, setTableData] = useState<any>([]);
-
   const finalArray = transformData(exchangeTableSummaryData);
-
-  const { tableData, socketConnection } = useSocket(finalArray.result);
-
-  console.log({ tableData });
-
   const [updatedExchangeArray, setupdatedExchangeArray] = useState(finalArray.result);
+  const { tableData, socketConnection } = useSocket('expense');
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -188,7 +179,7 @@ export default function AppNewInvoice({
       await socketConnection(finalArray?.result);
     };
     fetchData();
-  }, [finalArray?.result, socketConnection]);
+  }, [finalArray?.result, socketConnection, tableData]);
 
   function transformData(data: Item[]): TransformedData {
     const result: SummaryRow[] = [];
@@ -320,78 +311,6 @@ export default function AppNewInvoice({
 
     setupdatedExchangeArray(updatedFinalArray);
   }, [tableData]);
-
-  // useEffect(() => {
-  //   socketConnection(finalArray.result);
-  // }, [finalArray.result]);
-
-  // const socketConnection = async (activeSymbols: any) => {
-  //   try {
-  //     const socket = io(SOCKET_URL, {
-  //       transports: ['websocket'],
-  //       query: {
-  //         transport: 'websocket',
-  //         EIO: '4',
-  //         authorization: token,
-  //       },
-  //       auth: { authorization: token },
-  //       extraHeaders: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-
-  //     const Symbols = finalArray.result.map((symbol: any) => symbol?.socketLiveName);
-  //     const parsedSymbols = JSON.stringify(Symbols);
-
-  //     socket.on('connect', () => {
-  //       console.log('[socket] Connected');
-  //       socket.emit('subscribeToUserServerMarket', parsedSymbols);
-  //     });
-
-  //     socket.emit('joinUserRoom', parsedSymbols);
-
-  //     socket.on('disconnect', (reason: any) => {
-  //       console.log('[socket] Disconnected:', reason);
-  //     });
-  //     socket.on('error', (error: any) => {
-  //       console.log('[socket] Error:', error);
-  //     });
-
-  //     socket.on('marketWatch', (data: any) => {
-  //       setTableData((prev: any) => {
-  //         let index1 = -1;
-
-  //         for (let index = 0; index < prev.length; index++) {
-  //           const data1 = prev[index];
-  //           if (
-  //             data1?.InstrumentIdentifier &&
-  //             data?.InstrumentIdentifier &&
-  //             data1?.InstrumentIdentifier === data?.InstrumentIdentifier
-  //           ) {
-  //             index1 = index;
-
-  //             break;
-  //           }
-  //         }
-
-  //         if (index1 === -1) {
-  //           return [...prev, data];
-  //         }
-
-  //         const newObj = {
-  //           ...data,
-  //           oldBuyPrice: prev[index1].BuyPrice,
-  //           oldSellPrice: prev[index1].SellPrice,
-  //           oldPercentage: prev[index1].PriceChangePercentage,
-  //         };
-  //         prev[index1] = newObj;
-  //         return [...prev];
-  //       });
-  //     });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
 
   const tabs = [
     {
@@ -574,15 +493,6 @@ export default function AppNewInvoice({
         WebkitBorderRadius: '5px',
       }}
     >
-      {/* <Box sx={{ p: 2, textAlign: 'right' }}>
-        <Button
-          size="small"
-          color="inherit"
-          endIcon={<Iconify icon="eva:arrow-ios-forward-fill" width={18} sx={{ ml: -0.5 }} />}
-        >
-        View All
-        </Button>
-      </Box> */}
       <Box sx={{ margin: '5px', border: '1px solid #d3d3d3' }}>
         <Box>
           {tabs.map((data) => {

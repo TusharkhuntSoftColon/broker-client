@@ -37,9 +37,9 @@ const TABLE_HEAD = [
 ];
 
 const dummyData = [
-  { date: 'Gold', type: 'balance', amount: 2000, comment: 'This is comment' },
-  { date: 'Silver', type: 'credit', amount: 2000, comment: 'This is comment' },
-  { date: 'TATA', type: 'balance', amount: 2000, comment: 'This is comment' },
+  { date: 'Date', type: 'balance', amount: 2000, comment: 'This is comment' },
+  { date: 'Date', type: 'credit', amount: 2000, comment: 'This is comment' },
+  { date: 'Date', type: 'balance', amount: 2000, comment: 'This is comment' },
 ];
 export default function UserFinantials() {
   const settings = useSettingsContext();
