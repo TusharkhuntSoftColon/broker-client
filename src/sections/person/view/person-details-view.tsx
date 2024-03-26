@@ -1,3 +1,5 @@
+/* eslint-disable no-else-return */
+/* eslint-disable import/order */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { isAxiosError } from 'axios';
 import { useSnackbar } from 'notistack';
@@ -7,6 +9,8 @@ import { useMutation } from '@tanstack/react-query';
 
 import Container from '@mui/material/Container';
 import { Box, Table, TableBody, Typography, TableContainer } from '@mui/material';
+
+import { useSocket } from 'src/hooks/use-socket';
 
 import adminService from 'src/services/adminService';
 import masterService from 'src/services/masterService';
@@ -39,13 +43,13 @@ export default function PersonDetailsView({ currentUser }: Props) {
   const table = useTable();
   const role = useSelector((data: any) => data.auth.role);
   const exchangeData = useSelector((data: any) => data?.admin?.exchangeList);
-  const [tableData1, setTableData1] = useState<any>();
+  const [tableData1, setTableData1] = useState<any>([]);
 
-  console.log({ tableData1 });
+  const { tableData, socketConnection } = useSocket('personDetails');
+
+  console.log({ tableData });
 
   const { enqueueSnackbar } = useSnackbar();
-
-  console.log({ exchangeData });
 
   const getBrokerageByRole = (role1: any) => {
     switch (role1) {
@@ -63,7 +67,7 @@ export default function PersonDetailsView({ currentUser }: Props) {
   const { mutate: getUserPosition } = useMutation(getBrokerageByRole(role), {
     onSuccess: (data) => {
       setTableData1(data?.data?.rows);
-      // dispatch(addBrokerage(data?.data?.rows));
+      socketConnection(data?.data?.rows);
     },
     onError: (error: any) => {
       if (isAxiosError(error)) {
@@ -77,12 +81,28 @@ export default function PersonDetailsView({ currentUser }: Props) {
     getUserPosition(currentUser?._id);
   }, []);
 
-  const dummyData = [
-    { symbolName: 'Gold', type: 'sell', volume: 5, price: 3000, livePrice: 1000, profit: 2000 },
-    { symbolName: 'Silver', type: 'buy', volume: 5, price: 3000, livePrice: 2000, profit: -1000 },
-    { symbolName: 'TATA', type: 'sell', volume: 5, price: 3000, livePrice: 1000, profit: 2000 },
-  ];
-  const [tableData] = useState(dummyData);
+  useEffect(() => {
+    const updateLivePrice = async (socketData: any) => {
+      const updatedPositions = tableData1?.map((position: any) => {
+        const socketItem = socketData?.find(
+          (item: any) => item.InstrumentIdentifier === position.scriptName
+        );
+
+        if (socketItem) {
+          if (position.positionType === 'BUY') {
+            return { ...position, livePrice: socketItem.SellPrice };
+          } else if (position.positionType === 'SELL') {
+            return { ...position, livePrice: socketItem.BuyPrice };
+          }
+        }
+        return position;
+      });
+      console.log({ updatedPositions });
+
+      setTableData1(updatedPositions);
+    };
+    updateLivePrice(tableData);
+  }, [tableData]);
 
   const notFound = !tableData?.length;
 

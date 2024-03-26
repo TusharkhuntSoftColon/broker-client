@@ -40,7 +40,7 @@ export function useSocket(defaultValue?: any): ReturnType {
       });
 
       const Symbols =
-        defaultValue === 'client'
+        defaultValue === 'client' || defaultValue === 'personDetails'
           ? activeSymbols.map((symbol: any) => symbol?.scriptName)
           : defaultValue === 'expense' || defaultValue === 'symbol'
             ? activeSymbols.map((symbol: any) => symbol?.socketLiveName)
