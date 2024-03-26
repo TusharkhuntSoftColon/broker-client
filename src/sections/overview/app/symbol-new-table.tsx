@@ -4,7 +4,6 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable @typescript-eslint/no-shadow */
-import { io } from 'socket.io-client';
 /* eslint-disable no-restricted-syntax */
 import React, { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
@@ -43,7 +42,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import AddSymbolInDashboard from 'src/components/modal/AddSymbolInDashboard';
 import superMasterService from 'src/services/superMasterService';
 import masterService from 'src/services/masterService';
-import { SOCKET_URL } from 'src/utils/environments';
+import { useSocket } from 'src/hooks/use-socket';
 // ----------------------------------------------------------------------
 
 interface TabPanelProps {
@@ -108,11 +107,15 @@ export default function SymbolTableDashboard() {
   const role = useSelector((data: any) => data.auth.role);
   const { token } = useAuth();
   const [value, setValue] = React.useState(0);
-  const [tableData, setTableData] = useState<any>([]);
+  const [tableData1, setTableData] = useState<any>([]);
   const [symbolData, setSymbolData] = useState<any>([]);
   const [rows, setRow] = useState<any>([]);
   const [assignedExchanges, setAssignedExchanges] = useState([]);
   const [currentSymbolList, setCurrentSymbolList] = useState<any>([]);
+
+  const { tableData, socketConnection } = useSocket('symbol');
+
+  console.log({ tableData });
 
   const getImportMonthList = (role: any) => {
     switch (role) {
@@ -202,73 +205,73 @@ export default function SymbolTableDashboard() {
     setValue(newValue);
   };
 
-  const socketConnection = async (activeSymbols: any) => {
-    try {
-      const socket = io(SOCKET_URL, {
-        transports: ['websocket'],
-        query: {
-          transport: 'websocket',
-          EIO: '4',
-          authorization: token,
-        },
-        auth: { authorization: token },
-        extraHeaders: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+  // const socketConnection = async (activeSymbols: any) => {
+  //   try {
+  //     const socket = io(SOCKET_URL, {
+  //       transports: ['websocket'],
+  //       query: {
+  //         transport: 'websocket',
+  //         EIO: '4',
+  //         authorization: token,
+  //       },
+  //       auth: { authorization: token },
+  //       extraHeaders: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
 
-      const Symbols = activeSymbols.map((symbol: any) => symbol?.socketLiveName);
-      const parsedSymbols = JSON.stringify(Symbols);
+  //     const Symbols = activeSymbols.map((symbol: any) => symbol?.socketLiveName);
+  //     const parsedSymbols = JSON.stringify(Symbols);
 
-      socket.on('connect', () => {
-        console.log('[socket] Connected');
-        socket.emit('subscribeToUserServerMarket', parsedSymbols);
-      });
+  //     socket.on('connect', () => {
+  //       console.log('[socket] Connected');
+  //       socket.emit('subscribeToUserServerMarket', parsedSymbols);
+  //     });
 
-      socket.emit('joinUserRoom', parsedSymbols);
+  //     socket.emit('joinUserRoom', parsedSymbols);
 
-      socket.on('disconnect', (reason: any) => {
-        console.log('[socket] Disconnected:', reason);
-      });
-      socket.on('error', (error: any) => {
-        console.log('[socket] Error:', error);
-      });
+  //     socket.on('disconnect', (reason: any) => {
+  //       console.log('[socket] Disconnected:', reason);
+  //     });
+  //     socket.on('error', (error: any) => {
+  //       console.log('[socket] Error:', error);
+  //     });
 
-      socket.on('marketWatch', (data: any) => {
-        setTableData((prev: any) => {
-          let index1 = -1;
+  //     socket.on('marketWatch', (data: any) => {
+  //       setTableData((prev: any) => {
+  //         let index1 = -1;
 
-          for (let index = 0; index < prev.length; index++) {
-            const data1 = prev[index];
-            if (
-              data1?.InstrumentIdentifier &&
-              data?.InstrumentIdentifier &&
-              data1?.InstrumentIdentifier === data?.InstrumentIdentifier
-            ) {
-              index1 = index;
+  //         for (let index = 0; index < prev.length; index++) {
+  //           const data1 = prev[index];
+  //           if (
+  //             data1?.InstrumentIdentifier &&
+  //             data?.InstrumentIdentifier &&
+  //             data1?.InstrumentIdentifier === data?.InstrumentIdentifier
+  //           ) {
+  //             index1 = index;
 
-              break;
-            }
-          }
+  //             break;
+  //           }
+  //         }
 
-          if (index1 === -1) {
-            return [...prev, data];
-          }
+  //         if (index1 === -1) {
+  //           return [...prev, data];
+  //         }
 
-          const newObj = {
-            ...data,
-            oldBuyPrice: prev[index1].BuyPrice,
-            oldSellPrice: prev[index1].SellPrice,
-            oldPercentage: prev[index1].PriceChangePercentage,
-          };
-          prev[index1] = newObj;
-          return [...prev];
-        });
-      });
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  //         const newObj = {
+  //           ...data,
+  //           oldBuyPrice: prev[index1].BuyPrice,
+  //           oldSellPrice: prev[index1].SellPrice,
+  //           oldPercentage: prev[index1].PriceChangePercentage,
+  //         };
+  //         prev[index1] = newObj;
+  //         return [...prev];
+  //       });
+  //     });
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // };
 
   useEffect(() => {
     const symbolTableDashboard: any[] = [];

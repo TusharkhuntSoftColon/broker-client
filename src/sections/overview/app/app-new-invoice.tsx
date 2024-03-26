@@ -166,6 +166,7 @@ export default function AppNewInvoice({
   exchangeTableSummaryData: any;
 }) {
   const [value, setValue] = React.useState(0);
+
   const finalArray = transformData(exchangeTableSummaryData);
   const [updatedExchangeArray, setupdatedExchangeArray] = useState(finalArray.result);
   const { tableData, socketConnection } = useSocket('expense');

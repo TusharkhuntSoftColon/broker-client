@@ -126,8 +126,6 @@ export default function ClientTableDashboard({
 
   const { tableData, socketConnection } = useSocket('client');
 
-  console.log({ tableData });
-
   useEffect(() => {
     const fetchSocketData = async () => {
       await socketConnection(positionsData);

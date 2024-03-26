@@ -17,12 +17,8 @@ interface ReturnType {
 }
 
 export function useSocket(defaultValue?: any): ReturnType {
-  console.log({ defaultValue });
-
   const [tableData, setTableData] = useState<any>([]);
   const { token } = useAuth();
-
-  console.log({ tableData });
 
   // useEffect(() => {
   //   socketConnection(defaultValue);
@@ -43,17 +39,13 @@ export function useSocket(defaultValue?: any): ReturnType {
         },
       });
 
-      console.log({ activeSymbols });
-
       const Symbols =
         defaultValue === 'client'
           ? activeSymbols.map((symbol: any) => symbol?.scriptName)
-          : defaultValue === 'expense'
+          : defaultValue === 'expense' || defaultValue === 'symbol'
             ? activeSymbols.map((symbol: any) => symbol?.socketLiveName)
             : '';
       const parsedSymbols = JSON.stringify(Symbols);
-
-      console.log({ parsedSymbols });
 
       socket.on('connect', () => {
         console.log('[socket] Connected');
