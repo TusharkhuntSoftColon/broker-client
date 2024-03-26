@@ -124,16 +124,14 @@ export default function ClientTableDashboard({
   const [updatedPositionsData, setUpdatedPositionsData] = useState([]);
   const [updatedOrdersData, setUpdatedOrdersData] = useState([]);
 
-  const { tableData, socketConnection } = useSocket(positionsData);
+  const { tableData, socketConnection } = useSocket('client');
 
-  console.log('CLIENT TABLE DTAA', tableData);
-
-  // useEffect(() => {
-  //   const fetchSocketData = async () => {
-  //     await socketConnection();
-  //   };
-  //   fetchSocketData();
-  // }, [positionsData, socketConnection]);
+  useEffect(() => {
+    const fetchSocketData = async () => {
+      await socketConnection(positionsData);
+    };
+    fetchSocketData();
+  }, [positionsData, socketConnection]);
 
   // useEffect(() => {
   //   const subscribingData = value === 0 ? positionsData : value === 3 ? ordersData : [];
@@ -163,8 +161,8 @@ export default function ClientTableDashboard({
         setUpdatedOrdersData(updatedPositions);
       }
     };
-    updateLivePrice(tableData1);
-  }, [tableData1, value]);
+    updateLivePrice(tableData);
+  }, [tableData, value]);
 
   const socketConnection1 = async (activeSymbols: any) => {
     try {
@@ -239,7 +237,7 @@ export default function ClientTableDashboard({
       label: 'Positions',
       value: 0,
       title: 'Users',
-      tableDatas: tableData1?.length > 0 ? updatedPositionsData : positionsData,
+      tableDatas: tableData?.length > 0 ? updatedPositionsData : positionsData,
       tableLabel: [
         { id: 'login', label: 'Login', align: 'left', border: '1px solid #dddddd !important' },
         {
@@ -298,7 +296,7 @@ export default function ClientTableDashboard({
       label: 'Orders',
       value: 3,
       title: 'Orders Table',
-      tableDatas: tableData1?.length > 0 ? updatedOrdersData : ordersData,
+      tableDatas: tableData?.length > 0 ? updatedOrdersData : ordersData,
       tableLabel: [
         { id: 'ID', label: 'Login', align: 'left', border: '1px solid #dddddd !important' },
         { id: 'order', label: 'Order', align: 'left', border: '1px solid #dddddd !important' },
