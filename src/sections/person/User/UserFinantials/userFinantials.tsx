@@ -59,6 +59,7 @@ export default function UserFinantials() {
     }),
     []
   );
+
   const methods = useForm<any>({
     resolver: yupResolver(
       Yup.object().shape({

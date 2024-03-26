@@ -39,7 +39,7 @@ export default function PersonDetailsView({ currentUser }: Props) {
   const table = useTable();
   const role = useSelector((data: any) => data.auth.role);
   const exchangeData = useSelector((data: any) => data?.admin?.exchangeList);
-  const [tableData1, setTableData1] = useState();
+  const [tableData1, setTableData1] = useState<any>();
 
   console.log({ tableData1 });
 
@@ -88,6 +88,8 @@ export default function PersonDetailsView({ currentUser }: Props) {
 
   console.log({ currentUser });
 
+  console.log({ tableData1 });
+
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <Box>
@@ -118,9 +120,10 @@ export default function PersonDetailsView({ currentUser }: Props) {
             />
 
             <TableBody>
-              {tableData.map((row: any, index: any) => (
-                <UserTradeTableRow key={row._id} row={row} />
-              ))}
+              {tableData1?.length >= 0 &&
+                tableData1?.map((row: any, index: any) => (
+                  <UserTradeTableRow key={row._id} row={row} />
+                ))}
 
               {/* <TableEmptyRows
                 height={denseHeight}

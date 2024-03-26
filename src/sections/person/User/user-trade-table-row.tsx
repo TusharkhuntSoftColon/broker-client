@@ -7,18 +7,7 @@ import TableCell from '@mui/material/TableCell';
 
 // ----------------------------------------------------------------------
 
-type Props = {
-  row: {
-    symbolName: String;
-    type: String;
-    volume: any;
-    price: any;
-    livePrice: any;
-    profit: any;
-  };
-};
-
-export default function UserTradeTableRow({ row }: Props) {
+export default function UserTradeTableRow({ row }: any) {
   console.log({ row });
 
   const { symbolName, type, volume, price, livePrice, profit } = row;
@@ -32,15 +21,15 @@ export default function UserTradeTableRow({ row }: Props) {
   return (
     <>
       <TableRow hover sx={{ cursor: 'pointer' }}>
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{symbolName}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row?.importMonthName}</TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{type}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row?.positionType}</TableCell>
 
-        <TableCell>{volume}</TableCell>
+        <TableCell>{row?.quantity}</TableCell>
 
-        <TableCell>{price}</TableCell>
-        <TableCell>{livePrice}</TableCell>
-        <TableCell>{profit}</TableCell>
+        <TableCell>{row?.positionType === 'BUY' ? row?.buyPrice : row?.sellPrice}</TableCell>
+        <TableCell>{3500}</TableCell>
+        <TableCell>{1500}</TableCell>
       </TableRow>
     </>
   );
