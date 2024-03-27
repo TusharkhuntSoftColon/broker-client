@@ -134,3 +134,8 @@ export const GET_USER_POSITIONS_BY_MASTER = '/master/open-positions';
 export const GET_USER_ACCOUNTS_BY_MASTER = '/master/trading-accounts';
 export const GET_USER_ORDERS_BY_MASTER = '/master/pending-position';
 export const GET_EXCHANGE_TABLE_SUMMARY_DATA_BY_MASTER = '/master/symbol-positions';
+
+// user financials
+export const ADD_DEPOSIT = '/admin/deposit/user-balance';
+export const ADD_WITHDROW = '/admin/withdrow/user-balance';
+export const GET_BALANCE_HISTORY = '/admin/balance-history';
