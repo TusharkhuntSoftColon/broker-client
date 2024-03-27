@@ -122,12 +122,16 @@ export default function ClientTableDashboard({
 
   const { tableData, socketConnection } = useSocket('client');
 
+  console.log({ tableData });
+
+  console.log({ updatedOrdersData });
+
   useEffect(() => {
-    const fetchSocketData = () => {
-      socketConnection(positionsData);
-    };
-    fetchSocketData();
-  }, [positionsData]);
+    console.log({ value });
+
+    const subscribingData = value === 0 ? positionsData : value === 3 ? ordersData : [];
+    socketConnection(subscribingData);
+  }, [positionsData, ordersData, value]);
 
   // useEffect(() => {
   //   const subscribingData = value === 0 ? positionsData : value === 3 ? ordersData : [];
@@ -151,6 +155,8 @@ export default function ClientTableDashboard({
         }
         return position;
       });
+      console.log({ updatedPositions });
+
       if (updatedPositions !== undefined && value === 0) {
         setUpdatedPositionsData(updatedPositions);
       } else if (updatedPositions !== undefined && value === 3) {

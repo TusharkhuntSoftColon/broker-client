@@ -261,14 +261,18 @@ export default function AppNewInvoice({
     let totalSellVolume = 0;
     let totalSellPrice = 0;
     let totalProfit = 0;
+    let totalNetVolume = 0;
+
+    console.log({ updatedExchangeArray });
 
     // Iterate over each object in updatedExchangeArray
     updatedExchangeArray.forEach((item) => {
-      // Increment totalPositions by 1 for each item
-      totalPositions++;
+      // Add positions to totalPositions
+      totalPositions += parseFloat(item.positions);
 
       // Add buy_volume to totalBuyVolume
       totalBuyVolume += parseFloat(item.buy_volume);
+      totalNetVolume += parseFloat(item.net_volume);
 
       // Add buy_volume * buy_price to totalBuyPrice
       totalBuyPrice += parseFloat(item.buy_volume) * parseFloat(item.buy_price);
@@ -295,9 +299,9 @@ export default function AppNewInvoice({
       totalSellVolume,
       totalSellPrice,
       totalProfit,
+      totalNetVolume,
     };
   };
-
   const totals = calculateTotals();
 
   console.log({ totals });
@@ -640,37 +644,37 @@ export default function AppNewInvoice({
                             <StyledTableCell
                               sx={{ textAlign: 'right', padding: '9px', fontWeight: 'bold' }}
                             >
-                              {finalArray.totalPositions}
+                              {totals?.totalPositions}
                             </StyledTableCell>
                             <StyledTableCell
                               sx={{ textAlign: 'right', padding: '9px', fontWeight: 'bold' }}
                             >
-                              {finalArray.totalBuyVolume}
+                              {totals?.totalBuyVolume}
                             </StyledTableCell>
                             <StyledTableCell
                               sx={{ textAlign: 'right', padding: '9px', fontWeight: 'bold' }}
                             >
-                              {finalArray.totalBuyPrice}
+                              {totals?.totalBuyPrice}
                             </StyledTableCell>
                             <StyledTableCell
                               sx={{ textAlign: 'right', padding: '9px', fontWeight: 'bold' }}
                             >
-                              {finalArray.totalSellVolume}
+                              {totals?.totalSellVolume}
                             </StyledTableCell>
                             <StyledTableCell
                               sx={{ textAlign: 'right', padding: '9px', fontWeight: 'bold' }}
                             >
-                              {finalArray.totalSellPrice}
+                              {totals?.totalSellPrice}
                             </StyledTableCell>
                             <StyledTableCell
                               sx={{ textAlign: 'right', padding: '9px', fontWeight: 'bold' }}
                             >
-                              {finalArray.totalNetVolume}
+                              {totals?.totalNetVolume}
                             </StyledTableCell>
                             <StyledTableCell
                               sx={{ textAlign: 'right', padding: '9px', fontWeight: 'bold' }}
                             >
-                              {finalArray.totalProfit}
+                              {totals?.totalProfit}
                             </StyledTableCell>
                           </StyledTableRow>
                         )}

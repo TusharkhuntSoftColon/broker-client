@@ -47,8 +47,6 @@ export default function PersonDetailsView({ currentUser }: Props) {
 
   const { tableData, socketConnection } = useSocket('personDetails');
 
-  console.log({ tableData });
-
   const { enqueueSnackbar } = useSnackbar();
 
   const getBrokerageByRole = (role1: any) => {
@@ -97,18 +95,12 @@ export default function PersonDetailsView({ currentUser }: Props) {
         }
         return position;
       });
-      console.log({ updatedPositions });
-
       setTableData1(updatedPositions);
     };
     updateLivePrice(tableData);
   }, [tableData]);
 
   const notFound = !tableData?.length;
-
-  console.log({ currentUser });
-
-  console.log({ tableData1 });
 
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>

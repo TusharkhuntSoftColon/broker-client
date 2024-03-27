@@ -10,6 +10,8 @@ import TableCell from '@mui/material/TableCell';
 export default function UserTradeTableRow({ row }: any) {
   const { symbolName, type, volume, price, livePrice, profit } = row;
 
+  console.log({ row });
+
   const exchangeData = useSelector((data: any) => data?.admin?.exchangeList);
 
   return (
@@ -23,7 +25,18 @@ export default function UserTradeTableRow({ row }: any) {
 
         <TableCell>{row?.positionType === 'BUY' ? row?.buyPrice : row?.sellPrice}</TableCell>
         <TableCell>{row?.livePrice}</TableCell>
-        <TableCell>{1500}</TableCell>
+        <TableCell>
+          {(row?.positionType === 'BUY'
+            ? (row?.livePrice - row?.buyPrice) *
+              row?.tickValue *
+              row?.quantity *
+              row?.calculationValue
+            : (row?.sellPrice - row?.livePrice) *
+              row?.tickValue *
+              row?.quantity *
+              row?.calculationValue
+          ).toFixed(2)}
+        </TableCell>
       </TableRow>
     </>
   );
