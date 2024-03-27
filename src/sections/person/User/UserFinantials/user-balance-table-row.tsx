@@ -16,7 +16,7 @@ type Props = {
   };
 };
 
-export default function UserBalanceTableRow({ row }: Props) {
+export default function UserBalanceTableRow({ row }: any) {
   console.log({ row });
 
   const { date, type, amount, comment } = row;
@@ -30,11 +30,11 @@ export default function UserBalanceTableRow({ row }: Props) {
   return (
     <>
       <TableRow hover sx={{ cursor: 'pointer' }}>
-        <TableCell>{date}</TableCell>
+        <TableCell>{row?.date?.substr(0, 10)}</TableCell>
 
-        <TableCell>{type}</TableCell>
+        <TableCell>{row?.request === 'DEPOSIT' ? 'Deposite' : 'WithDrow'}</TableCell>
 
-        <TableCell>{comment}</TableCell>
+        <TableCell>{row?.comment}</TableCell>
         <TableCell>{amount}</TableCell>
       </TableRow>
     </>

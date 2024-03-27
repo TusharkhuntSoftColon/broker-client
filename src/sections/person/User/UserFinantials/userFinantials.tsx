@@ -1,14 +1,18 @@
 /* eslint-disable arrow-body-style */
 /* eslint-disable react/jsx-no-useless-fragment */
 import * as Yup from 'yup';
-import { useMemo } from 'react';
 import { useForm } from 'react-hook-form';
+import { useParams } from 'react-router-dom';
+import { useMutation } from '@tanstack/react-query';
+import { useMemo, useState, useEffect } from 'react';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 import Card from '@mui/material/Card';
 import { LoadingButton } from '@mui/lab';
 import Container from '@mui/material/Container';
 import { Box, Grid, Table, TableBody, TableContainer } from '@mui/material';
+
+import userFinancialsService from 'src/services/userFinancialsService';
 
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
@@ -41,9 +45,15 @@ const dummyData = [
   { date: 'Date', type: 'credit', amount: 2000, comment: 'This is comment' },
   { date: 'Date', type: 'balance', amount: 2000, comment: 'This is comment' },
 ];
+
 export default function UserFinantials() {
   const settings = useSettingsContext();
   const table = useTable();
+
+  const [tableData, setTableData] = useState<any>();
+  const [isWithDrow, setIsWithDrow] = useState<boolean>(false);
+
+  const { id }: any = useParams();
 
   const notFound = !dummyData?.length;
 
@@ -82,15 +92,54 @@ export default function UserFinantials() {
 
   console.log({ values });
 
-  const onSubmit = handleSubmit(async (data) => {
-    console.log({ data });
+  const { mutate: getBalanceHistory } = useMutation(
+    () => userFinancialsService.getBalanceHistory(id),
+    {
+      onSuccess: (data: any) => {
+        setTableData(data?.data?.data?.rows);
+      },
+      onError: (error: any) => {
+        console.log({ error });
+      },
+    }
+  );
 
-    try {
-      //   setUsdPrice(data);
-    } catch (error) {
-      console.error(error);
+  const { mutate: addDeposite } = useMutation(
+    (data) => userFinancialsService.addDeposite(data, id),
+    {
+      onSuccess: (data: any) => {
+        getBalanceHistory(id);
+      },
+      onError: (error: any) => {
+        console.log({ error });
+      },
+    }
+  );
+
+  const { mutate: addWithDrow } = useMutation(
+    (data) => userFinancialsService.addWithDrow(data, id),
+    {
+      onSuccess: (data: any) => {
+        getBalanceHistory(id);
+      },
+
+      onError: (error: any) => {
+        console.log({ error });
+      },
+    }
+  );
+
+  const onSubmit = handleSubmit(async (data) => {
+    if (isWithDrow) {
+      addWithDrow(data, id);
+    } else {
+      addDeposite(data, id);
     }
   });
+
+  useEffect(() => {
+    getBalanceHistory(id);
+  }, []);
 
   return (
     <>
@@ -127,12 +176,14 @@ export default function UserFinantials() {
                       </li>
                     )}
                   />
+
                   <RHFTextField
                     name={values?.operation?.label}
                     type="number"
                     label={values?.operation?.label}
                     // defaultValue={usdList[0]?.usdInrPrice}
                   />
+
                   <RHFTextField
                     name="comment"
                     label="Comment"
@@ -148,20 +199,23 @@ export default function UserFinantials() {
                       variant="contained"
                       loading={isSubmitting}
                     >
-                      Deposit
+                      {values?.operation?.label === 'Credit' ? 'Add' : 'Deposit'}
                     </LoadingButton>
                     <LoadingButton
                       fullWidth
+                      disabled={values?.operation?.label === 'Credit'}
                       // color="info"
                       size="medium"
                       type="submit"
                       variant="contained"
+                      onClick={() => setIsWithDrow(!isWithDrow)}
                       loading={isSubmitting}
                     >
                       Withdrawal
                     </LoadingButton>
                   </Box>
                 </Box>
+
                 <TableContainer sx={{ position: 'relative', overflow: 'unset', mt: 4 }}>
                   <Scrollbar>
                     <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
@@ -175,7 +229,7 @@ export default function UserFinantials() {
                       />
 
                       <TableBody>
-                        {dummyData.map((row: any, index: any) => (
+                        {tableData?.map((row: any, index: any) => (
                           <UserBalanceTableRow key={row._id} row={row} />
                         ))}
 
