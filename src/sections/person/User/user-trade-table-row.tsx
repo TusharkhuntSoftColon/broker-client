@@ -22,7 +22,7 @@ export default function UserTradeTableRow({ row }: any) {
         <TableCell>{row?.quantity}</TableCell>
 
         <TableCell>{row?.positionType === 'BUY' ? row?.buyPrice : row?.sellPrice}</TableCell>
-        <TableCell>{livePrice}</TableCell>
+        <TableCell>{row?.livePrice}</TableCell>
         <TableCell>{1500}</TableCell>
       </TableRow>
     </>

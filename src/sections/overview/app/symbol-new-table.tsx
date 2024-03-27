@@ -42,6 +42,7 @@ import CustomPopover, { usePopover } from 'src/components/custom-popover';
 import AddSymbolInDashboard from 'src/components/modal/AddSymbolInDashboard';
 import superMasterService from 'src/services/superMasterService';
 import masterService from 'src/services/masterService';
+
 import { useSocket } from 'src/hooks/use-socket';
 // ----------------------------------------------------------------------
 
@@ -114,8 +115,6 @@ export default function SymbolTableDashboard() {
   const [currentSymbolList, setCurrentSymbolList] = useState<any>([]);
 
   const { tableData, socketConnection } = useSocket('symbol');
-
-  console.log({ tableData });
 
   const getImportMonthList = (role: any) => {
     switch (role) {
@@ -194,7 +193,7 @@ export default function SymbolTableDashboard() {
         });
       }
       setRow(symbolTableDashboard);
-      await socketConnection(symbolnewData);
+      socketConnection(symbolnewData);
     },
     onError: (error) => {
       console.log('error', error);
@@ -296,8 +295,6 @@ export default function SymbolTableDashboard() {
       .filter(Boolean); // Filter out undefined values
     setRow(updatedArray);
   }, [tableData]);
-
-  useEffect(() => {}, [rows]);
 
   useEffect(() => {
     mutate();
