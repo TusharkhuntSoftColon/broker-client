@@ -16,6 +16,7 @@ import {
   UPDATE_MASTER_BY_ADMIN,
   GET_EXCHANGE_FOR_MASTER,
   GET_ALL_PERSONS_BY_ADMIN,
+  GET_USER_BALANCE_BY_ADMIN,
   DELETE_SUPER_MASTER_BY_ADMIN,
   GET_EXCHANGE_FOR_SUPERMASTER,
   IMPORT_MONTH_ORDER_FOR_ADMIN,
@@ -370,6 +371,15 @@ const adminService = {
       const response: AxiosResponse<any> = await client.get(
         `${GET_USERS_BET_POSITIONS_BY_ADMIN}/${id}`
       );
+      return response.data;
+    } catch (error) {
+      console.error('Error in exchangeService.getExchangeList:', error);
+      throw error;
+    }
+  },
+  getUserBalance: async (id?: string): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(`${GET_USER_BALANCE_BY_ADMIN}/${id}`);
       return response.data;
     } catch (error) {
       console.error('Error in exchangeService.getExchangeList:', error);

@@ -8,6 +8,7 @@ import {
   DELETE_USER_BY_MASTER,
   UPDATE_USER_BY_MASTER,
   GET_ALL_PERSONS_BY_MASTER,
+  GET_USER_BALANCE_BY_MASTER,
   GET_BROKERAGE_LIST_FOR_MASTER,
   IMPORT_MONTH_ORDER_FOR_MASTER,
   UPDATED_SELECTED_LIST_FOR_MASTER,
@@ -221,6 +222,15 @@ const masterService = {
       const response: AxiosResponse<any> = await client.get(
         `${GET_USERS_BET_POSITIONS_BY_MASTER}/${id}`
       );
+      return response.data;
+    } catch (error) {
+      console.error('Error in exchangeService.getExchangeList:', error);
+      throw error;
+    }
+  },
+  getUserBalance: async (id?: string): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(`${GET_USER_BALANCE_BY_MASTER}/${id}`);
       return response.data;
     } catch (error) {
       console.error('Error in exchangeService.getExchangeList:', error);

@@ -1,6 +1,5 @@
 /* eslint-disable react/jsx-no-useless-fragment */
 /* eslint-disable import/no-extraneous-dependencies */
-import { useSelector } from 'react-redux';
 
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
@@ -8,12 +7,6 @@ import TableCell from '@mui/material/TableCell';
 // ----------------------------------------------------------------------
 
 export default function UserTradeTableRow({ row }: any) {
-  const { symbolName, type, volume, price, livePrice, profit } = row;
-
-  console.log({ row });
-
-  const exchangeData = useSelector((data: any) => data?.admin?.exchangeList);
-
   return (
     <>
       <TableRow hover sx={{ cursor: 'pointer' }}>

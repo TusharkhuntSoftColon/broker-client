@@ -335,8 +335,6 @@ export default function PersonListView({ path }: { path: any }) {
     setFilters(defaultFilters);
   }, []);
 
-  console.log({ dataFiltered });
-
   return (
     <>
       <Container maxWidth={settings.themeStretch ? false : 'lg'}>

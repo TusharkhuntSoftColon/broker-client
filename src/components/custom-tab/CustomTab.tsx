@@ -56,8 +56,6 @@ export default function BasicTabs() {
   const [value, setValue] = React.useState(0);
   const [fields, setFields] = React.useState<any>([]);
 
-  console.log({ fields });
-
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     if (fields.length > 0) setValue(newValue);
   };

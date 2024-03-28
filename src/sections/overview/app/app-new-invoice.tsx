@@ -21,7 +21,6 @@ import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 
-import useAuth from 'src/hooks/useAuth';
 import { useSocket } from 'src/hooks/use-socket';
 
 import { newInvoiceData, newInvoiceJournalData, newInvoiceExposureData } from 'src/_mock';
@@ -167,8 +166,6 @@ export default function AppNewInvoice({
 }: {
   exchangeTableSummaryData: any;
 }) {
-  const { token } = useAuth();
-
   const [value, setValue] = React.useState(0);
   const finalArray = transformData(exchangeTableSummaryData);
 
@@ -263,8 +260,6 @@ export default function AppNewInvoice({
     let totalProfit = 0;
     let totalNetVolume = 0;
 
-    console.log({ updatedExchangeArray });
-
     // Iterate over each object in updatedExchangeArray
     updatedExchangeArray.forEach((item) => {
       // Add positions to totalPositions
@@ -303,8 +298,6 @@ export default function AppNewInvoice({
     };
   };
   const totals = calculateTotals();
-
-  console.log({ totals });
 
   function transformData(data: Item[]): TransformedData {
     const result: SummaryRow[] = [];
@@ -435,7 +428,7 @@ export default function AppNewInvoice({
     });
 
     setUpdatedExchangeArray(updatedFinalArray);
-  }, [tableData]);
+  }, [finalArray.result]);
 
   const tabs = [
     {

@@ -6,7 +6,6 @@ import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 
-import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 
 import UserFinantials from 'src/sections/person/User/UserFinantials/userFinantials';
@@ -55,30 +54,23 @@ export default function PersonTabsPanel() {
   const adminData = useSelector((data: any) => data?.admin?.personList);
   const currentUser = adminData.find((user: any) => user._id === id);
   const [value, setValue] = React.useState(0);
-  const [fields, setFields] = React.useState<any>([]);
-
-  console.log({ currentUser });
-
-  console.log({ fields });
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
-  const role = useSelector((data: any) => data.auth.role);
-
-  const getPath = (roleOfPerson: any) => {
-    switch (roleOfPerson) {
-      case 'ADMIN':
-        return paths.dashboard;
-      case 'SUPER_MASTER':
-        return paths.superMaster;
-      case 'MASTER':
-        return paths.master;
-      default:
-        return paths.dashboard.person;
-    }
-  };
+  // const getPath = (roleOfPerson: any) => {
+  //   switch (roleOfPerson) {
+  //     case 'ADMIN':
+  //       return paths.dashboard;
+  //     case 'SUPER_MASTER':
+  //       return paths.superMaster;
+  //     case 'MASTER':
+  //       return paths.master;
+  //     default:
+  //       return paths.dashboard.person;
+  //   }
+  // };
   return (
     <Box sx={{ width: '100%', ml: 2 }}>
       {currentUser ? <PersonEditView /> : <PersonCreateView />}

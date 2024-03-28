@@ -18,7 +18,12 @@ import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
 import FormProvider from 'src/components/hook-form/form-provider';
 import { RHFTextField, RHFAutocomplete } from 'src/components/hook-form';
-import { useTable, TableNoData, TableHeadCustom } from 'src/components/table';
+import {
+  useTable,
+  TableNoData,
+  TableHeadCustom,
+  TablePaginationCustom,
+} from 'src/components/table';
 
 import UserBalanceTableRow from './user-balance-table-row';
 
@@ -83,6 +88,8 @@ export default function UserFinantials() {
   });
 
   const {
+    reset,
+    setValue,
     watch,
     handleSubmit,
     formState: { isSubmitting },
@@ -90,7 +97,11 @@ export default function UserFinantials() {
 
   const values = watch();
 
-  console.log({ values });
+  useEffect(() => {
+    setValue('Credit', 0);
+    setValue('comment', '');
+    setValue('Balance', 0);
+  }, [values?.operation?.value]);
 
   const { mutate: getBalanceHistory } = useMutation(
     () => userFinancialsService.getBalanceHistory(id),
@@ -109,6 +120,12 @@ export default function UserFinantials() {
     {
       onSuccess: (data: any) => {
         getBalanceHistory(id);
+        if (values?.operation?.value === 'CREDIT')
+          setValue('operation', {
+            label: 'Balance',
+            value: 'BALANCE',
+          });
+        reset();
       },
       onError: (error: any) => {
         console.log({ error });
@@ -121,6 +138,7 @@ export default function UserFinantials() {
     {
       onSuccess: (data: any) => {
         getBalanceHistory(id);
+        reset();
       },
 
       onError: (error: any) => {
@@ -166,7 +184,7 @@ export default function UserFinantials() {
                       label: 'Balance',
                       value: 'BALANCE',
                     }}
-                    // data={Role}
+                    value={values?.operation}
                     isLabled={false}
                     isOptionEqualToValue={(option, value) => option.value === value.value}
                     getOptionLabel={(option: any) => option.label}
@@ -197,18 +215,19 @@ export default function UserFinantials() {
                       size="medium"
                       type="submit"
                       variant="contained"
+                      onClick={() => setIsWithDrow(false)}
                       loading={isSubmitting}
                     >
-                      {values?.operation?.label === 'Credit' ? 'Add' : 'Deposit'}
+                      {values?.operation?.value === 'CREDIT' ? 'Add' : 'Deposit'}
                     </LoadingButton>
                     <LoadingButton
                       fullWidth
-                      disabled={values?.operation?.label === 'Credit'}
+                      disabled={values?.operation?.value === 'CREDIT'}
                       // color="info"
                       size="medium"
                       type="submit"
                       variant="contained"
-                      onClick={() => setIsWithDrow(!isWithDrow)}
+                      onClick={() => setIsWithDrow(true)}
                       loading={isSubmitting}
                     >
                       Withdrawal
@@ -243,6 +262,16 @@ export default function UserFinantials() {
                     </Table>
                   </Scrollbar>
                 </TableContainer>
+                <TablePaginationCustom
+                  count={tableData?.length}
+                  page={table.page}
+                  rowsPerPage={table.rowsPerPage}
+                  onPageChange={table.onChangePage}
+                  onRowsPerPageChange={table.onChangeRowsPerPage}
+                  //
+                  dense={table.dense}
+                  onChangeDense={table.onChangeDense}
+                />
               </Card>
             </Grid>
           </Grid>

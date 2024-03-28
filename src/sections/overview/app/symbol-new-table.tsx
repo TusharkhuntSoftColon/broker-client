@@ -29,7 +29,6 @@ import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
 import TableContainer from '@mui/material/TableContainer';
 
-import useAuth from 'src/hooks/useAuth';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import { newSymbolTableData } from 'src/_mock';
@@ -106,9 +105,7 @@ export default function SymbolTableDashboard() {
   const socketSymbol = useBoolean();
   const addSymbolInDashboard = useBoolean();
   const role = useSelector((data: any) => data.auth.role);
-  const { token } = useAuth();
   const [value, setValue] = React.useState(0);
-  const [tableData1, setTableData] = useState<any>([]);
   const [symbolData, setSymbolData] = useState<any>([]);
   const [rows, setRow] = useState<any>([]);
   const [assignedExchanges, setAssignedExchanges] = useState([]);

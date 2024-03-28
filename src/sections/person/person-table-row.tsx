@@ -42,8 +42,6 @@ export default function PersonTableRow({
   index,
 }: Props) {
   const { name, exchangeList, ID, isActive, role } = row;
-  console.log({ row });
-
   const confirm = useBoolean();
   const quickEdit = useBoolean();
   const popover = usePopover();
@@ -110,7 +108,7 @@ export default function PersonTableRow({
                 popover.onClose();
               }}
             >
-              <Iconify icon="solar:trash-bin-trash-bold" />
+              <Iconify icon="solar:trash-bin-trash-bold" sx={{ color: 'red' }} />
             </IconButton>
           </Tooltip>
         </TableCell>

@@ -11,6 +11,7 @@ import {
   DELETE_MASTER_BY_SUPER_MASTER,
   UPDATE_MASTER_BY_SUPER_MASTER,
   GET_ALL_PERSONS_BY_SUPER_MASTER,
+  GET_USER_BALANCE_BY_SUPER_MASTER,
   GET_BROKERAGE_LIST_FOR_SUPER_MASTER,
   IMPORT_MONTH_ORDER_FOR_SUPER_MASTER,
   UPDATED_SELECTED_LIST_FOR_SUPER_MASTER,
@@ -301,6 +302,17 @@ const superMasterService = {
     try {
       const response: AxiosResponse<any> = await client.get(
         `${GET_USERS_BET_POSITIONS_BY_SUPER_MASTER}/${id}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error in exchangeService.getExchangeList:', error);
+      throw error;
+    }
+  },
+  getUserBalance: async (id?: string): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(
+        `${GET_USER_BALANCE_BY_SUPER_MASTER}/${id}`
       );
       return response.data;
     } catch (error) {
