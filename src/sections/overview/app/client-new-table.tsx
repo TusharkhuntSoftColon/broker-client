@@ -12,7 +12,6 @@ import { styled } from '@mui/system';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
-import { useTheme } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
@@ -339,8 +338,6 @@ type ClientNewRowProps = {
 
 function ClientNewRow({ row, value }: ClientNewRowProps) {
   const popover = usePopover();
-  const theme = useTheme();
-
   const handleDownload = () => {
     popover.onClose();
     console.info('DOWNLOAD', row.id);

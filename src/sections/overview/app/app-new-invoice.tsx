@@ -21,8 +21,6 @@ import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 
-import { usePathname } from 'src/routes/hooks';
-
 import { useSocket } from 'src/hooks/use-socket';
 
 import { newInvoiceData, newInvoiceJournalData, newInvoiceExposureData } from 'src/_mock';
@@ -171,8 +169,6 @@ export default function AppNewInvoice({
   const [value, setValue] = React.useState(0);
   const finalArray = transformData(exchangeTableSummaryData);
 
-  const pathname = usePathname();
-
   const [updatedExchangeArray, setUpdatedExchangeArray] = useState(finalArray.result);
 
   const { tableData, socketConnection } = useSocket('expense');
@@ -181,9 +177,9 @@ export default function AppNewInvoice({
     setValue(newValue);
   };
 
-  // useEffect(() => {
-  //   socketConnection(finalArray?.result);
-  // }, [finalArray?.result]);
+  useEffect(() => {
+    socketConnection(finalArray?.result);
+  }, [finalArray?.result]);
 
   const calculateTotals = () => {
     let totalPositions = 0;
