@@ -10,6 +10,7 @@ import { useMutation } from '@tanstack/react-query';
 import Container from '@mui/material/Container';
 import { Box, Card, Table, TableBody, Typography, TableContainer } from '@mui/material';
 
+import useAuth from 'src/hooks/useAuth';
 import { useSocket } from 'src/hooks/use-socket';
 
 import adminService from 'src/services/adminService';
@@ -41,12 +42,10 @@ const TABLE_HEAD = [
 export default function PersonDetailsView({ currentUser }: Props) {
   const settings = useSettingsContext();
   const table = useTable();
-  const role = useSelector((data: any) => data.auth.role);
+  const { role } = useAuth();
   const exchangeData = useSelector((data: any) => data?.admin?.exchangeList);
   const [tableData1, setTableData1] = useState<any>([]);
   const [userBalance, setUserBalance] = useState<any>({});
-
-  console.log({ tableData1 });
 
   const { tableData, socketConnection } = useSocket('personDetails');
 
@@ -109,14 +108,10 @@ export default function PersonDetailsView({ currentUser }: Props) {
 
   const calculateTotals = () => {
     let totalProfit = 0;
-
-    // Iterate over each object in updatedExchangeArray
     tableData1.forEach((item: any) => {
       totalProfit += parseFloat(item.profit);
     });
-
     totalProfit = parseFloat(totalProfit.toFixed(2));
-
     return {
       totalProfit,
     };
@@ -156,7 +151,7 @@ export default function PersonDetailsView({ currentUser }: Props) {
         }
         return position;
       });
-      await setTableData1(updatedPositions);
+      setTableData1(updatedPositions);
     };
     updateLivePrice(tableData);
   }, [tableData]);
@@ -199,50 +194,47 @@ export default function PersonDetailsView({ currentUser }: Props) {
                     <UserTradeTableRow key={row._id} row={row} />
                   ))}
 
-                {/* <TableEmptyRows
-                height={denseHeight}
-                emptyRows={emptyRows(table.page, table.rowsPerPage, dataFiltered?.length)}
-              /> */}
-
                 <TableNoData notFound={notFound} sx={{ py: 10 }} />
               </TableBody>
             </Table>
-            <Box sx={{ backgroundColor: 'lightgrey', padding: 2 }}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  gap: 2,
-                  justifyContent: 'space-between',
-                  flexDirection: 'row',
-                }}
-              >
-                <Box sx={{ display: 'flex', gap: 2 }}>
-                  <Typography
-                    sx={{ fontWeight: 'bold', fontSize: '14px' }}
-                  >{`Balance : ${userBalance?.UserBalance}`}</Typography>
-                  <Typography
-                    sx={{ fontWeight: 'bold', fontSize: '14px' }}
-                  >{`Credit : ${userBalance?.UserCreditLimit}`}</Typography>
-                  <Typography
-                    sx={{ fontWeight: 'bold', fontSize: '14px' }}
-                  >{`Equity : ${userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance}`}</Typography>
-                  <Typography
-                    sx={{ fontWeight: 'bold', fontSize: '14px' }}
-                  >{`Margin : ${userBalance?.UserMargin}`}</Typography>
-                  <Typography
-                    sx={{ fontWeight: 'bold', fontSize: '14px' }}
-                  >{`Free Margin : ${userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance - userBalance?.UserMargin}`}</Typography>
-                  <Typography
-                    sx={{ fontWeight: 'bold', fontSize: '14px' }}
-                  >{`Margin Level : ${(((userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance) / userBalance?.UserMargin) * 100).toFixed(2)}%`}</Typography>
-                </Box>
-                <Box>
-                  <Typography sx={{ fontWeight: 'bold', fontSize: '14px', marginRight: 12 }}>
-                    {(totals?.totalProfit).toFixed(2)}
-                  </Typography>
+            {!notFound && (
+              <Box sx={{ backgroundColor: 'lightgrey', padding: 2 }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 2,
+                    justifyContent: 'space-between',
+                    flexDirection: 'row',
+                  }}
+                >
+                  <Box sx={{ display: 'flex', gap: 2 }}>
+                    <Typography
+                      sx={{ fontWeight: 'bold', fontSize: '14px' }}
+                    >{`Balance : ${userBalance?.UserBalance}`}</Typography>
+                    <Typography
+                      sx={{ fontWeight: 'bold', fontSize: '14px' }}
+                    >{`Credit : ${userBalance?.UserCreditLimit}`}</Typography>
+                    <Typography
+                      sx={{ fontWeight: 'bold', fontSize: '14px' }}
+                    >{`Equity : ${userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance}`}</Typography>
+                    <Typography
+                      sx={{ fontWeight: 'bold', fontSize: '14px' }}
+                    >{`Margin : ${(userBalance?.UserMargin).toFixed(2)}`}</Typography>
+                    <Typography
+                      sx={{ fontWeight: 'bold', fontSize: '14px' }}
+                    >{`Free Margin : ${(userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance - userBalance?.UserMargin).toFixed(2)}`}</Typography>
+                    <Typography
+                      sx={{ fontWeight: 'bold', fontSize: '14px' }}
+                    >{`Margin Level : ${(((userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance) / userBalance?.UserMargin) * 100).toFixed(2)}%`}</Typography>
+                  </Box>
+                  <Box>
+                    <Typography sx={{ fontWeight: 'bold', fontSize: '14px', marginRight: 10 }}>
+                      {`Total Profit : ${(totals?.totalProfit).toFixed(2)}`}
+                    </Typography>
+                  </Box>
                 </Box>
               </Box>
-            </Box>
+            )}
           </Scrollbar>
         </TableContainer>
       </Card>

@@ -12,6 +12,7 @@ import { styled } from '@mui/system';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
+import { useTheme } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
@@ -142,9 +143,19 @@ export default function ClientTableDashboard({
 
         if (socketItem) {
           if (position.positionType === 'BUY') {
-            return { ...position, livePrice: socketItem.SellPrice };
+            return {
+              ...position,
+              livePrice: socketItem.SellPrice,
+              oldBuyPrice: socketItem?.oldBuyPrice,
+              oldSellPrice: socketItem?.oldSellPrice,
+            };
           } else if (position.positionType === 'SELL') {
-            return { ...position, livePrice: socketItem.BuyPrice };
+            return {
+              ...position,
+              livePrice: socketItem.BuyPrice,
+              oldBuyPrice: socketItem?.oldBuyPrice,
+              oldSellPrice: socketItem?.oldSellPrice,
+            };
           }
         }
         return position;
@@ -254,7 +265,12 @@ export default function ClientTableDashboard({
         <Box>
           {tabs.map((data) => {
             return (
-              <CustomTabPanel value={value} index={data.value} styles={{ overflow: 'hidden' }}>
+              <CustomTabPanel
+                key={data?.value}
+                value={value}
+                index={data.value}
+                styles={{ overflow: 'hidden' }}
+              >
                 <CardHeader title={data.title} sx={{ mb: 4, mt: -1 }} />
                 <TableContainer sx={{ overflow: 'unset', height: '400px' }}>
                   <Scrollbar>
@@ -292,6 +308,7 @@ export default function ClientTableDashboard({
           {tabs.map((data: any) => {
             return (
               <Tab
+                key={data?.value}
                 label={data.label}
                 {...a11yProps(data.value)}
                 sx={{
@@ -322,6 +339,7 @@ type ClientNewRowProps = {
 
 function ClientNewRow({ row, value }: ClientNewRowProps) {
   const popover = usePopover();
+  const theme = useTheme();
 
   const handleDownload = () => {
     popover.onClose();
@@ -362,7 +380,22 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
           <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
             {row.positionType === 'BUY' ? row.buyPrice : row.sellPrice}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell
+            sx={{
+              textAlign: 'right',
+              padding: '9px',
+              color:
+                row?.positionType === 'BUY' && row?.livePrice > row?.oldBuyPrice
+                  ? 'red'
+                  : row?.positionType === 'BUY' && row?.livePrice < row?.oldBuyPrice
+                    ? 'red'
+                    : row?.positionType === 'SELL' && row?.livePrice > row?.oldSellPrice
+                      ? 'red'
+                      : row?.positionType === 'SELL' && row?.livePrice < row?.oldSellPrice
+                        ? 'blue'
+                        : 'black',
+            }}
+          >
             {row?.livePrice}
           </StyledTableCell>
         </StyledTableRow>

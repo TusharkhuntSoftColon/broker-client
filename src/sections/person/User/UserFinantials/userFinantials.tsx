@@ -234,44 +234,45 @@ export default function UserFinantials() {
                     </LoadingButton>
                   </Box>
                 </Box>
+                <Card sx={{ mt: 2 }}>
+                  <TableContainer sx={{ position: 'relative', overflow: 'unset', mt: 4 }}>
+                    <Scrollbar>
+                      <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
+                        <TableHeadCustom
+                          order={table.order}
+                          orderBy={table.orderBy}
+                          headLabel={TABLE_HEAD}
+                          rowCount={dummyData?.length}
+                          numSelected={table.selected.length}
+                          onSort={table.onSort}
+                        />
 
-                <TableContainer sx={{ position: 'relative', overflow: 'unset', mt: 4 }}>
-                  <Scrollbar>
-                    <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
-                      <TableHeadCustom
-                        order={table.order}
-                        orderBy={table.orderBy}
-                        headLabel={TABLE_HEAD}
-                        rowCount={dummyData?.length}
-                        numSelected={table.selected.length}
-                        onSort={table.onSort}
-                      />
+                        <TableBody>
+                          {tableData?.map((row: any, index: any) => (
+                            <UserBalanceTableRow key={row._id} row={row} />
+                          ))}
 
-                      <TableBody>
-                        {tableData?.map((row: any, index: any) => (
-                          <UserBalanceTableRow key={row._id} row={row} />
-                        ))}
-
-                        {/* <TableEmptyRows
+                          {/* <TableEmptyRows
                 height={denseHeight}
                 emptyRows={emptyRows(table.page, table.rowsPerPage, dataFiltered?.length)}
               /> */}
 
-                        <TableNoData notFound={notFound} sx={{ py: 10 }} />
-                      </TableBody>
-                    </Table>
-                  </Scrollbar>
-                </TableContainer>
-                <TablePaginationCustom
-                  count={tableData?.length}
-                  page={table.page}
-                  rowsPerPage={table.rowsPerPage}
-                  onPageChange={table.onChangePage}
-                  onRowsPerPageChange={table.onChangeRowsPerPage}
-                  //
-                  dense={table.dense}
-                  onChangeDense={table.onChangeDense}
-                />
+                          <TableNoData notFound={notFound} sx={{ py: 10 }} />
+                        </TableBody>
+                      </Table>
+                    </Scrollbar>
+                  </TableContainer>
+                  <TablePaginationCustom
+                    count={tableData?.length}
+                    page={table.page}
+                    rowsPerPage={table.rowsPerPage}
+                    onPageChange={table.onChangePage}
+                    onRowsPerPageChange={table.onChangeRowsPerPage}
+                    //
+                    dense={table.dense}
+                    onChangeDense={table.onChangeDense}
+                  />
+                </Card>
               </Card>
             </Grid>
           </Grid>

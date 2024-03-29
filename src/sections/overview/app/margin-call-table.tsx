@@ -102,19 +102,15 @@ export default function MarginCallTableDashboard() {
         WebkitBorderRadius: '5px',
       }}
     >
-      {/* <Box sx={{ p: 2, textAlign: 'right' }}>
-        <Button
-          size="small"
-          color="inherit"
-          endIcon={<Iconify icon="eva:arrow-ios-forward-fill" width={18} sx={{ ml: -0.5 }} />}
-        >
-        View All
-        </Button>
-      </Box> */}
       <Box sx={{ margin: '5px', border: '1px solid #d3d3d3' }}>
         <Box>
           {tabs.map((data) => (
-            <CustomTabPanel value={value} index={data.value} styles={{ overflow: 'hidden' }}>
+            <CustomTabPanel
+              key={data?.value}
+              value={value}
+              index={data.value}
+              styles={{ overflow: 'hidden' }}
+            >
               <CardHeader title={data.title} sx={{ mb: 4, mt: -1 }} />
               <TableContainer sx={{ overflow: 'unset', height: '400px' }}>
                 <Scrollbar>
@@ -149,6 +145,7 @@ export default function MarginCallTableDashboard() {
         >
           {tabs.map((data: any) => (
             <Tab
+              key={data.value}
               label={data.label}
               {...a11yProps(data.value)}
               sx={{

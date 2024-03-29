@@ -9,6 +9,8 @@ import Typography from '@mui/material/Typography';
 import { paths } from 'src/routes/paths';
 import { useParams } from 'src/routes/hooks';
 
+import useAuth from 'src/hooks/useAuth';
+
 import BrokeragePage from 'src/pages/dashboard/brokerage/list';
 
 import PersonNewEditForm from 'src/sections/person/person-new-edit-form';
@@ -48,7 +50,7 @@ function a11yProps(index: number) {
 
 export default function BasicTabs() {
   const params = useParams();
-
+  const { role } = useAuth();
   const { id } = params;
 
   const adminData = useSelector((data: any) => data?.admin?.personList);
@@ -59,8 +61,6 @@ export default function BasicTabs() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     if (fields.length > 0) setValue(newValue);
   };
-
-  const role = useSelector((data: any) => data.auth.role);
 
   const getPath = (roleOfPerson: any) => {
     switch (roleOfPerson) {

@@ -1,12 +1,13 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable arrow-body-style */
 
-import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 
 import { LoadingButton } from '@mui/lab';
 import { Box, Grid } from '@mui/material';
+
+import useAuth from 'src/hooks/useAuth';
 
 import overviewService from 'src/services/overviewAppViewService';
 
@@ -23,7 +24,7 @@ const OverviewAppView = () => {
     'Exchange',
   ]);
 
-  const role = useSelector((data: any) => data.auth.role);
+  const { role } = useAuth();
 
   // User Tables Data
   const [userPostions, setUserPosition] = useState<any>();
@@ -50,14 +51,10 @@ const OverviewAppView = () => {
     },
   ];
 
-  // current table list
   const [currentTableCount, setCurrentTableCount] = useState<any | number>();
 
-  // managing the width of the tables
   useEffect(() => {
     const listArray = ['Symbol', 'Users', 'Margin Call'];
-
-    // Count the elements from the list array that are not present in selectedButtons
     const count = listArray.filter((item) => selectedButtons.includes(item)).length;
     setCurrentTableCount(count);
   }, [selectedButtons, currentTableCount]);
@@ -77,8 +74,6 @@ const OverviewAppView = () => {
     }
     return null;
   };
-
-  // User : -   table api's
 
   const getUserPositionsByRole = (role1: any) => {
     switch (role1) {
@@ -171,7 +166,6 @@ const OverviewAppView = () => {
     }
   );
 
-  // useeffect to call apis
   useEffect(() => {
     getUserPositions();
     getUserAccounts();
@@ -203,19 +197,9 @@ const OverviewAppView = () => {
         })}
       </Box>
 
-      {/* <Grid
-        width={'100%'}
-        style={{
-          display: 'grid',
-          // gridTemplateColumns: `${currentTableCount === 2 ? 'repeat(3, 1fr)' : currentTableCount === 1 ? 'repeat(1, 1fr)' : 'repeat(3, 1fr)'}`,
-          // gridTemplateColumns: currentTableCount === 2 ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)',
-        }}
-      > */}
-
       <Box width="100%" display="flex">
         {TableComponents.slice(0, 3).map((table) => (
           <Box
-            // width={['Symbol', 'Margin Call'].includes(table.name) ? '28%' : '44%'}
             display={selectedButtons.includes(table.name) ? 'block' : 'none'}
             key={table.name}
             width={
@@ -233,7 +217,6 @@ const OverviewAppView = () => {
         ))}
       </Box>
 
-      {/* </Grid> */}
       <Grid container>
         {TableComponents.slice(3).map((table) => (
           <Grid item xs={12} key={table.name}>

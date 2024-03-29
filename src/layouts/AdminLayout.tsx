@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-shadow */
 import { useState } from 'react';
-import { useSelector } from 'react-redux';
 import { Navigate } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 
+import useAuth from 'src/hooks/useAuth';
 import { useBoolean } from 'src/hooks/use-boolean';
 import { useResponsive } from 'src/hooks/use-responsive';
 
@@ -22,7 +22,7 @@ type Props = {
 };
 
 const AdminLayout = ({ children }: Props) => {
-  const role = useSelector((data: any) => data.auth.role);
+  const { role } = useAuth();
 
   const [manager] = useState(true);
   const adminNav = useNavData();

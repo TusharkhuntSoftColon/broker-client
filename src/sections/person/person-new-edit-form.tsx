@@ -35,6 +35,8 @@ import {
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import useAuth from 'src/hooks/useAuth';
+
 import { addUser } from 'src/store/slices/person';
 import adminService from 'src/services/adminService';
 import { addExchanges } from 'src/store/slices/admin';
@@ -70,7 +72,7 @@ export default function PersonNewEditForm({
   setFieldsValue,
 }: Props) {
   const ExchangeOptions: any = [];
-  const role = useSelector((data: any) => data.auth.role);
+  const { role } = useAuth();
   const ExchangeList = useSelector((data: any) => data?.admin?.exchangeList);
   const router = useRouter();
 

@@ -26,6 +26,7 @@ import TableContainer from '@mui/material/TableContainer';
 import { useRouter } from 'src/routes/hooks';
 import { RouterLink } from 'src/routes/components';
 
+import useAuth from 'src/hooks/useAuth';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import adminService from 'src/services/adminService';
@@ -78,7 +79,7 @@ const defaultFilters: IUserTableFilters = {
 
 export default function PersonListView({ path }: { path: any }) {
   const table = useTable();
-  const role = useSelector((data: any) => data.auth.role);
+  const { role } = useAuth();
 
   const dispatch = useDispatch();
 
@@ -171,9 +172,8 @@ export default function PersonListView({ path }: { path: any }) {
         return adminService.deleteMaster;
       case 'SUPER_MASTER':
         return superMasterService.deleteMaster;
-      // Add other cases for different roles with their respective paths
       default:
-        return masterService.deleteUser; // Return a default path if role doesn't match
+        return masterService.deleteUser;
     }
   };
 
@@ -185,9 +185,8 @@ export default function PersonListView({ path }: { path: any }) {
         return superMasterService.deleteUser;
       case 'MASTER':
         return masterService.deleteUser;
-      // Add other cases for different roles with their respective paths
       default:
-        return masterService.deleteUser; // Return a default path if role doesn't match
+        return masterService.deleteUser;
     }
   };
 
@@ -196,15 +195,12 @@ export default function PersonListView({ path }: { path: any }) {
   const { mutate } = useMutation(getAllPersonSByRole(role), {
     onSuccess: (data) => {
       setTableData(data?.data?.rows);
-      // dispatch(addExchanges(data?.data?.allowedExchange));
       dispatch(addPerson(data?.data?.rows));
-      // enqueueSnackbar(data?.message, { variant: 'success' });
     },
     onError: (error: any) => {
       if (isAxiosError(error)) {
         enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
       }
-      // enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
 
@@ -218,7 +214,6 @@ export default function PersonListView({ path }: { path: any }) {
       if (isAxiosError(error)) {
         enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
       }
-      // enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
 
@@ -268,7 +263,6 @@ export default function PersonListView({ path }: { path: any }) {
 
   const handleDeleteRow = useCallback(
     (id: string, role: string) => {
-      // dispatch(deleteAdmin(id));
       if (role === 'SUPER_MASTER') {
         deleteSuperMaster(id);
       } else if (role === 'MASTER') {
@@ -276,8 +270,6 @@ export default function PersonListView({ path }: { path: any }) {
       } else if (role === 'USER') {
         deleteUser(id);
       }
-
-      // enqueueSnackbar(`${role} Deleted Successfully`, { variant: 'success' });
       table.onUpdatePageDeleteRow(dataInPage.length);
     },
     [dispatch, enqueueSnackbar, table, dataInPage.length]
@@ -307,7 +299,6 @@ export default function PersonListView({ path }: { path: any }) {
 
   const { mutate: getPerson } = useMutation(adminService.getAllPersonById, {
     onSuccess: (data) => {
-      // if (data?.data?.rows?.length === 0) enqueueSnackbar('Data is not', { variant: 'info' });
       setTableData(data?.data?.rows);
 
       dispatch(addPerson(data?.data?.rows));
@@ -324,11 +315,6 @@ export default function PersonListView({ path }: { path: any }) {
     if (rowData?.role !== 'USER') {
       getPerson(rowData._id);
     }
-    // else {
-    //   console.log('USER CLICKED');
-    //   useDetailsModalValue.onTrue();
-    //   setCurrentUser(rowData);
-    // }
   };
 
   const handleResetFilters = useCallback(() => {

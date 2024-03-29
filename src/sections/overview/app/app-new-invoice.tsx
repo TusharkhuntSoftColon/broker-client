@@ -21,6 +21,8 @@ import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 
+import { usePathname } from 'src/routes/hooks';
+
 import { useSocket } from 'src/hooks/use-socket';
 
 import { newInvoiceData, newInvoiceJournalData, newInvoiceExposureData } from 'src/_mock';
@@ -169,8 +171,9 @@ export default function AppNewInvoice({
   const [value, setValue] = React.useState(0);
   const finalArray = transformData(exchangeTableSummaryData);
 
+  const pathname = usePathname();
+
   const [updatedExchangeArray, setUpdatedExchangeArray] = useState(finalArray.result);
-  // const [tableData, setTableData] = useState<any>([]);
 
   const { tableData, socketConnection } = useSocket('expense');
 
@@ -178,78 +181,9 @@ export default function AppNewInvoice({
     setValue(newValue);
   };
 
-  useEffect(() => {
-    socketConnection(finalArray?.result);
-  }, [finalArray?.result]);
-
-  // const socketConnection = async (activeSymbols: any) => {
-  //   try {
-  //     const socket = io(SOCKET_URL, {
-  //       transports: ['websocket'],
-  //       query: {
-  //         transport: 'websocket',
-  //         EIO: '4',
-  //         authorization: token,
-  //       },
-  //       auth: { authorization: token },
-  //       extraHeaders: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-
-  //     const Symbols = activeSymbols?.map((symbol: any) => symbol?.socketLiveName);
-
-  //     const parsedSymbols = JSON.stringify(Symbols);
-
-  //     socket.on('connect', () => {
-  //       console.log('[socket] Connected');
-  //       socket.emit('subscribeToUserServerMarket', parsedSymbols);
-  //     });
-
-  //     socket.emit('joinUserRoom', parsedSymbols);
-
-  //     socket.on('disconnect', (reason: any) => {
-  //       console.log('[socket] Disconnected:', reason);
-  //     });
-  //     socket.on('error', (error: any) => {
-  //       console.log('[socket] Error:', error);
-  //     });
-
-  //     socket.on('marketWatch', (data: any) => {
-  //       setTableData((prev: any) => {
-  //         let index1 = -1;
-
-  //         for (let index = 0; index < prev.length; index++) {
-  //           const data1 = prev[index];
-  //           if (
-  //             data1?.InstrumentIdentifier &&
-  //             data?.InstrumentIdentifier &&
-  //             data1?.InstrumentIdentifier === data?.InstrumentIdentifier
-  //           ) {
-  //             index1 = index;
-
-  //             break;
-  //           }
-  //         }
-
-  //         if (index1 === -1) {
-  //           return [...prev, data];
-  //         }
-
-  //         const newObj = {
-  //           ...data,
-  //           oldBuyPrice: prev[index1].BuyPrice,
-  //           oldSellPrice: prev[index1].SellPrice,
-  //           oldPercentage: prev[index1].PriceChangePercentage,
-  //         };
-  //         prev[index1] = newObj;
-  //         return [...prev];
-  //       });
-  //     });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
+  // useEffect(() => {
+  //   socketConnection(finalArray?.result);
+  // }, [finalArray?.result]);
 
   const calculateTotals = () => {
     let totalPositions = 0;
@@ -260,25 +194,13 @@ export default function AppNewInvoice({
     let totalProfit = 0;
     let totalNetVolume = 0;
 
-    // Iterate over each object in updatedExchangeArray
     updatedExchangeArray.forEach((item) => {
-      // Add positions to totalPositions
       totalPositions += parseFloat(item.positions);
-
-      // Add buy_volume to totalBuyVolume
       totalBuyVolume += parseFloat(item.buy_volume);
       totalNetVolume += parseFloat(item.net_volume);
-
-      // Add buy_volume * buy_price to totalBuyPrice
       totalBuyPrice += parseFloat(item.buy_volume) * parseFloat(item.buy_price);
-
-      // Add sell_volume to totalSellVolume
       totalSellVolume += parseFloat(item.sell_volume);
-
-      // Add sell_volume * sell_price to totalSellPrice
       totalSellPrice += parseFloat(item.sell_volume) * parseFloat(item.sell_price);
-
-      // Add profit to totalProfit
       totalProfit += parseFloat(item.profit);
     });
 
@@ -428,7 +350,7 @@ export default function AppNewInvoice({
     });
 
     setUpdatedExchangeArray(updatedFinalArray);
-  }, [finalArray.result]);
+  }, [tableData]);
 
   const tabs = [
     {
@@ -696,6 +618,7 @@ export default function AppNewInvoice({
             return (
               <Tab
                 label={data.label}
+                key={data.label}
                 {...a11yProps(data.value)}
                 sx={{
                   // ml: 2,

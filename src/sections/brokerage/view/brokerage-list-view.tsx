@@ -16,6 +16,8 @@ import Container from '@mui/material/Container';
 import TableBody from '@mui/material/TableBody';
 import TableContainer from '@mui/material/TableContainer';
 
+import useAuth from 'src/hooks/useAuth';
+
 import { ClientList } from 'src/_mock';
 import adminService from 'src/services/adminService';
 import { addBrokerage } from 'src/store/slices/admin';
@@ -77,7 +79,7 @@ export default function BrokerageListView({ currentUser, fields }: any) {
   const dispatch = useDispatch();
   const settings = useSettingsContext();
   const router = useRouter();
-  const role = useSelector((data: any) => data.auth.role);
+  const { role } = useAuth();
 
   const [filters, setFilters] = useState(defaultFilters);
   const [currentBrokerage, setCurrentBrokerage] = useState<any>();

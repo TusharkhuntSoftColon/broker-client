@@ -9,7 +9,6 @@ import React, { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 // import { HTML5Backend } from 'react-dnd-html5-backend';
 // import { useDrag, useDrop, DndProvider, DragPreviewImage } from 'react-dnd';
-import { useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import { styled } from '@mui/system';
@@ -43,6 +42,7 @@ import superMasterService from 'src/services/superMasterService';
 import masterService from 'src/services/masterService';
 
 import { useSocket } from 'src/hooks/use-socket';
+import useAuth from 'src/hooks/useAuth';
 // ----------------------------------------------------------------------
 
 interface TabPanelProps {
@@ -104,7 +104,7 @@ const TABLE_HEAD = [
 export default function SymbolTableDashboard() {
   const socketSymbol = useBoolean();
   const addSymbolInDashboard = useBoolean();
-  const role = useSelector((data: any) => data.auth.role);
+  const { role } = useAuth();
   const [value, setValue] = React.useState(0);
   const [symbolData, setSymbolData] = useState<any>([]);
   const [rows, setRow] = useState<any>([]);
@@ -121,9 +121,8 @@ export default function SymbolTableDashboard() {
         return superMasterService.getImportMonthOrderListBySuperMaster;
       case 'MASTER':
         return masterService.getImportMonthOrderListByMaster;
-      // Add other cases for different roles with their respective paths
       default:
-        return masterService.getImportMonthOrderListByMaster; // Return a default path if role doesn't match
+        return masterService.getImportMonthOrderListByMaster;
     }
   };
 
@@ -135,9 +134,8 @@ export default function SymbolTableDashboard() {
         return superMasterService.getupdatedImportMonthListBySuperMaster;
       case 'MASTER':
         return masterService.getupdatedImportMonthListByMaster;
-      // Add other cases for different roles with their respective paths
       default:
-        return masterService.getupdatedImportMonthListByMaster; // Return a default path if role doesn't match
+        return masterService.getupdatedImportMonthListByMaster;
     }
   };
   const getAssignedExchangeByRole = (role: any) => {
@@ -148,9 +146,8 @@ export default function SymbolTableDashboard() {
         return superMasterService.getassignedExchangeListBySuperMaster;
       case 'MASTER':
         return masterService.getassignedExchangeListByMaster;
-      // Add other cases for different roles with their respective paths
       default:
-        return masterService.getassignedExchangeListByMaster; // Return a default path if role doesn't match
+        return masterService.getassignedExchangeListByMaster;
     }
   };
 
@@ -201,74 +198,6 @@ export default function SymbolTableDashboard() {
     setValue(newValue);
   };
 
-  // const socketConnection = async (activeSymbols: any) => {
-  //   try {
-  //     const socket = io(SOCKET_URL, {
-  //       transports: ['websocket'],
-  //       query: {
-  //         transport: 'websocket',
-  //         EIO: '4',
-  //         authorization: token,
-  //       },
-  //       auth: { authorization: token },
-  //       extraHeaders: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-
-  //     const Symbols = activeSymbols.map((symbol: any) => symbol?.socketLiveName);
-  //     const parsedSymbols = JSON.stringify(Symbols);
-
-  //     socket.on('connect', () => {
-  //       console.log('[socket] Connected');
-  //       socket.emit('subscribeToUserServerMarket', parsedSymbols);
-  //     });
-
-  //     socket.emit('joinUserRoom', parsedSymbols);
-
-  //     socket.on('disconnect', (reason: any) => {
-  //       console.log('[socket] Disconnected:', reason);
-  //     });
-  //     socket.on('error', (error: any) => {
-  //       console.log('[socket] Error:', error);
-  //     });
-
-  //     socket.on('marketWatch', (data: any) => {
-  //       setTableData((prev: any) => {
-  //         let index1 = -1;
-
-  //         for (let index = 0; index < prev.length; index++) {
-  //           const data1 = prev[index];
-  //           if (
-  //             data1?.InstrumentIdentifier &&
-  //             data?.InstrumentIdentifier &&
-  //             data1?.InstrumentIdentifier === data?.InstrumentIdentifier
-  //           ) {
-  //             index1 = index;
-
-  //             break;
-  //           }
-  //         }
-
-  //         if (index1 === -1) {
-  //           return [...prev, data];
-  //         }
-
-  //         const newObj = {
-  //           ...data,
-  //           oldBuyPrice: prev[index1].BuyPrice,
-  //           oldSellPrice: prev[index1].SellPrice,
-  //           oldPercentage: prev[index1].PriceChangePercentage,
-  //         };
-  //         prev[index1] = newObj;
-  //         return [...prev];
-  //       });
-  //     });
-  //   } catch (e) {
-  //     console.log(e);
-  //   }
-  // };
-
   useEffect(() => {
     const symbolTableDashboard: any[] = [];
     for (const data of tableData) {
@@ -289,7 +218,7 @@ export default function SymbolTableDashboard() {
       .map((data: any) =>
         symbolTableDashboard.find((data1: any) => data1.id === data?.socketLiveName)
       )
-      .filter(Boolean); // Filter out undefined values
+      .filter(Boolean);
     setRow(updatedArray);
   }, [tableData]);
 

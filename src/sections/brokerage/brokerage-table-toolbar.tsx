@@ -20,6 +20,8 @@ import FormControl from '@mui/material/FormControl';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import useAuth from 'src/hooks/useAuth';
+
 import { ClientList } from 'src/_mock';
 import { addUser } from 'src/store/slices/person';
 import { addSymbol } from 'src/store/slices/symbol';
@@ -58,7 +60,7 @@ export default function BrokerageTableToolbar({
   const symbolList = useSelector((data: any) => data?.symbol?.symbolList);
   const ExchangeList = useSelector((data: any) => data?.admin?.exchangeList);
   const dispatch = useDispatch();
-  const role = useSelector((data: any) => data.auth.role);
+  const { role } = useAuth();
   const usersData = useSelector((state: any) => state?.person?.personData);
 
   const [roleOption] = useState<any>(currentUser ? usersData?.role : usersData?.role?.value);

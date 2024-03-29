@@ -30,10 +30,10 @@ import FormProvider from '../hook-form/form-provider';
 import { useState, useEffect } from 'react';
 import { RHFTextField } from '../hook-form';
 import Iconify from '../iconify';
-import { useSelector } from 'react-redux';
 import superMasterService from 'src/services/superMasterService';
 import masterService from 'src/services/masterService';
 import Folder from '@mui/icons-material/Folder';
+import useAuth from 'src/hooks/useAuth';
 
 interface AddSymbolInDashboardProps {
   open: boolean;
@@ -67,7 +67,7 @@ const AddSymbolInDashboard = ({
     undefined
   );
 
-  const role = useSelector((data: any) => data.auth.role);
+  const { role } = useAuth();
 
   const idsArray = currentList.map((data: any) => data?._id);
   const [importMonthIds, setImportMonthIds] = useState<any>(idsArray);
