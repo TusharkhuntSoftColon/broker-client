@@ -111,7 +111,7 @@ export default function PersonDetailsView({ currentUser }: Props) {
     tableData1.forEach((item: any) => {
       totalProfit += parseFloat(item.profit);
     });
-    totalProfit = parseFloat(totalProfit.toFixed(2));
+    totalProfit = parseFloat(totalProfit?.toFixed(2));
     return {
       totalProfit,
     };
@@ -219,17 +219,17 @@ export default function PersonDetailsView({ currentUser }: Props) {
                     >{`Equity : ${userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance}`}</Typography>
                     <Typography
                       sx={{ fontWeight: 'bold', fontSize: '14px' }}
-                    >{`Margin : ${(userBalance?.UserMargin).toFixed(2)}`}</Typography>
+                    >{`Margin : ${userBalance?.UserMargin?.toFixed(2)}`}</Typography>
                     <Typography
                       sx={{ fontWeight: 'bold', fontSize: '14px' }}
-                    >{`Free Margin : ${(userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance - userBalance?.UserMargin).toFixed(2)}`}</Typography>
+                    >{`Free Margin : ${(userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance - userBalance?.UserMargin)?.toFixed(2)}`}</Typography>
                     <Typography
                       sx={{ fontWeight: 'bold', fontSize: '14px' }}
-                    >{`Margin Level : ${(((userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance) / userBalance?.UserMargin) * 100).toFixed(2)}%`}</Typography>
+                    >{`Margin Level : ${(((userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance) / userBalance?.UserMargin) * 100)?.toFixed(2)}%`}</Typography>
                   </Box>
                   <Box>
                     <Typography sx={{ fontWeight: 'bold', fontSize: '14px', marginRight: 10 }}>
-                      {`Total Profit : ${(totals?.totalProfit).toFixed(2)}`}
+                      {`Total Profit : ${totals?.totalProfit?.toFixed(2)}`}
                     </Typography>
                   </Box>
                 </Box>

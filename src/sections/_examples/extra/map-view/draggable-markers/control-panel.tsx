@@ -10,7 +10,7 @@ import { StyledControlPanel } from 'src/components/map';
 const EVENT_NAMES = ['onDragStart', 'onDrag', 'onDragEnd'] as const;
 
 function round5(value: number) {
-  return (Math.round(value * 1e5) / 1e5).toFixed(5);
+  return (Math.round(value * 1e5) / 1e5)?.toFixed(5);
 }
 
 // ----------------------------------------------------------------------

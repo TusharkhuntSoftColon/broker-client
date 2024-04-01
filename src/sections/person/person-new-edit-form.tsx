@@ -71,6 +71,8 @@ export default function PersonNewEditForm({
   setTabValue,
   setFieldsValue,
 }: Props) {
+  console.log({ currentUser });
+
   const ExchangeOptions: any = [];
   const { role } = useAuth();
   const ExchangeList = useSelector((data: any) => data?.admin?.exchangeList);
@@ -97,6 +99,8 @@ export default function PersonNewEditForm({
 
   const [newExchangeOptions] = useState(Exchange);
 
+  console.log({ newExchangeOptions });
+
   const defaultExchangeOptions = useMemo(
     () => (index: number) => {
       const data = currentUser
@@ -116,9 +120,7 @@ export default function PersonNewEditForm({
   const defaultLeverageOptions = useMemo(() => {
     const data = currentUser
       ? LEVERAGE_OPTIONS.filter((option: any) => currentUser?.leverageXY === option.value)[0]
-      : LEVERAGE_OPTIONS.filter(
-          (option: any) => personList?.leverageXY?.value === option?.value
-        )[0];
+      : { value: '1:100', label: '1:100' };
     return data;
   }, [currentUser, personList]);
 
@@ -141,7 +143,7 @@ export default function PersonNewEditForm({
       investorPassword: personList?.investorPassword || '',
       name: currentUser?.name || personList?.name || '',
       ID: currentUser?.ID || personList?.ID || '',
-      positionMinTime: currentUser?.positionMinTime || personList?.positionMinTime || '',
+      positionMinTime: currentUser?.positionMinTime || personList?.positionMinTime || 0,
       exchangeGroup: defaultExchangeOptions || '',
       allowedExchange: defaultAllowedExchange || [],
       insertCustomBet: currentUser?.insertCustomBet || personList?.insertCustomBet || false,
@@ -281,6 +283,8 @@ export default function PersonNewEditForm({
 
   const value = watch();
 
+  console.log({ value });
+
   useEffect(() => {
     if (currentUser) {
       setValue('exchangeList', currentUser?.exchangeList);
@@ -397,7 +401,7 @@ export default function PersonNewEditForm({
     }
   };
 
-  // create SUPER_MASTER
+  // CREATE SUPER_MASTER
   const { mutate: createSuperMaster } = useMutation(adminService.createSuperMaster, {
     onSuccess: (data) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
@@ -412,7 +416,7 @@ export default function PersonNewEditForm({
     },
   });
 
-  // update SUPER_MASTER
+  // UPDATE SUPER_MASTER
   const { mutate: updateSuperMaster } = useMutation(adminService.updateSuperMaster, {
     onSuccess: (data) => {
       enqueueSnackbar(data?.message ?? 'Data Updated Successfully', { variant: 'success' });
@@ -427,7 +431,7 @@ export default function PersonNewEditForm({
     },
   });
 
-  // create MASTER
+  // CREATE MASTER
   const { mutate: createMaster } = useMutation(createMasterByRole(role), {
     onSuccess: (data: any) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
@@ -442,7 +446,7 @@ export default function PersonNewEditForm({
     },
   });
 
-  // update MASTER
+  // UPDATE MASTER
   const { mutate: updateMaster }: any = useMutation(updateMasterByRole(role), {
     onSuccess: (data: any) => {
       enqueueSnackbar(data?.message ?? 'Data Updated Successfully', { variant: 'success' });
@@ -457,6 +461,7 @@ export default function PersonNewEditForm({
     },
   });
 
+  // CREATE USER
   const { mutate: createUser }: any = useMutation(createUserByRole(role), {
     onSuccess: (data: any) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
@@ -470,6 +475,8 @@ export default function PersonNewEditForm({
       enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
+
+  // UPDATE USER
   const { mutate: updateUser }: any = useMutation(updateUserByRole(role), {
     onSuccess: (data: any) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
@@ -596,6 +603,7 @@ export default function PersonNewEditForm({
                   isReadOnly={!!isView}
                   name="limitOfAddMaster"
                   type="number"
+                  max={99}
                   label="Limit Of Add Master"
                 />
               )}
@@ -605,21 +613,30 @@ export default function PersonNewEditForm({
                   isReadOnly={!!isView}
                   name="limitOfAddUser"
                   type="number"
+                  max={
+                    value?.role?.value === 'SUPER_MASTER'
+                      ? 5000
+                      : value?.role?.value === 'MASTER'
+                        ? 500
+                        : 0
+                  }
                   label="Limit Of Add User"
                 />
               )}
               {roleOption === 'USER' && (
                 <>
-                  <RHFTextField
+                  {/* <RHFTextField
                     isReadOnly={!!isView}
                     name="creditLimit"
                     type="number"
                     label="Credit"
-                  />
+                  /> */}
                   <RHFTextField
                     isReadOnly={!!isView}
                     name="positionMinTime"
                     type="number"
+                    defaultValue={currentUser?.positionMinTime ?? null}
+                    // value={currentUser?.positionMinTime ?? null}
                     label="Position Min Tme"
                   />
                 </>

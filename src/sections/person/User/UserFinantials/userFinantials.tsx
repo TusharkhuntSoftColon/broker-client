@@ -33,7 +33,7 @@ const FinantialTypes = [
     value: 'BALANCE',
   },
   {
-    label: 'Credit',
+    label: 'Credit Limit',
     value: 'CREDIT',
   },
 ];

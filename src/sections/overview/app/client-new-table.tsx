@@ -125,7 +125,7 @@ export default function ClientTableDashboard({
   useEffect(() => {
     const subscribingData = value === 0 ? positionsData : value === 3 ? ordersData : [];
     socketConnection(subscribingData);
-  }, [positionsData, ordersData, value]);
+  }, [positionsData, ordersData]);
 
   // useEffect(() => {
   //   const subscribingData = value === 0 ? positionsData : value === 3 ? ordersData : [];
@@ -147,6 +147,7 @@ export default function ClientTableDashboard({
               livePrice: socketItem.SellPrice,
               oldBuyPrice: socketItem?.oldBuyPrice,
               oldSellPrice: socketItem?.oldSellPrice,
+              color: socketItem.SellPrice > socketItem?.oldSellPrice ? 'blue' : 'red',
             };
           } else if (position.positionType === 'SELL') {
             return {
@@ -154,6 +155,7 @@ export default function ClientTableDashboard({
               livePrice: socketItem.BuyPrice,
               oldBuyPrice: socketItem?.oldBuyPrice,
               oldSellPrice: socketItem?.oldSellPrice,
+              color: socketItem.BuyPrice < socketItem?.oldBuyPrice ? 'red' : 'blue',
             };
           }
         }
@@ -166,7 +168,7 @@ export default function ClientTableDashboard({
       }
     };
     updateLivePrice(tableData);
-  }, [tableData, value]);
+  }, [tableData]);
 
   const tabs = [
     {
@@ -343,6 +345,8 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
     console.info('DOWNLOAD', row.id);
   };
 
+  console.log({ row });
+
   const handlePrint = () => {
     popover.onClose();
     console.info('PRINT', row.id);
@@ -383,13 +387,13 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
               padding: '9px',
               color:
                 row?.positionType === 'BUY' && row?.livePrice > row?.oldBuyPrice
-                  ? 'red'
+                  ? row?.color
                   : row?.positionType === 'BUY' && row?.livePrice < row?.oldBuyPrice
-                    ? 'red'
+                    ? row?.color
                     : row?.positionType === 'SELL' && row?.livePrice > row?.oldSellPrice
-                      ? 'red'
+                      ? row?.color
                       : row?.positionType === 'SELL' && row?.livePrice < row?.oldSellPrice
-                        ? 'blue'
+                        ? 'black'
                         : 'black',
             }}
           >

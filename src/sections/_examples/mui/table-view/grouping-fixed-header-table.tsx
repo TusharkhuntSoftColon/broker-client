@@ -63,7 +63,7 @@ const COLUMNS: Column[] = [
     label: 'Density',
     minWidth: 170,
     align: 'right',
-    format: (value) => value.toFixed(2),
+    format: (value) => value?.toFixed(2),
   },
 ];
 

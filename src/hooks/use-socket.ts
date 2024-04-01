@@ -14,6 +14,7 @@ interface ReturnType {
   tableData: any;
   socketConnection: any;
   tableDataUpdated?: any;
+  expenseTableData?: any;
 }
 
 export function useSocket(defaultValue?: any): ReturnType {

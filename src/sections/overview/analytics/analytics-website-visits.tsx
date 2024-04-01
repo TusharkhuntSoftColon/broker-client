@@ -47,7 +47,7 @@ export default function AnalyticsWebsiteVisits({ title, subheader, chart, ...oth
       y: {
         formatter: (value: number) => {
           if (typeof value !== 'undefined') {
-            return `${value.toFixed(0)} visits`;
+            return `${value?.toFixed(0)} visits`;
           }
           return value;
         },

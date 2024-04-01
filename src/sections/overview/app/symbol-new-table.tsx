@@ -43,6 +43,7 @@ import masterService from 'src/services/masterService';
 
 import { useSocket } from 'src/hooks/use-socket';
 import useAuth from 'src/hooks/useAuth';
+import { usePathname } from 'src/routes/hooks';
 // ----------------------------------------------------------------------
 
 interface TabPanelProps {
@@ -104,6 +105,7 @@ const TABLE_HEAD = [
 export default function SymbolTableDashboard() {
   const socketSymbol = useBoolean();
   const addSymbolInDashboard = useBoolean();
+  const pathname = usePathname();
   const { role } = useAuth();
   const [value, setValue] = React.useState(0);
   const [symbolData, setSymbolData] = useState<any>([]);

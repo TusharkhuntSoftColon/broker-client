@@ -135,7 +135,7 @@ export default function SymbolLiveTableRow({
             textAlign: 'end',
           }}
         >
-          {`${dailyChange.toFixed(3)}%`}
+          {`${dailyChange?.toFixed(3)}%`}
         </TableCell>
       </TableRow>
     </>

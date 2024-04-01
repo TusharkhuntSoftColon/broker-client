@@ -173,13 +173,15 @@ export default function AppNewInvoice({
 
   const { tableData, socketConnection } = useSocket('expense');
 
+  console.log({ tableData });
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
   useEffect(() => {
     socketConnection(finalArray?.result);
-  }, [finalArray?.result]);
+  }, []);
 
   const calculateTotals = () => {
     let totalPositions = 0;
@@ -201,9 +203,9 @@ export default function AppNewInvoice({
     });
 
     // Format totals as needed
-    totalBuyPrice = parseFloat(totalBuyPrice.toFixed(2));
-    totalSellPrice = parseFloat(totalSellPrice.toFixed(2));
-    totalProfit = parseFloat(totalProfit.toFixed(2));
+    totalBuyPrice = parseFloat(totalBuyPrice?.toFixed(2));
+    totalSellPrice = parseFloat(totalSellPrice?.toFixed(2));
+    totalProfit = parseFloat(totalProfit?.toFixed(2));
 
     return {
       totalPositions,
@@ -250,12 +252,12 @@ export default function AppNewInvoice({
             symbol: buySymbol[0],
             positions: positions.toString(),
             buy_volume: `${buy.totalQuantity}`,
-            buy_price: `${buy.average.toFixed(2)}`,
+            buy_price: `${buy.average?.toFixed(2)}`,
             sell_volume: `${sellSymbol ? item.sell.allSellAverages[key].totalQuantity : 0}`,
-            sell_price: `${sellSymbol ? item.sell.allSellAverages[key].average.toFixed(2) : 0.0}`,
+            sell_price: `${sellSymbol ? item.sell.allSellAverages[key].average?.toFixed(2) : 0.0}`,
             net_volume: `${buy.totalQuantity - (sellSymbol ? item.sell.allSellAverages[key].totalQuantity : 0)}`,
-            profit: `${(buy.totalQuantity * buy.average - (sellSymbol ? item.sell.allSellAverages[key].totalQuantity * item.sell.allSellAverages[key].average : 0)).toFixed(2)}`,
-            unCovered: `${(buy.totalQuantity * buy.average - (sellSymbol ? item.sell.allSellAverages[key].totalQuantity * item.sell.allSellAverages[key].average : 0)).toFixed(2)}`,
+            profit: `${(buy.totalQuantity * buy.average - (sellSymbol ? item.sell.allSellAverages[key].totalQuantity * item.sell.allSellAverages[key].average : 0))?.toFixed(2)}`,
+            unCovered: `${(buy.totalQuantity * buy.average - (sellSymbol ? item.sell.allSellAverages[key].totalQuantity * item.sell.allSellAverages[key].average : 0))?.toFixed(2)}`,
           });
 
           // Update total buy volume and price
@@ -273,10 +275,10 @@ export default function AppNewInvoice({
               buy_volume: `0`,
               buy_price: `0`,
               sell_volume: `${sell.totalQuantity}`,
-              sell_price: `${sell.average.toFixed(2)}`,
+              sell_price: `${sell.average?.toFixed(2)}`,
               net_volume: `${-sell.totalQuantity}`,
-              profit: `${(sell.totalQuantity * sell.average).toFixed(2)}`,
-              unCovered: `${(sell.totalQuantity * sell.average).toFixed(2)}`,
+              profit: `${(sell.totalQuantity * sell.average)?.toFixed(2)}`,
+              unCovered: `${(sell.totalQuantity * sell.average)?.toFixed(2)}`,
             });
 
             // Update total sell volume and price
@@ -340,7 +342,7 @@ export default function AppNewInvoice({
 
         const updatedProfit = (buyProfit + sellProfit) * finalItem?.tickValue;
 
-        return { ...finalItem, profit: updatedProfit.toFixed(2) };
+        return { ...finalItem, profit: updatedProfit?.toFixed(2) };
       }
       return finalItem;
     });
@@ -549,7 +551,7 @@ export default function AppNewInvoice({
                         {data.tableDatas?.map((row, index) => (
                           <AppNewInvoiceRow key={index} row={row} value={value} />
                         ))}
-                        {data?.label === 'Summary' && tableData?.length > 0 && (
+                        {data?.label === 'Summary' && (
                           <StyledTableRow>
                             <StyledTableCell sx={{ fontWeight: 'bold' }}>Summary</StyledTableCell>
                             <StyledTableCell

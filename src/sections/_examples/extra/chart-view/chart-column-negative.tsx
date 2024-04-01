@@ -18,7 +18,7 @@ export default function ChartColumnNegative({ series }: Props) {
     stroke: { show: false },
     yaxis: {
       labels: {
-        formatter: (value: number) => `${value.toFixed(0)}%`,
+        formatter: (value: number) => `${value?.toFixed(0)}%`,
       },
     },
     xaxis: {

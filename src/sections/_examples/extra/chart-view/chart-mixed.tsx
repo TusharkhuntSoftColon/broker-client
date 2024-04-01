@@ -47,7 +47,7 @@ export default function ChartMixed({ series }: Props) {
       y: {
         formatter: (value: number) => {
           if (typeof value !== 'undefined') {
-            return `${value.toFixed(0)} points`;
+            return `${value?.toFixed(0)} points`;
           }
           return value;
         },
