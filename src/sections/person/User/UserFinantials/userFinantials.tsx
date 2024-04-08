@@ -33,7 +33,7 @@ const FinantialTypes = [
     value: 'BALANCE',
   },
   {
-    label: 'Credit Limit',
+    label: 'Credit',
     value: 'CREDIT',
   },
 ];
@@ -235,7 +235,7 @@ export default function UserFinantials() {
                   </Box>
                 </Box>
                 <Card sx={{ mt: 2 }}>
-                  <TableContainer sx={{ position: 'relative', overflow: 'unset', mt: 4 }}>
+                  <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
                     <Scrollbar>
                       <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
                         <TableHeadCustom

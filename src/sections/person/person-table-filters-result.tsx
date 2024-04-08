@@ -15,18 +15,14 @@ import { IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
 type Props = StackProps & {
   filters: IUserTableFilters;
   onFilters: (name: string, value: IUserTableFilterValue) => void;
-  //
   onResetFilters: VoidFunction;
-  //
   results: number;
 };
 
 export default function UserTableFiltersResult({
   filters,
   onFilters,
-  //
   onResetFilters,
-  //
   results,
   ...other
 }: Props) {
@@ -102,8 +98,6 @@ export default function UserTableFiltersResult({
     </Stack>
   );
 }
-
-// ----------------------------------------------------------------------
 
 type BlockProps = StackProps & {
   label: string;

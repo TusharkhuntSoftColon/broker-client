@@ -18,8 +18,6 @@ export default function Router() {
       element: <Navigate to={paths.auth.login} replace />,
     },
 
-    // ----------------------------------------------------------------------
-
     // Auth routes
     // ...authRoutes,
     ...authDemoRoutes,

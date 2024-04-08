@@ -10,3 +10,10 @@ export const SUPER_MASTER_ROLE = [
 ];
 
 export const MASTER_ROLE = [{ value: 'USER', label: 'USER' }];
+
+export const STATUS = [
+  { value: 'OPEN', label: 'Open' },
+  { value: 'CLOSE', label: 'Close' },
+  { value: 'DISABLE', label: 'Disable' },
+  { value: 'LOGIN_LOCK', label: 'Login Lock' },
+];

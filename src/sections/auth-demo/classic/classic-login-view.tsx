@@ -18,7 +18,7 @@ import useAuth from 'src/hooks/useAuth';
 import { useBoolean } from 'src/hooks/use-boolean';
 
 import authService from 'src/services/authService';
-import { PATH_USER, PATH_MASTER, PATH_DASHBOARD, PATH_SUPER_MASTER } from 'src/config-global';
+import { PATH_MASTER, PATH_DASHBOARD, PATH_SUPER_MASTER } from 'src/config-global';
 
 import Iconify from 'src/components/iconify';
 import FormProvider, { RHFTextField } from 'src/components/hook-form';
@@ -39,11 +39,9 @@ export default function ClassicLoginView() {
         return PATH_SUPER_MASTER;
       case 'MASTER':
         return PATH_MASTER;
-      case 'USER':
-        return PATH_USER;
-      // Add other cases for different roles with their respective paths
+
       default:
-        return PATH_USER; // Return a default path if role doesn't match
+        return PATH_MASTER; // Return a default path if role doesn't match
     }
   };
 

@@ -64,7 +64,6 @@ const superMasterService = {
       password: data?.password,
       exchangeList: data?.fields,
       role: data?.role?.value,
-      // creditLimit: data?.creditLimit,
       positionMinTime: data?.positionMinTime,
       leverageXY: data?.leverageXY?.value,
       isBrokerageAllowed: data?.isBrokerageAllowed,
@@ -129,6 +128,7 @@ const superMasterService = {
           bco: MasterData?.bco?.value,
           bcm: MasterData?.bcm?.value,
           symbol: MasterData?.symbol?.value,
+          status: MasterData?.status?.value,
           exchangeList: MasterData?.fields,
         }
       );
@@ -151,6 +151,7 @@ const superMasterService = {
       leverageXY: data?.leverageXY?.value,
       isBrokerageAllowed: data?.isBrokerageAllowed,
       isActive: data?.isActive,
+      status: data?.status?.value,
       investorPassword: data?.investorPassword,
     };
     const brokerageData = {

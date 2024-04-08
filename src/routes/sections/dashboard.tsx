@@ -14,22 +14,12 @@ const IndexPage = lazy(() => import('src/pages/dashboard/app'));
 
 // PERSON
 const PersonListPage = lazy(() => import('src/pages/dashboard/person/list'));
-// const PersonEditPage = lazy(() => import('src/pages/dashboard/person/edit'));
-// const PersonCreatePage = lazy(() => import('src/pages/dashboard/person/new'));
 
 // BROKERAGE
 const BrokerageListPage = lazy(() => import('src/pages/dashboard/brokerage/list'));
 const BrokerageDetailsPage = lazy(() => import('src/pages/dashboard/brokerage/details'));
 const BrokerageCreatePage = lazy(() => import('src/pages/dashboard/brokerage/new'));
 const BrokerageEditPage = lazy(() => import('src/pages/dashboard/brokerage/edit'));
-
-// FILE MANAGER
-// APP
-const MailPage = lazy(() => import('src/pages/dashboard/mail'));
-// TEST RENDER PAGE BY ROLE
-const PermissionDeniedPage = lazy(() => import('src/pages/dashboard/permission'));
-// BLANK PAGE
-const BlankPage = lazy(() => import('src/pages/dashboard/blank'));
 
 // ----------------------------------------------------------------------
 
@@ -67,9 +57,6 @@ export const dashboardRoutes = [
           { path: ':id/edit', element: <BrokerageEditPage /> },
         ],
       },
-      { path: 'mail', element: <MailPage /> },
-      { path: 'permission', element: <PermissionDeniedPage /> },
-      { path: 'blank', element: <BlankPage /> },
     ],
   },
   {

@@ -41,9 +41,8 @@ import AddSymbolInDashboard from 'src/components/modal/AddSymbolInDashboard';
 import superMasterService from 'src/services/superMasterService';
 import masterService from 'src/services/masterService';
 
-import { useSocket } from 'src/hooks/use-socket';
 import useAuth from 'src/hooks/useAuth';
-import { usePathname } from 'src/routes/hooks';
+import { useSocket } from 'src/context/SocketContext';
 // ----------------------------------------------------------------------
 
 interface TabPanelProps {
@@ -105,15 +104,17 @@ const TABLE_HEAD = [
 export default function SymbolTableDashboard() {
   const socketSymbol = useBoolean();
   const addSymbolInDashboard = useBoolean();
-  const pathname = usePathname();
   const { role } = useAuth();
+  const theme = useTheme();
   const [value, setValue] = React.useState(0);
   const [symbolData, setSymbolData] = useState<any>([]);
   const [rows, setRow] = useState<any>([]);
   const [assignedExchanges, setAssignedExchanges] = useState([]);
   const [currentSymbolList, setCurrentSymbolList] = useState<any>([]);
+  const [importMonthData, setImportMonthData] = useState<any>([]);
+  const [socketData, setSocketData] = useState<any>([]);
 
-  const { tableData, socketConnection } = useSocket('symbol');
+  const { socket, connect, disconnect, subscribeToMarket, joinUserRoom, marketWatch } = useSocket();
 
   const getImportMonthList = (role: any) => {
     switch (role) {
@@ -169,6 +170,30 @@ export default function SymbolTableDashboard() {
     },
   });
 
+  useEffect(() => {
+    if (socket) {
+      connect();
+      subscribeToMarket('symbol', importMonthData); // Subscribe to market when the component mounts
+      joinUserRoom('symbol', importMonthData); // Join user room when the component mounts
+
+      socket.on('disconnect', (reason: any) => {
+        console.log('[socket] Disconnected:', reason);
+      });
+
+      socket.on('error', (error: any) => {
+        console.log('[socket] Error:', error);
+      });
+
+      marketWatch(setSocketData);
+    }
+
+    return () => {
+      if (socket) {
+        disconnect(); // Call disconnect method when the component unmounts
+      }
+    };
+  }, [socket, connect, disconnect, subscribeToMarket, joinUserRoom, importMonthData]);
+
   const { mutate } = useMutation(getImportMonthList(role), {
     onSuccess: async (data) => {
       const symbolnewData: any[] = data?.data?.rows;
@@ -189,7 +214,7 @@ export default function SymbolTableDashboard() {
         });
       }
       setRow(symbolTableDashboard);
-      socketConnection(symbolnewData);
+      setImportMonthData(symbolnewData);
     },
     onError: (error) => {
       console.log('error', error);
@@ -202,7 +227,7 @@ export default function SymbolTableDashboard() {
 
   useEffect(() => {
     const symbolTableDashboard: any[] = [];
-    for (const data of tableData) {
+    for (const data of socketData) {
       symbolTableDashboard.push({
         id: data?.InstrumentIdentifier,
         symbol: symbolData
@@ -214,6 +239,26 @@ export default function SymbolTableDashboard() {
         oldBuyPrice: data?.oldBuyPrice,
         oldSellPrice: data?.oldSellPrice,
         oldPercentage: data?.oldPercentage,
+        bidColor:
+          data?.BuyPrice !== undefined && data?.oldBuyPrice !== undefined
+            ? data?.BuyPrice > data?.oldBuyPrice
+              ? 'blue'
+              : data?.BuyPrice === data?.oldBuyPrice
+                ? theme.palette.mode === 'light'
+                  ? 'red'
+                  : 'white'
+                : 'red'
+            : 'red',
+        askColor:
+          data?.SellPrice !== undefined && data?.oldSellPrice !== undefined
+            ? data?.SellPrice > data?.oldSellPrice
+              ? 'blue'
+              : data?.SellPrice === data?.oldSellPrice
+                ? theme.palette.mode === 'light'
+                  ? 'black'
+                  : 'white'
+                : 'red'
+            : 'red',
       });
     }
     const updatedArray = symbolData
@@ -222,7 +267,7 @@ export default function SymbolTableDashboard() {
       )
       .filter(Boolean);
     setRow(updatedArray);
-  }, [tableData]);
+  }, [socketData]);
 
   useEffect(() => {
     mutate();
@@ -231,7 +276,18 @@ export default function SymbolTableDashboard() {
   }, []);
 
   const rowData = rows?.map((row: any) => {
-    const { id, symbol, bid, ask, dailyChange, oldBuyPrice, oldSellPrice, oldPercentage } = row;
+    const {
+      id,
+      symbol,
+      bid,
+      ask,
+      dailyChange,
+      oldBuyPrice,
+      oldSellPrice,
+      oldPercentage,
+      bidColor,
+      askColor,
+    } = row;
     return {
       id,
       symbol,
@@ -241,6 +297,8 @@ export default function SymbolTableDashboard() {
       oldBuyPrice,
       oldSellPrice,
       oldPercentage,
+      bidColor,
+      askColor,
     };
   });
 
@@ -303,15 +361,15 @@ export default function SymbolTableDashboard() {
                   sx={{
                     display: 'flex',
                     width: '100%',
+                    padding: 0,
                     justifyContent: 'space-between',
                     alignItems: 'center',
                   }}
                 >
-                  <CardHeader title={data.title} sx={{ mb: 4, mt: -1 }} />
+                  <CardHeader title={data.title} sx={{ padding: '0px 0px 0px 10px !important' }} />
                   <Box>
                     <IconButton
                       color="default"
-                      sx={{ mb: 2 }}
                       onClick={(e) => {
                         e.stopPropagation();
                         addSymbolInDashboard.onTrue();
@@ -322,7 +380,6 @@ export default function SymbolTableDashboard() {
 
                     <IconButton
                       color="default"
-                      sx={{ mb: 2, mr: 2 }}
                       onClick={(e) => {
                         e.stopPropagation();
                         socketSymbol.onTrue();
@@ -415,6 +472,7 @@ type SymbolNewRowProps = {
 
 function SymbolNewRow({ row, value, index }: SymbolNewRowProps) {
   const popover = usePopover();
+
   const theme = useTheme();
   const handleBidData =
     row?.bid !== undefined && row?.oldBuyPrice !== undefined && row?.bid > row?.oldBuyPrice;

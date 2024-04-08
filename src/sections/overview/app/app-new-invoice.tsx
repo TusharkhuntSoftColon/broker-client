@@ -21,8 +21,7 @@ import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 
-import { useSocket } from 'src/hooks/use-socket';
-
+import { useSocket } from 'src/context/SocketContext';
 import { newInvoiceData, newInvoiceJournalData, newInvoiceExposureData } from 'src/_mock';
 
 import Iconify from 'src/components/iconify';
@@ -168,20 +167,38 @@ export default function AppNewInvoice({
 }) {
   const [value, setValue] = React.useState(0);
   const finalArray = transformData(exchangeTableSummaryData);
-
   const [updatedExchangeArray, setUpdatedExchangeArray] = useState(finalArray.result);
-
-  const { tableData, socketConnection } = useSocket('expense');
-
-  console.log({ tableData });
+  const { socket, connect, disconnect, subscribeToMarket, joinUserRoom, marketWatch } = useSocket();
+  const [socketData, setSocketData] = useState<any>([]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
 
   useEffect(() => {
-    socketConnection(finalArray?.result);
-  }, []);
+    if (socket) {
+      connect();
+      subscribeToMarket('expense', finalArray?.result); // Subscribe to market when the component mounts
+      joinUserRoom('expense', finalArray?.result); // Join user room when the component mounts
+
+      socket.on('disconnect', (reason: any) => {
+        console.log('[socket] Disconnected:', reason);
+      });
+
+      socket.on('error', (error: any) => {
+        console.log('[socket] Error:', error);
+        // Handle error event
+      });
+
+      marketWatch(setSocketData);
+    }
+
+    return () => {
+      if (socket) {
+        disconnect(); // Call disconnect method when the component unmounts
+      }
+    };
+  }, [socket, connect, disconnect, subscribeToMarket, joinUserRoom]);
 
   const calculateTotals = () => {
     let totalPositions = 0;
@@ -295,7 +312,6 @@ export default function AppNewInvoice({
     // Calculate total net volume and profit
     const totalNetVolume = totalBuyVolume - totalSellVolume;
     const totalProfit = totalBuyPrice - totalSellPrice;
-
     // Add socketLiveName and tickValue for all symbols in result
     for (const row of result) {
       const { symbol }: any = row;
@@ -324,7 +340,7 @@ export default function AppNewInvoice({
 
   useEffect(() => {
     const updatedFinalArray = finalArray.result?.map((finalItem: any) => {
-      const correspondingTableItem = tableData?.find(
+      const correspondingTableItem = socketData?.find(
         (tableItem: any) => finalItem.socketLiveName === tableItem.InstrumentIdentifier
       );
 
@@ -339,16 +355,14 @@ export default function AppNewInvoice({
           sellProfit =
             parseFloat(finalItem.sell_price) - parseFloat(correspondingTableItem.SellPrice);
         }
-
         const updatedProfit = (buyProfit + sellProfit) * finalItem?.tickValue;
-
         return { ...finalItem, profit: updatedProfit?.toFixed(2) };
       }
       return finalItem;
     });
 
     setUpdatedExchangeArray(updatedFinalArray);
-  }, [tableData]);
+  }, [socketData]);
 
   const tabs = [
     {
@@ -542,7 +556,7 @@ export default function AppNewInvoice({
                 index={data.value}
                 styles={{ overflow: 'hidden' }}
               >
-                <CardHeader title={data.title} sx={{ mb: 4, mt: -1 }} />
+                <CardHeader title={data.title} sx={{ padding: '12px !important' }} />
                 <TableContainer sx={{ overflow: 'unset', height: '400px' }}>
                   <Scrollbar>
                     <Table stickyHeader sx={{ minWidth: 680 }}>

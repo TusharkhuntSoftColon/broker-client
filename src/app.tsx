@@ -19,6 +19,7 @@ import { SettingsDrawer, SettingsProvider } from 'src/components/settings';
 import SnackbarProvider from 'src/components/snackbar/snackbar-provider';
 
 import { RoleBasedGuard } from './auth/guard';
+import { SocketProvider } from './context/SocketContext';
 
 // import { AuthProvider } from 'src/auth/context/auth0';
 // import { AuthProvider } from 'src/auth/context/amplify';
@@ -33,26 +34,28 @@ export default function App() {
     // <AuthProvider>
     <RoleBasedGuard hasContent roles={['ADMIN']} sx={{ py: 10 }}>
       <LocalizationProvider>
-        <SettingsProvider
-          defaultSettings={{
-            themeMode: 'light', // 'light' | 'dark'
-            themeDirection: 'ltr', //  'rtl' | 'ltr'
-            themeContrast: 'default', // 'default' | 'bold'
-            themeLayout: 'vertical', // 'vertical' | 'horizontal' | 'mini'
-            themeColorPresets: 'default', // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'
-            themeStretch: false,
-          }}
-        >
-          <ThemeProvider>
-            <MotionLazy>
-              <SnackbarProvider>
-                <SettingsDrawer />
-                <ProgressBar />
-                <Router />
-              </SnackbarProvider>
-            </MotionLazy>
-          </ThemeProvider>
-        </SettingsProvider>
+        <SocketProvider>
+          <SettingsProvider
+            defaultSettings={{
+              themeMode: 'light', // 'light' | 'dark'
+              themeDirection: 'ltr', //  'rtl' | 'ltr'
+              themeContrast: 'default', // 'default' | 'bold'
+              themeLayout: 'vertical', // 'vertical' | 'horizontal' | 'mini'
+              themeColorPresets: 'default', // 'default' | 'cyan' | 'purple' | 'blue' | 'orange' | 'red'
+              themeStretch: false,
+            }}
+          >
+            <ThemeProvider>
+              <MotionLazy>
+                <SnackbarProvider>
+                  <SettingsDrawer />
+                  <ProgressBar />
+                  <Router />
+                </SnackbarProvider>
+              </MotionLazy>
+            </ThemeProvider>
+          </SettingsProvider>
+        </SocketProvider>
       </LocalizationProvider>
     </RoleBasedGuard>
     // </AuthProvider>

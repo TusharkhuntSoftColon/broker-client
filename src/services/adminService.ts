@@ -91,7 +91,6 @@ const adminService = {
       password: data?.password,
       exchangeList: data?.fields,
       role: data?.role?.value,
-      // creditLimit: data?.creditLimit,
       positionMinTime: data?.positionMinTime,
       leverageXY: data?.leverageXY?.value,
       isBrokerageAllowed: data?.isBrokerageAllowed,
@@ -167,6 +166,7 @@ const adminService = {
           leverageXY: SuperMasterData?.leverageXY.value,
           role: SuperMasterData?.role?.value,
           exchangeList: SuperMasterData?.fields,
+          status: SuperMasterData?.status?.value,
         }
       );
       return response.data;
@@ -184,6 +184,7 @@ const adminService = {
           leverageXY: MasterData?.leverageXY.value,
           role: MasterData?.role?.value,
           exchangeList: MasterData?.fields,
+          status: MasterData?.status?.value,
         }
       );
       return response.data;
@@ -199,11 +200,11 @@ const adminService = {
       password: data?.password,
       exchangeList: data?.fields,
       role: data?.role?.value,
-      // creditLimit: data?.creditLimit,
       positionMinTime: data?.positionMinTime,
       leverageXY: data?.leverageXY?.value,
       isBrokerageAllowed: data?.isBrokerageAllowed,
       isActive: data?.isActive,
+      status: data?.status?.value,
       investorPassword: data?.investorPassword,
     };
 

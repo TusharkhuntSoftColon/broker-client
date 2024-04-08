@@ -8,8 +8,8 @@ import Typography from '@mui/material/Typography';
 
 import { useParams } from 'src/routes/hooks';
 
+import { PersonDetailsView } from 'src/sections/person/view';
 import UserFinantials from 'src/sections/person/User/UserFinantials/userFinantials';
-import { PersonEditView, PersonCreateView, PersonDetailsView } from 'src/sections/person/view';
 
 import BasicTabs from './CustomTab';
 
@@ -73,7 +73,7 @@ export default function PersonTabsPanel() {
   // };
   return (
     <Box sx={{ width: '100%', ml: 2 }}>
-      {currentUser ? <PersonEditView /> : <PersonCreateView />}
+      {/* {currentUser ? <PersonEditView /> : <PersonCreateView />} */}
 
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange}>

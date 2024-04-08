@@ -40,6 +40,8 @@ export const GET_ASSIGNED_EXCHANGE_LIST_FOR_ADMIN = '/admin/all-exchanges';
 export const GET_USERS_BET_POSITIONS_BY_ADMIN = '/admin/user-positions';
 export const GET_USER_BALANCE_BY_ADMIN = '/admin/balance';
 
+export const BROADCAST_MESSAGE_BY_ADMIN = '';
+
 // SUPER MASTER
 export const CREATE_MASTER_BY_SUPER_MASTER = '/super-master/master';
 export const CREATE_USER_BY_SUPER_MASTER = '/super-master/user';

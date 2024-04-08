@@ -26,8 +26,6 @@ import CustomDateRangePicker from 'src/components/custom-date-range-picker/custo
 
 import { IUserTableFilters, IUserTableFilterValue } from 'src/types/user';
 
-// ----------------------------------------------------------------------
-
 type Props = {
   filters: IUserTableFilters;
   onFilters: (name: string, value: IUserTableFilterValue) => void;

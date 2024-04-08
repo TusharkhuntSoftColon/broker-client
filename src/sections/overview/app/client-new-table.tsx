@@ -21,9 +21,11 @@ import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 import TableContainer from '@mui/material/TableContainer';
 
-import { useSocket } from 'src/hooks/use-socket';
+import { paths } from 'src/routes/paths';
+import { useRouter } from 'src/routes/hooks';
 
 import { newClientsOnlineTableData } from 'src/_mock';
+import { useSocket } from 'src/context/SocketContext';
 
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
@@ -119,24 +121,49 @@ export default function ClientTableDashboard({
 
   const [updatedPositionsData, setUpdatedPositionsData] = useState([]);
   const [updatedOrdersData, setUpdatedOrdersData] = useState([]);
-
-  const { tableData, socketConnection } = useSocket('client');
-
-  useEffect(() => {
-    const subscribingData = value === 0 ? positionsData : value === 3 ? ordersData : [];
-    socketConnection(subscribingData);
-  }, [positionsData, ordersData]);
-
-  // useEffect(() => {
-  //   const subscribingData = value === 0 ? positionsData : value === 3 ? ordersData : [];
-  //   socketConnection(subscribingData);
-  // }, [positionsData, ordersData]);
+  const { socket, connect, disconnect, subscribeToMarket, joinUserRoom, marketWatch } = useSocket();
+  const [socketData, setSocketData] = useState<any>([]);
 
   useEffect(() => {
-    const updateLivePrice = async (socketData: any) => {
+    if (socket) {
+      connect();
+      const subscribingData = value === 0 ? positionsData : value === 3 ? ordersData : [];
+      subscribeToMarket('client', subscribingData); // Subscribe to market when the component mounts
+      joinUserRoom('client', subscribingData); // Join user room when the component mounts
+
+      socket.on('disconnect', (reason: any) => {
+        console.log('[socket] Disconnected:', reason);
+      });
+
+      socket.on('error', (error: any) => {
+        console.log('[socket] Error:', error);
+        // Handle error event
+      });
+
+      marketWatch(setSocketData);
+    }
+
+    return () => {
+      if (socket) {
+        disconnect(); // Call disconnect method when the component unmounts
+      }
+    };
+  }, [
+    socket,
+    connect,
+    disconnect,
+    subscribeToMarket,
+    joinUserRoom,
+    positionsData,
+    ordersData,
+    value,
+  ]);
+
+  useEffect(() => {
+    const updateLivePrice = async (socketData1: any) => {
       const userTableData = value === 0 ? positionsData : value === 3 ? ordersData : [];
       const updatedPositions = userTableData?.map((position: any) => {
-        const socketItem = socketData?.find(
+        const socketItem = socketData1?.find(
           (item: any) => item.InstrumentIdentifier === position.scriptName
         );
 
@@ -147,7 +174,7 @@ export default function ClientTableDashboard({
               livePrice: socketItem.SellPrice,
               oldBuyPrice: socketItem?.oldBuyPrice,
               oldSellPrice: socketItem?.oldSellPrice,
-              color: socketItem.SellPrice > socketItem?.oldSellPrice ? 'blue' : 'red',
+              color: socketItem.BuyPrice > socketItem?.oldBuyPrice ? 'red' : 'blue',
             };
           } else if (position.positionType === 'SELL') {
             return {
@@ -155,7 +182,7 @@ export default function ClientTableDashboard({
               livePrice: socketItem.BuyPrice,
               oldBuyPrice: socketItem?.oldBuyPrice,
               oldSellPrice: socketItem?.oldSellPrice,
-              color: socketItem.BuyPrice < socketItem?.oldBuyPrice ? 'red' : 'blue',
+              color: socketItem.BuyPrice < socketItem?.oldBuyPrice ? 'blue' : 'red',
             };
           }
         }
@@ -167,15 +194,15 @@ export default function ClientTableDashboard({
         setUpdatedOrdersData(updatedPositions);
       }
     };
-    updateLivePrice(tableData);
-  }, [tableData]);
+    updateLivePrice(socketData);
+  }, [socketData]);
 
   const tabs = [
     {
       label: 'Positions',
       value: 0,
       title: 'Users',
-      tableDatas: tableData?.length > 0 ? updatedPositionsData : positionsData,
+      tableDatas: updatedPositionsData,
       tableLabel: [
         { id: 'login', label: 'Login', align: 'left', border: '1px solid #dddddd !important' },
         {
@@ -185,6 +212,7 @@ export default function ClientTableDashboard({
           border: '1px solid #dddddd !important',
         },
         { id: 'symbol', label: 'Symbol', align: 'left', border: '1px solid #dddddd !important' },
+        { id: 'time', label: 'Time', align: 'left', border: '1px solid #dddddd !important' },
         { id: 'type', label: 'Type', align: 'right', border: '1px solid #dddddd !important' },
         {
           id: 'volume',
@@ -210,9 +238,17 @@ export default function ClientTableDashboard({
       tableLabel: [
         { id: 'ID', label: 'Login', align: 'left', border: '1px solid #dddddd !important' },
         { id: 'name', label: 'Name', align: 'left', border: '1px solid #dddddd !important' },
+        {
+          id: 'leverage',
+          label: 'Leverage',
+          align: 'left',
+          border: '1px solid #dddddd !important',
+        },
         { id: 'balance', label: 'Balance', align: 'right', border: '1px solid #dddddd !important' },
         { id: 'credit', label: 'Credit', align: 'right', border: '1px solid #dddddd !important' },
         { id: 'equity', label: 'Equity', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'margin', label: 'Margin', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'profit', label: 'Profit', align: 'right', border: '1px solid #dddddd !important' },
       ],
     },
     {
@@ -234,7 +270,7 @@ export default function ClientTableDashboard({
       label: 'Orders',
       value: 3,
       title: 'Orders Table',
-      tableDatas: tableData?.length > 0 ? updatedOrdersData : ordersData,
+      tableDatas: updatedOrdersData,
       tableLabel: [
         { id: 'ID', label: 'Login', align: 'left', border: '1px solid #dddddd !important' },
         { id: 'order', label: 'Order', align: 'left', border: '1px solid #dddddd !important' },
@@ -272,13 +308,13 @@ export default function ClientTableDashboard({
                 index={data.value}
                 styles={{ overflow: 'hidden' }}
               >
-                <CardHeader title={data.title} sx={{ mb: 4, mt: -1 }} />
+                <CardHeader title={data.title} sx={{ padding: '12px !important' }} />
                 <TableContainer sx={{ overflow: 'unset', height: '400px' }}>
                   <Scrollbar>
                     <Table stickyHeader>
                       <TableHeadCustom headLabel={data.tableLabel} />
 
-                      <TableBody>
+                      <TableBody key={data?.value}>
                         {data.tableDatas?.map((row: any) => (
                           <ClientNewRow key={row.id} row={row} value={value} />
                         ))}
@@ -340,12 +376,11 @@ type ClientNewRowProps = {
 
 function ClientNewRow({ row, value }: ClientNewRowProps) {
   const popover = usePopover();
+  const router = useRouter();
   const handleDownload = () => {
     popover.onClose();
     console.info('DOWNLOAD', row.id);
   };
-
-  console.log({ row });
 
   const handlePrint = () => {
     popover.onClose();
@@ -361,16 +396,24 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
     popover.onClose();
     console.info('DELETE', row.id);
   };
+  const PositionTime = new Date(row?.timeOpen).toDateString();
+
   return (
     <>
       {value === 0 && (
-        <StyledTableRow>
+        <StyledTableRow
+          onDoubleClick={() => router.push(paths.dashboard.person.edit(row?.userId?._id))}
+          style={{ cursor: 'pointer' }}
+        >
           <StyledTableCell sx={{ textAlign: 'left', padding: '9px', borderLeft: 'none' }}>
             {row.userId?.ID}
           </StyledTableCell>
           <StyledTableCell sx={{ textAlign: 'left', padding: '9px' }}>{row.ticket}</StyledTableCell>
           <StyledTableCell sx={{ textAlign: 'left', padding: '9px' }}>
             {row.importMonthName}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'left', padding: '9px' }}>
+            {PositionTime}
           </StyledTableCell>
           <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
             {row.positionType}
@@ -385,16 +428,7 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
             sx={{
               textAlign: 'right',
               padding: '9px',
-              color:
-                row?.positionType === 'BUY' && row?.livePrice > row?.oldBuyPrice
-                  ? row?.color
-                  : row?.positionType === 'BUY' && row?.livePrice < row?.oldBuyPrice
-                    ? row?.color
-                    : row?.positionType === 'SELL' && row?.livePrice > row?.oldSellPrice
-                      ? row?.color
-                      : row?.positionType === 'SELL' && row?.livePrice < row?.oldSellPrice
-                        ? 'black'
-                        : 'black',
+              color: row?.color,
             }}
           >
             {row?.livePrice}
@@ -408,11 +442,20 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
             {row.ID}
           </StyledTableCell>
           <StyledTableCell sx={{ textAlign: 'left', padding: '9px' }}>{row.name}</StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
-            {row.balance}
+          <StyledTableCell sx={{ textAlign: 'left', padding: '9px' }}>
+            {row?.leverageXY}
           </StyledTableCell>
           <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
-            {row.credit}
+            {row?.user_balance?.balance}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+            {row?.user_balance?.creditLimit}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px', borderRight: 'none' }}>
+            {row.equity}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '9px', borderRight: 'none' }}>
+            {row.margin}
           </StyledTableCell>
           <StyledTableCell sx={{ textAlign: 'right', padding: '9px', borderRight: 'none' }}>
             {row.equity}

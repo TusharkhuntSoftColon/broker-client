@@ -36,10 +36,12 @@ const PersonDetailsViewLayout = ({ title, name, extraStyle, type }: AddUserTypes
           flex: 1.3,
           display: 'flex',
           alignItems: 'center',
-          p: 2,
+          padding: '0px 16px',
         }}
       >
-        <pre>{name}</pre>
+        <pre style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }} key={name}>
+          {name}
+        </pre>
       </Box>
     </Box>
   );

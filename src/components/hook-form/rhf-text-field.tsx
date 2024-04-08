@@ -11,7 +11,7 @@ type Props = TextFieldProps & {
   upperText?: any;
   isReadOnly?: any;
   min?: number;
-  max?: number;
+  max?: number | null;
 };
 
 export default function RHFTextField({

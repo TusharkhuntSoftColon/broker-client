@@ -1,0 +1,11 @@
+RewriteEngine On
+RewriteBase /subdirectory
+
+# If the request is for a file, directory, or symlink, don't do anything
+RewriteCond %{REQUEST_FILENAME} -f [OR]
+RewriteCond %{REQUEST_FILENAME} -d [OR]
+RewriteCond %{REQUEST_FILENAME} -l
+RewriteRule ^ - [L]
+
+# Otherwise, rewrite to index.html
+RewriteRule ^ index.html [L]

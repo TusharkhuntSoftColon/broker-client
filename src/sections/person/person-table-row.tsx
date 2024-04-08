@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 /* eslint-disable import/no-extraneous-dependencies */
 import { useSelector } from 'react-redux';
 
@@ -10,6 +11,8 @@ import TableCell from '@mui/material/TableCell';
 import IconButton from '@mui/material/IconButton';
 
 import { useBoolean } from 'src/hooks/use-boolean';
+
+import { STATUS } from 'src/_mock/_person';
 
 import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
@@ -41,7 +44,8 @@ export default function PersonTableRow({
   onGetPersonRow,
   index,
 }: Props) {
-  const { name, exchangeList, ID, isActive, role } = row;
+  const { name, exchangeList, ID, status, role } = row;
+
   const confirm = useBoolean();
   const quickEdit = useBoolean();
   const popover = usePopover();
@@ -81,8 +85,21 @@ export default function PersonTableRow({
         </TableCell>
 
         <TableCell>
-          <Label variant="soft" color={isActive ? 'success' : 'warning'}>
-            {isActive === true ? 'Active' : 'In Active'}
+          <Label
+            variant="soft"
+            color={
+              status === STATUS[0].value
+                ? 'success'
+                : status === STATUS[1].value
+                  ? 'warning'
+                  : status === STATUS[2].value
+                    ? 'error'
+                    : status === STATUS[3].value
+                      ? 'info'
+                      : 'secondary'
+            }
+          >
+            {status}
           </Label>
         </TableCell>
 

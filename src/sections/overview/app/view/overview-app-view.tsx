@@ -197,7 +197,7 @@ const OverviewAppView = () => {
         })}
       </Box>
 
-      <Box width="100%" display="flex">
+      <Box sx={{ width: '100%', display: 'flex' }}>
         {TableComponents.slice(0, 3).map((table) => (
           <Box
             display={selectedButtons.includes(table.name) ? 'block' : 'none'}

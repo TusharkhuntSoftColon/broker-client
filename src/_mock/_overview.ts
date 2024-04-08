@@ -446,13 +446,6 @@ export const newInvoiceJournalData = [
   },
 ];
 
-export const _appFeatured = [...Array(3)].map((_, index) => ({
-  id: _mock.id(index),
-  title: _mock.postTitle(index),
-  description: _mock.sentence(index),
-  coverUrl: _mock.image.cover(index),
-}));
-
 // ANALYTIC
 // ----------------------------------------------------------------------
 

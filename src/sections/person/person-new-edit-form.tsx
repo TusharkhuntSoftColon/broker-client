@@ -8,6 +8,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-shadow */
 import * as Yup from 'yup';
+import { v4 as uuidv4 } from 'uuid';
 import { isAxiosError } from 'axios';
 import { useForm } from 'react-hook-form';
 import { useMutation } from '@tanstack/react-query';
@@ -21,16 +22,7 @@ import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
 import LoadingButton from '@mui/lab/LoadingButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import {
-  Select,
-  MenuItem,
-  Accordion,
-  Typography,
-  InputLabel,
-  FormControl,
-  AccordionDetails,
-  AccordionSummary,
-} from '@mui/material';
+import { Accordion, Typography, AccordionDetails, AccordionSummary } from '@mui/material';
 
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
@@ -43,7 +35,7 @@ import { addExchanges } from 'src/store/slices/admin';
 import masterService from 'src/services/masterService';
 import { EXCHANGE_GROUP, LEVERAGE_OPTIONS } from 'src/_mock';
 import superMasterService from 'src/services/superMasterService';
-import { ADMIN_ROLE, MASTER_ROLE, SUPER_MASTER_ROLE } from 'src/_mock/_person';
+import { STATUS, ADMIN_ROLE, MASTER_ROLE, SUPER_MASTER_ROLE } from 'src/_mock/_person';
 import { NewUserSchema, NewMasterSchema, NewSuperMasterSchema } from 'src/schema/personSchema';
 
 import { useSnackbar } from 'src/components/snackbar';
@@ -55,6 +47,8 @@ import FormProvider, {
 } from 'src/components/hook-form';
 
 import { IUserItem } from 'src/types/user';
+
+import AllowedExchangeComponent, { AllowedExChangeInterface } from './AllowedExchangeComponenet';
 
 type Props = {
   currentUser?: IUserItem | any;
@@ -71,15 +65,12 @@ export default function PersonNewEditForm({
   setTabValue,
   setFieldsValue,
 }: Props) {
-  console.log({ currentUser });
-
   const ExchangeOptions: any = [];
   const { role } = useAuth();
   const ExchangeList = useSelector((data: any) => data?.admin?.exchangeList);
   const router = useRouter();
 
   const [exchangeData, setExchangeData] = useState<any>();
-  const [selectedValues, setSelectedValues] = useState<string[]>([]);
 
   const personList = useSelector((data: any) => data?.person?.personData);
   const Exchange: { label: any; value: any }[] = [];
@@ -96,10 +87,6 @@ export default function PersonNewEditForm({
       (option: any) => currentUser?.exchangeList[index]?.allowedExchange === option.value
     )[0];
   };
-
-  const [newExchangeOptions] = useState(Exchange);
-
-  console.log({ newExchangeOptions });
 
   const defaultExchangeOptions = useMemo(
     () => (index: number) => {
@@ -121,6 +108,13 @@ export default function PersonNewEditForm({
     const data = currentUser
       ? LEVERAGE_OPTIONS.filter((option: any) => currentUser?.leverageXY === option.value)[0]
       : { value: '1:100', label: '1:100' };
+    return data;
+  }, [currentUser, personList]);
+
+  const defaultStatus = useMemo(() => {
+    const data = currentUser
+      ? STATUS.find((option: any) => currentUser?.status === option.value)
+      : { value: 'OPEN', label: 'Open' };
     return data;
   }, [currentUser, personList]);
 
@@ -154,6 +148,7 @@ export default function PersonNewEditForm({
       deleteBet: currentUser?.deleteBet || personList?.deleteBet || false,
       leverageXY: defaultLeverageOptions || '',
       isActive: currentUser?.isActive || null,
+      status: defaultStatus || '',
       isBrokerageAllowed: currentUser?.isBrokerageAllowed || false,
       limitOfAddUser: currentUser?.limitOfAddUser || personList?.limitOfAddUser || null,
       limitOfAddMaster: currentUser?.limitOfAddMaster || personList?.limitOfAddMaster || null,
@@ -162,98 +157,34 @@ export default function PersonNewEditForm({
     [defaultAllowedExchange, defaultExchangeOptions]
   );
 
-  const [fields, setFields] = useState(() => {
+  const [fields, setFields] = useState<AllowedExChangeInterface[]>(() => {
     if (currentUser) {
       return currentUser?.exchangeList.map(({ allowedExchange, exchangeGroup }: any) => ({
         allowedExchange,
         exchangeGroup,
+        index: uuidv4(),
       }));
     }
-    return [{ allowedExchange: '', exchangeGroup: '' }];
+    return [{ allowedExchange: '', exchangeGroup: '', index: uuidv4() }];
   });
 
-  const handleChange = (index: number, event: any) => {
+  const handleChange = (index: string, event: any) => {
     const { name, value } = event.target;
-    const newFields: any = [...fields];
-    newFields[index][name as string] = value;
-    setFields(newFields);
 
-    const selectedValue = value as string;
-    const alreadySelected = selectedValues.some((val) => val === selectedValue);
-    if (!alreadySelected) {
-      setSelectedValues((prev) => {
-        const updatedSelectedValues = [...prev];
-        updatedSelectedValues[index] = selectedValue;
-        return updatedSelectedValues;
-      });
+    const newFields = [...fields];
+
+    const fieldToUpdate: any = newFields.find((field) => field.index === index);
+    if (fieldToUpdate) {
+      fieldToUpdate[name] = value;
+      setFields(newFields);
     }
   };
-
   const handleAddField = () => {
-    setFields([...fields, { allowedExchange: '', exchangeGroup: '' }]);
+    setFields([...fields, { allowedExchange: '', exchangeGroup: '', index: uuidv4() }]);
   };
-
-  const handleRemoveLast = () => {
-    const lastField = fields[fields.length - 1];
-    if (lastField) {
-      const updatedOptions: any = [...selectedValues];
-      updatedOptions.push({ label: lastField.allowedExchange, value: lastField.allowedExchange });
-      updatedOptions.push({ label: lastField.exchangeGroup, value: lastField.exchangeGroup });
-      setSelectedValues(updatedOptions);
-      setFields(fields.slice(0, -1));
-    }
-  };
-
-  const allowedExchangeComponent = (index: number) => {
-    const exchangeListItem = currentUser?.exchangeList[index];
-
-    const defaultAllowedExchange = newExchangeOptions.find(
-      (option) => option.value === exchangeListItem?.allowedExchange
-    );
-    const defaultExchangeGroup = EXCHANGE_GROUP.find(
-      (option) => option.value === exchangeListItem?.exchangeGroup
-    );
-
-    return (
-      <Box sx={{ display: 'flex', gap: 2, width: '100%' }} key={index}>
-        <FormControl fullWidth>
-          <InputLabel id={`allowedExchange-label-${index}`}>Allowed Exchange</InputLabel>
-          <Select
-            name="allowedExchange"
-            labelId={`allowedExchange-label-${index}`}
-            label="Allowed Exchange"
-            sx={{ width: '100%' }}
-            defaultValue={defaultAllowedExchange?.value || ''}
-            value={fields[index].allowedExchange}
-            onChange={(event) => handleChange(index, event)}
-          >
-            {newExchangeOptions.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <FormControl fullWidth>
-          <InputLabel id={`exchangeGroup-label-${index}`}>Exchange Group</InputLabel>
-          <Select
-            name="exchangeGroup"
-            labelId={`exchangeGroup-label-${index}`}
-            label="Exchange Group"
-            sx={{ width: '100%' }}
-            defaultValue={defaultExchangeGroup?.value || ''}
-            value={fields[index].exchangeGroup}
-            onChange={(event) => handleChange(index, event)}
-          >
-            {EXCHANGE_GROUP.map((option) => (
-              <MenuItem key={option.value} value={option.value}>
-                {option.label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Box>
-    );
+  const handleRemoveExchange = (index: string) => {
+    const updatedFields = fields.filter((field) => field.index !== index);
+    setFields(updatedFields);
   };
 
   const getValidationSchema = (role: any) => {
@@ -282,8 +213,6 @@ export default function PersonNewEditForm({
   } = methods;
 
   const value = watch();
-
-  console.log({ value });
 
   useEffect(() => {
     if (currentUser) {
@@ -618,7 +547,7 @@ export default function PersonNewEditForm({
                       ? 5000
                       : value?.role?.value === 'MASTER'
                         ? 500
-                        : 0
+                        : null
                   }
                   label="Limit Of Add User"
                 />
@@ -659,19 +588,6 @@ export default function PersonNewEditForm({
                 )}
               />
 
-              {roleOption === 'USER' && (
-                <RHFSwitch
-                  name="isBrokerageAllowed"
-                  labelPlacement="start"
-                  label={
-                    <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                      Brokerage
-                    </Typography>
-                  }
-                  sx={{ mx: 0, width: 1 }}
-                />
-              )}
-
               {roleOption !== 'USER' && (
                 <>
                   <RHFCheckbox
@@ -685,15 +601,32 @@ export default function PersonNewEditForm({
               )}
 
               {currentUser && (
+                <RHFAutocomplete
+                  name="status"
+                  label="Status"
+                  options={STATUS}
+                  defaultValue={defaultStatus}
+                  isLabled={false}
+                  isOptionEqualToValue={(option, value) => option.value === value.value}
+                  getOptionLabel={(option: any) => option.label}
+                  renderOption={(props, option) => (
+                    <li {...props} key={option.value}>
+                      {option.label}
+                    </li>
+                  )}
+                />
+              )}
+
+              {roleOption === 'USER' && (
                 <RHFSwitch
-                  name="isActive"
+                  name="isBrokerageAllowed"
                   labelPlacement="start"
                   label={
                     <Typography variant="subtitle2" sx={{ mb: 0.5 }}>
-                      Active or In Active Super Master
+                      Brokerage
                     </Typography>
                   }
-                  sx={{ mx: 0, width: 1, justifyContent: 'space-between' }}
+                  sx={{ width: 0.5 }}
                 />
               )}
             </Box>
@@ -710,11 +643,17 @@ export default function PersonNewEditForm({
                 <AccordionDetails>
                   <Grid container spacing={1}>
                     <Box sx={{ display: 'flex', gap: 2, width: '100%', flexWrap: 'wrap' }}>
-                      {/* {allowedExchangeComponent(0)}
-                      {value?.exchangeList?.map((data: any, index: any) =>
-                        allowedExchangeComponent(index + 1)
-                      )} */}
-                      {fields?.map((data: any, index: any) => allowedExchangeComponent(index))}
+                      {fields?.map((field: AllowedExChangeInterface) => (
+                        <AllowedExchangeComponent
+                          allowedExchange={field?.allowedExchange}
+                          exchangeGroup={field?.exchangeGroup}
+                          index={field?.index}
+                          Exchange={Exchange}
+                          handleChange={handleChange}
+                          fields={fields}
+                          handleRemoveExchange={handleRemoveExchange}
+                        />
+                      ))}
                     </Box>
                     <Grid xs={6}>
                       <Box
@@ -727,17 +666,14 @@ export default function PersonNewEditForm({
                       >
                         <LoadingButton
                           variant="contained"
-                          disabled={!(newExchangeOptions.length - 1 >= fields?.length)}
+                          disabled={
+                            !fields.every(
+                              (field) => field.allowedExchange && field.exchangeGroup
+                            ) || fields.length === Exchange.length
+                          }
                           onClick={() => handleAddField()}
                         >
                           ADD EXCHANGE
-                        </LoadingButton>
-                        <LoadingButton
-                          disabled={!(fields.length > 1)}
-                          variant="contained"
-                          onClick={() => handleRemoveLast()}
-                        >
-                          REMOVE EXCHANGE
                         </LoadingButton>
                       </Box>
                     </Grid>

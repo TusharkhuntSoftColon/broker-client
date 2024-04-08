@@ -193,7 +193,7 @@ export default function BrokerageListView({ currentUser, fields }: any) {
       if (isAxiosError(error)) {
         enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
       }
-      enqueueSnackbar(error?.message, { variant: 'error' });
+      enqueueSnackbar(error?.messge, { variant: 'error' });
     },
   });
 

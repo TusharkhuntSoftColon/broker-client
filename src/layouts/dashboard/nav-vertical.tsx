@@ -34,7 +34,6 @@ export default function NavVertical({ openNav, onCloseNav, nav }: Props) {
   const { SUPER_MASTER } = useMockedUser();
 
   const pathname = usePathname();
-
   const lgUp = useResponsive('up', 'lg');
 
   useEffect(() => {
@@ -66,7 +65,7 @@ export default function NavVertical({ openNav, onCloseNav, nav }: Props) {
 
       <Box sx={{ flexGrow: 1 }} />
 
-      <Box sx={{ margin: 2 }}>
+      <Box sx={{ margin: 2, display: 'flex' }}>
         <SettingsButton />
 
         <AccountPopover />

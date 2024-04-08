@@ -1,3 +1,4 @@
+/* eslint-disable no-plusplus */
 /* eslint-disable no-else-return */
 /* eslint-disable import/order */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -11,12 +12,13 @@ import Container from '@mui/material/Container';
 import { Box, Card, Table, TableBody, Typography, TableContainer } from '@mui/material';
 
 import useAuth from 'src/hooks/useAuth';
-import { useSocket } from 'src/hooks/use-socket';
 
 import adminService from 'src/services/adminService';
+import { useSocket } from 'src/context/SocketContext';
 import masterService from 'src/services/masterService';
 import superMasterService from 'src/services/superMasterService';
 
+import Label from 'src/components/label';
 import Scrollbar from 'src/components/scrollbar';
 import { useSettingsContext } from 'src/components/settings';
 import { useTable, TableNoData, TableHeadCustom } from 'src/components/table';
@@ -44,14 +46,41 @@ export default function PersonDetailsView({ currentUser }: Props) {
   const table = useTable();
   const { role } = useAuth();
   const exchangeData = useSelector((data: any) => data?.admin?.exchangeList);
+
   const [tableData1, setTableData1] = useState<any>([]);
   const [userBalance, setUserBalance] = useState<any>({});
+  const [socketData, setSocketData] = useState<any>([]);
 
-  const { tableData, socketConnection } = useSocket('personDetails');
+  const { socket, connect, disconnect, subscribeToMarket, joinUserRoom, marketWatch } = useSocket();
+
+  useEffect(() => {
+    if (socket) {
+      connect();
+      subscribeToMarket('personDetails', tableData1); // Subscribe to market when the component mounts
+      joinUserRoom(tableData1); // Join user room when the component mounts
+
+      socket.on('disconnect', (reason: any) => {
+        console.log('[socket] Disconnected:', reason);
+      });
+
+      socket.on('error', (error: any) => {
+        console.log('[socket] Error:', error);
+        // Handle error event
+      });
+
+      marketWatch(setSocketData);
+    }
+
+    return () => {
+      if (socket) {
+        disconnect(); // Call disconnect method when the component unmounts
+      }
+    };
+  }, [socket, connect, disconnect, subscribeToMarket, joinUserRoom, tableData1]);
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const getBrokerageByRole = (role1: any) => {
+  const getUsersBetPositionByRole = (role1: any) => {
     switch (role1) {
       case 'ADMIN':
         return adminService.getUserBetPositions;
@@ -77,10 +106,12 @@ export default function PersonDetailsView({ currentUser }: Props) {
     }
   };
 
-  const { mutate: getUserPosition } = useMutation(getBrokerageByRole(role), {
+  const { mutate: getUserPosition } = useMutation(getUsersBetPositionByRole(role), {
     onSuccess: (data) => {
+      console.log(data?.data?.rows);
+
       setTableData1(data?.data?.rows);
-      socketConnection(data?.data?.rows);
+      // socketConnection(data?.data?.rows);
     },
     onError: (error: any) => {
       if (isAxiosError(error)) {
@@ -120,9 +151,9 @@ export default function PersonDetailsView({ currentUser }: Props) {
   const totals = calculateTotals();
 
   useEffect(() => {
-    const updateLivePrice = async (socketData: any) => {
+    const updateLivePrice = async (socketData1: any) => {
       const updatedPositions = tableData1?.map((position: any) => {
-        const socketItem = socketData?.find(
+        const socketItem = socketData1?.find(
           (item: any) => item.InstrumentIdentifier === position.scriptName
         );
 
@@ -153,8 +184,8 @@ export default function PersonDetailsView({ currentUser }: Props) {
       });
       setTableData1(updatedPositions);
     };
-    updateLivePrice(tableData);
-  }, [tableData]);
+    updateLivePrice(socketData);
+  }, [socketData]);
 
   const notFound = !tableData1?.length;
 
@@ -166,7 +197,13 @@ export default function PersonDetailsView({ currentUser }: Props) {
           title="Allowed Exchanges"
           name={currentUser?.exchangeList?.map((_el: any) => {
             const data = exchangeData?.filter((el: any) => el._id === _el.allowedExchange);
-            return <Typography>{data[0]?.name}</Typography>;
+            return (
+              <Box sx={{ display: 'flex', flexDirection: 'row', gap: 1 }}>
+                <Label variant="soft" color="default">
+                  {data[0]?.name} * {_el?.exchangeGroup}
+                </Label>
+              </Box>
+            );
           })}
         />
         <PersonDetailsViewLayout title="Leverage" name={currentUser?.leverageXY} />
@@ -176,14 +213,14 @@ export default function PersonDetailsView({ currentUser }: Props) {
         />
       </Box>
       <Card sx={{ mt: 2 }}>
-        <TableContainer sx={{ position: 'relative', overflow: 'unset', mt: 4 }}>
+        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
           <Scrollbar>
             <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
               <TableHeadCustom
                 order={table.order}
                 orderBy={table.orderBy}
                 headLabel={TABLE_HEAD}
-                rowCount={tableData?.length}
+                // rowCount={tableData?.length}
                 numSelected={table.selected.length}
                 onSort={table.onSort}
               />
@@ -197,44 +234,42 @@ export default function PersonDetailsView({ currentUser }: Props) {
                 <TableNoData notFound={notFound} sx={{ py: 10 }} />
               </TableBody>
             </Table>
-            {!notFound && (
-              <Box sx={{ backgroundColor: 'lightgrey', padding: 2 }}>
-                <Box
-                  sx={{
-                    display: 'flex',
-                    gap: 2,
-                    justifyContent: 'space-between',
-                    flexDirection: 'row',
-                  }}
-                >
-                  <Box sx={{ display: 'flex', gap: 2 }}>
-                    <Typography
-                      sx={{ fontWeight: 'bold', fontSize: '14px' }}
-                    >{`Balance : ${userBalance?.UserBalance}`}</Typography>
-                    <Typography
-                      sx={{ fontWeight: 'bold', fontSize: '14px' }}
-                    >{`Credit : ${userBalance?.UserCreditLimit}`}</Typography>
-                    <Typography
-                      sx={{ fontWeight: 'bold', fontSize: '14px' }}
-                    >{`Equity : ${userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance}`}</Typography>
-                    <Typography
-                      sx={{ fontWeight: 'bold', fontSize: '14px' }}
-                    >{`Margin : ${userBalance?.UserMargin?.toFixed(2)}`}</Typography>
-                    <Typography
-                      sx={{ fontWeight: 'bold', fontSize: '14px' }}
-                    >{`Free Margin : ${(userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance - userBalance?.UserMargin)?.toFixed(2)}`}</Typography>
-                    <Typography
-                      sx={{ fontWeight: 'bold', fontSize: '14px' }}
-                    >{`Margin Level : ${(((userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance) / userBalance?.UserMargin) * 100)?.toFixed(2)}%`}</Typography>
-                  </Box>
-                  <Box>
-                    <Typography sx={{ fontWeight: 'bold', fontSize: '14px', marginRight: 10 }}>
-                      {`Total Profit : ${totals?.totalProfit?.toFixed(2)}`}
-                    </Typography>
-                  </Box>
+            <Box sx={{ backgroundColor: 'lightgrey', padding: 2 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  gap: 2,
+                  justifyContent: 'space-between',
+                  flexDirection: 'row',
+                }}
+              >
+                <Box sx={{ display: 'flex', gap: 2 }}>
+                  <Typography
+                    sx={{ fontWeight: 'bold', fontSize: '14px' }}
+                  >{`Balance : ${userBalance?.UserBalance}`}</Typography>
+                  <Typography
+                    sx={{ fontWeight: 'bold', fontSize: '14px' }}
+                  >{`Credit : ${userBalance?.UserCreditLimit}`}</Typography>
+                  <Typography
+                    sx={{ fontWeight: 'bold', fontSize: '14px' }}
+                  >{`Equity : ${userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance}`}</Typography>
+                  <Typography
+                    sx={{ fontWeight: 'bold', fontSize: '14px' }}
+                  >{`Margin : ${userBalance?.UserMargin?.toFixed(2)}`}</Typography>
+                  <Typography
+                    sx={{ fontWeight: 'bold', fontSize: '14px' }}
+                  >{`Free Margin : ${(userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance - userBalance?.UserMargin)?.toFixed(2)}`}</Typography>
+                  <Typography
+                    sx={{ fontWeight: 'bold', fontSize: '14px' }}
+                  >{`Margin Level : ${(((userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance) / userBalance?.UserMargin) * 100)?.toFixed(2)}%`}</Typography>
+                </Box>
+                <Box>
+                  <Typography sx={{ fontWeight: 'bold', fontSize: '14px', marginRight: 10 }}>
+                    {`Total Profit : ${totals?.totalProfit?.toFixed(2)}`}
+                  </Typography>
                 </Box>
               </Box>
-            )}
+            </Box>
           </Scrollbar>
         </TableContainer>
       </Card>
