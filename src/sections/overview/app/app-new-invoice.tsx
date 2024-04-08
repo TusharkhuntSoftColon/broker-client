@@ -171,9 +171,15 @@ export default function AppNewInvoice({
   const { socket, connect, disconnect, subscribeToMarket, joinUserRoom, marketWatch } = useSocket();
   const [socketData, setSocketData] = useState<any>([]);
 
+  console.log({ finalArray });
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
+
+  console.log({ exchangeTableSummaryData });
+
+  console.log({ updatedExchangeArray });
 
   useEffect(() => {
     if (socket) {
@@ -264,6 +270,8 @@ export default function AppNewInvoice({
 
         if (buySymbol) {
           const buy = item.buy.allBuyAverages[buySymbol[0]];
+          console.log({ buy });
+
           result.push({
             id: buySymbol[1].toString(),
             symbol: buySymbol[0],
@@ -303,7 +311,6 @@ export default function AppNewInvoice({
             totalSellPrice += sell.totalQuantity * sell.average;
           }
         }
-
         // Update positions map
         positionsMap[key] = (positionsMap[key] || 0) + positions;
       }
@@ -349,12 +356,17 @@ export default function AppNewInvoice({
         let sellProfit = 0;
 
         if (Number(finalItem.buy_volume) > 0) {
-          buyProfit = parseFloat(correspondingTableItem.BuyPrice) - parseFloat(finalItem.buy_price);
+          buyProfit =
+            (parseFloat(correspondingTableItem.BuyPrice) - parseFloat(finalItem.buy_price)) *
+            Number(finalItem.buy_volume);
         }
         if (Number(finalItem.sell_volume) > 0) {
           sellProfit =
-            parseFloat(finalItem.sell_price) - parseFloat(correspondingTableItem.SellPrice);
+            parseFloat(finalItem.sell_price) -
+            parseFloat(correspondingTableItem.SellPrice) * Number(finalItem.sell_volume);
         }
+        console.log({ finalItem });
+
         const updatedProfit = (buyProfit + sellProfit) * finalItem?.tickValue;
         return { ...finalItem, profit: updatedProfit?.toFixed(2) };
       }

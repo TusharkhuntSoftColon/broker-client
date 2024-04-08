@@ -355,7 +355,6 @@ export default function BrokerageTableToolbar({
       value.date &&
       value.template &&
       value.exchangeCode &&
-      value.symbol &&
       value.bco &&
       value.bcm &&
       value.brkgRate &&
