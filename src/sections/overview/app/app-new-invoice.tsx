@@ -557,7 +557,7 @@ export default function AppNewInvoice({
                 styles={{ overflow: 'hidden' }}
               >
                 <CardHeader title={data.title} sx={{ padding: '12px !important' }} />
-                <TableContainer sx={{ overflow: 'unset', height: '400px' }}>
+                <TableContainer sx={{ overflow: 'unset', height: '230px' }}>
                   <Scrollbar>
                     <Table stickyHeader sx={{ minWidth: 680 }}>
                       <TableHeadCustom headLabel={data.tableLabel} />
@@ -567,39 +567,76 @@ export default function AppNewInvoice({
                         ))}
                         {data?.label === 'Summary' && (
                           <StyledTableRow>
-                            <StyledTableCell sx={{ fontWeight: 'bold' }}>Summary</StyledTableCell>
+                            <StyledTableCell sx={{ fontWeight: 'bold', fontSize: '13px' }}>
+                              Summary
+                            </StyledTableCell>
                             <StyledTableCell
-                              sx={{ textAlign: 'right', padding: '9px', fontWeight: 'bold' }}
+                              sx={{
+                                textAlign: 'right',
+                                padding: '5px',
+                                fontSize: '13px',
+                                fontWeight: 'bold',
+                              }}
                             >
                               {totals?.totalPositions}
                             </StyledTableCell>
                             <StyledTableCell
-                              sx={{ textAlign: 'right', padding: '9px', fontWeight: 'bold' }}
+                              sx={{
+                                textAlign: 'right',
+                                padding: '5px',
+                                fontSize: '13px',
+                                fontWeight: 'bold',
+                              }}
                             >
                               {totals?.totalBuyVolume}
                             </StyledTableCell>
                             <StyledTableCell
-                              sx={{ textAlign: 'right', padding: '9px', fontWeight: 'bold' }}
+                              sx={{
+                                textAlign: 'right',
+                                padding: '5px',
+                                fontSize: '13px',
+                                fontWeight: 'bold',
+                              }}
                             >
                               {totals?.totalBuyPrice}
                             </StyledTableCell>
                             <StyledTableCell
-                              sx={{ textAlign: 'right', padding: '9px', fontWeight: 'bold' }}
+                              sx={{
+                                textAlign: 'right',
+                                padding: '5px',
+                                fontSize: '13px',
+                                fontWeight: 'bold',
+                              }}
                             >
                               {totals?.totalSellVolume}
                             </StyledTableCell>
                             <StyledTableCell
-                              sx={{ textAlign: 'right', padding: '9px', fontWeight: 'bold' }}
+                              sx={{
+                                textAlign: 'right',
+                                padding: '5px',
+                                fontSize: '13px',
+                                fontWeight: 'bold',
+                              }}
                             >
                               {totals?.totalSellPrice}
                             </StyledTableCell>
                             <StyledTableCell
-                              sx={{ textAlign: 'right', padding: '9px', fontWeight: 'bold' }}
+                              sx={{
+                                textAlign: 'right',
+                                padding: '5px',
+                                fontSize: '13px',
+                                fontWeight: 'bold',
+                              }}
                             >
                               {totals?.totalNetVolume}
                             </StyledTableCell>
                             <StyledTableCell
-                              sx={{ textAlign: 'right', padding: '9px', fontWeight: 'bold' }}
+                              sx={{
+                                textAlign: 'right',
+                                padding: '5px',
+                                fontSize: '13px',
+                                fontWeight: 'bold',
+                              }}
                             >
                               {totals?.totalProfit}
                             </StyledTableCell>
@@ -635,6 +672,7 @@ export default function AppNewInvoice({
                 sx={{
                   // ml: 2,
                   width: '7%',
+                  fontSize: '13px',
                   marginRight: '0px !important',
                   borderTop: value === data.value ? 'none' : '1px solid #d3d3d3',
                   borderLeft: value === data.value ? 'none' : '0.5px solid #d3d3d3',
@@ -686,28 +724,30 @@ function AppNewInvoiceRow({ row, value }: AppNewInvoiceRowProps) {
     <>
       {value === 0 && (
         <StyledTableRow>
-          <StyledTableCell sx={{ textAlign: 'left', padding: '9px', borderLeft: 'none' }}>
+          <StyledTableCell
+            sx={{ textAlign: 'left', padding: '5px', fontSize: '13px', borderLeft: 'none' }}
+          >
             {row.symbol}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
             {row.positions}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
             {row.buy_volume}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
             {row.buy_price}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
             {row.sell_volume}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
             {row.sell_price}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
             {row.net_volume}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
             {row.profit}
           </StyledTableCell>
         </StyledTableRow>
@@ -715,37 +755,49 @@ function AppNewInvoiceRow({ row, value }: AppNewInvoiceRowProps) {
 
       {value === 1 && (
         <StyledTableRow>
-          <StyledTableCell sx={{ textAlign: 'left', padding: '9px', borderLeft: 'none' }}>
+          <StyledTableCell
+            sx={{ textAlign: 'left', padding: '5px', fontSize: '13px', borderLeft: 'none' }}
+          >
             {row.asset}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
             {row.clients}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
             {row.coverage}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
             {row.nettotal}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.rate}</StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
+            {row.rate}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
             {row.netTotal}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
             {row.positive}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px', borderRight: 'none' }}>
+          <StyledTableCell
+            sx={{ textAlign: 'right', padding: '5px', fontSize: '13px', borderRight: 'none' }}
+          >
             {row.graph}
           </StyledTableCell>
         </StyledTableRow>
       )}
       {value === 3 && (
         <StyledTableRow>
-          <StyledTableCell sx={{ textAlign: 'left', padding: '9px', borderLeft: 'none' }}>
+          <StyledTableCell
+            sx={{ textAlign: 'left', padding: '5px', fontSize: '13px', borderLeft: 'none' }}
+          >
             {row.time}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'left', padding: '9px' }}>{row.server}</StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'left', padding: '9px', borderRight: 'none' }}>
+          <StyledTableCell sx={{ textAlign: 'left', padding: '5px', fontSize: '13px' }}>
+            {row.server}
+          </StyledTableCell>
+          <StyledTableCell
+            sx={{ textAlign: 'left', padding: '5px', fontSize: '13px', borderRight: 'none' }}
+          >
             {row.message}
           </StyledTableCell>
         </StyledTableRow>

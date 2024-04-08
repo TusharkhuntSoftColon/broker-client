@@ -19,6 +19,7 @@ import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
 import AddIcon from '@mui/icons-material/Add';
+import CreateIcon from '@mui/icons-material/Create';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import CardHeader from '@mui/material/CardHeader';
@@ -361,6 +362,7 @@ export default function SymbolTableDashboard() {
                   sx={{
                     display: 'flex',
                     width: '100%',
+                    fontSize: '5px',
                     padding: 0,
                     justifyContent: 'space-between',
                     alignItems: 'center',
@@ -375,7 +377,7 @@ export default function SymbolTableDashboard() {
                         addSymbolInDashboard.onTrue();
                       }}
                     >
-                      <AddIcon sx={{ fontSize: '28px', fontWeight: '800' }} />
+                      <AddIcon />
                     </IconButton>
 
                     <IconButton
@@ -384,18 +386,23 @@ export default function SymbolTableDashboard() {
                         e.stopPropagation();
                         socketSymbol.onTrue();
                       }}
+                      sx={{ fontSize: '18px', fontWeight: '800' }}
                     >
-                      <Iconify icon="solar:pen-bold" />
+                      <CreateIcon sx={{ fontSize: '18px', fontWeight: '800' }} />
+                      {/* <Iconify icon="solar:pen-bold" /> */}
                     </IconButton>
                   </Box>
                 </Box>
                 <TableContainer
                   className="symbol-table-card"
-                  sx={{ overflow: 'scroll', height: '400px' }}
+                  sx={{ overflow: 'scroll', height: '250px' }}
                 >
                   <Table stickyHeader>
                     <TableHeadCustom
-                      sx={{ textAlign: 'right', border: '1px solid #dddddd' }}
+                      sx={{
+                        textAlign: 'right',
+                        border: '1px solid #dddddd',
+                      }}
                       headLabel={TABLE_HEAD}
                     />
                     <TableBody>
@@ -428,6 +435,7 @@ export default function SymbolTableDashboard() {
                 {...a11yProps(data.value)}
                 sx={{
                   // ml: 2,
+                  fontSize: '13px',
                   width: '20%',
                   marginRight: '0px !important',
                   borderTop: value === data.value ? 'none' : '1px solid #d3d3d3',
@@ -505,15 +513,18 @@ function SymbolNewRow({ row, value, index }: SymbolNewRowProps) {
             textAlign: 'left',
             display: 'flex',
             alignItems: 'center',
-            gap: '4px',
-            padding: '9px',
+            gap: '1px',
+            padding: '1px',
+            fontSize: '13px',
             borderLeft: 'none',
+            borderRight: 'none',
+            borderBottom: 'none',
           }}
         >
           {handleBidData || handleAskData ? (
-            <NorthEastIcon style={{ fontSize: '18px', color: 'blue' }} />
+            <NorthEastIcon style={{ fontSize: '14px', color: 'blue' }} />
           ) : (
-            <SouthEastIcon style={{ fontSize: '18px', color: 'red' }} />
+            <SouthEastIcon style={{ fontSize: '14px', color: 'red' }} />
           )}
           {row.symbol}
         </TableCell>
@@ -531,7 +542,10 @@ function SymbolNewRow({ row, value, index }: SymbolNewRowProps) {
                 : 'red',
             textAlign: 'right',
             width: '40px',
-            padding: '9px',
+            fontSize: '13px',
+            padding: '5px',
+            borderRight: 'none',
+            borderBottom: 'none',
           }}
         >
           {row.bid}
@@ -550,8 +564,10 @@ function SymbolNewRow({ row, value, index }: SymbolNewRowProps) {
                 : 'red',
             textAlign: 'right',
             width: '40px',
-            padding: '9px',
+            fontSize: '13px',
+            padding: '5px',
             borderRight: 'none',
+            borderBottom: 'none',
           }}
         >
           {row.ask}

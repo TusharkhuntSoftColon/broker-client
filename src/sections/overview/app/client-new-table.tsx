@@ -309,10 +309,13 @@ export default function ClientTableDashboard({
                 styles={{ overflow: 'hidden' }}
               >
                 <CardHeader title={data.title} sx={{ padding: '12px !important' }} />
-                <TableContainer sx={{ overflow: 'unset', height: '400px' }}>
+                <TableContainer sx={{ overflow: 'unset', height: '250px' }}>
                   <Scrollbar>
                     <Table stickyHeader>
-                      <TableHeadCustom headLabel={data.tableLabel} />
+                      <TableHeadCustom
+                        sx={{ fontSize: '13px !important', padding: '0px !important' }}
+                        headLabel={data.tableLabel}
+                      />
 
                       <TableBody key={data?.value}>
                         {data.tableDatas?.map((row: any) => (
@@ -350,6 +353,7 @@ export default function ClientTableDashboard({
                 {...a11yProps(data.value)}
                 sx={{
                   width: '15%',
+                  fontSize: '13px',
                   marginRight: '0px !important',
                   borderTop: value === data.value ? 'none' : '1px solid #d3d3d3',
                   borderLeft: value === data.value ? 'none' : '0.5px solid #d3d3d3',
@@ -405,29 +409,36 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
           onDoubleClick={() => router.push(paths.dashboard.person.edit(row?.userId?._id))}
           style={{ cursor: 'pointer' }}
         >
-          <StyledTableCell sx={{ textAlign: 'left', padding: '9px', borderLeft: 'none' }}>
+          <StyledTableCell
+            sx={{ textAlign: 'left', fontSize: '13px', padding: '5px', borderLeft: 'none' }}
+          >
             {row.userId?.ID}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'left', padding: '9px' }}>{row.ticket}</StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'left', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'left', fontSize: '13px', padding: '5px' }}>
+            {row.ticket}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'left', fontSize: '13px', padding: '5px' }}>
             {row.importMonthName}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'left', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'left', fontSize: '13px', padding: '5px' }}>
             {PositionTime}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row.positionType}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px', width: '10px' }}>
+          <StyledTableCell
+            sx={{ textAlign: 'right', fontSize: '13px', padding: '5px', width: '10px' }}
+          >
             {row.quantity}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row.positionType === 'BUY' ? row.buyPrice : row.sellPrice}
           </StyledTableCell>
           <StyledTableCell
             sx={{
               textAlign: 'right',
-              padding: '9px',
+              fontSize: '13px',
+              padding: '5px',
               color: row?.color,
             }}
           >
@@ -438,26 +449,36 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
 
       {value === 1 && (
         <StyledTableRow>
-          <StyledTableCell sx={{ textAlign: 'left', padding: '9px', borderLeft: 'none' }}>
+          <StyledTableCell
+            sx={{ textAlign: 'left', fontSize: '13px', padding: '5px', borderLeft: 'none' }}
+          >
             {row.ID}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'left', padding: '9px' }}>{row.name}</StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'left', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'left', fontSize: '13px', padding: '5px' }}>
+            {row.name}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'left', fontSize: '13px', padding: '5px' }}>
             {row?.leverageXY}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row?.user_balance?.balance}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row?.user_balance?.creditLimit}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px', borderRight: 'none' }}>
+          <StyledTableCell
+            sx={{ textAlign: 'right', fontSize: '13px', padding: '5px', borderRight: 'none' }}
+          >
             {row.equity}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px', borderRight: 'none' }}>
+          <StyledTableCell
+            sx={{ textAlign: 'right', fontSize: '13px', padding: '5px', borderRight: 'none' }}
+          >
             {row.margin}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px', borderRight: 'none' }}>
+          <StyledTableCell
+            sx={{ textAlign: 'right', fontSize: '13px', padding: '5px', borderRight: 'none' }}
+          >
             {row.equity}
           </StyledTableCell>
         </StyledTableRow>
@@ -465,19 +486,29 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
 
       {value === 2 && (
         <StyledTableRow>
-          <StyledTableCell sx={{ textAlign: 'left', padding: '9px', borderLeft: 'none' }}>
+          <StyledTableCell
+            sx={{ textAlign: 'left', fontSize: '13px', padding: '5px', borderLeft: 'none' }}
+          >
             {row.login}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.group}</StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.name}</StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
+            {row.group}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
+            {row.name}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row.client}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row.version}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>{row.ip}</StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px', borderRight: 'none' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
+            {row.ip}
+          </StyledTableCell>
+          <StyledTableCell
+            sx={{ textAlign: 'right', fontSize: '13px', padding: '5px', borderRight: 'none' }}
+          >
             {row.equity}
           </StyledTableCell>
         </StyledTableRow>
@@ -485,28 +516,32 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
 
       {value === 3 && (
         <StyledTableRow>
-          <StyledTableCell sx={{ textAlign: 'left', padding: '9px', borderLeft: 'none' }}>
+          <StyledTableCell
+            sx={{ textAlign: 'left', fontSize: '13px', padding: '5px', borderLeft: 'none' }}
+          >
             {row?.userId?.ID}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row.ticket}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row.importMonthName}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row?.time && new Date(row?.time).toDateString()}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row.positionType}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row.quantity}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row.positionType === 'BUY' ? row.buyPrice : row.sellPrice}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '9px', borderRight: 'none' }}>
+          <StyledTableCell
+            sx={{ textAlign: 'right', fontSize: '13px', padding: '5px', borderRight: 'none' }}
+          >
             {row.livePrice}
           </StyledTableCell>
         </StyledTableRow>

@@ -102,7 +102,7 @@ export default function MarginCallTableDashboard() {
         WebkitBorderRadius: '5px',
       }}
     >
-      <Box sx={{ margin: '5px', border: '1px solid #d3d3d3' }}>
+      <Box sx={{ margin: '5px', fontSize: '13px', border: '1px solid #d3d3d3' }}>
         <Box>
           {tabs.map((data) => (
             <CustomTabPanel
@@ -112,11 +112,11 @@ export default function MarginCallTableDashboard() {
               styles={{ overflow: 'hidden' }}
             >
               <CardHeader title={data.title} sx={{ padding: '12px !important' }} />
-              <TableContainer sx={{ overflow: 'unset', height: '400px' }}>
+              <TableContainer sx={{ overflow: 'unset', height: '250px' }}>
                 <Scrollbar>
                   <Table stickyHeader>
                     <TableHeadCustom
-                      sx={{ textAlign: 'right', border: '1px solid #dddddd' }}
+                      sx={{ textAlign: 'right', padding: 0, border: '1px solid #dddddd' }}
                       headLabel={data.tableLabel}
                     />
                     <TableBody>
@@ -206,9 +206,11 @@ function SymbolNewRow({ row, value, index }: SymbolNewRowProps) {
             textAlign: 'left',
             display: 'flex',
             alignItems: 'center',
-            gap: '4px',
-            padding: '9px',
+            gap: '1px',
+            padding: '5px',
+            fontSize: '13px',
             borderLeft: 'none',
+            borderBottom: 'none',
           }}
         >
           {row.login}
@@ -216,8 +218,10 @@ function SymbolNewRow({ row, value, index }: SymbolNewRowProps) {
         <StyledTableCell
           style={{
             textAlign: 'right',
-            padding: '9px',
+            padding: '5px',
+            fontSize: '13px',
             borderRight: 'none',
+            borderBottom: 'none',
           }}
         >
           {row.level}

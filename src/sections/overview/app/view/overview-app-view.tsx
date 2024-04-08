@@ -182,6 +182,8 @@ const OverviewAppView = () => {
               key={data.name}
               onClick={() => handleButtonClick(data.name)}
               sx={{
+                fontSize: '11px',
+
                 backgroundColor: selectedButtons.includes(data.name) ? '#919eab29' : 'transparent',
                 color: selectedButtons.includes(data.name) ? 'black' : 'black',
                 '&:hover': {
@@ -189,6 +191,7 @@ const OverviewAppView = () => {
                   boxShadow: 'none',
                 },
                 margin: 0.2,
+                mt: '-1.6rem',
               }}
             >
               {data.name}
@@ -202,6 +205,7 @@ const OverviewAppView = () => {
           <Box
             display={selectedButtons.includes(table.name) ? 'block' : 'none'}
             key={table.name}
+            sx={{ fontSize: '10px' }}
             width={
               currentTableCount === 2
                 ? '50%'
