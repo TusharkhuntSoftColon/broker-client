@@ -174,8 +174,17 @@ const OverviewAppView = () => {
   }, [getUserPositions, getUserAccounts, getUserOrders, getAllExchangeSummaryData]);
 
   return (
-    <Box width="100%">
-      <Box sx={{ margin: 3 }}>
+    <Box
+      sx={{
+        height: '97vh',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'hidden',
+      }}
+    >
+      <Box sx={{ margin: '25px 0px 0px 20px' }}>
+        {/* First Child Box */}
         {TableComponents.map((data: any) => {
           return (
             <LoadingButton
@@ -183,7 +192,6 @@ const OverviewAppView = () => {
               onClick={() => handleButtonClick(data.name)}
               sx={{
                 fontSize: '11px',
-
                 backgroundColor: selectedButtons.includes(data.name) ? '#919eab29' : 'transparent',
                 color: selectedButtons.includes(data.name) ? 'black' : 'black',
                 '&:hover': {
@@ -200,12 +208,17 @@ const OverviewAppView = () => {
         })}
       </Box>
 
-      <Box sx={{ width: '100%', display: 'flex' }}>
+      <Box sx={{ width: '100%', display: 'flex', flex: '1 1 auto' }}>
+        {/* Second and Third Child Boxes */}
         {TableComponents.slice(0, 3).map((table) => (
           <Box
-            display={selectedButtons.includes(table.name) ? 'block' : 'none'}
             key={table.name}
-            sx={{ fontSize: '10px' }}
+            sx={{
+              fontSize: '10px',
+              flex: '1 1 0', // Let these boxes grow and shrink equally
+              minWidth: 0, // Ensure content can overflow
+              overflow: 'auto', // Enable scrolling if content overflows
+            }}
             width={
               currentTableCount === 2
                 ? '50%'
@@ -221,7 +234,9 @@ const OverviewAppView = () => {
         ))}
       </Box>
 
-      <Grid container>
+      {/* Fourth Child Box */}
+      <Grid container sx={{ flex: '0 0 auto', overflow: 'auto' }}>
+        {/* Third Child Boxes */}
         {TableComponents.slice(3).map((table) => (
           <Grid item xs={12} key={table.name}>
             {renderComponent(table.name)}
