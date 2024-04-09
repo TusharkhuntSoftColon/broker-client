@@ -171,15 +171,9 @@ export default function AppNewInvoice({
   const { socket, connect, disconnect, subscribeToMarket, joinUserRoom, marketWatch } = useSocket();
   const [socketData, setSocketData] = useState<any>([]);
 
-  console.log({ finalArray });
-
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-
-  console.log({ exchangeTableSummaryData });
-
-  console.log({ updatedExchangeArray });
 
   useEffect(() => {
     if (socket) {
@@ -270,8 +264,6 @@ export default function AppNewInvoice({
 
         if (buySymbol) {
           const buy = item.buy.allBuyAverages[buySymbol[0]];
-          console.log({ buy });
-
           result.push({
             id: buySymbol[1].toString(),
             symbol: buySymbol[0],
@@ -365,8 +357,6 @@ export default function AppNewInvoice({
             (parseFloat(finalItem.sell_price) - parseFloat(correspondingTableItem.SellPrice)) *
             Number(finalItem.sell_volume);
         }
-        console.log({ finalItem });
-
         const updatedProfit = (buyProfit + sellProfit) * finalItem?.tickValue;
         return { ...finalItem, profit: updatedProfit?.toFixed(2) };
       }
@@ -648,6 +638,7 @@ export default function AppNewInvoice({
                                 padding: '5px',
                                 fontSize: '13px',
                                 fontWeight: 'bold',
+                                color: totals?.totalProfit > 0 ? 'blue' : 'red',
                               }}
                             >
                               {totals?.totalProfit}
@@ -759,7 +750,14 @@ function AppNewInvoiceRow({ row, value }: AppNewInvoiceRowProps) {
           <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
             {row.net_volume}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
+          <StyledTableCell
+            sx={{
+              textAlign: 'right',
+              padding: '5px',
+              fontSize: '13px',
+              color: row.profit > 0 ? 'blue' : 'red',
+            }}
+          >
             {row.profit}
           </StyledTableCell>
         </StyledTableRow>

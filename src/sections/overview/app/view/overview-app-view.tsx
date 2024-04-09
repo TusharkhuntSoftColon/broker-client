@@ -176,7 +176,7 @@ const OverviewAppView = () => {
   return (
     <Box
       sx={{
-        height: '97vh',
+        height: '96vh',
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
@@ -215,7 +215,7 @@ const OverviewAppView = () => {
             key={table.name}
             sx={{
               fontSize: '10px',
-              flex: '1 1 0', // Let these boxes grow and shrink equally
+
               minWidth: 0, // Ensure content can overflow
               overflow: 'auto', // Enable scrolling if content overflows
             }}

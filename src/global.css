@@ -148,3 +148,7 @@
 .css-287okb-MuiPaper-root-MuiCard-root {
   box-shadow: none !important;
 } */
+
+.css-6okn92-MuiButtonBase-root-MuiTab-root{
+  height: 10px !important;
+}

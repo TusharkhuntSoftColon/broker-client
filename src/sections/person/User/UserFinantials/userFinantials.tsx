@@ -10,7 +10,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import Card from '@mui/material/Card';
 import { LoadingButton } from '@mui/lab';
 import Container from '@mui/material/Container';
-import { Box, Grid, Table, TableBody, TableContainer } from '@mui/material';
+import { Box, Grid, Table, TableBody, Typography, TableContainer } from '@mui/material';
 
 import userFinancialsService from 'src/services/userFinancialsService';
 
@@ -57,6 +57,9 @@ export default function UserFinantials() {
 
   const [tableData, setTableData] = useState<any>();
   const [isWithDrow, setIsWithDrow] = useState<boolean>(false);
+  const [userBalanceDetails, setUserBalanceDetails] = useState<any>({});
+
+  console.log({ userBalanceDetails });
 
   const { id }: any = useParams();
 
@@ -107,7 +110,8 @@ export default function UserFinantials() {
     () => userFinancialsService.getBalanceHistory(id),
     {
       onSuccess: (data: any) => {
-        setTableData(data?.data?.data?.rows);
+        setTableData(data?.data?.data?.balanceHistoryDetails);
+        setUserBalanceDetails(data?.data?.data?.balanceDetails?.user_balance);
       },
       onError: (error: any) => {
         console.log({ error });
@@ -125,6 +129,7 @@ export default function UserFinantials() {
             label: 'Balance',
             value: 'BALANCE',
           });
+        setValue('Credit', 0);
         reset();
       },
       onError: (error: any) => {
@@ -139,6 +144,9 @@ export default function UserFinantials() {
       onSuccess: (data: any) => {
         getBalanceHistory(id);
         reset();
+        setValue('Credit', 0);
+        setValue('comment', '');
+        setValue('Balance', 0);
       },
 
       onError: (error: any) => {
@@ -165,7 +173,19 @@ export default function UserFinantials() {
         <FormProvider methods={methods} onSubmit={onSubmit}>
           <Grid container>
             <Grid xs={12}>
-              <Card sx={{ p: 6 }}>
+              <Card sx={{ p: 4 }}>
+                <Box sx={{ marginBottom: 4, display: 'flex', gap: 2 }}>
+                  <Box sx={{ display: 'flex', gap: 2 }}>
+                    <Typography sx={{ fontSize: '14px' }}>Balance : </Typography>
+                    <Typography sx={{ fontSize: '14px' }}>{userBalanceDetails?.balance}</Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', gap: 2 }}>
+                    <Typography sx={{ fontSize: '14px' }}>Credit Limit : </Typography>
+                    <Typography sx={{ fontSize: '14px' }}>
+                      {userBalanceDetails?.creditLimit}
+                    </Typography>
+                  </Box>
+                </Box>
                 <Box
                   rowGap={3}
                   columnGap={2}

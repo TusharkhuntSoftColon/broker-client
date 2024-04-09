@@ -24,7 +24,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
-import { useTheme, IconButton } from '@mui/material';
+import { Tooltip, useTheme, IconButton } from '@mui/material';
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
 import TableContainer from '@mui/material/TableContainer';
@@ -100,6 +100,9 @@ const TABLE_HEAD = [
   },
   { id: 'bid', label: 'Bid', align: 'right', border: '1px solid #dddddd !important' },
   { id: 'ask', label: 'Ask', align: 'right', border: '1px solid #dddddd !important' },
+  { id: 'dailyChange', label: 'Ask', align: 'right', border: '1px solid #dddddd !important' },
+  { id: 'high', label: 'High', align: 'right', border: '1px solid #dddddd !important' },
+  { id: 'low', label: 'Low', align: 'right', border: '1px solid #dddddd !important' },
 ];
 
 export default function SymbolTableDashboard() {
@@ -114,6 +117,9 @@ export default function SymbolTableDashboard() {
   const [currentSymbolList, setCurrentSymbolList] = useState<any>([]);
   const [importMonthData, setImportMonthData] = useState<any>([]);
   const [socketData, setSocketData] = useState<any>([]);
+  const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false);
+
+  console.log({ socketData });
 
   const { socket, connect, disconnect, subscribeToMarket, joinUserRoom, marketWatch } = useSocket();
 
@@ -260,6 +266,13 @@ export default function SymbolTableDashboard() {
                   : 'white'
                 : 'red'
             : 'red',
+        open: data?.Open,
+        close: data?.Close,
+        high: data?.High,
+        low: data?.Low,
+        priceChangePercentage: data?.PriceChangePercentage,
+        lastTradePrice: data?.LastTradePrice,
+        priceChange: data?.PriceChange,
       });
     }
     const updatedArray = symbolData
@@ -288,6 +301,13 @@ export default function SymbolTableDashboard() {
       oldPercentage,
       bidColor,
       askColor,
+      open,
+      close,
+      high,
+      low,
+      priceChangePercentage,
+      lastTradePrice,
+      priceChange,
     } = row;
     return {
       id,
@@ -300,6 +320,13 @@ export default function SymbolTableDashboard() {
       oldPercentage,
       bidColor,
       askColor,
+      open,
+      close,
+      high,
+      low,
+      priceChangePercentage,
+      lastTradePrice,
+      priceChange,
     };
   });
 
@@ -310,9 +337,26 @@ export default function SymbolTableDashboard() {
       title: 'Symbol Table',
       tableDatas: newSymbolTableData,
       tableLabel: [
-        { id: 'symbol', label: 'Symbol', align: 'left', border: '1px solid #dddddd !important' },
+        {
+          id: 'symbol',
+          label: 'Symbol',
+          align: 'left',
+          border: '1px solid #dddddd !important',
+        },
         { id: 'bid', label: 'Bid', align: 'right', border: '1px solid #dddddd !important' },
         { id: 'ask', label: 'Ask', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'ltp', label: 'LTP', align: 'right', border: '1px solid #dddddd !important' },
+        {
+          id: 'dailyChange',
+          label: 'Net Change',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+        },
+        { id: 'change%', label: 'Change%', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'high', label: 'High', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'low', label: 'Low', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'open', label: 'Open', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'close', label: 'Close', align: 'right', border: '1px solid #dddddd !important' },
       ],
     },
     {
@@ -356,7 +400,7 @@ export default function SymbolTableDashboard() {
                 key={data.value}
                 value={value}
                 index={data.value}
-                styles={{ overflow: 'hidden' }}
+                styles={{ overflowY: 'hidden' }}
               >
                 <Box
                   sx={{
@@ -370,27 +414,54 @@ export default function SymbolTableDashboard() {
                 >
                   <CardHeader title={data.title} sx={{ padding: '0px 0px 0px 10px !important' }} />
                   <Box>
-                    <IconButton
-                      color="default"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        addSymbolInDashboard.onTrue();
-                      }}
-                    >
-                      <AddIcon />
-                    </IconButton>
-
-                    <IconButton
-                      color="default"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        socketSymbol.onTrue();
-                      }}
-                      sx={{ fontSize: '18px', fontWeight: '800' }}
-                    >
-                      <CreateIcon sx={{ fontSize: '18px', fontWeight: '800' }} />
-                      {/* <Iconify icon="solar:pen-bold" /> */}
-                    </IconButton>
+                    <Tooltip title="Advance Mode" placement="top">
+                      <IconButton
+                        color="default"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          console.log('CLICKEDDDDDDDDDDDDDDDDD');
+                          setIsAdvancedMode(!isAdvancedMode);
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            fontSize: '16px',
+                            border: '1px solid gray',
+                            padding: 0.3,
+                            borderRadius: '50%',
+                            height: '22px',
+                            width: '22px',
+                            backgroundColor: isAdvancedMode ? 'lightgray' : 'transparent',
+                          }}
+                        >
+                          A
+                        </Box>
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Add Symbol" placement="top">
+                      <IconButton
+                        color="default"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          addSymbolInDashboard.onTrue();
+                        }}
+                      >
+                        <AddIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Rearrange Symbols" placement="top">
+                      <IconButton
+                        color="default"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          socketSymbol.onTrue();
+                        }}
+                        sx={{ fontSize: '18px', fontWeight: '800' }}
+                      >
+                        <CreateIcon sx={{ fontSize: '18px', fontWeight: '800' }} />
+                        {/* <Iconify icon="solar:pen-bold" /> */}
+                      </IconButton>
+                    </Tooltip>
                   </Box>
                 </Box>
                 <TableContainer
@@ -403,11 +474,21 @@ export default function SymbolTableDashboard() {
                         textAlign: 'right',
                         border: '1px solid #dddddd',
                       }}
-                      headLabel={TABLE_HEAD}
+                      headLabel={
+                        data?.label === 'Symbols' && !isAdvancedMode
+                          ? data?.tableLabel.slice(0, 3)
+                          : data?.tableLabel
+                      }
                     />
                     <TableBody>
                       {rowData?.map((row: any, index: number) => (
-                        <SymbolNewRow key={row.id} row={row} index={index} value={value} />
+                        <SymbolNewRow
+                          key={row.id}
+                          row={row}
+                          index={index}
+                          value={value}
+                          isAdvancedMode={isAdvancedMode}
+                        />
                       ))}
                     </TableBody>
                   </Table>
@@ -476,9 +557,10 @@ type SymbolNewRowProps = {
   row: any;
   value?: any;
   index?: any;
+  isAdvancedMode?: boolean;
 };
 
-function SymbolNewRow({ row, value, index }: SymbolNewRowProps) {
+function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) {
   const popover = usePopover();
 
   const theme = useTheme();
@@ -541,7 +623,7 @@ function SymbolNewRow({ row, value, index }: SymbolNewRowProps) {
                     : 'red'
                 : 'red',
             textAlign: 'right',
-            width: '40px',
+            width: '100px',
             fontSize: '13px',
             padding: '5px',
             borderRight: 'none',
@@ -563,7 +645,7 @@ function SymbolNewRow({ row, value, index }: SymbolNewRowProps) {
                     : 'red'
                 : 'red',
             textAlign: 'right',
-            width: '40px',
+            width: '100px',
             fontSize: '13px',
             padding: '5px',
             borderRight: 'none',
@@ -572,6 +654,156 @@ function SymbolNewRow({ row, value, index }: SymbolNewRowProps) {
         >
           {row.ask}
         </StyledTableCell>
+        {isAdvancedMode && (
+          <>
+            {' '}
+            <StyledTableCell
+              style={{
+                color:
+                  row?.ask !== undefined && row?.oldSellPrice !== undefined
+                    ? row?.ask > row?.oldSellPrice
+                      ? 'blue'
+                      : row?.ask === row?.oldSellPrice
+                        ? theme.palette.mode === 'light'
+                          ? 'black'
+                          : 'white'
+                        : 'red'
+                    : 'red',
+                textAlign: 'right',
+                width: '100px',
+                fontSize: '13px',
+                padding: '5px',
+                borderRight: 'none',
+                borderBottom: 'none',
+              }}
+            >
+              {row?.lastTradePrice}
+            </StyledTableCell>
+            <StyledTableCell
+              style={{
+                color: row.priceChange > 0 ? 'blue' : 'red',
+                textAlign: 'right',
+                width: '100px',
+                fontSize: '13px',
+                padding: '5px',
+                borderRight: 'none',
+                borderBottom: 'none',
+              }}
+            >
+              {row.priceChange?.toFixed(2)}
+            </StyledTableCell>
+            <StyledTableCell
+              style={{
+                color:
+                  row?.ask !== undefined && row?.oldSellPrice !== undefined
+                    ? row?.ask > row?.oldSellPrice
+                      ? 'blue'
+                      : row?.ask === row?.oldSellPrice
+                        ? theme.palette.mode === 'light'
+                          ? 'black'
+                          : 'white'
+                        : 'red'
+                    : 'red',
+                textAlign: 'right',
+                width: '100px',
+                fontSize: '13px',
+                padding: '5px',
+                borderRight: 'none',
+                borderBottom: 'none',
+              }}
+            >
+              {row.priceChangePercentage?.toFixed(2)}
+            </StyledTableCell>
+            <StyledTableCell
+              style={{
+                color:
+                  row?.ask !== undefined && row?.oldSellPrice !== undefined
+                    ? row?.ask > row?.oldSellPrice
+                      ? 'blue'
+                      : row?.ask === row?.oldSellPrice
+                        ? theme.palette.mode === 'light'
+                          ? 'black'
+                          : 'white'
+                        : 'red'
+                    : 'red',
+                textAlign: 'right',
+                width: '100px',
+                fontSize: '13px',
+                padding: '5px',
+                borderRight: 'none',
+                borderBottom: 'none',
+              }}
+            >
+              {row.high}
+            </StyledTableCell>
+            <StyledTableCell
+              style={{
+                color:
+                  row?.ask !== undefined && row?.oldSellPrice !== undefined
+                    ? row?.ask > row?.oldSellPrice
+                      ? 'blue'
+                      : row?.ask === row?.oldSellPrice
+                        ? theme.palette.mode === 'light'
+                          ? 'black'
+                          : 'white'
+                        : 'red'
+                    : 'red',
+                textAlign: 'right',
+                width: '100px',
+                fontSize: '13px',
+                padding: '5px',
+                borderRight: 'none',
+                borderBottom: 'none',
+              }}
+            >
+              {row.low}
+            </StyledTableCell>
+            <StyledTableCell
+              style={{
+                color:
+                  row?.ask !== undefined && row?.oldSellPrice !== undefined
+                    ? row?.ask > row?.oldSellPrice
+                      ? 'blue'
+                      : row?.ask === row?.oldSellPrice
+                        ? theme.palette.mode === 'light'
+                          ? 'black'
+                          : 'white'
+                        : 'red'
+                    : 'red',
+                textAlign: 'right',
+                width: '100px',
+                fontSize: '13px',
+                padding: '5px',
+                borderRight: 'none',
+                borderBottom: 'none',
+              }}
+            >
+              {row.open}
+            </StyledTableCell>
+            <StyledTableCell
+              style={{
+                color:
+                  row?.ask !== undefined && row?.oldSellPrice !== undefined
+                    ? row?.ask > row?.oldSellPrice
+                      ? 'blue'
+                      : row?.ask === row?.oldSellPrice
+                        ? theme.palette.mode === 'light'
+                          ? 'black'
+                          : 'white'
+                        : 'red'
+                    : 'red',
+                textAlign: 'right',
+                width: '100px',
+                fontSize: '13px',
+                padding: '5px',
+                borderRight: 'none',
+                borderBottom: 'none',
+              }}
+            >
+              {row.close}
+            </StyledTableCell>{' '}
+          </>
+        )}
       </StyledTableRow>
 
       <CustomPopover

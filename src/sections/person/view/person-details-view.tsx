@@ -245,26 +245,26 @@ export default function PersonDetailsView({ currentUser }: Props) {
               >
                 <Box sx={{ display: 'flex', gap: 2 }}>
                   <Typography
-                    sx={{ fontWeight: 'bold', fontSize: '14px' }}
+                    sx={{ fontWeight: 'bold', fontSize: '13px' }}
                   >{`Balance : ${userBalance?.UserBalance}`}</Typography>
                   <Typography
-                    sx={{ fontWeight: 'bold', fontSize: '14px' }}
+                    sx={{ fontWeight: 'bold', fontSize: '13px' }}
                   >{`Credit : ${userBalance?.UserCreditLimit}`}</Typography>
                   <Typography
-                    sx={{ fontWeight: 'bold', fontSize: '14px' }}
+                    sx={{ fontWeight: 'bold', fontSize: '13px' }}
                   >{`Equity : ${userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance}`}</Typography>
                   <Typography
-                    sx={{ fontWeight: 'bold', fontSize: '14px' }}
+                    sx={{ fontWeight: 'bold', fontSize: '13px' }}
                   >{`Margin : ${userBalance?.UserMargin?.toFixed(2)}`}</Typography>
                   <Typography
-                    sx={{ fontWeight: 'bold', fontSize: '14px' }}
+                    sx={{ fontWeight: 'bold', fontSize: '13px' }}
                   >{`Free Margin : ${(userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance - userBalance?.UserMargin)?.toFixed(2)}`}</Typography>
                   <Typography
-                    sx={{ fontWeight: 'bold', fontSize: '14px' }}
+                    sx={{ fontWeight: 'bold', fontSize: '13px' }}
                   >{`Margin Level : ${(((userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance) / userBalance?.UserMargin) * 100)?.toFixed(2)}%`}</Typography>
                 </Box>
                 <Box>
-                  <Typography sx={{ fontWeight: 'bold', fontSize: '14px', marginRight: 10 }}>
+                  <Typography sx={{ fontWeight: 'bold', fontSize: '13px', marginRight: 10 }}>
                     {`Total Profit : ${totals?.totalProfit?.toFixed(2)}`}
                   </Typography>
                 </Box>

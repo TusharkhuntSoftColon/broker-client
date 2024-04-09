@@ -25,11 +25,11 @@ const PersonDetailsViewLayout = ({ title, name, extraStyle, type }: AddUserTypes
           flex: 0.7,
           display: 'flex',
           alignItems: 'center',
-          p: 2,
+          padding: '0px 16px',
           bgcolor: '#f9fafa',
         }}
       >
-        <Typography>{title}</Typography>
+        <Typography sx={{ fontSize: '13px' }}>{title}</Typography>
       </Box>
       <Box
         sx={{
@@ -39,7 +39,10 @@ const PersonDetailsViewLayout = ({ title, name, extraStyle, type }: AddUserTypes
           padding: '0px 16px',
         }}
       >
-        <pre style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }} key={name}>
+        <pre
+          style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', fontSize: '13px' }}
+          key={name}
+        >
           {name}
         </pre>
       </Box>

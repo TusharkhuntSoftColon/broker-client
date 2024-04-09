@@ -99,8 +99,8 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
   };
   const marketWatch = (setSocketData: any) => {
     if (socket) {
-      socket.on('marketWatch', (data: any) => {
-        setSocketData((prev: any) => {
+      socket.on('marketWatch', async (data: any) => {
+        await setSocketData((prev: any) => {
           let index1 = -1;
 
           for (let index = 0; index < prev.length; index++) {
