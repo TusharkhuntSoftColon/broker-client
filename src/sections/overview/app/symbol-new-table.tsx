@@ -395,7 +395,7 @@ export default function SymbolTableDashboard() {
                 </Box>
                 <TableContainer
                   className="symbol-table-card"
-                  sx={{ overflow: 'scroll', height: '250px' }}
+                  sx={{ overflow: 'scroll', height: '35vh' }}
                 >
                   <Table stickyHeader>
                     <TableHeadCustom

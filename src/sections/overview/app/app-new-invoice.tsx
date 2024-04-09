@@ -362,8 +362,8 @@ export default function AppNewInvoice({
         }
         if (Number(finalItem.sell_volume) > 0) {
           sellProfit =
-            parseFloat(finalItem.sell_price) -
-            parseFloat(correspondingTableItem.SellPrice) * Number(finalItem.sell_volume);
+            (parseFloat(finalItem.sell_price) - parseFloat(correspondingTableItem.SellPrice)) *
+            Number(finalItem.sell_volume);
         }
         console.log({ finalItem });
 
@@ -569,7 +569,7 @@ export default function AppNewInvoice({
                 styles={{ overflow: 'hidden' }}
               >
                 <CardHeader title={data.title} sx={{ padding: '12px !important' }} />
-                <TableContainer sx={{ overflow: 'unset', height: '230px' }}>
+                <TableContainer sx={{ overflow: 'unset', height: '35vh' }}>
                   <Scrollbar>
                     <Table stickyHeader sx={{ minWidth: 680 }}>
                       <TableHeadCustom headLabel={data.tableLabel} />
