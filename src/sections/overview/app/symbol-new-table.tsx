@@ -588,7 +588,7 @@ function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) 
 
   return (
     <>
-      <StyledTableRow>
+      <StyledTableRow sx={{ cursor: 'pointer' }}>
         <TableCell
           style={{
             border: '1px solid #dddddd',

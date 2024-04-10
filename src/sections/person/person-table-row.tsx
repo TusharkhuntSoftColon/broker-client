@@ -46,6 +46,8 @@ export default function PersonTableRow({
 }: Props) {
   const { name, exchangeList, ID, status, role } = row;
 
+  console.log({ status });
+
   const confirm = useBoolean();
   const quickEdit = useBoolean();
   const popover = usePopover();
@@ -88,18 +90,18 @@ export default function PersonTableRow({
           <Label
             variant="soft"
             color={
-              status === STATUS[0].value
+              status[0] === STATUS[0].value
                 ? 'success'
-                : status === STATUS[1].value
+                : status[0] === STATUS[1].value
                   ? 'warning'
-                  : status === STATUS[2].value
+                  : status[0] === STATUS[2].value
                     ? 'error'
-                    : status === STATUS[3].value
+                    : status[0] === STATUS[3].value
                       ? 'info'
                       : 'secondary'
             }
           >
-            {status}
+            {status[0]}
           </Label>
         </TableCell>
 

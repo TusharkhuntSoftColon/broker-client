@@ -340,7 +340,7 @@ export default function AppNewInvoice({
   useEffect(() => {
     const updatedFinalArray = finalArray.result?.map((finalItem: any) => {
       const correspondingTableItem = socketData?.find(
-        (tableItem: any) => finalItem.socketLiveName === tableItem.InstrumentIdentifier
+        (tableItem: any) => finalItem.socketLiveName === tableItem?.InstrumentIdentifier
       );
 
       if (correspondingTableItem) {

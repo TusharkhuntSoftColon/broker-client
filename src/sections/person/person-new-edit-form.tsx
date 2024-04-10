@@ -113,7 +113,7 @@ export default function PersonNewEditForm({
 
   const defaultStatus = useMemo(() => {
     const data = currentUser
-      ? STATUS.find((option: any) => currentUser?.status === option.value)
+      ? STATUS.find((option: any) => currentUser?.status[0] === option.value)
       : { value: 'OPEN', label: 'Open' };
     return data;
   }, [currentUser, personList]);

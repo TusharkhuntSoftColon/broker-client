@@ -112,8 +112,15 @@ export default function ClientTableDashboard({
   positionsData: any;
 }) {
   const [value, setValue] = useState(0);
-  // const [tableData1, setTableData] = useState<any>([]);
-  // const { token } = useAuth();
+  const [allOrders, setAllOrders] = useState([]);
+
+  useEffect(() => {
+    const orders = accountData?.reduce((acc, user) => {
+      return acc.concat(user.order);
+    }, []);
+
+    setAllOrders(orders);
+  }, [accountData]);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -127,7 +134,8 @@ export default function ClientTableDashboard({
   useEffect(() => {
     if (socket) {
       connect();
-      const subscribingData = value === 0 ? positionsData : value === 3 ? ordersData : [];
+      const subscribingData =
+        value === 1 ? positionsData : value === 3 ? ordersData : value === 0 ? allOrders : [];
       subscribeToMarket('client', subscribingData); // Subscribe to market when the component mounts
       joinUserRoom('client', subscribingData); // Join user room when the component mounts
 
@@ -161,10 +169,12 @@ export default function ClientTableDashboard({
 
   useEffect(() => {
     const updateLivePrice = async (socketData1: any) => {
+      console.log({ socketData1 });
+
       const userTableData = value === 0 ? positionsData : value === 3 ? ordersData : [];
       const updatedPositions = userTableData?.map((position: any) => {
         const socketItem = socketData1?.find(
-          (item: any) => item.InstrumentIdentifier === position.scriptName
+          (item: any) => item?.InstrumentIdentifier === position.scriptName
         );
 
         if (socketItem) {
@@ -193,14 +203,96 @@ export default function ClientTableDashboard({
       } else if (updatedPositions !== undefined && value === 3) {
         setUpdatedOrdersData(updatedPositions);
       }
+
+      console.log({ accountData });
     };
     updateLivePrice(socketData);
   }, [socketData]);
 
+  // const calculateProfitForOrders = (socketData: any, accountData: any) => {
+  //   console.log({ socketData, accountData });
+
+  //   const updatedAccountData = accountData?.map((user) => {
+  //     const updatedOrders = user.order?.map((order) => {
+  //       const socketItem = socketData?.find(
+  //         (item) => item?.InstrumentIdentifier === order?.scriptName
+  //       );
+  //       console.log({ socketItem });
+
+  //       if (socketItem) {
+  //         let profit = 0;
+  //         if (order.positionType === 'BUY') {
+  //           profit =
+  //             (socketItem.BuyPrice - order.buyPrice) *
+  //             order.tickValue *
+  //             order.quantity *
+  //             order.calculationValue;
+  //         } else if (order.positionType === 'SELL') {
+  //           profit =
+  //             (order.sellPrice - socketItem.SellPrice) *
+  //             order.tickValue *
+  //             order.quantity *
+  //             order.calculationValue;
+  //         }
+  //         return {
+  //           ...order,
+  //           profit,
+  //         };
+  //       }
+  //       return order;
+  //     });
+  //     return {
+  //       ...user,
+  //       order: updatedOrders,
+  //     };
+  //   });
+  //   return updatedAccountData;
+  // };
+  // const updatedAccountData = calculateProfitForOrders(socketData, accountData);
+
+  // const calculateTotals = (updatedAccountData) => {
+  //   let totalProfit = 0;
+
+  //   updatedAccountData?.order?.forEach((item) => {
+  //     totalProfit += parseFloat(item.profit);
+  //   });
+
+  //   totalProfit = parseFloat(totalProfit?.toFixed(2));
+
+  //   return {
+  //     totalProfit,
+  //   };
+  // };
+  // const totals = calculateTotals(updatedAccountData);
+  // console.log({ totals });
+
+  // console.log({ updatedAccountData });
+
   const tabs = [
     {
-      label: 'Positions',
+      label: 'Accounts',
       value: 0,
+      title: 'Accounts Table',
+      tableDatas: accountData,
+      tableLabel: [
+        { id: 'ID', label: 'Login', align: 'left', border: '1px solid #dddddd !important' },
+        { id: 'name', label: 'Name', align: 'left', border: '1px solid #dddddd !important' },
+        {
+          id: 'leverage',
+          label: 'Leverage',
+          align: 'left',
+          border: '1px solid #dddddd !important',
+        },
+        { id: 'balance', label: 'Balance', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'credit', label: 'Credit', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'equity', label: 'Equity', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'margin', label: 'Margin', align: 'right', border: '1px solid #dddddd !important' },
+        { id: 'profit', label: 'Profit', align: 'right', border: '1px solid #dddddd !important' },
+      ],
+    },
+    {
+      label: 'Positions',
+      value: 1,
       title: 'Users',
       tableDatas: updatedPositionsData,
       tableLabel: [
@@ -230,27 +322,7 @@ export default function ClientTableDashboard({
         },
       ],
     },
-    {
-      label: 'Accounts',
-      value: 1,
-      title: 'Accounts Table',
-      tableDatas: accountData,
-      tableLabel: [
-        { id: 'ID', label: 'Login', align: 'left', border: '1px solid #dddddd !important' },
-        { id: 'name', label: 'Name', align: 'left', border: '1px solid #dddddd !important' },
-        {
-          id: 'leverage',
-          label: 'Leverage',
-          align: 'left',
-          border: '1px solid #dddddd !important',
-        },
-        { id: 'balance', label: 'Balance', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'credit', label: 'Credit', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'equity', label: 'Equity', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'margin', label: 'Margin', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'profit', label: 'Profit', align: 'right', border: '1px solid #dddddd !important' },
-      ],
-    },
+
     {
       label: 'Online',
       value: 2,
@@ -405,6 +477,42 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
   return (
     <>
       {value === 0 && (
+        <StyledTableRow>
+          <StyledTableCell
+            sx={{ textAlign: 'left', fontSize: '13px', padding: '5px', borderLeft: 'none' }}
+          >
+            {row.ID}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'left', fontSize: '13px', padding: '5px' }}>
+            {row.name}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'left', fontSize: '13px', padding: '5px' }}>
+            {row?.leverageXY}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
+            {row?.user_balance?.balance}
+          </StyledTableCell>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
+            {row?.user_balance?.creditLimit}
+          </StyledTableCell>
+          <StyledTableCell
+            sx={{ textAlign: 'right', fontSize: '13px', padding: '5px', borderRight: 'none' }}
+          >
+            {row.equity}
+          </StyledTableCell>
+          <StyledTableCell
+            sx={{ textAlign: 'right', fontSize: '13px', padding: '5px', borderRight: 'none' }}
+          >
+            {row.margin}
+          </StyledTableCell>
+          <StyledTableCell
+            sx={{ textAlign: 'right', fontSize: '13px', padding: '5px', borderRight: 'none' }}
+          >
+            {row.equity}
+          </StyledTableCell>
+        </StyledTableRow>
+      )}
+      {value === 1 && (
         <StyledTableRow
           onDoubleClick={() => router.push(paths.dashboard.person.edit(row?.userId?._id))}
           style={{ cursor: 'pointer' }}
@@ -443,43 +551,6 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
             }}
           >
             {row?.livePrice}
-          </StyledTableCell>
-        </StyledTableRow>
-      )}
-
-      {value === 1 && (
-        <StyledTableRow>
-          <StyledTableCell
-            sx={{ textAlign: 'left', fontSize: '13px', padding: '5px', borderLeft: 'none' }}
-          >
-            {row.ID}
-          </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'left', fontSize: '13px', padding: '5px' }}>
-            {row.name}
-          </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'left', fontSize: '13px', padding: '5px' }}>
-            {row?.leverageXY}
-          </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
-            {row?.user_balance?.balance}
-          </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
-            {row?.user_balance?.creditLimit}
-          </StyledTableCell>
-          <StyledTableCell
-            sx={{ textAlign: 'right', fontSize: '13px', padding: '5px', borderRight: 'none' }}
-          >
-            {row.equity}
-          </StyledTableCell>
-          <StyledTableCell
-            sx={{ textAlign: 'right', fontSize: '13px', padding: '5px', borderRight: 'none' }}
-          >
-            {row.margin}
-          </StyledTableCell>
-          <StyledTableCell
-            sx={{ textAlign: 'right', fontSize: '13px', padding: '5px', borderRight: 'none' }}
-          >
-            {row.equity}
           </StyledTableCell>
         </StyledTableRow>
       )}
