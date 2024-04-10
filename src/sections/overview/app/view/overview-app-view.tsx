@@ -215,7 +215,6 @@ const OverviewAppView = () => {
             key={table.name}
             sx={{
               fontSize: '10px',
-
               minWidth: 0, // Ensure content can overflow
               overflow: 'auto', // Enable scrolling if content overflows
             }}
@@ -225,7 +224,7 @@ const OverviewAppView = () => {
                 : currentTableCount === 1
                   ? '100%'
                   : table.name !== 'Users'
-                    ? '25%'
+                    ? '24%'
                     : '50%'
             }
           >
