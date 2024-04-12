@@ -8,7 +8,7 @@ export default function BrokerageCreatePage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Create a new user</title>
+        <title>1stock Admin</title>
       </Helmet>
 
       <BrokerageCreateView />

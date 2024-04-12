@@ -14,7 +14,7 @@ export default function BrokerageDetailsPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Brokerage Details</title>
+        <title>1stock Admin</title>
       </Helmet>
 
       <BrokerageDetailsView id={`${id}`} />

@@ -11,10 +11,12 @@ import {
   GET_USER_BALANCE_BY_MASTER,
   GET_BROKERAGE_LIST_FOR_MASTER,
   IMPORT_MONTH_ORDER_FOR_MASTER,
+  CHANGE_USER_PASSWORD_BY_MASTER,
   UPDATED_SELECTED_LIST_FOR_MASTER,
   SET_IMPORT_MONTH_LIST_FOR_MASTER,
   GET_USERS_BET_POSITIONS_BY_MASTER,
   IMPORT_MONTH_ORDER_LIST_FOR_MASTER,
+  CHANGE_INVESTOR_PASSWORD_BY_MASTER,
   GET_ASSIGNED_EXCHANGE_LIST_FOR_MASTER,
   GET_BROKERAGE_LIST_FOR_USER_UPDATE_BY_MASTER,
 } from '../utils/urls';
@@ -234,6 +236,39 @@ const masterService = {
     } catch (error) {
       console.error('Error in exchangeService.getExchangeList:', error);
       throw error;
+    }
+  },
+  changeUserPassword: async (userData: any): Promise<any> => {
+    const data = {};
+    try {
+      const response: AxiosResponse<any> = await client.post(
+        `${CHANGE_USER_PASSWORD_BY_MASTER}/${userData}`,
+        {
+          password: data,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in adminService.createAdmin:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  changeInvestorPassword: async (userData: any): Promise<any> => {
+    const data = {};
+
+    try {
+      const response: AxiosResponse<any> = await client.post(
+        `${CHANGE_INVESTOR_PASSWORD_BY_MASTER}/${userData}`,
+        {
+          investorPassword: data,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in adminService.createAdmin:', error);
+      throw error; // Re-throw the error to be caught by the caller
     }
   },
 };

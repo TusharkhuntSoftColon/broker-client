@@ -40,7 +40,8 @@ export const GET_ASSIGNED_EXCHANGE_LIST_FOR_ADMIN = '/admin/all-exchanges';
 export const GET_USERS_BET_POSITIONS_BY_ADMIN = '/admin/user-positions';
 export const GET_USER_BALANCE_BY_ADMIN = '/admin/balance';
 
-export const BROADCAST_MESSAGE_BY_ADMIN = '';
+export const CHANGE_USER_PASSWORD_BY_ADMIN = '/admin/person-password-change';
+export const CHANGE_INVESTOR_PASSWORD_BY_ADMIN = '/admin/investor-password-change';
 
 // SUPER MASTER
 export const CREATE_MASTER_BY_SUPER_MASTER = '/super-master/master';
@@ -73,6 +74,9 @@ export const GET_BROKERAGE_LIST_FOR_USER_UPDATE_BY_SUPERMASTER =
 export const GET_USERS_BET_POSITIONS_BY_SUPER_MASTER = '/super-master/user-positions';
 export const GET_USER_BALANCE_BY_SUPER_MASTER = '/super-master/balance';
 
+export const CHANGE_USER_PASSWORD_BY_SUPER_MASTER = '/super-master/person-password-change';
+export const CHANGE_INVESTOR_PASSWORD_BY_SUPER_MASTER = '/super-master/investor-password-change';
+
 // MASTER
 export const CREATE_USER_BY_MASTER = '/master/user';
 export const GET_ALL_PERSONS_BY_MASTER = '/master/person';
@@ -97,6 +101,9 @@ export const GET_BROKERAGE_LIST_FOR_USER_UPDATE_BY_MASTER = '/master/brockrages-
 
 export const GET_USERS_BET_POSITIONS_BY_MASTER = '/master/user-positions';
 export const GET_USER_BALANCE_BY_MASTER = '/master/balance';
+
+export const CHANGE_USER_PASSWORD_BY_MASTER = '/master/person-password-change';
+export const CHANGE_INVESTOR_PASSWORD_BY_MASTER = '/master/investor-password-change';
 
 // Exchange
 export const EXCHANGE_CREATE = '/exchange/create';

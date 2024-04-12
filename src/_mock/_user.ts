@@ -14,9 +14,12 @@ export const USER_STATUS_OPTIONS = [
 export const LEVERAGE_OPTIONS = [
   { value: '1:1', label: '1:1' },
   { value: '1:10', label: '1:10' },
+  { value: '1:50', label: '1:50' },
   { value: '1:100', label: '1:100' },
+  { value: '1:250', label: '1:250' },
+  { value: '1:500', label: '1:500' },
   { value: '1:1000', label: '1:1000' },
-  { value: '1:10000', label: '1:10000' },
+  { value: '1:5000', label: '1:5000' },
 ];
 
 export const USER_ROLE = [{ value: 'USER', label: 'USER' }];

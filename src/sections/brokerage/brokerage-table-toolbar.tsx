@@ -577,7 +577,12 @@ export default function BrokerageTableToolbar({
             </Stack>
           </FormControl>
           <Box display="flex" gap={2} width="100%">
-            <RHFTextField sx={{ width: '100%' }} type="number" name="brkgRate" label="BRKG Rate" />
+            <RHFTextField
+              sx={{ width: '100%' }}
+              type="number"
+              name="brkgRate"
+              label="Commission Rate"
+            />
             <RHFTextField sx={{ width: '100%' }} name="brkgRatePer" isReadOnly label="BRKG Per" />
           </Box>
           <LoadingButton variant="contained" onClick={handleAddBrokerageClick}>

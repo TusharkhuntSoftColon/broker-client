@@ -90,18 +90,18 @@ export default function PersonTableRow({
           <Label
             variant="soft"
             color={
-              status[0] === STATUS[0].value
+              status === STATUS[0].value
                 ? 'success'
-                : status[0] === STATUS[1].value
+                : status === STATUS[1].value
                   ? 'warning'
-                  : status[0] === STATUS[2].value
+                  : status === STATUS[2].value
                     ? 'error'
-                    : status[0] === STATUS[3].value
+                    : status === STATUS[3].value
                       ? 'info'
                       : 'secondary'
             }
           >
-            {status[0]}
+            {status}
           </Label>
         </TableCell>
 

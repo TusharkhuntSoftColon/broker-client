@@ -22,10 +22,12 @@ import {
   IMPORT_MONTH_ORDER_FOR_ADMIN,
   CREATE_SUPER_MASTER_BY_ADMIN,
   UPDATE_SUPER_MASTER_BY_ADMIN,
+  CHANGE_USER_PASSWORD_BY_ADMIN,
   UPDATED_SELECTED_LIST_FOR_ADMIN,
   SET_IMPORT_MONTH_LIST_FOR_ADMIN,
   GET_USERS_BET_POSITIONS_BY_ADMIN,
   IMPORT_MONTH_ORDER_LIST_FOR_ADMIN,
+  CHANGE_INVESTOR_PASSWORD_BY_ADMIN,
   GET_ASSIGNED_EXCHANGE_LIST_FOR_ADMIN,
   GET_BROKERAGE_LIST_FOR_USER_UPDATE_BY_ADMIN,
 } from '../utils/urls';
@@ -385,6 +387,66 @@ const adminService = {
     } catch (error) {
       console.error('Error in exchangeService.getExchangeList:', error);
       throw error;
+    }
+  },
+  changeUserPassword: async (userPassword: any): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.post(
+        `${CHANGE_USER_PASSWORD_BY_ADMIN}/${userPassword?.id}`,
+        {
+          password: userPassword?.password,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in adminService.createAdmin:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  changeInvestorPassword: async (investorPassword: any): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.post(
+        `${CHANGE_INVESTOR_PASSWORD_BY_ADMIN}/${investorPassword?.id}`,
+        {
+          investorPassword: investorPassword?.password,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in adminService.createAdmin:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  changeSuperMasterPassword: async (superMasterPassword: any): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.post(
+        `${CHANGE_USER_PASSWORD_BY_ADMIN}/${superMasterPassword?.id}`,
+        {
+          password: superMasterPassword?.password,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in adminService.createAdmin:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  changeMasterPassword: async (masterPassword: any): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.post(
+        `${CHANGE_USER_PASSWORD_BY_ADMIN}/${masterPassword?.id}`,
+        {
+          password: masterPassword?.password,
+        }
+      );
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in adminService.createAdmin:', error);
+      throw error; // Re-throw the error to be caught by the caller
     }
   },
 };

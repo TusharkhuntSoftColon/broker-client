@@ -167,6 +167,19 @@ const OverviewAppView = () => {
   );
 
   useEffect(() => {
+    // Check if it's the first time the component is mounted
+    const isFirstTime = localStorage.getItem('isFirstTime') === null;
+
+    if (isFirstTime) {
+      // Perform the refresh action
+      window.location.reload();
+
+      // Set a flag in localStorage to indicate that the component has been mounted once
+      localStorage.setItem('isFirstTime', 'false');
+    }
+  }, []);
+
+  useEffect(() => {
     getUserPositions();
     getUserAccounts();
     getUserOrders();

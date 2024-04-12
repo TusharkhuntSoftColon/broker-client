@@ -8,7 +8,7 @@ export default function PersonCreatePage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Create a new Person</title>
+        <title>1stock Admin</title>
       </Helmet>
 
       <PersonCreateView />

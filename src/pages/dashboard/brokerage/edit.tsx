@@ -15,7 +15,7 @@ export default function BrokerageEditPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Brokerage Edit</title>
+        <title>1stock Admin</title>
       </Helmet>
 
       <BrokerageEditView id={`${id}`} />

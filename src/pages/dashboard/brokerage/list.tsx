@@ -8,7 +8,7 @@ export default function BrokeragePage({ currentUser, fields }: any) {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Brokerage</title>
+        <title>1stock Admin</title>
       </Helmet>
 
       <BrokerageListView fields={fields} currentUser={currentUser} />

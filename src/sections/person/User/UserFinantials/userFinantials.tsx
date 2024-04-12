@@ -1,6 +1,7 @@
 /* eslint-disable arrow-body-style */
 /* eslint-disable react/jsx-no-useless-fragment */
 import * as Yup from 'yup';
+import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { useParams } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
@@ -54,7 +55,7 @@ const dummyData = [
 export default function UserFinantials() {
   const settings = useSettingsContext();
   const table = useTable();
-
+  const { enqueueSnackbar } = useSnackbar();
   const [tableData, setTableData] = useState<any>();
   const [isWithDrow, setIsWithDrow] = useState<boolean>(false);
   const [userBalanceDetails, setUserBalanceDetails] = useState<any>({});
@@ -150,7 +151,7 @@ export default function UserFinantials() {
       },
 
       onError: (error: any) => {
-        console.log({ error });
+        enqueueSnackbar(error.message, { variant: 'error' });
       },
     }
   );

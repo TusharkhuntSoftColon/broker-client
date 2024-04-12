@@ -30,7 +30,7 @@ export default function PersonListPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Master List</title>
+        <title>1stock Admin</title>
       </Helmet>
 
       <PersonListView path={getPath(role)} />

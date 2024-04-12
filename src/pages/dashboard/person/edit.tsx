@@ -12,7 +12,7 @@ export default function PersonEditPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Master Edit</title>
+        <title>1stock Admin</title>
       </Helmet>
 
       <PersonEditView />

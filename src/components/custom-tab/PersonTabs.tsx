@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 
 import { useParams } from 'src/routes/hooks';
 
+import PersonSecurity from 'src/sections/person/security';
 import { PersonDetailsView } from 'src/sections/person/view';
 import UserFinantials from 'src/sections/person/User/UserFinantials/userFinantials';
 
@@ -58,19 +59,6 @@ export default function PersonTabsPanel() {
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-
-  // const getPath = (roleOfPerson: any) => {
-  //   switch (roleOfPerson) {
-  //     case 'ADMIN':
-  //       return paths.dashboard;
-  //     case 'SUPER_MASTER':
-  //       return paths.superMaster;
-  //     case 'MASTER':
-  //       return paths.master;
-  //     default:
-  //       return paths.dashboard.person;
-  //   }
-  // };
   return (
     <Box sx={{ width: '100%', ml: 2 }}>
       {/* {currentUser ? <PersonEditView /> : <PersonCreateView />} */}
@@ -81,6 +69,7 @@ export default function PersonTabsPanel() {
           <Tab label="Personal" {...a11yProps(1)} />
           {currentUser && <Tab label="Balance" {...a11yProps(2)} />}
           {currentUser && <Tab label="History" {...a11yProps(3)} />}
+          {currentUser && <Tab label="Security" {...a11yProps(3)} />}
         </Tabs>
       </Box>
       {currentUser && (
@@ -109,6 +98,12 @@ export default function PersonTabsPanel() {
         <CustomTabPanel value={value} index={3}>
           {/* <BrokeragePage fields={fields} currentUser={currentUser} /> */}
           <Box>History</Box>
+        </CustomTabPanel>
+      )}
+      {currentUser && (
+        <CustomTabPanel value={value} index={4}>
+          {/* <BrokeragePage fields={fields} currentUser={currentUser} /> */}
+          <PersonSecurity currentUser={currentUser} />
         </CustomTabPanel>
       )}
     </Box>

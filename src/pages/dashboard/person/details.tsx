@@ -10,7 +10,7 @@ export default function PersonDetailsPage() {
   return (
     <>
       <Helmet>
-        <title> Dashboard: Master Detail</title>
+        <title>1stock Admin</title>
       </Helmet>
 
       {/* <PersonDetailsView id={`${id}`} /> */}

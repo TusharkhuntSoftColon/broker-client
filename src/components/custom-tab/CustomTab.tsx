@@ -80,7 +80,7 @@ export default function BasicTabs() {
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange}>
           <Tab label="User" {...a11yProps(0)} />
-          <Tab label="Brokerage" {...a11yProps(1)} />
+          <Tab label="Commission" {...a11yProps(1)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>

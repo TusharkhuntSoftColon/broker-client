@@ -212,67 +212,69 @@ export default function PersonDetailsView({ currentUser }: Props) {
           name={new Date(currentUser?.createdAt).toDateString()}
         />
       </Box>
-      <Card sx={{ mt: 2 }}>
-        <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
-          <Scrollbar>
-            <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
-              <TableHeadCustom
-                order={table.order}
-                orderBy={table.orderBy}
-                headLabel={TABLE_HEAD}
-                // rowCount={tableData?.length}
-                numSelected={table.selected.length}
-                onSort={table.onSort}
-              />
+      {currentUser?.role === 'USER' && (
+        <Card sx={{ mt: 2 }}>
+          <TableContainer sx={{ position: 'relative', overflow: 'unset' }}>
+            <Scrollbar>
+              <Table size={table.dense ? 'small' : 'medium'} sx={{ minWidth: 960 }}>
+                <TableHeadCustom
+                  order={table.order}
+                  orderBy={table.orderBy}
+                  headLabel={TABLE_HEAD}
+                  // rowCount={tableData?.length}
+                  numSelected={table.selected.length}
+                  onSort={table.onSort}
+                />
 
-              <TableBody>
-                {tableData1?.length >= 0 &&
-                  tableData1?.map((row: any, index: any) => (
-                    <UserTradeTableRow key={row._id} row={row} />
-                  ))}
+                <TableBody>
+                  {tableData1?.length >= 0 &&
+                    tableData1?.map((row: any, index: any) => (
+                      <UserTradeTableRow key={row._id} row={row} />
+                    ))}
 
-                <TableNoData notFound={notFound} sx={{ py: 10 }} />
-              </TableBody>
-            </Table>
-            <Box sx={{ backgroundColor: 'lightgrey', padding: 2 }}>
-              <Box
-                sx={{
-                  display: 'flex',
-                  gap: 2,
-                  justifyContent: 'space-between',
-                  flexDirection: 'row',
-                }}
-              >
-                <Box sx={{ display: 'flex', gap: 2 }}>
-                  <Typography
-                    sx={{ fontWeight: 'bold', fontSize: '13px' }}
-                  >{`Balance : ${userBalance?.UserBalance}`}</Typography>
-                  <Typography
-                    sx={{ fontWeight: 'bold', fontSize: '13px' }}
-                  >{`Credit : ${userBalance?.UserCreditLimit}`}</Typography>
-                  <Typography
-                    sx={{ fontWeight: 'bold', fontSize: '13px' }}
-                  >{`Equity : ${userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance}`}</Typography>
-                  <Typography
-                    sx={{ fontWeight: 'bold', fontSize: '13px' }}
-                  >{`Margin : ${userBalance?.UserMargin?.toFixed(2)}`}</Typography>
-                  <Typography
-                    sx={{ fontWeight: 'bold', fontSize: '13px' }}
-                  >{`Free Margin : ${(userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance - userBalance?.UserMargin)?.toFixed(2)}`}</Typography>
-                  <Typography
-                    sx={{ fontWeight: 'bold', fontSize: '13px' }}
-                  >{`Margin Level : ${(((userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance) / userBalance?.UserMargin) * 100)?.toFixed(2)}%`}</Typography>
-                </Box>
-                <Box>
-                  <Typography sx={{ fontWeight: 'bold', fontSize: '13px', marginRight: 10 }}>
-                    {`Total Profit : ${totals?.totalProfit?.toFixed(2)}`}
-                  </Typography>
+                  <TableNoData notFound={notFound} sx={{ py: 10 }} />
+                </TableBody>
+              </Table>
+              <Box sx={{ backgroundColor: 'lightgrey', padding: 2 }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 2,
+                    justifyContent: 'space-between',
+                    flexDirection: 'row',
+                  }}
+                >
+                  <Box sx={{ display: 'flex', gap: 2 }}>
+                    <Typography
+                      sx={{ fontWeight: 'bold', fontSize: '13px' }}
+                    >{`Balance : ${userBalance?.UserBalance}`}</Typography>
+                    <Typography
+                      sx={{ fontWeight: 'bold', fontSize: '13px' }}
+                    >{`Credit : ${userBalance?.UserCreditLimit}`}</Typography>
+                    <Typography
+                      sx={{ fontWeight: 'bold', fontSize: '13px' }}
+                    >{`Equity : ${userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance}`}</Typography>
+                    <Typography
+                      sx={{ fontWeight: 'bold', fontSize: '13px' }}
+                    >{`Margin : ${userBalance?.UserMargin?.toFixed(2)}`}</Typography>
+                    <Typography
+                      sx={{ fontWeight: 'bold', fontSize: '13px' }}
+                    >{`Free Margin : ${(userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance - userBalance?.UserMargin)?.toFixed(2)}`}</Typography>
+                    <Typography
+                      sx={{ fontWeight: 'bold', fontSize: '13px' }}
+                    >{`Margin Level : ${(((userBalance?.UserPnl + totals?.totalProfit + userBalance?.UserBalance) / userBalance?.UserMargin) * 100)?.toFixed(2)}%`}</Typography>
+                  </Box>
+                  <Box>
+                    <Typography sx={{ fontWeight: 'bold', fontSize: '13px', marginRight: 10 }}>
+                      {`Total Profit : ${totals?.totalProfit?.toFixed(2)}`}
+                    </Typography>
+                  </Box>
                 </Box>
               </Box>
-            </Box>
-          </Scrollbar>
-        </TableContainer>
-      </Card>
+            </Scrollbar>
+          </TableContainer>
+        </Card>
+      )}
     </Container>
   );
 }
