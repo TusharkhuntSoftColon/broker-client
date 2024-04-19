@@ -91,7 +91,7 @@ export default function PersonTabsPanel() {
       {currentUser && (
         <CustomTabPanel value={value} index={2}>
           {/* <BrokeragePage fields={fields} currentUser={currentUser} /> */}
-          <UserFinantials />
+          <UserFinantials currentUser={currentUser} />
         </CustomTabPanel>
       )}
       {currentUser && (

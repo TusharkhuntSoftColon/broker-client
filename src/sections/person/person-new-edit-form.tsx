@@ -566,7 +566,7 @@ export default function PersonNewEditForm({
                     type="number"
                     defaultValue={currentUser?.positionMinTime ?? null}
                     // value={currentUser?.positionMinTime ?? null}
-                    label="Position Min Tme"
+                    label="Position Min Time"
                   />
                 </>
               )}

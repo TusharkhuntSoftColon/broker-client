@@ -145,7 +145,6 @@ export default function BrokerageTableToolbar({
   } = methods;
 
   const value: any = watch();
-
   const symbolOptionsArray = symbolList?.filter(
     (data: any) => data.exchange === value.exchangeCode?.value
   );
@@ -233,7 +232,6 @@ export default function BrokerageTableToolbar({
       // dispatch(addUser([]));
     },
     onError: (error: any) => {
-      console.log({ error });
       if (isAxiosError(error)) {
         enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
       }
@@ -581,7 +579,7 @@ export default function BrokerageTableToolbar({
               sx={{ width: '100%' }}
               type="number"
               name="brkgRate"
-              label="Commission Rate"
+              label="Brokerage Rate"
             />
             <RHFTextField sx={{ width: '100%' }} name="brkgRatePer" isReadOnly label="BRKG Per" />
           </Box>

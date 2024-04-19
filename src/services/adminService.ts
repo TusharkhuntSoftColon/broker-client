@@ -23,6 +23,7 @@ import {
   CREATE_SUPER_MASTER_BY_ADMIN,
   UPDATE_SUPER_MASTER_BY_ADMIN,
   CHANGE_USER_PASSWORD_BY_ADMIN,
+  GET_SYMBOL_PROPERTIES_BY_ADMIN,
   UPDATED_SELECTED_LIST_FOR_ADMIN,
   SET_IMPORT_MONTH_LIST_FOR_ADMIN,
   GET_USERS_BET_POSITIONS_BY_ADMIN,
@@ -447,6 +448,17 @@ const adminService = {
       // You can log the error here for debugging purposes
       console.error('Error in adminService.createAdmin:', error);
       throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  getSymbolProperties: async (id?: string): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(
+        `${GET_SYMBOL_PROPERTIES_BY_ADMIN}/${id}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error in exchangeService.getExchangeList:', error);
+      throw error;
     }
   },
 };

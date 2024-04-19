@@ -1,11 +1,21 @@
 import { AxiosResponse } from 'axios';
 
-import { ADD_DEPOSIT, ADD_WITHDROW, GET_BALANCE_HISTORY } from 'src/utils/urls';
+import {
+  ADD_DEPOSIT_BY_ADMIN,
+  ADD_DEPOSIT_BY_MASTER,
+  ADD_WITHDROW_BY_ADMIN,
+  ADD_WITHDROW_BY_MASTER,
+  ADD_DEPOSIT_BY_SUPER_MASTER,
+  ADD_WITHDROW_BY_SUPER_MASTER,
+  GET_BALANCE_HISTORY_BY_ADMIN,
+  GET_BALANCE_HISTORY_BY_MASTER,
+  GET_BALANCE_HISTORY_BY_SUPER_MASTER,
+} from 'src/utils/urls';
 
 import client from 'src/lib/client';
 
 const userFinancialsService = {
-  addDeposite: async (userFinancialData: any, id: any): Promise<any> => {
+  addDepositeByAdmin: async (userFinancialData: any, id: any): Promise<any> => {
     const data = {
       operation: userFinancialData?.operation?.value,
       amount:
@@ -15,7 +25,47 @@ const userFinancialsService = {
       comment: userFinancialData?.comment,
     };
     try {
-      const response: AxiosResponse<any> = await client.post(`${ADD_DEPOSIT}/${id}`, data);
+      const response: AxiosResponse<any> = await client.post(`${ADD_DEPOSIT_BY_ADMIN}/${id}`, data);
+      return response.data;
+    } catch (error) {
+      console.log('Error in user financialservice.addDeposite');
+      throw error;
+    }
+  },
+  addDepositeBySuperMaster: async (userFinancialData: any, id: any): Promise<any> => {
+    const data = {
+      operation: userFinancialData?.operation?.value,
+      amount:
+        userFinancialData?.operation?.value === 'BALANCE'
+          ? userFinancialData?.Balance
+          : userFinancialData?.Credit,
+      comment: userFinancialData?.comment,
+    };
+    try {
+      const response: AxiosResponse<any> = await client.post(
+        `${ADD_DEPOSIT_BY_SUPER_MASTER}/${id}`,
+        data
+      );
+      return response.data;
+    } catch (error) {
+      console.log('Error in user financialservice.addDeposite');
+      throw error;
+    }
+  },
+  addDepositeByMaster: async (userFinancialData: any, id: any): Promise<any> => {
+    const data = {
+      operation: userFinancialData?.operation?.value,
+      amount:
+        userFinancialData?.operation?.value === 'BALANCE'
+          ? userFinancialData?.Balance
+          : userFinancialData?.Credit,
+      comment: userFinancialData?.comment,
+    };
+    try {
+      const response: AxiosResponse<any> = await client.post(
+        `${ADD_DEPOSIT_BY_MASTER}/${id}`,
+        data
+      );
       return response.data;
     } catch (error) {
       console.log('Error in user financialservice.addDeposite');
@@ -23,14 +73,53 @@ const userFinancialsService = {
     }
   },
 
-  addWithDrow: async (userFinancialData: any, id: any): Promise<any> => {
+  addWithdrawByAdmin: async (userFinancialData: any, id: any): Promise<any> => {
     const data = {
       operation: userFinancialData?.operation?.value,
       amount: userFinancialData?.Balance,
       comment: userFinancialData?.comment,
     };
     try {
-      const response: AxiosResponse<any> = await client.post(`${ADD_WITHDROW}/${id}`, data);
+      const response: AxiosResponse<any> = await client.post(
+        `${ADD_WITHDROW_BY_ADMIN}/${id}`,
+        data
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log('Error in user financialservice.addWithDrow');
+      throw error;
+    }
+  },
+  addWithdrawBySuperMaster: async (userFinancialData: any, id: any): Promise<any> => {
+    const data = {
+      operation: userFinancialData?.operation?.value,
+      amount: userFinancialData?.Balance,
+      comment: userFinancialData?.comment,
+    };
+    try {
+      const response: AxiosResponse<any> = await client.post(
+        `${ADD_WITHDROW_BY_SUPER_MASTER}/${id}`,
+        data
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log('Error in user financialservice.addWithDrow');
+      throw error;
+    }
+  },
+  addWithdrawByMaster: async (userFinancialData: any, id: any): Promise<any> => {
+    const data = {
+      operation: userFinancialData?.operation?.value,
+      amount: userFinancialData?.Balance,
+      comment: userFinancialData?.comment,
+    };
+    try {
+      const response: AxiosResponse<any> = await client.post(
+        `${ADD_WITHDROW_BY_MASTER}/${id}`,
+        data
+      );
 
       return response.data;
     } catch (error) {
@@ -39,9 +128,33 @@ const userFinancialsService = {
     }
   },
 
-  getBalanceHistory: async (id: any): Promise<any> => {
+  getBalanceHistoryByAdmin: async (id: any): Promise<any> => {
     try {
-      const response: AxiosResponse<any> = await client.get(`${GET_BALANCE_HISTORY}/${id}`);
+      const response: AxiosResponse<any> = await client.get(
+        `${GET_BALANCE_HISTORY_BY_ADMIN}/${id}`
+      );
+      return response;
+    } catch (error) {
+      console.log('Error in user financialservice.getBalanceHistory');
+      throw error;
+    }
+  },
+  getBalanceHistoryBySuperMaster: async (id: any): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(
+        `${GET_BALANCE_HISTORY_BY_SUPER_MASTER}/${id}`
+      );
+      return response;
+    } catch (error) {
+      console.log('Error in user financialservice.getBalanceHistory');
+      throw error;
+    }
+  },
+  getBalanceHistoryByMaster: async (id: any): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(
+        `${GET_BALANCE_HISTORY_BY_MASTER}/${id}`
+      );
       return response;
     } catch (error) {
       console.log('Error in user financialservice.getBalanceHistory');

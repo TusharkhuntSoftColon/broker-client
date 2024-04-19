@@ -513,7 +513,7 @@ function applyFilter({
   }
 
   if (status?.label?.length > 0) {
-    inputData = inputData.filter((user: any) => user?.isActive === status?.value);
+    inputData = inputData.filter((user: any) => user?.status === status?.value);
   }
 
   if (exchange.length) {

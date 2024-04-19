@@ -13,6 +13,8 @@ import { LoadingButton } from '@mui/lab';
 import Container from '@mui/material/Container';
 import { Box, Grid, Table, TableBody, Typography, TableContainer } from '@mui/material';
 
+import useAuth from 'src/hooks/useAuth';
+
 import userFinancialsService from 'src/services/userFinancialsService';
 
 import Scrollbar from 'src/components/scrollbar';
@@ -52,15 +54,14 @@ const dummyData = [
   { date: 'Date', type: 'balance', amount: 2000, comment: 'This is comment' },
 ];
 
-export default function UserFinantials() {
+export default function UserFinantials({ currentUser }: any) {
   const settings = useSettingsContext();
   const table = useTable();
   const { enqueueSnackbar } = useSnackbar();
   const [tableData, setTableData] = useState<any>();
   const [isWithDrow, setIsWithDrow] = useState<boolean>(false);
   const [userBalanceDetails, setUserBalanceDetails] = useState<any>({});
-
-  console.log({ userBalanceDetails });
+  const { role } = useAuth();
 
   const { id }: any = useParams();
 
@@ -107,54 +108,83 @@ export default function UserFinantials() {
     setValue('Balance', 0);
   }, [values?.operation?.value]);
 
-  const { mutate: getBalanceHistory } = useMutation(
-    () => userFinancialsService.getBalanceHistory(id),
-    {
-      onSuccess: (data: any) => {
-        setTableData(data?.data?.data?.balanceHistoryDetails);
-        setUserBalanceDetails(data?.data?.data?.balanceDetails?.user_balance);
-      },
-      onError: (error: any) => {
-        console.log({ error });
-      },
+  const getBalanceHistoryByRole: any = (role1: any) => {
+    switch (role1) {
+      case 'ADMIN':
+        return userFinancialsService.getBalanceHistoryByAdmin(id);
+      case 'SUPER_MASTER':
+        return userFinancialsService.getBalanceHistoryBySuperMaster(id);
+      case 'MASTER':
+        return userFinancialsService.getBalanceHistoryByMaster(id);
+      default:
+        return userFinancialsService.getBalanceHistoryByMaster(id);
     }
-  );
-
-  const { mutate: addDeposite } = useMutation(
-    (data) => userFinancialsService.addDeposite(data, id),
-    {
-      onSuccess: (data: any) => {
-        getBalanceHistory(id);
-        if (values?.operation?.value === 'CREDIT')
-          setValue('operation', {
-            label: 'Balance',
-            value: 'BALANCE',
-          });
-        setValue('Credit', 0);
-        reset();
-      },
-      onError: (error: any) => {
-        console.log({ error });
-      },
+  };
+  const addDepositByRole: any = (role1: any, data: any) => {
+    switch (role1) {
+      case 'ADMIN':
+        return userFinancialsService.addDepositeByAdmin(data, id);
+      case 'SUPER_MASTER':
+        return userFinancialsService.addDepositeBySuperMaster(data, id);
+      case 'MASTER':
+        return userFinancialsService.addDepositeByMaster(data, id);
+      default:
+        return userFinancialsService.addDepositeByMaster(data, id);
     }
-  );
-
-  const { mutate: addWithDrow } = useMutation(
-    (data) => userFinancialsService.addWithDrow(data, id),
-    {
-      onSuccess: (data: any) => {
-        getBalanceHistory(id);
-        reset();
-        setValue('Credit', 0);
-        setValue('comment', '');
-        setValue('Balance', 0);
-      },
-
-      onError: (error: any) => {
-        enqueueSnackbar(error.message, { variant: 'error' });
-      },
+  };
+  const addWithdrawByRole: any = (role1: any, data: any) => {
+    switch (role1) {
+      case 'ADMIN':
+        return userFinancialsService.addWithdrawByAdmin(data, id);
+      case 'SUPER_MASTER':
+        return userFinancialsService.addWithdrawBySuperMaster(data, id);
+      case 'MASTER':
+        return userFinancialsService.addWithdrawByMaster(data, id);
+      default:
+        return userFinancialsService.addWithdrawByMaster(data, id);
     }
-  );
+  };
+
+  const { mutate: getBalanceHistory } = useMutation(() => getBalanceHistoryByRole(role), {
+    onSuccess: (data: any) => {
+      setTableData(data?.data?.data?.balanceHistoryDetails);
+      setUserBalanceDetails(data?.data?.data?.balanceDetails?.user_balance);
+    },
+    onError: (error: any) => {
+      console.log({ error });
+    },
+  });
+
+  const { mutate: addDeposite } = useMutation((data) => addDepositByRole(role, data), {
+    onSuccess: (data: any) => {
+      getBalanceHistory(id);
+      if (values?.operation?.value === 'CREDIT')
+        setValue('operation', {
+          label: 'Balance',
+          value: 'BALANCE',
+        });
+      setValue('Credit', null);
+      setValue('Balance', null);
+      reset();
+    },
+    onError: (error: any) => {
+      console.log({ error });
+    },
+  });
+
+  const { mutate: addWithDrow } = useMutation((data) => addWithdrawByRole(role, data), {
+    onSuccess: (data: any) => {
+      getBalanceHistory(id);
+      reset();
+      setValue('Credit', null);
+      setValue('comment', '');
+      setValue('Balance', null);
+    },
+
+    onError: (error: any) => {
+      enqueueSnackbar(error.message, { variant: 'error' });
+    },
+  });
 
   const onSubmit = handleSubmit(async (data) => {
     if (isWithDrow) {

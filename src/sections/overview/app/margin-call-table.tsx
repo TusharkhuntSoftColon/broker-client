@@ -88,8 +88,22 @@ export default function MarginCallTableDashboard() {
       title: 'Margin Calls Table',
       tableDatas: newMarginCallTableData,
       tableLabel: [
-        { id: 'login', label: 'Login', align: 'left', border: '1px solid #dddddd !important' },
-        { id: 'level', label: 'Level', align: 'right', border: '1px solid #dddddd !important' },
+        {
+          id: 'login',
+          label: 'Login',
+          align: 'left',
+          border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
+        },
+        {
+          id: 'level',
+          label: 'Level',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
+        },
       ],
     },
   ];
@@ -102,7 +116,7 @@ export default function MarginCallTableDashboard() {
         WebkitBorderRadius: '5px',
       }}
     >
-      <Box sx={{ margin: '5px', fontSize: '13px', border: '1px solid #d3d3d3' }}>
+      <Box sx={{ margin: '5px', fontSize: '11px', border: '1px solid #d3d3d3' }}>
         <Box>
           {tabs.map((data) => (
             <CustomTabPanel
@@ -208,7 +222,7 @@ function SymbolNewRow({ row, value, index }: SymbolNewRowProps) {
             alignItems: 'center',
             gap: '1px',
             padding: '5px',
-            fontSize: '13px',
+            fontSize: '11px',
             borderLeft: 'none',
             borderBottom: 'none',
           }}
@@ -219,7 +233,7 @@ function SymbolNewRow({ row, value, index }: SymbolNewRowProps) {
           style={{
             textAlign: 'right',
             padding: '5px',
-            fontSize: '13px',
+            fontSize: '11px',
             borderRight: 'none',
             borderBottom: 'none',
           }}

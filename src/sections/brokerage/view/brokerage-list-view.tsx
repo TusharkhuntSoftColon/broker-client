@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/dot-notation */
+/* eslint-disable no-prototype-builtins */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { isAxiosError } from 'axios';
@@ -186,7 +188,13 @@ export default function BrokerageListView({ currentUser, fields }: any) {
 
   const { mutate: getAllBrokerages } = useMutation(getBrokerageByRole(role), {
     onSuccess: (data) => {
-      setTableData(data?.data?.rows);
+      const newData = data?.data?.rows.map((obj: any) => {
+        if (!obj.hasOwnProperty('symbol')) {
+          obj['symbol'] = '';
+        }
+        return obj;
+      });
+      setTableData(newData);
       dispatch(addBrokerage(data?.data?.rows));
     },
     onError: (error: any) => {

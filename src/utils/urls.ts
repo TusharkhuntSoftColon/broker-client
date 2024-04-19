@@ -43,6 +43,8 @@ export const GET_USER_BALANCE_BY_ADMIN = '/admin/balance';
 export const CHANGE_USER_PASSWORD_BY_ADMIN = '/admin/person-password-change';
 export const CHANGE_INVESTOR_PASSWORD_BY_ADMIN = '/admin/investor-password-change';
 
+export const GET_SYMBOL_PROPERTIES_BY_ADMIN = '/admin/symbol-properties';
+
 // SUPER MASTER
 export const CREATE_MASTER_BY_SUPER_MASTER = '/super-master/master';
 export const CREATE_USER_BY_SUPER_MASTER = '/super-master/user';
@@ -77,6 +79,8 @@ export const GET_USER_BALANCE_BY_SUPER_MASTER = '/super-master/balance';
 export const CHANGE_USER_PASSWORD_BY_SUPER_MASTER = '/super-master/person-password-change';
 export const CHANGE_INVESTOR_PASSWORD_BY_SUPER_MASTER = '/super-master/investor-password-change';
 
+export const GET_SYMBOL_PROPERTIES_BY_SUPER_MASTER = '/super-master/symbol-properties';
+
 // MASTER
 export const CREATE_USER_BY_MASTER = '/master/user';
 export const GET_ALL_PERSONS_BY_MASTER = '/master/person';
@@ -104,6 +108,8 @@ export const GET_USER_BALANCE_BY_MASTER = '/master/balance';
 
 export const CHANGE_USER_PASSWORD_BY_MASTER = '/master/person-password-change';
 export const CHANGE_INVESTOR_PASSWORD_BY_MASTER = '/master/investor-password-change';
+
+export const GET_SYMBOL_PROPERTIES_BY_MASTER = '/master/symbol-properties';
 
 // Exchange
 export const EXCHANGE_CREATE = '/exchange/create';
@@ -148,6 +154,14 @@ export const GET_USER_ORDERS_BY_MASTER = '/master/pending-position';
 export const GET_EXCHANGE_TABLE_SUMMARY_DATA_BY_MASTER = '/master/symbol-positions';
 
 // user financials
-export const ADD_DEPOSIT = '/admin/deposit/user-balance';
-export const ADD_WITHDROW = '/admin/withdrow/user-balance';
-export const GET_BALANCE_HISTORY = '/admin/balance-history';
+export const ADD_DEPOSIT_BY_ADMIN = '/admin/deposit/user-balance';
+export const ADD_DEPOSIT_BY_SUPER_MASTER = '/super-master/deposit/user-balance';
+export const ADD_DEPOSIT_BY_MASTER = '/master/deposit/user-balance';
+
+export const ADD_WITHDROW_BY_ADMIN = '/admin/withdrow/user-balance';
+export const ADD_WITHDROW_BY_SUPER_MASTER = '/super-master/withdrow/user-balance';
+export const ADD_WITHDROW_BY_MASTER = '/master/withdrow/user-balance';
+
+export const GET_BALANCE_HISTORY_BY_ADMIN = '/admin/balance-history';
+export const GET_BALANCE_HISTORY_BY_SUPER_MASTER = '/super-master/balance-history';
+export const GET_BALANCE_HISTORY_BY_MASTER = '/master/balance-history';

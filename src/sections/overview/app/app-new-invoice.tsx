@@ -171,16 +171,9 @@ export default function AppNewInvoice({
   const { socket, connect, disconnect, subscribeToMarket, joinUserRoom, marketWatch } = useSocket();
   const [socketData, setSocketData] = useState<any>([]);
 
-  console.log({ finalArray });
-
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-
-  console.log({ exchangeTableSummaryData });
-
-  console.log({ updatedExchangeArray });
-
   useEffect(() => {
     if (socket) {
       connect();
@@ -270,8 +263,6 @@ export default function AppNewInvoice({
 
         if (buySymbol) {
           const buy = item.buy.allBuyAverages[buySymbol[0]];
-          console.log({ buy });
-
           result.push({
             id: buySymbol[1].toString(),
             symbol: buySymbol[0],
@@ -365,8 +356,6 @@ export default function AppNewInvoice({
             parseFloat(finalItem.sell_price) -
             parseFloat(correspondingTableItem.SellPrice) * Number(finalItem.sell_volume);
         }
-        console.log({ finalItem });
-
         const updatedProfit = (buyProfit + sellProfit) * finalItem?.tickValue;
         return { ...finalItem, profit: updatedProfit?.toFixed(2) };
       }
@@ -383,48 +372,69 @@ export default function AppNewInvoice({
       title: 'Exchange Table',
       tableDatas: updatedExchangeArray,
       tableLabel: [
-        { id: 'symbol', label: 'Symbol', align: 'left', border: '1px solid #dddddd !important' },
+        {
+          id: 'symbol',
+          label: 'Symbol',
+          align: 'left',
+          border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
+        },
         {
           id: 'positions',
           label: 'Positions',
           align: 'right',
           border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
         },
         {
           id: 'buy_volume',
           label: 'Buy Volume',
           align: 'right',
           border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
         },
         {
           id: 'buy_price',
           label: 'Buy Price',
           align: 'right',
           border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
         },
         {
           id: 'sell_volume',
           label: 'Sell Volume',
           align: 'right',
           border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
         },
         {
           id: 'sell_price',
           label: 'Sell Price',
           align: 'right',
           border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
         },
         {
           id: 'net_volume',
           label: 'Net Volume',
           align: 'right',
           border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
         },
         {
           id: 'profit',
           label: 'Profit (INR)',
           align: 'right',
           border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
         },
       ],
     },
@@ -434,48 +444,69 @@ export default function AppNewInvoice({
       title: 'Exposure Table',
       tableDatas: newInvoiceExposureData,
       tableLabel: [
-        { id: 'asset', label: 'Asset', align: 'left', border: '1px solid #dddddd !important' },
+        {
+          id: 'asset',
+          label: 'Asset',
+          align: 'left',
+          border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
+        },
         {
           id: 'clients',
           label: 'Clients',
           align: 'right',
           border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
         },
         {
           id: 'coverage',
           label: 'Coverage',
           align: 'right',
           border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
         },
         {
           id: 'nettotal',
           label: 'Net Total',
           align: 'right',
           border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
         },
         {
           id: 'rate',
           label: 'Rate',
           align: 'right',
           border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
         },
         {
           id: 'netTotal',
           label: 'Net Total (INR)',
           align: 'right',
           border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
         },
         {
           id: 'positive',
           label: 'Positive (INR)',
           align: 'right',
           border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
         },
         {
           id: 'graph',
           label: 'Graph',
           align: 'right',
           border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
         },
       ],
     },
@@ -485,54 +516,77 @@ export default function AppNewInvoice({
       title: 'News Table',
       tableDatas: newInvoiceData,
       tableLabel: [
-        { id: 'symbol', label: 'Symbol', align: 'left', border: '1px solid #dddddd !important' },
+        {
+          id: 'symbol',
+          label: 'Symbol',
+          align: 'left',
+          border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
+        },
         {
           id: 'positions',
           label: 'Positions',
           align: 'right',
           border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
         },
         {
           id: 'buy_volume',
           label: 'Buy Volume',
           align: 'right',
           border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
         },
         {
           id: 'buy_price',
           label: 'Buy Price',
           align: 'right',
           border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
         },
         {
           id: 'sell_volume',
           label: 'Sell Volume',
           align: 'right',
           border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
         },
         {
           id: 'sell_price',
           label: 'Sell Price',
           align: 'right',
           border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
         },
         {
           id: 'net_volume',
           label: 'Net Volume',
           align: 'right',
           border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
         },
         {
           id: 'profit',
           label: 'Profit (INR)',
           align: 'right',
           border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
         },
         {
           id: 'unCovered',
           label: 'Uncovered (INR)',
           align: 'right',
           border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
         },
       ],
     },
@@ -542,9 +596,30 @@ export default function AppNewInvoice({
       title: 'Journal Table',
       tableDatas: newInvoiceJournalData,
       tableLabel: [
-        { id: 'time', label: 'Time', align: 'left', border: '1px solid #dddddd !important' },
-        { id: 'server', label: 'Server', align: 'left', border: '1px solid #dddddd !important' },
-        { id: 'message', label: 'Message', align: 'left', border: '1px solid #dddddd !important' },
+        {
+          id: 'time',
+          label: 'Time',
+          align: 'left',
+          border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
+        },
+        {
+          id: 'server',
+          label: 'Server',
+          align: 'left',
+          border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
+        },
+        {
+          id: 'message',
+          label: 'Message',
+          align: 'left',
+          border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
+        },
       ],
     },
   ];
@@ -579,14 +654,14 @@ export default function AppNewInvoice({
                         ))}
                         {data?.label === 'Summary' && (
                           <StyledTableRow>
-                            <StyledTableCell sx={{ fontWeight: 'bold', fontSize: '13px' }}>
+                            <StyledTableCell sx={{ fontWeight: 'bold', fontSize: '11px' }}>
                               Summary
                             </StyledTableCell>
                             <StyledTableCell
                               sx={{
                                 textAlign: 'right',
                                 padding: '5px',
-                                fontSize: '13px',
+                                fontSize: '11px',
                                 fontWeight: 'bold',
                               }}
                             >
@@ -596,7 +671,7 @@ export default function AppNewInvoice({
                               sx={{
                                 textAlign: 'right',
                                 padding: '5px',
-                                fontSize: '13px',
+                                fontSize: '11px',
                                 fontWeight: 'bold',
                               }}
                             >
@@ -606,7 +681,7 @@ export default function AppNewInvoice({
                               sx={{
                                 textAlign: 'right',
                                 padding: '5px',
-                                fontSize: '13px',
+                                fontSize: '11px',
                                 fontWeight: 'bold',
                               }}
                             >
@@ -616,7 +691,7 @@ export default function AppNewInvoice({
                               sx={{
                                 textAlign: 'right',
                                 padding: '5px',
-                                fontSize: '13px',
+                                fontSize: '11px',
                                 fontWeight: 'bold',
                               }}
                             >
@@ -626,7 +701,7 @@ export default function AppNewInvoice({
                               sx={{
                                 textAlign: 'right',
                                 padding: '5px',
-                                fontSize: '13px',
+                                fontSize: '11px',
                                 fontWeight: 'bold',
                               }}
                             >
@@ -636,7 +711,7 @@ export default function AppNewInvoice({
                               sx={{
                                 textAlign: 'right',
                                 padding: '5px',
-                                fontSize: '13px',
+                                fontSize: '11px',
                                 fontWeight: 'bold',
                               }}
                             >
@@ -646,7 +721,7 @@ export default function AppNewInvoice({
                               sx={{
                                 textAlign: 'right',
                                 padding: '5px',
-                                fontSize: '13px',
+                                fontSize: '11px',
                                 fontWeight: 'bold',
                               }}
                             >
@@ -684,7 +759,7 @@ export default function AppNewInvoice({
                 sx={{
                   // ml: 2,
                   width: '7%',
-                  fontSize: '13px',
+                  fontSize: '11px',
                   marginRight: '0px !important',
                   borderTop: value === data.value ? 'none' : '1px solid #d3d3d3',
                   borderLeft: value === data.value ? 'none' : '0.5px solid #d3d3d3',
@@ -737,29 +812,29 @@ function AppNewInvoiceRow({ row, value }: AppNewInvoiceRowProps) {
       {value === 0 && (
         <StyledTableRow>
           <StyledTableCell
-            sx={{ textAlign: 'left', padding: '5px', fontSize: '13px', borderLeft: 'none' }}
+            sx={{ textAlign: 'left', padding: '5px', fontSize: '11px', borderLeft: 'none' }}
           >
             {row.symbol}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '11px' }}>
             {row.positions}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '11px' }}>
             {row.buy_volume}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '11px' }}>
             {row.buy_price}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '11px' }}>
             {row.sell_volume}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '11px' }}>
             {row.sell_price}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '11px' }}>
             {row.net_volume}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '11px' }}>
             {row.profit}
           </StyledTableCell>
         </StyledTableRow>
@@ -768,30 +843,30 @@ function AppNewInvoiceRow({ row, value }: AppNewInvoiceRowProps) {
       {value === 1 && (
         <StyledTableRow>
           <StyledTableCell
-            sx={{ textAlign: 'left', padding: '5px', fontSize: '13px', borderLeft: 'none' }}
+            sx={{ textAlign: 'left', padding: '5px', fontSize: '11px', borderLeft: 'none' }}
           >
             {row.asset}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '11px' }}>
             {row.clients}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '11px' }}>
             {row.coverage}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '11px' }}>
             {row.nettotal}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '11px' }}>
             {row.rate}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '11px' }}>
             {row.netTotal}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '13px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', padding: '5px', fontSize: '11px' }}>
             {row.positive}
           </StyledTableCell>
           <StyledTableCell
-            sx={{ textAlign: 'right', padding: '5px', fontSize: '13px', borderRight: 'none' }}
+            sx={{ textAlign: 'right', padding: '5px', fontSize: '11px', borderRight: 'none' }}
           >
             {row.graph}
           </StyledTableCell>
@@ -800,15 +875,15 @@ function AppNewInvoiceRow({ row, value }: AppNewInvoiceRowProps) {
       {value === 3 && (
         <StyledTableRow>
           <StyledTableCell
-            sx={{ textAlign: 'left', padding: '5px', fontSize: '13px', borderLeft: 'none' }}
+            sx={{ textAlign: 'left', padding: '5px', fontSize: '11px', borderLeft: 'none' }}
           >
             {row.time}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'left', padding: '5px', fontSize: '13px' }}>
+          <StyledTableCell sx={{ textAlign: 'left', padding: '5px', fontSize: '11px' }}>
             {row.server}
           </StyledTableCell>
           <StyledTableCell
-            sx={{ textAlign: 'left', padding: '5px', fontSize: '13px', borderRight: 'none' }}
+            sx={{ textAlign: 'left', padding: '5px', fontSize: '11px', borderRight: 'none' }}
           >
             {row.message}
           </StyledTableCell>

@@ -102,7 +102,6 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
       socket.on('marketWatch', async (data: any) => {
         await setSocketData((prev: any) => {
           let index1 = -1;
-
           for (let index = 0; index < prev.length; index++) {
             const data1 = prev[index];
             if (
@@ -111,7 +110,6 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
               data1?.InstrumentIdentifier === data?.InstrumentIdentifier
             ) {
               index1 = index;
-
               break;
             }
           }

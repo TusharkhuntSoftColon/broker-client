@@ -44,6 +44,7 @@ import masterService from 'src/services/masterService';
 
 import useAuth from 'src/hooks/useAuth';
 import { useSocket } from 'src/context/SocketContext';
+import SymbolPropertiesDialog from '../Dialog/SymbolProperties';
 // ----------------------------------------------------------------------
 
 interface TabPanelProps {
@@ -118,8 +119,6 @@ export default function SymbolTableDashboard() {
   const [importMonthData, setImportMonthData] = useState<any>([]);
   const [socketData, setSocketData] = useState<any>([]);
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false);
-
-  console.log({ socketData });
 
   const { socket, connect, disconnect, subscribeToMarket, joinUserRoom, marketWatch } = useSocket();
 
@@ -196,7 +195,7 @@ export default function SymbolTableDashboard() {
 
     return () => {
       if (socket) {
-        disconnect(); // Call disconnect method when the component unmounts
+        disconnect();
       }
     };
   }, [socket, connect, disconnect, subscribeToMarket, joinUserRoom, importMonthData]);
@@ -214,7 +213,6 @@ export default function SymbolTableDashboard() {
           bid: 0,
           ask: 0,
           dailyChange: 0,
-
           oldBuyPrice: 0,
           oldSellPrice: 0,
           oldPercentage: 0,
@@ -236,7 +234,10 @@ export default function SymbolTableDashboard() {
     const symbolTableDashboard: any[] = [];
     for (const data of socketData) {
       symbolTableDashboard.push({
-        id: data?.InstrumentIdentifier,
+        id: symbolData
+          .filter((item: any) => item?.socketLiveName === data?.InstrumentIdentifier)
+          .map((item: any) => item?._id)[0],
+        instrumentIdentifier: data?.InstrumentIdentifier,
         symbol: symbolData
           .filter((item: any) => item?.socketLiveName === data?.InstrumentIdentifier)
           .map((item: any) => item?.name),
@@ -255,7 +256,7 @@ export default function SymbolTableDashboard() {
                   ? 'red'
                   : 'white'
                 : 'red'
-            : 'red',
+            : 'black',
         askColor:
           data?.SellPrice !== undefined && data?.oldSellPrice !== undefined
             ? data?.SellPrice > data?.oldSellPrice
@@ -277,9 +278,12 @@ export default function SymbolTableDashboard() {
     }
     const updatedArray = symbolData
       .map((data: any) =>
-        symbolTableDashboard.find((data1: any) => data1.id === data?.socketLiveName)
+        symbolTableDashboard.find(
+          (data1: any) => data1.instrumentIdentifier === data?.socketLiveName
+        )
       )
       .filter(Boolean);
+
     setRow(updatedArray);
   }, [socketData]);
 
@@ -342,43 +346,81 @@ export default function SymbolTableDashboard() {
           label: 'Symbol',
           align: 'left',
           border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
         },
-        { id: 'bid', label: 'Bid', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'ask', label: 'Ask', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'ltp', label: 'LTP', align: 'right', border: '1px solid #dddddd !important' },
+        {
+          id: 'bid',
+          label: 'Bid',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
+        },
+        {
+          id: 'ask',
+          label: 'Ask',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
+        },
+        {
+          id: 'ltp',
+          label: 'LTP',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
+        },
         {
           id: 'dailyChange',
           label: 'Net Change',
           align: 'right',
           border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
         },
-        { id: 'change%', label: 'Change%', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'high', label: 'High', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'low', label: 'Low', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'open', label: 'Open', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'close', label: 'Close', align: 'right', border: '1px solid #dddddd !important' },
-      ],
-    },
-    {
-      label: 'Details',
-      value: 1,
-      title: 'Details Table',
-      tableDatas: newSymbolTableData,
-      tableLabel: [
-        { id: 'symbol', label: 'Symbol', align: 'left', border: '1px solid #dddddd !important' },
-        { id: 'bid', label: 'Bid', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'ask', label: 'Ask', align: 'right', border: '1px solid #dddddd !important' },
-      ],
-    },
-    {
-      label: 'Ticks',
-      value: 2,
-      title: 'Ticks Table',
-      tableDatas: newSymbolTableData,
-      tableLabel: [
-        { id: 'symbol', label: 'Symbol', align: 'left', border: '1px solid #dddddd !important' },
-        { id: 'bid', label: 'Bid', align: 'right', border: '1px solid #dddddd !important' },
-        { id: 'ask', label: 'Ask', align: 'right', border: '1px solid #dddddd !important' },
+        {
+          id: 'change%',
+          label: 'Change%',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
+        },
+        {
+          id: 'high',
+          label: 'High',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
+        },
+        {
+          id: 'low',
+          label: 'Low',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
+        },
+        {
+          id: 'open',
+          label: 'Open',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
+        },
+        {
+          id: 'close',
+          label: 'Close',
+          align: 'right',
+          border: '1px solid #dddddd !important',
+          fontSize: '11px',
+          padding: '5px',
+        },
       ],
     },
   ];
@@ -419,7 +461,6 @@ export default function SymbolTableDashboard() {
                         color="default"
                         onClick={(e) => {
                           e.stopPropagation();
-                          console.log('CLICKEDDDDDDDDDDDDDDDDD');
                           setIsAdvancedMode(!isAdvancedMode);
                         }}
                       >
@@ -520,8 +561,8 @@ export default function SymbolTableDashboard() {
                 {...a11yProps(data.value)}
                 sx={{
                   // ml: 2,
-                  fontSize: '13px',
-                  width: '20%',
+                  fontSize: '11px',
+                  width: '50%',
                   marginRight: '0px !important',
                   borderTop: value === data.value ? 'none' : '1px solid #d3d3d3',
                   borderLeft: value === data.value ? 'none' : '0.5px solid #d3d3d3',
@@ -566,7 +607,7 @@ type SymbolNewRowProps = {
 
 function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) {
   const popover = usePopover();
-
+  const symbolProperties = useBoolean();
   const theme = useTheme();
   const handleBidData =
     row?.bid !== undefined && row?.oldBuyPrice !== undefined && row?.bid > row?.oldBuyPrice;
@@ -592,7 +633,7 @@ function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) 
 
   return (
     <>
-      <StyledTableRow sx={{ cursor: 'pointer' }}>
+      <StyledTableRow sx={{ cursor: 'pointer' }} onDoubleClick={() => symbolProperties.onTrue()}>
         <TableCell
           style={{
             border: '1px solid #dddddd',
@@ -601,7 +642,7 @@ function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) 
             alignItems: 'center',
             gap: '1px',
             padding: '1px',
-            fontSize: '13px',
+            fontSize: '11px',
             borderLeft: 'none',
             borderRight: 'none',
             borderBottom: 'none',
@@ -628,7 +669,7 @@ function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) 
                 : 'red',
             textAlign: 'right',
             width: '100px',
-            fontSize: '13px',
+            fontSize: '11px',
             padding: '5px',
             borderRight: 'none',
             borderBottom: 'none',
@@ -650,7 +691,7 @@ function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) 
                 : 'red',
             textAlign: 'right',
             width: '100px',
-            fontSize: '13px',
+            fontSize: '11px',
             padding: '5px',
             borderRight: 'none',
             borderBottom: 'none',
@@ -675,7 +716,7 @@ function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) 
                     : 'red',
                 textAlign: 'right',
                 width: '100px',
-                fontSize: '13px',
+                fontSize: '11px',
                 padding: '5px',
                 borderRight: 'none',
                 borderBottom: 'none',
@@ -688,7 +729,7 @@ function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) 
                 color: row.priceChange > 0 ? 'blue' : 'red',
                 textAlign: 'right',
                 width: '100px',
-                fontSize: '13px',
+                fontSize: '11px',
                 padding: '5px',
                 borderRight: 'none',
                 borderBottom: 'none',
@@ -710,7 +751,7 @@ function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) 
                     : 'red',
                 textAlign: 'right',
                 width: '100px',
-                fontSize: '13px',
+                fontSize: '11px',
                 padding: '5px',
                 borderRight: 'none',
                 borderBottom: 'none',
@@ -732,7 +773,7 @@ function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) 
                     : 'red',
                 textAlign: 'right',
                 width: '100px',
-                fontSize: '13px',
+                fontSize: '11px',
                 padding: '5px',
                 borderRight: 'none',
                 borderBottom: 'none',
@@ -754,7 +795,7 @@ function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) 
                     : 'red',
                 textAlign: 'right',
                 width: '100px',
-                fontSize: '13px',
+                fontSize: '11px',
                 padding: '5px',
                 borderRight: 'none',
                 borderBottom: 'none',
@@ -776,7 +817,7 @@ function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) 
                     : 'red',
                 textAlign: 'right',
                 width: '100px',
-                fontSize: '13px',
+                fontSize: '11px',
                 padding: '5px',
                 borderRight: 'none',
                 borderBottom: 'none',
@@ -798,7 +839,7 @@ function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) 
                     : 'red',
                 textAlign: 'right',
                 width: '100px',
-                fontSize: '13px',
+                fontSize: '11px',
                 padding: '5px',
                 borderRight: 'none',
                 borderBottom: 'none',
@@ -809,6 +850,12 @@ function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) 
           </>
         )}
       </StyledTableRow>
+
+      <SymbolPropertiesDialog
+        open={symbolProperties.value}
+        onClose={symbolProperties.onFalse}
+        row={row}
+      />
 
       <CustomPopover
         open={popover.open}

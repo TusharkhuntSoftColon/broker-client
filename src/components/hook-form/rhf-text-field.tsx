@@ -11,7 +11,7 @@ type Props = TextFieldProps & {
   upperText?: any;
   isReadOnly?: any;
   min?: number;
-  max?: number | null;
+  max?: any;
 };
 
 export default function RHFTextField({
@@ -53,7 +53,7 @@ export default function RHFTextField({
           fullWidth
           type={type}
           inputProps={{ min: min ?? 0, max: max ?? null }}
-          value={type === 'number' && field.value === 0 ? '' : field.value}
+          value={type === 'number' && field.value === 0 ? null : field.value}
           onChange={(event) => {
             if (type === 'number') {
               field.onChange(Number(event.target.value));

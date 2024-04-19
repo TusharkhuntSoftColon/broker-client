@@ -15,7 +15,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { fDate } from 'src/utils/format-time';
 
-import { ExchangeStatus } from 'src/_mock';
+import { STATUS } from 'src/_mock/_person';
 
 import Iconify from 'src/components/iconify';
 import { RHFAutocomplete } from 'src/components/hook-form';
@@ -209,10 +209,9 @@ export default function PersonTableToolbar({
             <RHFAutocomplete
               name="status"
               label="Status"
-              options={ExchangeStatus}
+              options={STATUS}
               isLabled={false}
               value={filters?.status}
-              data={ExchangeStatus}
               isOptionEqualToValue={(option, value) => option.value === value.value}
               getOptionLabel={(option: any) => option.label}
               renderOption={(props, option) => (

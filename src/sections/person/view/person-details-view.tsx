@@ -108,8 +108,6 @@ export default function PersonDetailsView({ currentUser }: Props) {
 
   const { mutate: getUserPosition } = useMutation(getUsersBetPositionByRole(role), {
     onSuccess: (data) => {
-      console.log(data?.data?.rows);
-
       setTableData1(data?.data?.rows);
       // socketConnection(data?.data?.rows);
     },

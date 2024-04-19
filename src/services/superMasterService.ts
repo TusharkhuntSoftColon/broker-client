@@ -15,6 +15,7 @@ import {
   GET_BROKERAGE_LIST_FOR_SUPER_MASTER,
   IMPORT_MONTH_ORDER_FOR_SUPER_MASTER,
   CHANGE_USER_PASSWORD_BY_SUPER_MASTER,
+  GET_SYMBOL_PROPERTIES_BY_SUPER_MASTER,
   UPDATED_SELECTED_LIST_FOR_SUPER_MASTER,
   SET_IMPORT_MONTH_LIST_FOR_SUPER_MASTER,
   GET_USERS_BET_POSITIONS_BY_SUPER_MASTER,
@@ -369,6 +370,17 @@ const superMasterService = {
       // You can log the error here for debugging purposes
       console.error('Error in adminService.createAdmin:', error);
       throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  getSymbolProperties: async (id?: string): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(
+        `${GET_SYMBOL_PROPERTIES_BY_SUPER_MASTER}/${id}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error in exchangeService.getExchangeList:', error);
+      throw error;
     }
   },
 };

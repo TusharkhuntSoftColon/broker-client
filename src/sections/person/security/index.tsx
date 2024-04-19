@@ -12,8 +12,6 @@ import { LoadingButton } from '@mui/lab';
 import { Box, Grid } from '@mui/material';
 import Container from '@mui/material/Container';
 
-import { useParams } from 'src/routes/hooks';
-
 import useAuth from 'src/hooks/useAuth';
 
 import adminService from 'src/services/adminService';
@@ -27,10 +25,6 @@ import FormProvider from 'src/components/hook-form/form-provider';
 export default function PersonSecurity({ currentUser }: any) {
   const settings = useSettingsContext();
   const { role } = useAuth();
-
-  console.log({ currentUser });
-
-  const { id }: any = useParams();
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -112,7 +106,7 @@ export default function PersonSecurity({ currentUser }: any) {
   } = methods;
 
   const { mutate: changeUserPassword }: any = useMutation(changeUserPasswordByRole(role), {
-    onSuccess: (data) => {
+    onSuccess: (data: any) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
       reset();
     },
@@ -123,7 +117,7 @@ export default function PersonSecurity({ currentUser }: any) {
     },
   });
   const { mutate: changeInvestorPassword }: any = useMutation(changeInvestorPasswordByRole(role), {
-    onSuccess: (data) => {
+    onSuccess: (data: any) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
       reset();
     },
@@ -132,7 +126,7 @@ export default function PersonSecurity({ currentUser }: any) {
     },
   });
   const { mutate: changeMasterPassword }: any = useMutation(changeMasterPasswordByRole(role), {
-    onSuccess: (data) => {
+    onSuccess: (data: any) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
       reset();
     },

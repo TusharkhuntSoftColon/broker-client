@@ -46,8 +46,6 @@ export default function PersonTableRow({
 }: Props) {
   const { name, exchangeList, ID, status, role } = row;
 
-  console.log({ status });
-
   const confirm = useBoolean();
   const quickEdit = useBoolean();
   const popover = usePopover();

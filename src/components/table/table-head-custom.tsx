@@ -67,7 +67,8 @@ export default function TableHeadCustom({
               width: headCell.width,
               minWidth: headCell.minWidth,
               border: headCell.border,
-              padding: '9px',
+              fontSize: headCell.fontSize,
+              padding: headCell.padding || '9px',
             }}
           >
             {onSort ? (
