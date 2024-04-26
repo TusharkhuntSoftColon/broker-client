@@ -122,8 +122,6 @@ export default function ClientTableDashboard({
     setAllOrders(orders);
   }, [accountData]);
 
-  console.log({ allOrders });
-
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };

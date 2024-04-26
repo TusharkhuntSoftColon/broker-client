@@ -22,9 +22,8 @@ import AddIcon from '@mui/icons-material/Add';
 import CreateIcon from '@mui/icons-material/Create';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
-import { Tooltip, useTheme, IconButton } from '@mui/material';
+import { Tooltip, useTheme, IconButton, CardHeader } from '@mui/material';
 import NorthEastIcon from '@mui/icons-material/NorthEast';
 import SouthEastIcon from '@mui/icons-material/SouthEast';
 import TableContainer from '@mui/material/TableContainer';
@@ -454,7 +453,10 @@ export default function SymbolTableDashboard() {
                     alignItems: 'center',
                   }}
                 >
-                  <CardHeader title={data.title} sx={{ padding: '0px 0px 0px 10px !important' }} />
+                  <CardHeader
+                    title={data.title}
+                    sx={{ padding: '0px 0px 0px 10px !important', fontSize: '12px' }}
+                  />
                   <Box>
                     <Tooltip title="Advance Mode" placement="top">
                       <IconButton

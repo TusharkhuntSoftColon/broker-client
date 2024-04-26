@@ -124,16 +124,16 @@
   background-color: white !important;
 }
 
-.css-1bqify2-MuiTableRow-root:last-of-type .MuiTableCell-root{
+.css-1bqify2-MuiTableRow-root:last-of-type .MuiTableCell-root {
   border-color: #dddddd !important;
 }
 
-.css-8ebtji-MuiTypography-root{
-  font-size: 12px !important;
+.css-yuob64 {
+  margin: 12px !important;
 }
 
-.css-yuob64{
-  margin:12px !important;
+.MuiCardHeader-title {
+  font-size: 12px !important;
 }
 
 /* .css-7ed3vs-MuiTableRow-root:last-of-type > * {
@@ -149,6 +149,6 @@
   box-shadow: none !important;
 } */
 
-.css-6okn92-MuiButtonBase-root-MuiTab-root{
+.css-6okn92-MuiButtonBase-root-MuiTab-root {
   height: 10px !important;
 }

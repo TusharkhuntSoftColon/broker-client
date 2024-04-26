@@ -24,6 +24,7 @@ export default function AccountPopover() {
     try {
       popover.onClose();
       router.replace('/auth/login');
+      localStorage.setItem('isFirstTime', 'true');
     } catch (error) {
       console.error(error);
       enqueueSnackbar('Unable to logout!', { variant: 'error' });
