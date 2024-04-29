@@ -19,7 +19,7 @@ export default function MainLayout({ children }: Props) {
       sx={{
         flexGrow: 1,
         ...(!homePage && {
-          pt: { xs: 8, md: 3.5 },
+          pt: { xs: 8, md: 1.5 },
         }),
       }}
     >

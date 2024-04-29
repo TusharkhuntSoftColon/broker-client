@@ -13,6 +13,7 @@ export default function UserTradeTableRow({ row }: any) {
 
   const sellProfit =
     (row?.sellPrice - row?.livePrice) * row?.tickValue * row?.quantity * row?.calculationValue;
+
   return (
     <>
       <TableRow hover sx={{ cursor: 'pointer' }}>

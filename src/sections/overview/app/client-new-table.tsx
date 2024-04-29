@@ -128,8 +128,11 @@ export default function ClientTableDashboard({
 
   const [updatedPositionsData, setUpdatedPositionsData] = useState([]);
   const [updatedOrdersData, setUpdatedOrdersData] = useState([]);
+  const [updatedAccountData1, setUpdatedAccountData1] = useState([]);
   const { socket, connect, disconnect, subscribeToMarket, joinUserRoom, marketWatch } = useSocket();
   const [socketData, setSocketData] = useState<any>([]);
+
+  console.log({ updatedAccountData1 });
 
   useEffect(() => {
     if (socket) {
@@ -196,78 +199,64 @@ export default function ClientTableDashboard({
     updateLivePrice(socketData);
   }, [socketData]);
 
-  // const calculateProfitForOrders = (socketData: any, accountData: any) => {
-  //   console.log({ socketData, accountData });
-
-  //   const updatedAccountData = accountData?.map((user) => {
-  //     const updatedOrders = user.order?.map((order) => {
-  //       const socketItem = socketData?.find(
-  //         (item) => item?.InstrumentIdentifier === order?.scriptName
-  //       );
-  //       console.log({ socketItem });
-
-  //       if (socketItem) {
-  //         let profit = 0;
-  //         if (order.positionType === 'BUY') {
-  //           profit =
-  //             (socketItem.BuyPrice - order.buyPrice) *
-  //             order.tickValue *
-  //             order.quantity *
-  //             order.calculationValue;
-  //         } else if (order.positionType === 'SELL') {
-  //           profit =
-  //             (order.sellPrice - socketItem.SellPrice) *
-  //             order.tickValue *
-  //             order.quantity *
-  //             order.calculationValue;
-  //         }
-  //         return {
-  //           ...order,
-  //           profit,
-  //         };
-  //       }
-  //       return order;
-  //     });
-  //     return {
-  //       ...user,
-  //       order: updatedOrders,
-  //     };
-  //   });
-  //   return updatedAccountData;
-  // };
-  // const updatedAccountData = calculateProfitForOrders(socketData, accountData);
-
-  // const calculateTotals = (updatedAccountData) => {
-  //   let totalProfit = 0;
-
-  //   updatedAccountData?.order?.forEach((item) => {
-  //     totalProfit += parseFloat(item.profit);
-  //   });
-
-  //   totalProfit = parseFloat(totalProfit?.toFixed(2));
-
-  //   return {
-  //     totalProfit,
-  //   };
-  // };
-  // const totals = calculateTotals(updatedAccountData);
-  // console.log({ totals });
-
-  // console.log({ updatedAccountData });
+  const calculateTotalsAndProfit = (socketData1: any, accountData1: any) => {
+    const updatedAccountData = accountData1?.map((user: any) => {
+      let totalProfit = 0;
+      const updatedOrders = user.order?.map((order: any) => {
+        const socketItem = socketData1?.find(
+          (item: any) => item?.InstrumentIdentifier === order?.scriptName
+        );
+        if (socketItem) {
+          let profit = 0;
+          if (order.positionType === 'BUY') {
+            profit =
+              (socketItem.BuyPrice - order.buyPrice) *
+              order.tickValue *
+              order.quantity *
+              order.calculationValue;
+          } else if (order.positionType === 'SELL') {
+            profit =
+              (order.sellPrice - socketItem.SellPrice) *
+              order.tickValue *
+              order.quantity *
+              order.calculationValue;
+          }
+          totalProfit += profit; // Accumulating profit for each order
+          return {
+            ...order,
+            profit,
+          };
+        }
+        return order;
+      });
+      const equity = user.user_balance.balance + totalProfit + user.user_balance.PnL;
+      return {
+        ...user,
+        order: updatedOrders,
+        totalProfit: parseFloat(totalProfit.toFixed(2)),
+        equity,
+      };
+    });
+    return updatedAccountData;
+  };
+  useEffect(() => {
+    const data = calculateTotalsAndProfit(socketData, accountData);
+    setUpdatedAccountData1(data);
+  }, [socketData, value, accountData]);
 
   const tabs = [
     {
       label: 'Accounts',
       value: 0,
       title: 'Accounts Table',
-      tableDatas: accountData,
+      tableDatas: updatedAccountData1,
       tableLabel: [
         {
           id: 'ID',
           label: 'Login',
           align: 'left',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -275,7 +264,7 @@ export default function ClientTableDashboard({
           label: 'Name',
           align: 'left',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -283,7 +272,7 @@ export default function ClientTableDashboard({
           label: 'Leverage',
           align: 'left',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -291,7 +280,7 @@ export default function ClientTableDashboard({
           label: 'Balance',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -299,7 +288,7 @@ export default function ClientTableDashboard({
           label: 'Credit',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -307,7 +296,7 @@ export default function ClientTableDashboard({
           label: 'Equity',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -315,7 +304,7 @@ export default function ClientTableDashboard({
           label: 'Margin',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -323,7 +312,7 @@ export default function ClientTableDashboard({
           label: 'Profit',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
       ],
@@ -339,7 +328,7 @@ export default function ClientTableDashboard({
           label: 'Login',
           align: 'left',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -347,7 +336,7 @@ export default function ClientTableDashboard({
           label: 'Position',
           align: 'left',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -355,7 +344,7 @@ export default function ClientTableDashboard({
           label: 'Symbol',
           align: 'left',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -363,7 +352,7 @@ export default function ClientTableDashboard({
           label: 'Time',
           align: 'left',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -371,7 +360,7 @@ export default function ClientTableDashboard({
           label: 'Type',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -380,7 +369,7 @@ export default function ClientTableDashboard({
           align: 'right',
           border: '1px solid #dddddd !important',
           width: '10px',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -388,7 +377,7 @@ export default function ClientTableDashboard({
           label: 'Price',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -396,7 +385,7 @@ export default function ClientTableDashboard({
           label: 'Current Price',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
       ],
@@ -413,7 +402,7 @@ export default function ClientTableDashboard({
           label: 'Login',
           align: 'left',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -421,7 +410,7 @@ export default function ClientTableDashboard({
           label: 'Group',
           align: 'left',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -429,7 +418,7 @@ export default function ClientTableDashboard({
           label: 'Name',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -437,7 +426,7 @@ export default function ClientTableDashboard({
           label: 'Client',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -445,7 +434,7 @@ export default function ClientTableDashboard({
           label: 'Version',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -453,7 +442,7 @@ export default function ClientTableDashboard({
           label: 'IP',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -461,7 +450,7 @@ export default function ClientTableDashboard({
           label: 'Equity',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
       ],
@@ -477,7 +466,7 @@ export default function ClientTableDashboard({
           label: 'Login',
           align: 'left',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -485,7 +474,7 @@ export default function ClientTableDashboard({
           label: 'Order',
           align: 'left',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -493,7 +482,7 @@ export default function ClientTableDashboard({
           label: 'Symbol',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -501,7 +490,7 @@ export default function ClientTableDashboard({
           label: 'Time',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -509,7 +498,7 @@ export default function ClientTableDashboard({
           label: 'Type',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -517,7 +506,7 @@ export default function ClientTableDashboard({
           label: 'Volume',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -525,7 +514,7 @@ export default function ClientTableDashboard({
           label: 'Price',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -533,7 +522,7 @@ export default function ClientTableDashboard({
           label: 'Current Price',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
       ],
@@ -560,7 +549,7 @@ export default function ClientTableDashboard({
                 styles={{ overflow: 'hidden' }}
               >
                 <CardHeader title={data.title} sx={{ padding: '12px !important' }} />
-                <TableContainer sx={{ overflow: 'unset', height: '35vh' }}>
+                <TableContainer sx={{ overflow: 'unset', height: '39.1vh' }}>
                   <Scrollbar>
                     <Table stickyHeader>
                       <TableHeadCustom
@@ -594,6 +583,8 @@ export default function ClientTableDashboard({
             '& .MuiTab-root': {
               marginRight: 0, // Remove auto margin right for each tab
             },
+            height: '10px !important',
+            minHeight: '30px !important',
           }}
         >
           {tabs.map((data: any) => {
@@ -604,7 +595,7 @@ export default function ClientTableDashboard({
                 {...a11yProps(data.value)}
                 sx={{
                   width: '15%',
-                  fontSize: '11px',
+                  fontSize: '13px',
                   marginRight: '0px !important',
                   borderTop: value === data.value ? 'none' : '1px solid #d3d3d3',
                   borderLeft: value === data.value ? 'none' : '0.5px solid #d3d3d3',
@@ -612,6 +603,7 @@ export default function ClientTableDashboard({
                   // borderBottom: value === data.value ? '1px solid #d3d3d3' : '1px solid #d3d3d3',
                   borderTopLeftRadius: '10px',
                   borderTopRightRadius: '10px',
+                  minHeight: '30px !important',
                 }}
               />
             );
@@ -656,38 +648,38 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
   return (
     <>
       {value === 0 && (
-        <StyledTableRow>
+        <StyledTableRow onDoubleClick={() => router.push(paths.dashboard.person.edit(row?._id))}>
           <StyledTableCell
-            sx={{ textAlign: 'left', fontSize: '11px', padding: '5px', borderLeft: 'none' }}
+            sx={{ textAlign: 'left', fontSize: '13px', padding: '5px', borderLeft: 'none' }}
           >
             {row.ID}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'left', fontSize: '11px', padding: '5px' }}>
+          <StyledTableCell sx={{ textAlign: 'left', fontSize: '13px', padding: '5px' }}>
             {row.name}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'left', fontSize: '11px', padding: '5px' }}>
+          <StyledTableCell sx={{ textAlign: 'left', fontSize: '13px', padding: '5px' }}>
             {row?.leverageXY}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', fontSize: '11px', padding: '5px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row?.user_balance?.balance}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', fontSize: '11px', padding: '5px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row?.user_balance?.creditLimit}
           </StyledTableCell>
           <StyledTableCell
-            sx={{ textAlign: 'right', fontSize: '11px', padding: '5px', borderRight: 'none' }}
+            sx={{ textAlign: 'right', fontSize: '13px', padding: '5px', borderRight: 'none' }}
           >
             {row.equity}
           </StyledTableCell>
           <StyledTableCell
-            sx={{ textAlign: 'right', fontSize: '11px', padding: '5px', borderRight: 'none' }}
+            sx={{ textAlign: 'right', fontSize: '13px', padding: '5px', borderRight: 'none' }}
           >
             {row.margin}
           </StyledTableCell>
           <StyledTableCell
-            sx={{ textAlign: 'right', fontSize: '11px', padding: '5px', borderRight: 'none' }}
+            sx={{ textAlign: 'right', fontSize: '13px', padding: '5px', borderRight: 'none' }}
           >
-            {row.equity}
+            {row?.totalProfit}
           </StyledTableCell>
         </StyledTableRow>
       )}
@@ -697,34 +689,34 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
           style={{ cursor: 'pointer' }}
         >
           <StyledTableCell
-            sx={{ textAlign: 'left', fontSize: '11px', padding: '5px', borderLeft: 'none' }}
+            sx={{ textAlign: 'left', fontSize: '13px', padding: '5px', borderLeft: 'none' }}
           >
             {row.userId?.ID}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'left', fontSize: '11px', padding: '5px' }}>
+          <StyledTableCell sx={{ textAlign: 'left', fontSize: '13px', padding: '5px' }}>
             {row.ticket}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'left', fontSize: '11px', padding: '5px' }}>
+          <StyledTableCell sx={{ textAlign: 'left', fontSize: '13px', padding: '5px' }}>
             {row.importMonthName}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'left', fontSize: '11px', padding: '5px' }}>
+          <StyledTableCell sx={{ textAlign: 'left', fontSize: '13px', padding: '5px' }}>
             {PositionTime}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', fontSize: '11px', padding: '5px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row.positionType}
           </StyledTableCell>
           <StyledTableCell
-            sx={{ textAlign: 'right', fontSize: '11px', padding: '5px', width: '10px' }}
+            sx={{ textAlign: 'right', fontSize: '13px', padding: '5px', width: '10px' }}
           >
             {row.quantity}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', fontSize: '11px', padding: '5px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row.positionType === 'BUY' ? row.buyPrice : row.sellPrice}
           </StyledTableCell>
           <StyledTableCell
             sx={{
               textAlign: 'right',
-              fontSize: '11px',
+              fontSize: '13px',
               padding: '5px',
               color: row?.color,
             }}
@@ -737,27 +729,27 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
       {value === 2 && (
         <StyledTableRow>
           <StyledTableCell
-            sx={{ textAlign: 'left', fontSize: '11px', padding: '5px', borderLeft: 'none' }}
+            sx={{ textAlign: 'left', fontSize: '13px', padding: '5px', borderLeft: 'none' }}
           >
             {row.login}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', fontSize: '11px', padding: '5px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row.group}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', fontSize: '11px', padding: '5px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row.name}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', fontSize: '11px', padding: '5px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row.client}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', fontSize: '11px', padding: '5px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row.version}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', fontSize: '11px', padding: '5px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row.ip}
           </StyledTableCell>
           <StyledTableCell
-            sx={{ textAlign: 'right', fontSize: '11px', padding: '5px', borderRight: 'none' }}
+            sx={{ textAlign: 'right', fontSize: '13px', padding: '5px', borderRight: 'none' }}
           >
             {row.equity}
           </StyledTableCell>
@@ -767,30 +759,30 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
       {value === 3 && (
         <StyledTableRow>
           <StyledTableCell
-            sx={{ textAlign: 'left', fontSize: '11px', padding: '5px', borderLeft: 'none' }}
+            sx={{ textAlign: 'left', fontSize: '13px', padding: '5px', borderLeft: 'none' }}
           >
             {row?.userId?.ID}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', fontSize: '11px', padding: '5px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row.ticket}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', fontSize: '11px', padding: '5px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row.importMonthName}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', fontSize: '11px', padding: '5px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row?.time && new Date(row?.time).toDateString()}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', fontSize: '11px', padding: '5px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row.positionType}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', fontSize: '11px', padding: '5px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row.quantity}
           </StyledTableCell>
-          <StyledTableCell sx={{ textAlign: 'right', fontSize: '11px', padding: '5px' }}>
+          <StyledTableCell sx={{ textAlign: 'right', fontSize: '13px', padding: '5px' }}>
             {row.positionType === 'BUY' ? row.buyPrice : row.sellPrice}
           </StyledTableCell>
           <StyledTableCell
-            sx={{ textAlign: 'right', fontSize: '11px', padding: '5px', borderRight: 'none' }}
+            sx={{ textAlign: 'right', fontSize: '13px', padding: '5px', borderRight: 'none' }}
           >
             {row.livePrice}
           </StyledTableCell>

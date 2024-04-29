@@ -7,9 +7,12 @@ import {
   GET_USER_POSITIONS_BY_ADMIN,
   GET_USER_ACCOUNTS_BY_MASTER,
   GET_USER_POSITIONS_BY_MASTER,
+  GET_SYMBOL_PROPERTIES_BY_ADMIN,
   GET_USER_ORDERS_BY_SUPER_MASTER,
+  GET_SYMBOL_PROPERTIES_BY_MASTER,
   GET_USER_ACCOUNTS_BY_SUPER_MASTER,
   GET_USER_POSITIONS_BY_SUPER_MASTER,
+  GET_SYMBOL_PROPERTIES_BY_SUPER_MASTER,
   GET_EXCHANGE_TABLE_SUMMARY_DATA_BY_ADMIN,
   GET_EXCHANGE_TABLE_SUMMARY_DATA_BY_MASTER,
   GET_EXCHANGE_TABLE_SUMMARY_DATA_BY_SUPER_MASTER,
@@ -127,6 +130,30 @@ const overviewService = {
         GET_EXCHANGE_TABLE_SUMMARY_DATA_BY_MASTER
       );
       return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
+  getSymbolPropertiesByAdmin: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(GET_SYMBOL_PROPERTIES_BY_ADMIN);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  getSymbolPropertiesBySuperMaster: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(GET_SYMBOL_PROPERTIES_BY_SUPER_MASTER);
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  },
+  getSymbolPropertiesByMaster: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(GET_SYMBOL_PROPERTIES_BY_MASTER);
+      return response;
     } catch (error) {
       throw error;
     }

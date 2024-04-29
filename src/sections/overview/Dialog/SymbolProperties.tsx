@@ -9,10 +9,6 @@ import DialogContent from '@mui/material/DialogContent';
 
 import useAuth from 'src/hooks/useAuth';
 
-import adminService from 'src/services/adminService';
-import masterService from 'src/services/masterService';
-import superMasterService from 'src/services/superMasterService';
-
 // ----------------------------------------------------------------------
 
 type Props = {
@@ -24,18 +20,18 @@ type Props = {
 export default function SymbolPropertiesDialog({ open, onClose, row }: Props) {
   const { role } = useAuth();
 
-  const getSymbolPropertiesByRole: any = (role1: any) => {
-    switch (role1) {
-      case 'ADMIN':
-        return adminService.getSymbolProperties(row?.id);
-      case 'SUPER_MASTER':
-        return superMasterService.getSymbolProperties(row?.id);
-      case 'MASTER':
-        return masterService.getSymbolProperties(row?.id);
-      default:
-        return masterService.getSymbolProperties(row?.id);
-    }
-  };
+  // const getSymbolPropertiesByRole: any = (role1: any) => {
+  //   switch (role1) {
+  //     case 'ADMIN':
+  //       return adminService.getSymbolProperties(row?.id);
+  //     case 'SUPER_MASTER':
+  //       return superMasterService.getSymbolProperties(row?.id);
+  //     case 'MASTER':
+  //       return masterService.getSymbolProperties(row?.id);
+  //     default:
+  //       return masterService.getSymbolProperties(row?.id);
+  //   }
+  // };
   // const { mutate: getSymbolProperty } = useMutation(getSymbolPropertiesByRole(role), {
   //   onSuccess: (data) => {
   //     //   setAssignedExchanges(data?.data?.rows);

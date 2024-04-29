@@ -12,8 +12,6 @@ import {
   GET_BROKERAGE_LIST_FOR_MASTER,
   IMPORT_MONTH_ORDER_FOR_MASTER,
   CHANGE_USER_PASSWORD_BY_MASTER,
-  GET_SYMBOL_PROPERTIES_BY_MASTER,
-  UPDATED_SELECTED_LIST_FOR_MASTER,
   SET_IMPORT_MONTH_LIST_FOR_MASTER,
   GET_USERS_BET_POSITIONS_BY_MASTER,
   IMPORT_MONTH_ORDER_LIST_FOR_MASTER,
@@ -161,16 +159,6 @@ const masterService = {
       throw error; // Re-throw the error to be caught by the caller
     }
   },
-  getupdatedImportMonthListByMaster: async (): Promise<any> => {
-    try {
-      const response: AxiosResponse<any> = await client.get(UPDATED_SELECTED_LIST_FOR_MASTER);
-      return response.data;
-    } catch (error) {
-      // You can log the error here for debugging purposes
-      console.error('Error in symbolService.getSymbolList:', error);
-      throw error; // Re-throw the error to be caught by the caller
-    }
-  },
   updateImportMonthOrder: async (symbolIds: any): Promise<any> => {
     try {
       const response: AxiosResponse<any> = await client.put(`${IMPORT_MONTH_ORDER_FOR_MASTER}`, {
@@ -270,17 +258,6 @@ const masterService = {
       // You can log the error here for debugging purposes
       console.error('Error in adminService.createAdmin:', error);
       throw error; // Re-throw the error to be caught by the caller
-    }
-  },
-  getSymbolProperties: async (id?: string): Promise<any> => {
-    try {
-      const response: AxiosResponse<any> = await client.get(
-        `${GET_SYMBOL_PROPERTIES_BY_MASTER}/${id}`
-      );
-      return response.data;
-    } catch (error) {
-      console.error('Error in exchangeService.getExchangeList:', error);
-      throw error;
     }
   },
 };

@@ -33,12 +33,6 @@
   background-color: rgba(0, 167, 111, 0.16) !important;
 }
 
-#tv_chart_container,
-#tv_chart_container iframe {
-  height: 100% !important;
-  width: 100%;
-}
-
 .grid-item__title {
   font-size: 14px;
   color: #fff;

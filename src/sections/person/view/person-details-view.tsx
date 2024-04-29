@@ -51,6 +51,8 @@ export default function PersonDetailsView({ currentUser }: Props) {
   const [userBalance, setUserBalance] = useState<any>({});
   const [socketData, setSocketData] = useState<any>([]);
 
+  console.log({ tableData1, socketData });
+
   const { socket, connect, disconnect, subscribeToMarket, joinUserRoom, marketWatch } = useSocket();
 
   useEffect(() => {
@@ -76,7 +78,7 @@ export default function PersonDetailsView({ currentUser }: Props) {
         disconnect(); // Call disconnect method when the component unmounts
       }
     };
-  }, [socket, connect, disconnect, subscribeToMarket, joinUserRoom, tableData1]);
+  }, [socket, connect, disconnect, subscribeToMarket, joinUserRoom]);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -108,6 +110,8 @@ export default function PersonDetailsView({ currentUser }: Props) {
 
   const { mutate: getUserPosition } = useMutation(getUsersBetPositionByRole(role), {
     onSuccess: (data) => {
+      console.log({ data: data?.data?.rows });
+
       setTableData1(data?.data?.rows);
       // socketConnection(data?.data?.rows);
     },
@@ -155,6 +159,8 @@ export default function PersonDetailsView({ currentUser }: Props) {
           (item: any) => item.InstrumentIdentifier === position.scriptName
         );
 
+        console.log({ socketItem });
+
         if (socketItem) {
           if (position.positionType === 'BUY') {
             return {
@@ -180,6 +186,8 @@ export default function PersonDetailsView({ currentUser }: Props) {
         }
         return position;
       });
+      console.log({ updatedPositions });
+
       setTableData1(updatedPositions);
     };
     updateLivePrice(socketData);

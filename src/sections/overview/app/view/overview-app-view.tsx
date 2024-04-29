@@ -31,6 +31,7 @@ const OverviewAppView = () => {
   const [userAccounts, setUserAccounts] = useState<any>();
   const [userOrders, setUserOrders] = useState<any>();
   const [exchangeTableSummaryData, setExchangeTableSummary] = useState<any>([]);
+  const [symbolProperties, setSymbolProperties] = useState<any>([]);
 
   const TableComponents = [
     { name: 'Symbol', component: <SymbolTableDashboard /> },
@@ -175,6 +176,30 @@ const OverviewAppView = () => {
     }
   }, []);
 
+  // const getSymbolPropertiesByRole: any = (role1: any) => {
+  //   switch (role1) {
+  //     case 'ADMIN':
+  //       return overviewService.getSymbolPropertiesByAdmin();
+  //     case 'SUPER_MASTER':
+  //       return overviewService.getSymbolPropertiesBySuperMaster();
+  //     case 'MASTER':
+  //       return overviewService.getSymbolPropertiesByMaster();
+  //     default:
+  //       return overviewService.getSymbolPropertiesByMaster();
+  //   }
+  // };
+  // const { mutate: getSymbolProperty } = useMutation(getSymbolPropertiesByRole(role), {
+  //   onSuccess: (data) => {
+  //     console.log({ data });
+  //     // setSymbolProperties(data?.rows);
+  //   },
+  //   onError: (error) => {
+  //     console.log('error', error);
+  //   },
+  // });
+  // useEffect(() => {
+  //   getSymbolProperty();
+  // }, []);
   useEffect(() => {
     getUserPositions();
     getUserAccounts();
@@ -192,7 +217,7 @@ const OverviewAppView = () => {
         overflow: 'hidden',
       }}
     >
-      <Box sx={{ margin: '25px 0px 0px 20px' }}>
+      <Box sx={{ margin: '20px 0px 0px 20px' }}>
         {/* First Child Box */}
         {TableComponents.map((data: any) => {
           return (
@@ -233,7 +258,7 @@ const OverviewAppView = () => {
                 : currentTableCount === 1
                   ? '100%'
                   : table.name !== 'Users'
-                    ? '24%'
+                    ? '25%'
                     : '50%'
             }
           >

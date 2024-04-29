@@ -10,10 +10,8 @@ import { useMutation } from '@tanstack/react-query';
 // import { HTML5Backend } from 'react-dnd-html5-backend';
 // import { useDrag, useDrop, DndProvider, DragPreviewImage } from 'react-dnd';
 import Box from '@mui/material/Box';
-import Tab from '@mui/material/Tab';
 import { styled } from '@mui/system';
 import Card from '@mui/material/Card';
-import Tabs from '@mui/material/Tabs';
 import Table from '@mui/material/Table';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
@@ -43,6 +41,7 @@ import masterService from 'src/services/masterService';
 
 import useAuth from 'src/hooks/useAuth';
 import { useSocket } from 'src/context/SocketContext';
+import overviewService from 'src/services/overviewAppViewService';
 import SymbolPropertiesDialog from '../Dialog/SymbolProperties';
 // ----------------------------------------------------------------------
 
@@ -134,18 +133,6 @@ export default function SymbolTableDashboard() {
     }
   };
 
-  const getUpdatedImportMonthByRole = (role: any) => {
-    switch (role) {
-      case 'ADMIN':
-        return adminService.getupdatedImportMonthListByAdmin;
-      case 'SUPER_MASTER':
-        return superMasterService.getupdatedImportMonthListBySuperMaster;
-      case 'MASTER':
-        return masterService.getupdatedImportMonthListByMaster;
-      default:
-        return masterService.getupdatedImportMonthListByMaster;
-    }
-  };
   const getAssignedExchangeByRole = (role: any) => {
     switch (role) {
       case 'ADMIN':
@@ -158,13 +145,6 @@ export default function SymbolTableDashboard() {
         return masterService.getassignedExchangeListByMaster;
     }
   };
-
-  const { mutate: getUpdatedImportMonthList } = useMutation(getUpdatedImportMonthByRole(role), {
-    onSuccess: (data) => {},
-    onError: (error) => {
-      console.log('error', error);
-    },
-  });
 
   const { mutate: getAssignedExchangeList } = useMutation(getAssignedExchangeByRole(role), {
     onSuccess: (data) => {
@@ -225,9 +205,31 @@ export default function SymbolTableDashboard() {
     },
   });
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+  const getSymbolPropertiesByRole: any = (role1: any) => {
+    switch (role1) {
+      case 'ADMIN':
+        return overviewService.getSymbolPropertiesByAdmin();
+      case 'SUPER_MASTER':
+        return overviewService.getSymbolPropertiesBySuperMaster();
+      case 'MASTER':
+        return overviewService.getSymbolPropertiesByMaster();
+      default:
+        return overviewService.getSymbolPropertiesByMaster();
+    }
   };
+  const { mutate: getSymbolProperty } = useMutation(getSymbolPropertiesByRole(role), {
+    onSuccess: (data) => {
+      console.log(data?.data?.rows);
+      // setSymbolProperties(data?.rows);
+    },
+    onError: (error) => {
+      console.log('error', error);
+    },
+  });
+
+  useEffect(() => {
+    getSymbolProperty();
+  }, []);
 
   useEffect(() => {
     const symbolTableDashboard: any[] = [];
@@ -288,7 +290,6 @@ export default function SymbolTableDashboard() {
 
   useEffect(() => {
     mutate();
-    getUpdatedImportMonthList();
     getAssignedExchangeList();
   }, []);
 
@@ -345,7 +346,7 @@ export default function SymbolTableDashboard() {
           label: 'Symbol',
           align: 'left',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -353,7 +354,7 @@ export default function SymbolTableDashboard() {
           label: 'Bid',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -361,7 +362,7 @@ export default function SymbolTableDashboard() {
           label: 'Ask',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -369,7 +370,7 @@ export default function SymbolTableDashboard() {
           label: 'LTP',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -377,7 +378,7 @@ export default function SymbolTableDashboard() {
           label: 'Net Change',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -385,7 +386,7 @@ export default function SymbolTableDashboard() {
           label: 'Change%',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -393,7 +394,7 @@ export default function SymbolTableDashboard() {
           label: 'High',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -401,7 +402,7 @@ export default function SymbolTableDashboard() {
           label: 'Low',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -409,7 +410,7 @@ export default function SymbolTableDashboard() {
           label: 'Open',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
         {
@@ -417,7 +418,7 @@ export default function SymbolTableDashboard() {
           label: 'Close',
           align: 'right',
           border: '1px solid #dddddd !important',
-          fontSize: '11px',
+          fontSize: '13px',
           padding: '5px',
         },
       ],
@@ -511,7 +512,7 @@ export default function SymbolTableDashboard() {
                   className="symbol-table-card"
                   sx={{
                     overflow: 'scroll',
-                    height: '35vh',
+                    height: '42.5vh',
                     maxWidth: '52.5vh !important',
                   }}
                 >
@@ -529,13 +530,7 @@ export default function SymbolTableDashboard() {
                     />
                     <TableBody>
                       {rowData?.map((row: any, index: number) => (
-                        <SymbolNewRow
-                          key={row.id}
-                          row={row}
-                          index={index}
-                          value={value}
-                          isAdvancedMode={isAdvancedMode}
-                        />
+                        <SymbolNewRow key={row.id} row={row} isAdvancedMode={isAdvancedMode} />
                       ))}
                     </TableBody>
                   </Table>
@@ -543,39 +538,6 @@ export default function SymbolTableDashboard() {
               </CustomTabPanel>
             ))}
           </Box>
-          <Tabs
-            value={value}
-            onChange={handleChange}
-            aria-label="basic tabs example"
-            sx={{
-              '& .MuiTabs-indicator': {
-                display: 'none',
-              },
-              '& .MuiTab-root': {
-                marginRight: 0,
-              },
-            }}
-          >
-            {tabs.map((data: any) => (
-              <Tab
-                key={data.value}
-                label={data.label}
-                {...a11yProps(data.value)}
-                sx={{
-                  // ml: 2,
-                  fontSize: '11px',
-                  width: '50%',
-                  marginRight: '0px !important',
-                  borderTop: value === data.value ? 'none' : '1px solid #d3d3d3',
-                  borderLeft: value === data.value ? 'none' : '0.5px solid #d3d3d3',
-                  borderRight: value === data.value ? 'none' : '0.5px solid #d3d3d3',
-                  // borderBottom: value === data.value ? '1px solid #d3d3d3' : '1px solid #d3d3d3',
-                  borderTopLeftRadius: '10px',
-                  borderTopRightRadius: '10px',
-                }}
-              />
-            ))}
-          </Tabs>
         </Box>
       </Card>
 
@@ -602,12 +564,10 @@ export default function SymbolTableDashboard() {
 
 type SymbolNewRowProps = {
   row: any;
-  value?: any;
-  index?: any;
   isAdvancedMode?: boolean;
 };
 
-function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) {
+function SymbolNewRow({ row, isAdvancedMode }: SymbolNewRowProps) {
   const popover = usePopover();
   const symbolProperties = useBoolean();
   const theme = useTheme();
@@ -644,7 +604,7 @@ function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) 
             alignItems: 'center',
             gap: '1px',
             padding: '1px',
-            fontSize: '11px',
+            fontSize: '13px',
             borderLeft: 'none',
             borderRight: 'none',
             borderBottom: 'none',
@@ -671,7 +631,7 @@ function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) 
                 : 'red',
             textAlign: 'right',
             width: '100px',
-            fontSize: '11px',
+            fontSize: '13px',
             padding: '5px',
             borderRight: 'none',
             borderBottom: 'none',
@@ -693,7 +653,7 @@ function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) 
                 : 'red',
             textAlign: 'right',
             width: '100px',
-            fontSize: '11px',
+            fontSize: '13px',
             padding: '5px',
             borderRight: 'none',
             borderBottom: 'none',
@@ -718,7 +678,7 @@ function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) 
                     : 'red',
                 textAlign: 'right',
                 width: '100px',
-                fontSize: '11px',
+                fontSize: '13px',
                 padding: '5px',
                 borderRight: 'none',
                 borderBottom: 'none',
@@ -731,7 +691,7 @@ function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) 
                 color: row.priceChange > 0 ? 'blue' : 'red',
                 textAlign: 'right',
                 width: '100px',
-                fontSize: '11px',
+                fontSize: '13px',
                 padding: '5px',
                 borderRight: 'none',
                 borderBottom: 'none',
@@ -753,7 +713,7 @@ function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) 
                     : 'red',
                 textAlign: 'right',
                 width: '100px',
-                fontSize: '11px',
+                fontSize: '13px',
                 padding: '5px',
                 borderRight: 'none',
                 borderBottom: 'none',
@@ -775,7 +735,7 @@ function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) 
                     : 'red',
                 textAlign: 'right',
                 width: '100px',
-                fontSize: '11px',
+                fontSize: '13px',
                 padding: '5px',
                 borderRight: 'none',
                 borderBottom: 'none',
@@ -797,7 +757,7 @@ function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) 
                     : 'red',
                 textAlign: 'right',
                 width: '100px',
-                fontSize: '11px',
+                fontSize: '13px',
                 padding: '5px',
                 borderRight: 'none',
                 borderBottom: 'none',
@@ -819,7 +779,7 @@ function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) 
                     : 'red',
                 textAlign: 'right',
                 width: '100px',
-                fontSize: '11px',
+                fontSize: '13px',
                 padding: '5px',
                 borderRight: 'none',
                 borderBottom: 'none',
@@ -841,7 +801,7 @@ function SymbolNewRow({ row, value, index, isAdvancedMode }: SymbolNewRowProps) 
                     : 'red',
                 textAlign: 'right',
                 width: '100px',
-                fontSize: '11px',
+                fontSize: '13px',
                 padding: '5px',
                 borderRight: 'none',
                 borderBottom: 'none',
