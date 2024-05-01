@@ -644,93 +644,95 @@ export default function AppNewInvoice({
                 styles={{ overflow: '' }}
               >
                 <CardHeader title={data.title} sx={{ padding: '12px !important' }} />
-                <TableContainer sx={{ overflow: 'unset', height: '34vh' }}>
+                <TableContainer sx={{ overflow: 'unset', height: '25.9vh' }}>
                   <Scrollbar>
-                    <Table stickyHeader sx={{ minWidth: 680 }}>
-                      <TableHeadCustom headLabel={data.tableLabel} />
-                      <TableBody>
-                        {data.tableDatas?.map((row, index) => (
-                          <AppNewInvoiceRow key={index} row={row} value={value} />
-                        ))}
-                        {data?.label === 'Summary' && (
-                          <StyledTableRow>
-                            <StyledTableCell sx={{ fontWeight: 'bold', fontSize: '13px' }}>
-                              Summary
-                            </StyledTableCell>
-                            <StyledTableCell
-                              sx={{
-                                textAlign: 'right',
-                                padding: '5px',
-                                fontSize: '13px',
-                                fontWeight: 'bold',
-                              }}
-                            >
-                              {totals?.totalPositions}
-                            </StyledTableCell>
-                            <StyledTableCell
-                              sx={{
-                                textAlign: 'right',
-                                padding: '5px',
-                                fontSize: '13px',
-                                fontWeight: 'bold',
-                              }}
-                            >
-                              {totals?.totalBuyVolume}
-                            </StyledTableCell>
-                            <StyledTableCell
-                              sx={{
-                                textAlign: 'right',
-                                padding: '5px',
-                                fontSize: '13px',
-                                fontWeight: 'bold',
-                              }}
-                            >
-                              {totals?.totalBuyPrice}
-                            </StyledTableCell>
-                            <StyledTableCell
-                              sx={{
-                                textAlign: 'right',
-                                padding: '5px',
-                                fontSize: '13px',
-                                fontWeight: 'bold',
-                              }}
-                            >
-                              {totals?.totalSellVolume}
-                            </StyledTableCell>
-                            <StyledTableCell
-                              sx={{
-                                textAlign: 'right',
-                                padding: '5px',
-                                fontSize: '13px',
-                                fontWeight: 'bold',
-                              }}
-                            >
-                              {totals?.totalSellPrice}
-                            </StyledTableCell>
-                            <StyledTableCell
-                              sx={{
-                                textAlign: 'right',
-                                padding: '5px',
-                                fontSize: '13px',
-                                fontWeight: 'bold',
-                              }}
-                            >
-                              {totals?.totalNetVolume}
-                            </StyledTableCell>
-                            <StyledTableCell
-                              sx={{
-                                textAlign: 'right',
-                                padding: '5px',
-                                fontSize: '13px',
-                                fontWeight: 'bold',
-                              }}
-                            >
-                              {totals?.totalProfit}
-                            </StyledTableCell>
-                          </StyledTableRow>
-                        )}
-                      </TableBody>
-                    </Table>
+                    <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'}>
+                      <Table stickyHeader sx={{ minWidth: 680 }}>
+                        <TableHeadCustom headLabel={data.tableLabel} />
+                        <TableBody>
+                          {data.tableDatas?.map((row, index) => (
+                            <AppNewInvoiceRow key={index} row={row} value={value} />
+                          ))}
+                          {data?.label === 'Summary' && (
+                            <StyledTableRow>
+                              <StyledTableCell sx={{ fontWeight: 'bold', fontSize: '13px' }}>
+                                Summary
+                              </StyledTableCell>
+                              <StyledTableCell
+                                sx={{
+                                  textAlign: 'right',
+                                  padding: '5px',
+                                  fontSize: '13px',
+                                  fontWeight: 'bold',
+                                }}
+                              >
+                                {totals?.totalPositions}
+                              </StyledTableCell>
+                              <StyledTableCell
+                                sx={{
+                                  textAlign: 'right',
+                                  padding: '5px',
+                                  fontSize: '13px',
+                                  fontWeight: 'bold',
+                                }}
+                              >
+                                {totals?.totalBuyVolume}
+                              </StyledTableCell>
+                              <StyledTableCell
+                                sx={{
+                                  textAlign: 'right',
+                                  padding: '5px',
+                                  fontSize: '13px',
+                                  fontWeight: 'bold',
+                                }}
+                              >
+                                {totals?.totalBuyPrice}
+                              </StyledTableCell>
+                              <StyledTableCell
+                                sx={{
+                                  textAlign: 'right',
+                                  padding: '5px',
+                                  fontSize: '13px',
+                                  fontWeight: 'bold',
+                                }}
+                              >
+                                {totals?.totalSellVolume}
+                              </StyledTableCell>
+                              <StyledTableCell
+                                sx={{
+                                  textAlign: 'right',
+                                  padding: '5px',
+                                  fontSize: '13px',
+                                  fontWeight: 'bold',
+                                }}
+                              >
+                                {totals?.totalSellPrice}
+                              </StyledTableCell>
+                              <StyledTableCell
+                                sx={{
+                                  textAlign: 'right',
+                                  padding: '5px',
+                                  fontSize: '13px',
+                                  fontWeight: 'bold',
+                                }}
+                              >
+                                {totals?.totalNetVolume}
+                              </StyledTableCell>
+                              <StyledTableCell
+                                sx={{
+                                  textAlign: 'right',
+                                  padding: '5px',
+                                  fontSize: '13px',
+                                  fontWeight: 'bold',
+                                }}
+                              >
+                                {totals?.totalProfit}
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          )}
+                        </TableBody>
+                      </Table>
+                    </Box>
                   </Scrollbar>
                 </TableContainer>
               </CustomTabPanel>
@@ -742,6 +744,7 @@ export default function AppNewInvoice({
           onChange={handleChange}
           aria-label="basic tabs example"
           sx={{
+            // mb: '1rem',
             '& .MuiTabs-indicator': {
               display: 'none',
             },

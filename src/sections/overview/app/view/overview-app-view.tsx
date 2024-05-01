@@ -57,6 +57,8 @@ const OverviewAppView = () => {
   useEffect(() => {
     const listArray = ['Symbol', 'Users', 'Margin Call'];
     const count = listArray.filter((item) => selectedButtons.includes(item)).length;
+
+    console.log({ selectedButtons, listArray });
     setCurrentTableCount(count);
   }, [selectedButtons, currentTableCount]);
 
@@ -260,14 +262,23 @@ const OverviewAppView = () => {
               minWidth: 0, // Ensure content can overflow
               overflow: 'auto', // Enable scrolling if content overflows
             }}
+            // width={
+            //   currentTableCount === 2
+            //     ? '50%'
+            //     : currentTableCount === 1
+            //       ? '100%'
+            //       : table.name !== 'Users'
+            //         ? '25%'
+            //         : '50%'
+            // }
             width={
-              currentTableCount === 2
-                ? '50%'
-                : currentTableCount === 1
+              table.name === 'Users'
+                ? !selectedButtons.includes('Symbol') || !selectedButtons.includes('Margin Call')
                   ? '100%'
-                  : table.name !== 'Users'
-                    ? '25%'
-                    : '50%'
+                  : '50%'
+                : !selectedButtons.includes(table.name)
+                  ? '0%'
+                  : '25%'
             }
           >
             {renderComponent(table.name)}
