@@ -549,7 +549,7 @@ export default function ClientTableDashboard({
                 styles={{ overflow: 'hidden' }}
               >
                 <CardHeader title={data.title} sx={{ padding: '12px !important' }} />
-                <TableContainer sx={{ overflow: 'unset', height: '36.1vh' }}>
+                <TableContainer sx={{ overflow: 'unset', height: { xl: '35vh', xxl: '36.1vh' } }}>
                   <Scrollbar>
                     <Table stickyHeader>
                       <TableHeadCustom
