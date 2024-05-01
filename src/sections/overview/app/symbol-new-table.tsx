@@ -511,7 +511,7 @@ export default function SymbolTableDashboard() {
                   className="symbol-table-card"
                   sx={{
                     overflow: 'scroll',
-                    height: '42.5vh',
+                    height: '39.5vh',
                     maxWidth: '52.5vh !important',
                   }}
                 >

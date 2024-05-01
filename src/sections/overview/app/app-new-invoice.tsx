@@ -9,8 +9,8 @@ import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import { styled } from '@mui/system';
+import { Card } from '@mui/material';
 import Tabs from '@mui/material/Tabs';
-import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
@@ -644,9 +644,9 @@ export default function AppNewInvoice({
                 styles={{ overflow: '' }}
               >
                 <CardHeader title={data.title} sx={{ padding: '12px !important' }} />
-                <TableContainer sx={{ overflow: 'unset', height: '25.9vh' }}>
+                <TableContainer sx={{ overflow: 'unset', height: '37vh' }}>
                   <Scrollbar>
-                    <Box display={'flex'} flexDirection={'column'} justifyContent={'space-between'}>
+                    <Box display="flex" flexDirection="column" justifyContent="space-between">
                       <Table stickyHeader sx={{ minWidth: 680 }}>
                         <TableHeadCustom headLabel={data.tableLabel} />
                         <TableBody>

@@ -124,7 +124,7 @@ export default function MarginCallTableDashboard() {
               styles={{ overflow: 'hidden' }}
             >
               <CardHeader title={data.title} sx={{ padding: '12px !important' }} />
-              <TableContainer sx={{ overflow: 'unset', height: '42.2vh' }}>
+              <TableContainer sx={{ overflow: 'unset', height: '39.2vh' }}>
                 <Scrollbar>
                   <Table stickyHeader>
                     <TableHeadCustom
