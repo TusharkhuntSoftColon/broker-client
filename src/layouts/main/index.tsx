@@ -18,6 +18,7 @@ export default function MainLayout({ children }: Props) {
       component="main"
       sx={{
         flexGrow: 1,
+        overflowX: 'hidden',
         ...(!homePage && {
           pt: { xs: 8, md: 1.5 },
         }),
