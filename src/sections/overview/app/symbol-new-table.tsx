@@ -434,7 +434,7 @@ export default function SymbolTableDashboard() {
           WebkitBorderRadius: '5px',
         }}
       >
-        <Box sx={{ margin: '5px', border: '1px solid #d3d3d3' }}>
+        <Box sx={{ margin: '5px', border: '1px solid #d3d3d3', height: '98%' }}>
           <Box>
             {tabs.map((data) => (
               <CustomTabPanel
@@ -511,7 +511,7 @@ export default function SymbolTableDashboard() {
                   className="symbol-table-card"
                   sx={{
                     overflow: 'scroll',
-                    height: { md: '35vh', xl: '40vh' },
+                    height: { md: '40vh !important', xl: '50vh' },
                     maxWidth: '52.5vh !important',
                   }}
                 >

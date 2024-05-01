@@ -114,7 +114,7 @@ export default function MarginCallTableDashboard() {
         WebkitBorderRadius: '5px',
       }}
     >
-      <Box sx={{ margin: '5px', fontSize: '13px', border: '1px solid #d3d3d3' }}>
+      <Box sx={{ margin: '5px', fontSize: '13px', border: '1px solid #d3d3d3', height: '98%' }}>
         <Box>
           {tabs.map((data) => (
             <CustomTabPanel

@@ -260,7 +260,8 @@ const OverviewAppView = () => {
             sx={{
               fontSize: '10px',
               minWidth: 0, // Ensure content can overflow
-              overflow: 'auto', // Enable scrolling if content overflows
+              overflow: 'auto',
+              height: '100%', // Enable scrolling if content overflows
             }}
             // width={
             //   currentTableCount === 2

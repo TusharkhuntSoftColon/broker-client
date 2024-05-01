@@ -538,8 +538,8 @@ export default function ClientTableDashboard({
         WebkitBorderRadius: '5px',
       }}
     >
-      <Box sx={{ margin: '5px', border: '1px solid #d3d3d3' }}>
-        <Box>
+      <Box sx={{ margin: '5px', border: '1px solid #d3d3d3', height: '98%' }}>
+        <Box height={'92%'}>
           {tabs.map((data) => {
             return (
               <CustomTabPanel
