@@ -9,7 +9,7 @@ type Props = TextFieldProps & {
   name: string;
   type?: any;
   upperText?: any;
-  isReadOnly?: any;
+  isReadOnly?: boolean;
   min?: number;
   max?: any;
 };

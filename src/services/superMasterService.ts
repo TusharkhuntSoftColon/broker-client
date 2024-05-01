@@ -12,6 +12,7 @@ import {
   UPDATE_MASTER_BY_SUPER_MASTER,
   GET_ALL_PERSONS_BY_SUPER_MASTER,
   GET_USER_BALANCE_BY_SUPER_MASTER,
+  GET_NEW_PERSON_ID_BY_SUPER_MASTER,
   GET_BROKERAGE_LIST_FOR_SUPER_MASTER,
   IMPORT_MONTH_ORDER_FOR_SUPER_MASTER,
   CHANGE_USER_PASSWORD_BY_SUPER_MASTER,
@@ -19,6 +20,7 @@ import {
   GET_USERS_BET_POSITIONS_BY_SUPER_MASTER,
   IMPORT_MONTH_ORDER_LIST_FOR_SUPER_MASTER,
   CHANGE_INVESTOR_PASSWORD_BY_SUPER_MASTER,
+  GET_LOGGED_PERSON_DETAILS_BY_SUPER_MASTER,
   GET_ASSIGNED_EXCHANGE_LIST_FOR_SUPER_MASTER,
   GET_BROKERAGE_LIST_FOR_USER_UPDATE_BY_SUPERMASTER,
 } from '../utils/urls';
@@ -313,13 +315,12 @@ const superMasterService = {
       throw error;
     }
   },
-  changeUserPassword: async (userData: any): Promise<any> => {
-    const data = {};
+  changeUserPassword: async (userPassword: any): Promise<any> => {
     try {
       const response: AxiosResponse<any> = await client.post(
-        `${CHANGE_USER_PASSWORD_BY_SUPER_MASTER}/${userData}`,
+        `${CHANGE_USER_PASSWORD_BY_SUPER_MASTER}/${userPassword?.id}`,
         {
-          password: data,
+          password: userPassword?.password,
         }
       );
       return response.data;
@@ -329,14 +330,12 @@ const superMasterService = {
       throw error; // Re-throw the error to be caught by the caller
     }
   },
-  changeInvestorPassword: async (userData: any): Promise<any> => {
-    const data = {};
-
+  changeInvestorPassword: async (investorPassword: any): Promise<any> => {
     try {
       const response: AxiosResponse<any> = await client.post(
-        `${CHANGE_INVESTOR_PASSWORD_BY_SUPER_MASTER}/${userData}`,
+        `${CHANGE_INVESTOR_PASSWORD_BY_SUPER_MASTER}/${investorPassword?.id}`,
         {
-          investorPassword: data,
+          investorPassword: investorPassword?.password,
         }
       );
       return response.data;
@@ -359,6 +358,26 @@ const superMasterService = {
       // You can log the error here for debugging purposes
       console.error('Error in adminService.createAdmin:', error);
       throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  getNewPersonId: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(GET_NEW_PERSON_ID_BY_SUPER_MASTER);
+      return response.data;
+    } catch (error) {
+      console.error('Error in exchangeService.getExchangeList:', error);
+      throw error;
+    }
+  },
+  loggedPersonDetail: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(
+        GET_LOGGED_PERSON_DETAILS_BY_SUPER_MASTER
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error in exchangeService.getExchangeList:', error);
+      throw error;
     }
   },
 };

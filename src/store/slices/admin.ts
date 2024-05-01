@@ -27,22 +27,7 @@ const adminSlice = createSlice({
     resetState: () => initialState,
     addPerson: (state, action) => {
       const data = action.payload;
-      // state.personList = state.personList.concat({
-      //   data,
-      //   id: Math.random().toString(36).substr(2, 5),
-      // });
-
       state.personList = data;
-      // state.personList = [
-      //   ...state.personList,
-      //   {
-      //     ...data,
-      //     _id: Math.random().toString(36).substr(2, 5),
-      //     status: 'Active',
-      //     createdAt: new Date().toDateString(),
-      //     updatedAt: new Date().toDateString(),
-      //   },
-      // ];
     },
     updateAdmin: (state, action) => {
       const { id, updatedData } = action.payload;

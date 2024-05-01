@@ -80,6 +80,7 @@ export const SocketProvider: React.FC<SocketProviderProps> = ({ children }) => {
           : '';
 
     const parsedSymbols = JSON.stringify(Symbols);
+
     if (socket) {
       socket.emit('subscribeToUserServerMarket', parsedSymbols);
     }

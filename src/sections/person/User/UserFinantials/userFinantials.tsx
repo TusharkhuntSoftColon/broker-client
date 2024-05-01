@@ -175,10 +175,9 @@ export default function UserFinantials({ currentUser }: any) {
   const { mutate: addWithDrow } = useMutation((data) => addWithdrawByRole(role, data), {
     onSuccess: (data: any) => {
       getBalanceHistory(id);
-      reset();
       setValue('Credit', null);
-      setValue('comment', '');
       setValue('Balance', null);
+      reset();
     },
 
     onError: (error: any) => {

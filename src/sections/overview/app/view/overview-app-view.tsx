@@ -125,6 +125,18 @@ const OverviewAppView = () => {
         return overviewService.getExchangeTableSummaryByMaster;
     }
   };
+  // const getSymbolPropertiesByRole: any = (role1: any) => {
+  //   switch (role1) {
+  //     case 'ADMIN':
+  //       return overviewService.getSymbolPropertiesByAdmin();
+  //     case 'SUPER_MASTER':
+  //       return overviewService.getSymbolPropertiesBySuperMaster();
+  //     case 'MASTER':
+  //       return overviewService.getSymbolPropertiesByMaster();
+  //     default:
+  //       return overviewService.getSymbolPropertiesByMaster();
+  //   }
+  // };
 
   // POSITIONS
   const { mutate: getUserPositions } = useMutation(getUserPositionsByRole(role), {
@@ -166,28 +178,24 @@ const OverviewAppView = () => {
       },
     }
   );
+  // const { mutate: getSelectedSymbolPropertyData } = useMutation(getSymbolPropertiesByRole(role), {
+  //   onSuccess: (data) => {
+  //     // setExchangeTableSummary(data?.data?.rows);
+  //   },
+  //   onError: (error) => {
+  //     console.log({ 'ORDERS ERROR :- ': error });
+  //   },
+  // });
 
-  useEffect(() => {
-    // Check if it's the first time the component is mounted
-    const isFirstTime = localStorage.getItem('isFirstTime') === 'true';
-    if (isFirstTime) {
-      window.location.reload();
-      localStorage.setItem('isFirstTime', 'false');
-    }
-  }, []);
-
-  // const getSymbolPropertiesByRole: any = (role1: any) => {
-  //   switch (role1) {
-  //     case 'ADMIN':
-  //       return overviewService.getSymbolPropertiesByAdmin();
-  //     case 'SUPER_MASTER':
-  //       return overviewService.getSymbolPropertiesBySuperMaster();
-  //     case 'MASTER':
-  //       return overviewService.getSymbolPropertiesByMaster();
-  //     default:
-  //       return overviewService.getSymbolPropertiesByMaster();
+  // useEffect(() => {
+  //   // Check if it's the first time the component is mounted
+  //   const isFirstTime = localStorage.getItem('isFirstTime') === 'true';
+  //   if (isFirstTime) {
+  //     window.location.reload();
+  //     localStorage.setItem('isFirstTime', 'false');
   //   }
-  // };
+  // }, []);
+
   // const { mutate: getSymbolProperty } = useMutation(getSymbolPropertiesByRole(role), {
   //   onSuccess: (data) => {
   //     console.log({ data });

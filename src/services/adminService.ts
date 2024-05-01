@@ -17,6 +17,7 @@ import {
   GET_EXCHANGE_FOR_MASTER,
   GET_ALL_PERSONS_BY_ADMIN,
   GET_USER_BALANCE_BY_ADMIN,
+  GET_NEW_PERSON_ID_BY_ADMIN,
   DELETE_SUPER_MASTER_BY_ADMIN,
   GET_EXCHANGE_FOR_SUPERMASTER,
   IMPORT_MONTH_ORDER_FOR_ADMIN,
@@ -27,6 +28,7 @@ import {
   GET_USERS_BET_POSITIONS_BY_ADMIN,
   IMPORT_MONTH_ORDER_LIST_FOR_ADMIN,
   CHANGE_INVESTOR_PASSWORD_BY_ADMIN,
+  GET_LOGGED_PERSON_DETAILS_BY_ADMIN,
   GET_ASSIGNED_EXCHANGE_LIST_FOR_ADMIN,
   GET_BROKERAGE_LIST_FOR_USER_UPDATE_BY_ADMIN,
 } from '../utils/urls';
@@ -436,6 +438,24 @@ const adminService = {
       // You can log the error here for debugging purposes
       console.error('Error in adminService.createAdmin:', error);
       throw error; // Re-throw the error to be caught by the caller
+    }
+  },
+  getNewPersonId: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(GET_NEW_PERSON_ID_BY_ADMIN);
+      return response.data;
+    } catch (error) {
+      console.error('Error in exchangeService.getExchangeList:', error);
+      throw error;
+    }
+  },
+  loggedPersonDetail: async (): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(GET_LOGGED_PERSON_DETAILS_BY_ADMIN);
+      return response.data;
+    } catch (error) {
+      console.error('Error in exchangeService.getExchangeList:', error);
+      throw error;
     }
   },
 };

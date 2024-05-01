@@ -41,7 +41,6 @@ import masterService from 'src/services/masterService';
 
 import useAuth from 'src/hooks/useAuth';
 import { useSocket } from 'src/context/SocketContext';
-import overviewService from 'src/services/overviewAppViewService';
 import SymbolPropertiesDialog from '../Dialog/SymbolProperties';
 // ----------------------------------------------------------------------
 
@@ -205,31 +204,31 @@ export default function SymbolTableDashboard() {
     },
   });
 
-  const getSymbolPropertiesByRole: any = (role1: any) => {
-    switch (role1) {
-      case 'ADMIN':
-        return overviewService.getSymbolPropertiesByAdmin();
-      case 'SUPER_MASTER':
-        return overviewService.getSymbolPropertiesBySuperMaster();
-      case 'MASTER':
-        return overviewService.getSymbolPropertiesByMaster();
-      default:
-        return overviewService.getSymbolPropertiesByMaster();
-    }
-  };
-  const { mutate: getSymbolProperty } = useMutation(getSymbolPropertiesByRole(role), {
-    onSuccess: (data) => {
-      console.log(data?.data?.rows);
-      // setSymbolProperties(data?.rows);
-    },
-    onError: (error) => {
-      console.log('error', error);
-    },
-  });
+  // const getSymbolPropertiesByRole: any = (role1: any) => {
+  //   switch (role1) {
+  //     case 'ADMIN':
+  //       return overviewService.getSymbolPropertiesByAdmin();
+  //     case 'SUPER_MASTER':
+  //       return overviewService.getSymbolPropertiesBySuperMaster();
+  //     case 'MASTER':
+  //       return overviewService.getSymbolPropertiesByMaster();
+  //     default:
+  //       return overviewService.getSymbolPropertiesByMaster();
+  //   }
+  // };
+  // const { mutate: getSymbolProperty } = useMutation(getSymbolPropertiesByRole(role), {
+  //   onSuccess: (data) => {
+  //     console.log(data?.data?.rows);
+  //     // setSymbolProperties(data?.rows);
+  //   },
+  //   onError: (error) => {
+  //     console.log('error', error);
+  //   },
+  // });
 
-  useEffect(() => {
-    getSymbolProperty();
-  }, []);
+  // useEffect(() => {
+  //   getSymbolProperty();
+  // }, []);
 
   useEffect(() => {
     const symbolTableDashboard: any[] = [];

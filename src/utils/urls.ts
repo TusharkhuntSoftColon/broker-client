@@ -43,6 +43,8 @@ export const CHANGE_USER_PASSWORD_BY_ADMIN = '/admin/person-password-change';
 export const CHANGE_INVESTOR_PASSWORD_BY_ADMIN = '/admin/investor-password-change';
 
 export const GET_SYMBOL_PROPERTIES_BY_ADMIN = '/admin/symbol-properties';
+export const GET_NEW_PERSON_ID_BY_ADMIN = '/admin/generate-id';
+export const GET_LOGGED_PERSON_DETAILS_BY_ADMIN = '/admin/client-details';
 
 // SUPER MASTER
 export const CREATE_MASTER_BY_SUPER_MASTER = '/super-master/master';
@@ -78,6 +80,8 @@ export const CHANGE_USER_PASSWORD_BY_SUPER_MASTER = '/super-master/person-passwo
 export const CHANGE_INVESTOR_PASSWORD_BY_SUPER_MASTER = '/super-master/investor-password-change';
 
 export const GET_SYMBOL_PROPERTIES_BY_SUPER_MASTER = '/super-master/symbol-properties';
+export const GET_NEW_PERSON_ID_BY_SUPER_MASTER = '/super-master/generate-id';
+export const GET_LOGGED_PERSON_DETAILS_BY_SUPER_MASTER = '/super-master/client-details';
 
 // MASTER
 export const CREATE_USER_BY_MASTER = '/master/user';
@@ -107,6 +111,8 @@ export const CHANGE_USER_PASSWORD_BY_MASTER = '/master/person-password-change';
 export const CHANGE_INVESTOR_PASSWORD_BY_MASTER = '/master/investor-password-change';
 
 export const GET_SYMBOL_PROPERTIES_BY_MASTER = '/master/symbol-properties';
+export const GET_NEW_PERSON_ID_BY_MASTER = '/master/generate-id';
+export const GET_LOGGED_PERSON_DETAILS_BY_MASTER = '/master/client-details';
 
 // Exchange
 export const EXCHANGE_CREATE = '/exchange/create';

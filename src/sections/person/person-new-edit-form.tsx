@@ -67,10 +67,18 @@ export default function PersonNewEditForm({
 }: Props) {
   const ExchangeOptions: any = [];
   const { role } = useAuth();
+
   const ExchangeList = useSelector((data: any) => data?.admin?.exchangeList);
   const router = useRouter();
 
   const [exchangeData, setExchangeData] = useState<any>();
+  const [loggedPersonData, setLoggedPersonData] = useState<any>([]);
+
+  console.log({ loggedPersonData });
+
+  const leverageIndex = LEVERAGE_OPTIONS.findIndex(
+    (option) => option.value === loggedPersonData?.leverageXY
+  );
 
   const personList = useSelector((data: any) => data?.person?.personData);
   const Exchange: { label: any; value: any }[] = [];
@@ -80,6 +88,8 @@ export default function PersonNewEditForm({
       value: ExchangeList[i]?._id,
     });
   }
+
+  console.log({ currentUser, Exchange });
 
   const defaultAllowedExchange = (index: number) => {
     if (!currentUser) return [];
@@ -157,7 +167,7 @@ export default function PersonNewEditForm({
     [defaultAllowedExchange, defaultExchangeOptions]
   );
 
-  const [fields, setFields] = useState<AllowedExChangeInterface[]>(() => {
+  const [fields, setFields] = useState<AllowedExChangeInterface[] | any>(() => {
     if (currentUser) {
       return currentUser?.exchangeList.map(({ allowedExchange, exchangeGroup }: any) => ({
         allowedExchange,
@@ -183,7 +193,7 @@ export default function PersonNewEditForm({
     setFields([...fields, { allowedExchange: '', exchangeGroup: '', index: uuidv4() }]);
   };
   const handleRemoveExchange = (index: string) => {
-    const updatedFields = fields.filter((field) => field.index !== index);
+    const updatedFields = fields.filter((field: any) => field.index !== index);
     setFields(updatedFields);
   };
 
@@ -270,6 +280,36 @@ export default function PersonNewEditForm({
     }
   };
 
+  const getLoggedPersonDetailsByRole: any = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.loggedPersonDetail;
+      case 'SUPER_MASTER':
+        return superMasterService.loggedPersonDetail;
+      case 'MASTER':
+        return masterService.loggedPersonDetail;
+      default:
+        return paths;
+    }
+  };
+  // GET LOGGED PERSON DETAILS
+  const { mutate: getLoggedPersonDetails }: any = useMutation(getLoggedPersonDetailsByRole(role), {
+    onSuccess: (data: any) => {
+      // enqueueSnackbar(data?.message, { variant: 'success' });
+      // router.push(paths.dashboard.person.edit(data?.data));
+      // dispatch(addUser([]));
+      console.log({ data });
+
+      setLoggedPersonData(data?.data);
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+      enqueueSnackbar(error?.message, { variant: 'error' });
+    },
+  });
+
   // get exchange list
   const { mutate } = useMutation(getExchangeListForPerson(role), {
     onSuccess: (data: any) => {
@@ -329,6 +369,45 @@ export default function PersonNewEditForm({
         return paths;
     }
   };
+  const getNewPersonIdByRole: any = (role: any) => {
+    switch (role) {
+      case 'ADMIN':
+        return adminService.getNewPersonId;
+      case 'SUPER_MASTER':
+        return superMasterService.getNewPersonId;
+      case 'MASTER':
+        return masterService.getNewPersonId;
+      default:
+        return paths;
+    }
+  };
+
+  const { mutate: getNewPersonId } = useMutation(getNewPersonIdByRole(role), {
+    onSuccess: (data: any) => {
+      setValue(
+        'ID',
+        roleOption === 'SUPER_MASTER'
+          ? data?.data?.newSuperMasterId
+          : roleOption === 'MASTER'
+            ? data?.data?.newMasterId
+            : roleOption === 'USER'
+              ? data?.data?.newUserId
+              : null
+      );
+    },
+    onError: (error: any) => {
+      if (isAxiosError(error)) {
+        enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      }
+      enqueueSnackbar(error?.message, { variant: 'error' });
+    },
+  });
+
+  useEffect(() => {
+    if (!currentUser) {
+      getNewPersonId();
+    }
+  }, [value?.role]);
 
   // CREATE SUPER_MASTER
   const { mutate: createSuperMaster } = useMutation(adminService.createSuperMaster, {
@@ -394,7 +473,7 @@ export default function PersonNewEditForm({
   const { mutate: createUser }: any = useMutation(createUserByRole(role), {
     onSuccess: (data: any) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
-      router.push(paths.dashboard.person.root);
+      router.push(paths.dashboard.person.edit(data?.data));
       dispatch(addUser([]));
     },
     onError: (error: any) => {
@@ -459,6 +538,10 @@ export default function PersonNewEditForm({
     mutate();
   }, []);
 
+  useEffect(() => {
+    getLoggedPersonDetails();
+  }, [fields]);
+
   const RolesOptions = (role: any) => {
     switch (role) {
       case 'ADMIN':
@@ -506,7 +589,7 @@ export default function PersonNewEditForm({
                 )}
               />
               <RHFTextField isReadOnly={!!isView} name="name" label="Full Name" />
-              <RHFTextField isReadOnly={!!isView || currentUser} name="ID" label="User Id" />
+              <RHFTextField isReadOnly name="ID" label="User Id" />
               {!currentUser && (
                 <RHFTextField
                   isReadOnly={!!isView || currentUser}
@@ -575,7 +658,7 @@ export default function PersonNewEditForm({
                 label="Leverage"
                 // control={control}
                 isReadOnly={!!isView}
-                options={LEVERAGE_OPTIONS}
+                options={LEVERAGE_OPTIONS.slice(0, leverageIndex + 1)}
                 defaultValue={defaultLeverageOptions}
                 data={LEVERAGE_OPTIONS}
                 isLabled={false}
@@ -590,13 +673,19 @@ export default function PersonNewEditForm({
 
               {roleOption !== 'USER' && (
                 <>
-                  <RHFCheckbox
-                    isReadOnly={!!isView}
-                    name="insertCustomBet"
-                    label="Insert Custom Bet"
-                  />
-                  <RHFCheckbox isReadOnly={!!isView} name="editBet" label="Edit Bet" />
-                  <RHFCheckbox isReadOnly={!!isView} name="deleteBet" label="Delete Bet" />
+                  {loggedPersonData?.insertCustomBet && (
+                    <RHFCheckbox
+                      isReadOnly={!!isView}
+                      name="insertCustomBet"
+                      label="Insert Custom Bet"
+                    />
+                  )}
+                  {loggedPersonData?.editBet && (
+                    <RHFCheckbox isReadOnly={!!isView} name="editBet" label="Edit Bet" />
+                  )}
+                  {loggedPersonData?.deleteBet && (
+                    <RHFCheckbox isReadOnly={!!isView} name="deleteBet" label="Delete Bet" />
+                  )}
                 </>
               )}
 
@@ -651,6 +740,7 @@ export default function PersonNewEditForm({
                           Exchange={Exchange}
                           handleChange={handleChange}
                           fields={fields}
+                          loggedPersonData={loggedPersonData}
                           handleRemoveExchange={handleRemoveExchange}
                         />
                       ))}
@@ -668,7 +758,7 @@ export default function PersonNewEditForm({
                           variant="contained"
                           disabled={
                             !fields.every(
-                              (field) => field.allowedExchange && field.exchangeGroup
+                              (field: any) => field.allowedExchange && field.exchangeGroup
                             ) || fields.length === Exchange.length
                           }
                           onClick={() => handleAddField()}

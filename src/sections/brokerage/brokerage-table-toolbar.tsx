@@ -213,7 +213,7 @@ export default function BrokerageTableToolbar({
   const { mutate: createUser }: any = useMutation(createUserByRole(role), {
     onSuccess: (data: any) => {
       enqueueSnackbar(data?.message, { variant: 'success' });
-      router.push(paths.dashboard.person.root);
+      router.push(paths.dashboard.person.edit(data?.data));
       dispatch(addUser([]));
     },
     onError: (error: any) => {

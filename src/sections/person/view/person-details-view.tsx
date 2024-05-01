@@ -51,15 +51,13 @@ export default function PersonDetailsView({ currentUser }: Props) {
   const [userBalance, setUserBalance] = useState<any>({});
   const [socketData, setSocketData] = useState<any>([]);
 
-  console.log({ tableData1, socketData });
-
   const { socket, connect, disconnect, subscribeToMarket, joinUserRoom, marketWatch } = useSocket();
 
   useEffect(() => {
     if (socket) {
       connect();
       subscribeToMarket('personDetails', tableData1); // Subscribe to market when the component mounts
-      joinUserRoom(tableData1); // Join user room when the component mounts
+      joinUserRoom('personDetails', tableData1); // Join user room when the component mounts
 
       socket.on('disconnect', (reason: any) => {
         console.log('[socket] Disconnected:', reason);
@@ -78,7 +76,7 @@ export default function PersonDetailsView({ currentUser }: Props) {
         disconnect(); // Call disconnect method when the component unmounts
       }
     };
-  }, [socket, connect, disconnect, subscribeToMarket, joinUserRoom]);
+  }, [socket, connect, disconnect, subscribeToMarket, joinUserRoom, tableData1]);
 
   const { enqueueSnackbar } = useSnackbar();
 
@@ -110,10 +108,7 @@ export default function PersonDetailsView({ currentUser }: Props) {
 
   const { mutate: getUserPosition } = useMutation(getUsersBetPositionByRole(role), {
     onSuccess: (data) => {
-      console.log({ data: data?.data?.rows });
-
       setTableData1(data?.data?.rows);
-      // socketConnection(data?.data?.rows);
     },
     onError: (error: any) => {
       if (isAxiosError(error)) {
@@ -158,9 +153,6 @@ export default function PersonDetailsView({ currentUser }: Props) {
         const socketItem = socketData1?.find(
           (item: any) => item.InstrumentIdentifier === position.scriptName
         );
-
-        console.log({ socketItem });
-
         if (socketItem) {
           if (position.positionType === 'BUY') {
             return {
@@ -186,8 +178,6 @@ export default function PersonDetailsView({ currentUser }: Props) {
         }
         return position;
       });
-      console.log({ updatedPositions });
-
       setTableData1(updatedPositions);
     };
     updateLivePrice(socketData);
@@ -198,7 +188,7 @@ export default function PersonDetailsView({ currentUser }: Props) {
   return (
     <Container maxWidth={settings.themeStretch ? false : 'lg'}>
       <Box>
-        <PersonDetailsViewLayout title="ID" name={currentUser?.name} />
+        <PersonDetailsViewLayout title="ID" name={`${currentUser?.ID} ( ${currentUser?.name} )`} />
         <PersonDetailsViewLayout
           title="Allowed Exchanges"
           name={currentUser?.exchangeList?.map((_el: any) => {

@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { useSelector } from 'react-redux';
 
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
@@ -7,7 +6,6 @@ import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 
 import { paths } from 'src/routes/paths';
-import { useParams } from 'src/routes/hooks';
 
 import useAuth from 'src/hooks/useAuth';
 
@@ -48,13 +46,8 @@ function a11yProps(index: number) {
   };
 }
 
-export default function BasicTabs() {
-  const params = useParams();
+export default function BasicTabs({ currentUser }: any) {
   const { role } = useAuth();
-  const { id } = params;
-
-  const adminData = useSelector((data: any) => data?.admin?.personList);
-  const currentUser = adminData.find((user: any) => user._id === id);
   const [value, setValue] = React.useState(0);
   const [fields, setFields] = React.useState<any>([]);
 

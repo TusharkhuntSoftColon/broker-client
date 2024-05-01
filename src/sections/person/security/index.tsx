@@ -149,6 +149,8 @@ export default function PersonSecurity({ currentUser }: any) {
 
   const values = watch();
 
+  console.log({ values });
+
   const setUserPassword = () => {
     changeUserPassword({ password: values?.userPassword, id: currentUser?._id });
   };
