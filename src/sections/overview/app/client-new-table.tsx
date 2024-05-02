@@ -12,6 +12,7 @@ import { styled } from '@mui/system';
 import Tabs from '@mui/material/Tabs';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
+import { useTheme } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
@@ -26,7 +27,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import { newClientsOnlineTableData } from 'src/_mock';
 import { useSocket } from 'src/context/SocketContext';
-import { useTheme } from '@mui/material';
+
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { TableNoData, TableHeadCustom } from 'src/components/table';
@@ -597,8 +598,9 @@ export default function ClientTableDashboard({
             '& .MuiTab-root': {
               marginRight: 0, // Remove auto margin right for each tab
             },
-            height: '10px !important',
-            minHeight: '30px !important',
+            mt: '6px',
+            height: '20px !important',
+            minHeight: '50px !important',
           }}
         >
           {tabs.map((data: any) => {
@@ -617,7 +619,7 @@ export default function ClientTableDashboard({
                   // borderBottom: value === data.value ? '1px solid #d3d3d3' : '1px solid #d3d3d3',
                   borderTopLeftRadius: '10px',
                   borderTopRightRadius: '10px',
-                  minHeight: '30px !important',
+                  minHeight: '35px !important',
                 }}
               />
             );
