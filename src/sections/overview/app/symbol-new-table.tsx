@@ -511,9 +511,20 @@ export default function SymbolTableDashboard() {
                   className="symbol-table-card"
                   sx={{
                     overflow: 'scroll',
-                    height: { md: '40vh !important', xl: '50vh' },
-                    maxHeight: { md: '40vh !important', xl: '50vh' },
+                    // height: { md: '40vh !important', xl: '46vh !important' },
+                    // maxHeight: { md: '40vh !important', xl: '46vh !important' },
                     maxWidth: '52.5vh !important',
+                    [theme.breakpoints.down(1800)]: {
+                      height: '40vh',
+                    },
+
+                    [theme.breakpoints.up(1600)]: {
+                      height: '46vh',
+                    },
+
+                    // [theme.breakpoints.down(347)]: {
+                    //   width: '70%',
+                    // },
                   }}
                 >
                   <Table stickyHeader>
