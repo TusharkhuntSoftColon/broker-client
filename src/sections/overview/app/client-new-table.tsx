@@ -553,6 +553,7 @@ export default function ClientTableDashboard({
                   sx={{
                     overflow: 'unset',
                     height: { md: '35.6vh !important', xl: '36.5vh !important' },
+                    maxHeight: { md: '35.6vh !important', xl: '36.5vh !important' },
                   }}
                 >
                   <Scrollbar>

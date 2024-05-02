@@ -279,7 +279,9 @@ const OverviewAppView = () => {
                   : '50%'
                 : !selectedButtons.includes(table.name)
                   ? '0%'
-                  : '25%'
+                  : table.name === 'Symbol'
+                    ? '27%'
+                    : '23%'
             }
           >
             {renderComponent(table.name)}

@@ -512,6 +512,7 @@ export default function SymbolTableDashboard() {
                   sx={{
                     overflow: 'scroll',
                     height: { md: '40vh !important', xl: '50vh' },
+                    maxHeight: { md: '40vh !important', xl: '50vh' },
                     maxWidth: '52.5vh !important',
                   }}
                 >
