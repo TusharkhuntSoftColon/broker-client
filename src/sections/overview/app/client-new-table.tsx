@@ -564,7 +564,7 @@ export default function ClientTableDashboard({
                     // height: { md: '35.6vh !important', xl: '36.5vh !important' },
                     // maxHeight: { md: '35.6vh !important', xl: '36.5vh !important' },
                     [theme.breakpoints.down(1800)]: {
-                      height: '35vh',
+                      height: '75vh',
                     },
 
                     [theme.breakpoints.up(1600)]: {
