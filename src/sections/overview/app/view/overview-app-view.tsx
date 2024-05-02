@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 
 import { LoadingButton } from '@mui/lab';
-import { Box, Grid } from '@mui/material';
+import { Box, Grid, Tooltip, Typography } from '@mui/material';
 
 import useAuth from 'src/hooks/useAuth';
 
@@ -32,11 +32,12 @@ const OverviewAppView = () => {
   const [userOrders, setUserOrders] = useState<any>();
   const [exchangeTableSummaryData, setExchangeTableSummary] = useState<any>([]);
   const [symbolProperties, setSymbolProperties] = useState<any>([]);
-
+  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
   const TableComponents = [
-    { name: 'Symbol', component: <SymbolTableDashboard /> },
+    { name: 'Symbol', img: './Symbols.png', component: <SymbolTableDashboard /> },
     {
       name: 'Users',
+      img: './multiple-users-silhouette.png',
       component: (
         <ClientTableDashboard
           accountData={userAccounts}
@@ -45,9 +46,10 @@ const OverviewAppView = () => {
         />
       ),
     },
-    { name: 'Margin Call', component: <MarginCallTableDashboard /> },
+    { name: 'Margin Call', img: './MArgin CAll.png', component: <MarginCallTableDashboard /> },
     {
       name: 'Exchange',
+      img: './Exchange.png',
       component: <AppNewInvoice exchangeTableSummaryData={exchangeTableSummaryData} />,
     },
   ];
@@ -225,9 +227,14 @@ const OverviewAppView = () => {
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
+        position: 'relative',
       }}
     >
-      <Box sx={{ margin: '20px 0px 0px 20px' }}>
+      <Box
+        sx={{
+          margin: '20px 0px 0px 20px',
+        }}
+      >
         {/* First Child Box */}
         {TableComponents.map((data: any) => {
           return (
@@ -246,10 +253,57 @@ const OverviewAppView = () => {
                 mt: '-1.6rem',
               }}
             >
-              {data.name}
+              <Box>
+                <img
+                  height="20px"
+                  style={{ objectFit: 'cover', objectPosition: 'center' }}
+                  width="20px"
+                  src={data.img}
+                  alt="tables"
+                />
+              </Box>
+              <Box ml="0.6rem">
+                <Typography fontSize="11px">{data.name} </Typography>
+              </Box>
             </LoadingButton>
           );
         })}
+        <Box sx={{ position: 'absolute', top: 0, right: 5 }}>
+          <Tooltip placement="top" title={isFullscreen ? 'Exit Full Screen' : 'Full Screen'}>
+            <LoadingButton
+              onClick={(e) => {
+                if (!isFullscreen) {
+                  if (document.documentElement.requestFullscreen) {
+                    document.documentElement.requestFullscreen();
+                  } else if (document.documentElement.webkitRequestFullscreen) {
+                    /* Safari */
+                    document.documentElement.webkitRequestFullscreen();
+                  } else if (document.documentElement.msRequestFullscreen) {
+                    /* IE11 */
+                    document.documentElement.msRequestFullscreen();
+                  }
+                } else if (document.exitFullscreen) {
+                  document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                  /* Safari */
+                  document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                  /* IE11 */
+                  document.msExitFullscreen();
+                }
+                setIsFullscreen(!isFullscreen);
+              }}
+            >
+              <img
+                height="20px"
+                style={{ objectFit: 'cover', objectPosition: 'center' }}
+                width="20px"
+                src="./Full Screen.png"
+                alt="fullscreen"
+              />
+            </LoadingButton>
+          </Tooltip>
+        </Box>
       </Box>
 
       <Box sx={{ width: '100%', display: 'flex', flex: '1 1 auto' }}>

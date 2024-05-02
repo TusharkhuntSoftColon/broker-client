@@ -432,6 +432,13 @@ export default function SymbolTableDashboard() {
           height: 'inherit',
           border: '1px solid #d3d3d3',
           WebkitBorderRadius: '5px',
+          [theme.breakpoints.down(1800)]: {
+            height: '49vh',
+          },
+
+          [theme.breakpoints.up(1600)]: {
+            height: '53vh',
+          },
         }}
       >
         <Box sx={{ margin: '5px', border: '1px solid #d3d3d3', height: '98%' }}>
@@ -517,11 +524,11 @@ export default function SymbolTableDashboard() {
                     // maxHeight: { md: '40vh !important', xl: '46vh !important' },
                     maxWidth: '52.5vh !important',
                     [theme.breakpoints.down(1800)]: {
-                      height: '41.2vh',
+                      height: '42vh',
                     },
 
                     [theme.breakpoints.up(1600)]: {
-                      height: '46vh',
+                      height: '48vh',
                     },
 
                     // [theme.breakpoints.down(347)]: {

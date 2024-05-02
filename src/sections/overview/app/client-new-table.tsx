@@ -538,6 +538,13 @@ export default function ClientTableDashboard({
         height: 'inherit',
         border: '1px solid #d3d3d3',
         WebkitBorderRadius: '5px',
+        [theme.breakpoints.down(1800)]: {
+          height: '49vh',
+        },
+
+        [theme.breakpoints.up(1600)]: {
+          height: '53vh',
+        },
       }}
     >
       <Box sx={{ margin: '5px', border: '1px solid #d3d3d3', height: '98%' }}>
@@ -557,11 +564,11 @@ export default function ClientTableDashboard({
                     // height: { md: '35.6vh !important', xl: '36.5vh !important' },
                     // maxHeight: { md: '35.6vh !important', xl: '36.5vh !important' },
                     [theme.breakpoints.down(1800)]: {
-                      height: '35.6vh',
+                      height: '75vh',
                     },
 
                     [theme.breakpoints.up(1600)]: {
-                      height: '39.5vh',
+                      height: '42.5vh',
                     },
                   }}
                 >

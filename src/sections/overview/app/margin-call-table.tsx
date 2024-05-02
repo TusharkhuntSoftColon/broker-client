@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import { styled } from '@mui/system';
 import Card from '@mui/material/Card';
 import Table from '@mui/material/Table';
+import { useTheme } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import MenuItem from '@mui/material/MenuItem';
 import TableRow from '@mui/material/TableRow';
@@ -74,7 +75,7 @@ function a11yProps(index: number) {
 
 export default function MarginCallTableDashboard() {
   const [value, setValue] = React.useState(0);
-
+  const theme = useTheme();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -112,6 +113,13 @@ export default function MarginCallTableDashboard() {
         height: 'inherit',
         border: '1px solid #d3d3d3',
         WebkitBorderRadius: '5px',
+        [theme.breakpoints.down(1800)]: {
+          height: '49vh',
+        },
+
+        [theme.breakpoints.up(1600)]: {
+          height: '53vh',
+        },
       }}
     >
       <Box sx={{ margin: '5px', fontSize: '13px', border: '1px solid #d3d3d3', height: '98%' }}>
