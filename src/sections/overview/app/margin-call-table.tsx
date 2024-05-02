@@ -19,6 +19,7 @@ import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { TableHeadCustom } from 'src/components/table';
 import CustomPopover, { usePopover } from 'src/components/custom-popover';
+import { useTheme } from '@mui/material';
 // ----------------------------------------------------------------------
 
 type RowProps = {
@@ -74,7 +75,7 @@ function a11yProps(index: number) {
 
 export default function MarginCallTableDashboard() {
   const [value, setValue] = React.useState(0);
-
+  const theme = useTheme();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -112,6 +113,13 @@ export default function MarginCallTableDashboard() {
         height: 'inherit',
         border: '1px solid #d3d3d3',
         WebkitBorderRadius: '5px',
+        [theme.breakpoints.down(1800)]: {
+          height: '49vh',
+        },
+
+        [theme.breakpoints.up(1600)]: {
+          height: '53vh',
+        },
       }}
     >
       <Box sx={{ margin: '5px', fontSize: '13px', border: '1px solid #d3d3d3', height: '98%' }}>
