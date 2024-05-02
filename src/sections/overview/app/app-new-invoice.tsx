@@ -378,7 +378,7 @@ export default function AppNewInvoice({
           align: 'left',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'positions',
@@ -386,7 +386,7 @@ export default function AppNewInvoice({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'buy_volume',
@@ -394,7 +394,7 @@ export default function AppNewInvoice({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'buy_price',
@@ -402,7 +402,7 @@ export default function AppNewInvoice({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'sell_volume',
@@ -410,7 +410,7 @@ export default function AppNewInvoice({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'sell_price',
@@ -418,7 +418,7 @@ export default function AppNewInvoice({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'net_volume',
@@ -426,7 +426,7 @@ export default function AppNewInvoice({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'profit',
@@ -434,7 +434,7 @@ export default function AppNewInvoice({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
       ],
     },
@@ -450,7 +450,7 @@ export default function AppNewInvoice({
           align: 'left',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'clients',
@@ -458,7 +458,7 @@ export default function AppNewInvoice({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'coverage',
@@ -466,7 +466,7 @@ export default function AppNewInvoice({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'nettotal',
@@ -474,7 +474,7 @@ export default function AppNewInvoice({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'rate',
@@ -482,7 +482,7 @@ export default function AppNewInvoice({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'netTotal',
@@ -490,7 +490,7 @@ export default function AppNewInvoice({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'positive',
@@ -498,7 +498,7 @@ export default function AppNewInvoice({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'graph',
@@ -506,7 +506,7 @@ export default function AppNewInvoice({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
       ],
     },
@@ -522,7 +522,7 @@ export default function AppNewInvoice({
           align: 'left',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'positions',
@@ -530,7 +530,7 @@ export default function AppNewInvoice({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'buy_volume',
@@ -538,7 +538,7 @@ export default function AppNewInvoice({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'buy_price',
@@ -546,7 +546,7 @@ export default function AppNewInvoice({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'sell_volume',
@@ -554,7 +554,7 @@ export default function AppNewInvoice({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'sell_price',
@@ -562,7 +562,7 @@ export default function AppNewInvoice({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'net_volume',
@@ -570,7 +570,7 @@ export default function AppNewInvoice({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'profit',
@@ -578,7 +578,7 @@ export default function AppNewInvoice({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'unCovered',
@@ -586,7 +586,7 @@ export default function AppNewInvoice({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
       ],
     },
@@ -602,7 +602,7 @@ export default function AppNewInvoice({
           align: 'left',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'server',
@@ -610,7 +610,7 @@ export default function AppNewInvoice({
           align: 'left',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'message',
@@ -618,7 +618,7 @@ export default function AppNewInvoice({
           align: 'left',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
       ],
     },
@@ -643,7 +643,7 @@ export default function AppNewInvoice({
                 index={data.value}
                 styles={{ overflow: '' }}
               >
-                <CardHeader title={data.title} sx={{ padding: '12px !important' }} />
+                <CardHeader title={data.title} sx={{ padding: '5px !important' }} />
                 <TableContainer sx={{ overflow: 'unset', height: { xl: '29vh' } }}>
                   <Scrollbar>
                     <Box display="flex" flexDirection="column" justifyContent="space-between">

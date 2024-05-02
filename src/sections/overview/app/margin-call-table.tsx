@@ -92,7 +92,7 @@ export default function MarginCallTableDashboard() {
           align: 'left',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'level',
@@ -100,7 +100,7 @@ export default function MarginCallTableDashboard() {
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
       ],
     },
@@ -123,7 +123,7 @@ export default function MarginCallTableDashboard() {
               index={data.value}
               styles={{ overflow: 'hidden' }}
             >
-              <CardHeader title={data.title} sx={{ padding: '12px !important' }} />
+              <CardHeader title={data.title} sx={{ padding: '5px !important' }} />
               <TableContainer
                 sx={{
                   overflow: 'unset',

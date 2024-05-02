@@ -346,7 +346,7 @@ export default function SymbolTableDashboard() {
           align: 'left',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'bid',
@@ -354,7 +354,7 @@ export default function SymbolTableDashboard() {
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'ask',
@@ -362,7 +362,7 @@ export default function SymbolTableDashboard() {
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'ltp',
@@ -370,7 +370,7 @@ export default function SymbolTableDashboard() {
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'dailyChange',
@@ -378,7 +378,7 @@ export default function SymbolTableDashboard() {
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'change%',
@@ -386,7 +386,7 @@ export default function SymbolTableDashboard() {
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'high',
@@ -394,7 +394,7 @@ export default function SymbolTableDashboard() {
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'low',
@@ -402,7 +402,7 @@ export default function SymbolTableDashboard() {
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'open',
@@ -410,7 +410,7 @@ export default function SymbolTableDashboard() {
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'close',
@@ -418,7 +418,7 @@ export default function SymbolTableDashboard() {
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
       ],
     },
@@ -465,15 +465,16 @@ export default function SymbolTableDashboard() {
                           e.stopPropagation();
                           setIsAdvancedMode(!isAdvancedMode);
                         }}
+                        sx={{ fontSize: '18px', fontWeight: '800', padding: '0px' }}
                       >
                         <Box
                           sx={{
-                            fontSize: '16px',
+                            fontSize: '11px',
                             border: '1px solid gray',
                             padding: 0.3,
                             borderRadius: '50%',
-                            height: '22px',
-                            width: '22px',
+                            height: '17px',
+                            width: '17px',
                             backgroundColor: isAdvancedMode ? 'lightgray' : 'transparent',
                           }}
                         >
@@ -488,8 +489,9 @@ export default function SymbolTableDashboard() {
                           e.stopPropagation();
                           addSymbolInDashboard.onTrue();
                         }}
+                        sx={{ fontSize: '18px', fontWeight: '800', padding: '6px' }}
                       >
-                        <AddIcon />
+                        <AddIcon sx={{ fontSize: '20px', fontWeight: '800' }} />
                       </IconButton>
                     </Tooltip>
                     <Tooltip title="Rearrange Symbols" placement="top">
@@ -499,9 +501,9 @@ export default function SymbolTableDashboard() {
                           e.stopPropagation();
                           socketSymbol.onTrue();
                         }}
-                        sx={{ fontSize: '18px', fontWeight: '800' }}
+                        sx={{ fontSize: '18px', fontWeight: '800', padding: '6px' }}
                       >
-                        <CreateIcon sx={{ fontSize: '18px', fontWeight: '800' }} />
+                        <CreateIcon sx={{ fontSize: '16px', fontWeight: '800' }} />
                         {/* <Iconify icon="solar:pen-bold" /> */}
                       </IconButton>
                     </Tooltip>

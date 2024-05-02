@@ -259,7 +259,7 @@ export default function ClientTableDashboard({
           align: 'left',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'name',
@@ -267,7 +267,7 @@ export default function ClientTableDashboard({
           align: 'left',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'leverage',
@@ -275,7 +275,7 @@ export default function ClientTableDashboard({
           align: 'left',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'balance',
@@ -283,7 +283,7 @@ export default function ClientTableDashboard({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'credit',
@@ -291,7 +291,7 @@ export default function ClientTableDashboard({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'equity',
@@ -299,7 +299,7 @@ export default function ClientTableDashboard({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'margin',
@@ -307,7 +307,7 @@ export default function ClientTableDashboard({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'profit',
@@ -315,7 +315,7 @@ export default function ClientTableDashboard({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
       ],
     },
@@ -331,7 +331,7 @@ export default function ClientTableDashboard({
           align: 'left',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'position',
@@ -339,7 +339,7 @@ export default function ClientTableDashboard({
           align: 'left',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'symbol',
@@ -347,7 +347,7 @@ export default function ClientTableDashboard({
           align: 'left',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'time',
@@ -355,7 +355,7 @@ export default function ClientTableDashboard({
           align: 'left',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'type',
@@ -363,7 +363,7 @@ export default function ClientTableDashboard({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'volume',
@@ -372,7 +372,7 @@ export default function ClientTableDashboard({
           border: '1px solid #dddddd !important',
           width: '10px',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'price1',
@@ -380,7 +380,7 @@ export default function ClientTableDashboard({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'livePrice',
@@ -388,7 +388,7 @@ export default function ClientTableDashboard({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
       ],
     },
@@ -405,7 +405,7 @@ export default function ClientTableDashboard({
           align: 'left',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'group',
@@ -413,7 +413,7 @@ export default function ClientTableDashboard({
           align: 'left',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'name',
@@ -421,7 +421,7 @@ export default function ClientTableDashboard({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'client',
@@ -429,7 +429,7 @@ export default function ClientTableDashboard({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'version',
@@ -437,7 +437,7 @@ export default function ClientTableDashboard({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'ip',
@@ -445,7 +445,7 @@ export default function ClientTableDashboard({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'equity',
@@ -453,7 +453,7 @@ export default function ClientTableDashboard({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
       ],
     },
@@ -469,7 +469,7 @@ export default function ClientTableDashboard({
           align: 'left',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'order',
@@ -477,7 +477,7 @@ export default function ClientTableDashboard({
           align: 'left',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'symbol',
@@ -485,7 +485,7 @@ export default function ClientTableDashboard({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'time',
@@ -493,7 +493,7 @@ export default function ClientTableDashboard({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'type',
@@ -501,7 +501,7 @@ export default function ClientTableDashboard({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'volume',
@@ -509,7 +509,7 @@ export default function ClientTableDashboard({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'price1',
@@ -517,7 +517,7 @@ export default function ClientTableDashboard({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
         {
           id: 'livePrice',
@@ -525,7 +525,7 @@ export default function ClientTableDashboard({
           align: 'right',
           border: '1px solid #dddddd !important',
           fontSize: '13px',
-          padding: '5px',
+          padding: '0px 5px',
         },
       ],
     },
@@ -550,7 +550,7 @@ export default function ClientTableDashboard({
                 index={data.value}
                 styles={{ overflow: 'hidden' }}
               >
-                <CardHeader title={data.title} sx={{ padding: '12px !important' }} />
+                <CardHeader title={data.title} sx={{ padding: '5px !important' }} />
                 <TableContainer
                   sx={{
                     overflow: 'unset',
@@ -598,7 +598,7 @@ export default function ClientTableDashboard({
             '& .MuiTab-root': {
               marginRight: 0, // Remove auto margin right for each tab
             },
-            mt: '6px',
+            // mt: '6px',
             height: '20px !important',
             minHeight: '50px !important',
           }}
