@@ -26,7 +26,7 @@ import { useRouter } from 'src/routes/hooks';
 
 import { newClientsOnlineTableData } from 'src/_mock';
 import { useSocket } from 'src/context/SocketContext';
-
+import { useTheme } from '@mui/material';
 import Iconify from 'src/components/iconify';
 import Scrollbar from 'src/components/scrollbar';
 import { TableNoData, TableHeadCustom } from 'src/components/table';
@@ -113,6 +113,7 @@ export default function ClientTableDashboard({
 }) {
   const [value, setValue] = useState(0);
   const [allOrders, setAllOrders] = useState([]);
+  const theme = useTheme();
 
   useEffect(() => {
     const orders = accountData?.reduce((acc: any, user: any) => {
@@ -552,8 +553,15 @@ export default function ClientTableDashboard({
                 <TableContainer
                   sx={{
                     overflow: 'unset',
-                    height: { md: '35.6vh !important', xl: '36.5vh !important' },
-                    maxHeight: { md: '35.6vh !important', xl: '36.5vh !important' },
+                    // height: { md: '35.6vh !important', xl: '36.5vh !important' },
+                    // maxHeight: { md: '35.6vh !important', xl: '36.5vh !important' },
+                    [theme.breakpoints.down(1800)]: {
+                      height: '35.6vh',
+                    },
+
+                    [theme.breakpoints.up(1600)]: {
+                      height: '39.5vh',
+                    },
                   }}
                 >
                   <Scrollbar>

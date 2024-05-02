@@ -515,7 +515,7 @@ export default function SymbolTableDashboard() {
                     // maxHeight: { md: '40vh !important', xl: '46vh !important' },
                     maxWidth: '52.5vh !important',
                     [theme.breakpoints.down(1800)]: {
-                      height: '40vh',
+                      height: '41.2vh',
                     },
 
                     [theme.breakpoints.up(1600)]: {

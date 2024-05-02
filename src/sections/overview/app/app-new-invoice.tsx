@@ -644,7 +644,7 @@ export default function AppNewInvoice({
                 styles={{ overflow: '' }}
               >
                 <CardHeader title={data.title} sx={{ padding: '12px !important' }} />
-                <TableContainer sx={{ overflow: 'unset', height: { xl: '30.2vh' } }}>
+                <TableContainer sx={{ overflow: 'unset', height: { xl: '29vh' } }}>
                   <Scrollbar>
                     <Box display="flex" flexDirection="column" justifyContent="space-between">
                       <Table stickyHeader sx={{ minWidth: 680 }}>
