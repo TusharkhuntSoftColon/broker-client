@@ -605,8 +605,9 @@ export default function ClientTableDashboard({
             '& .MuiTab-root': {
               marginRight: 0, // Remove auto margin right for each tab
             },
-            height: '10px !important',
-            minHeight: '30px !important',
+            mt: '6px',
+            height: '20px !important',
+            minHeight: '50px !important',
           }}
         >
           {tabs.map((data: any) => {
@@ -625,7 +626,7 @@ export default function ClientTableDashboard({
                   // borderBottom: value === data.value ? '1px solid #d3d3d3' : '1px solid #d3d3d3',
                   borderTopLeftRadius: '10px',
                   borderTopRightRadius: '10px',
-                  minHeight: '30px !important',
+                  minHeight: '35px !important',
                 }}
               />
             );
