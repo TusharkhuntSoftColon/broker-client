@@ -114,7 +114,6 @@ export default function ClientTableDashboard({
 }) {
   const [value, setValue] = useState(0);
   const [allOrders, setAllOrders] = useState([]);
-  const theme = useTheme();
 
   useEffect(() => {
     const orders = accountData?.reduce((acc: any, user: any) => {
@@ -133,7 +132,7 @@ export default function ClientTableDashboard({
   const [updatedAccountData1, setUpdatedAccountData1] = useState([]);
   const { socket, connect, disconnect, subscribeToMarket, joinUserRoom, marketWatch } = useSocket();
   const [socketData, setSocketData] = useState<any>([]);
-
+  const theme = useTheme();
   console.log({ updatedAccountData1 });
 
   useEffect(() => {
@@ -605,7 +604,15 @@ export default function ClientTableDashboard({
             '& .MuiTab-root': {
               marginRight: 0, // Remove auto margin right for each tab
             },
-            // mt: '6px',
+
+            [theme.breakpoints.down(1800)]: {
+              mt: '0 !important',
+            },
+
+            [theme.breakpoints.up(1600)]: {
+              height: '6px !important',
+            },
+            // mt: { sm: '0px', md: '0px', lg: '7px' },
             height: '20px !important',
             minHeight: '50px !important',
           }}
@@ -619,6 +626,7 @@ export default function ClientTableDashboard({
                 sx={{
                   width: '15%',
                   fontSize: '13px',
+                  mt: '6px',
                   marginRight: '0px !important',
                   borderTop: value === data.value ? 'none' : '1px solid #d3d3d3',
                   borderLeft: value === data.value ? 'none' : '0.5px solid #d3d3d3',

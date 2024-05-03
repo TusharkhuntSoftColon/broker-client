@@ -480,8 +480,8 @@ export default function SymbolTableDashboard() {
                             border: '1px solid gray',
                             padding: 0.3,
                             borderRadius: '50%',
-                            height: '17px',
-                            width: '17px',
+                            height: '19px',
+                            width: '19px',
                             backgroundColor: isAdvancedMode ? 'lightgray' : 'transparent',
                           }}
                         >
