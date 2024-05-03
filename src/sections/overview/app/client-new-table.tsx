@@ -606,11 +606,11 @@ export default function ClientTableDashboard({
             },
 
             [theme.breakpoints.down(1800)]: {
-              mt: '0 !important',
+              mt: '-8px !important',
             },
 
             [theme.breakpoints.up(1600)]: {
-              height: '6px !important',
+              mt: '5px !important',
             },
             // mt: { sm: '0px', md: '0px', lg: '7px' },
             height: '20px !important',
