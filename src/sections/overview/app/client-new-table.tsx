@@ -564,7 +564,7 @@ export default function ClientTableDashboard({
                     // height: { md: '35.6vh !important', xl: '36.5vh !important' },
                     // maxHeight: { md: '35.6vh !important', xl: '36.5vh !important' },
                     [theme.breakpoints.down(1800)]: {
-                      height: '75vh',
+                      height: '40vh',
                     },
 
                     [theme.breakpoints.up(1600)]: {
@@ -626,7 +626,7 @@ export default function ClientTableDashboard({
                   // borderBottom: value === data.value ? '1px solid #d3d3d3' : '1px solid #d3d3d3',
                   borderTopLeftRadius: '10px',
                   borderTopRightRadius: '10px',
-                  minHeight: '35px !important',
+                  minHeight: '30px !important',
                 }}
               />
             );
