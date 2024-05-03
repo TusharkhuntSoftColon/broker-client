@@ -9,7 +9,7 @@ import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import { styled } from '@mui/system';
-import { Card } from '@mui/material';
+import { Card, useTheme } from '@mui/material';
 import Tabs from '@mui/material/Tabs';
 import Table from '@mui/material/Table';
 import Divider from '@mui/material/Divider';
@@ -170,7 +170,7 @@ export default function AppNewInvoice({
   const [updatedExchangeArray, setUpdatedExchangeArray] = useState(finalArray.result);
   const { socket, connect, disconnect, subscribeToMarket, joinUserRoom, marketWatch } = useSocket();
   const [socketData, setSocketData] = useState<any>([]);
-
+  const theme = useTheme();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -644,7 +644,18 @@ export default function AppNewInvoice({
                 styles={{ overflow: '' }}
               >
                 <CardHeader title={data.title} sx={{ padding: '5px !important' }} />
-                <TableContainer sx={{ overflow: 'unset', height: { xl: '29vh' } }}>
+                <TableContainer
+                  sx={{
+                    overflow: 'unset',
+                    [theme.breakpoints.down(1800)]: {
+                      height: '31vh',
+                    },
+
+                    [theme.breakpoints.up(1600)]: {
+                      height: '30.5vh',
+                    },
+                  }}
+                >
                   <Scrollbar>
                     <Box display="flex" flexDirection="column" justifyContent="space-between">
                       <Table stickyHeader sx={{ minWidth: 680 }}>
