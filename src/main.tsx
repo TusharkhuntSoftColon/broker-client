@@ -1,3 +1,4 @@
+/* eslint-disable no-lonely-if */
 import { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';
@@ -12,6 +13,44 @@ import addAuthTokenInterceptor from './lib/addAuthTokenInterceptor';
 
 // Create a client
 const queryClient = new QueryClient();
+
+const handleKeyDown = (event: KeyboardEvent) => {
+  console.log('Key pressed:', event.key);
+
+  if (event.key === 'F11' || (event.ctrlKey && event.key === 'f')) {
+    const isFullScreen = toggleFullScreen();
+    localStorage.setItem('isFullScreen', String(isFullScreen));
+  }
+  if (
+    (event.key === 'f' && event.metaKey && event.ctrlKey) ||
+    (event.ctrlKey && event.key === 'F')
+  ) {
+    const isFullScreen = toggleFullScreen();
+    console.log({ isFullScreen });
+    const localFullScreen = localStorage.getItem('isFullScreen') === 'true';
+    console.log({ localFullScreen });
+
+    localStorage.setItem('isFullScreen', String(isFullScreen || localFullScreen));
+  }
+};
+
+const toggleFullScreen = () => {
+  const isFullScreen = document.fullscreenElement !== null;
+  if (!isFullScreen) {
+    if (document.documentElement.requestFullscreen) {
+      document.documentElement.requestFullscreen();
+    } else if (document.documentElement.webkitRequestFullscreen) {
+      document.documentElement.webkitRequestFullscreen();
+    }
+  } else {
+    if (document.exitFullscreen) {
+      document.exitFullscreen();
+    } else if (document.webkitExitFullscreen) {
+      document.webkitExitFullscreen();
+    }
+  }
+  return isFullScreen;
+};
 
 // ----------------------------------------------------------------------
 addAuthTokenInterceptor(store);
@@ -32,3 +71,5 @@ root.render(
     </PersistGate>
   </StoreProvider>
 );
+
+document.addEventListener('keydown', handleKeyDown);

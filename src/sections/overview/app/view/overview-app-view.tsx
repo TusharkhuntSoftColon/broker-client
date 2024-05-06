@@ -272,7 +272,25 @@ const OverviewAppView = () => {
           <Tooltip placement="top" title={isFullscreen ? 'Exit Full Screen' : 'Full Screen'}>
             <LoadingButton
               onClick={(e) => {
-                if (!isFullscreen) {
+                if (
+                  document.fullscreenElement ||
+                  document.webkitFullscreenElement ||
+                  document.msFullscreenElement
+                ) {
+                  // If browser is in fullscreen mode, exit fullscreen
+                  if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                  } else if (document.webkitExitFullscreen) {
+                    /* Safari */
+                    document.webkitExitFullscreen();
+                  } else if (document.msExitFullscreen) {
+                    /* IE11 */
+                    document.msExitFullscreen();
+                  }
+                  setIsFullscreen(false);
+                  localStorage.setItem('isFullScreen', false);
+                } else {
+                  // If browser is not in fullscreen mode, request fullscreen
                   if (document.documentElement.requestFullscreen) {
                     document.documentElement.requestFullscreen();
                   } else if (document.documentElement.webkitRequestFullscreen) {
@@ -282,16 +300,11 @@ const OverviewAppView = () => {
                     /* IE11 */
                     document.documentElement.msRequestFullscreen();
                   }
-                } else if (document.exitFullscreen) {
-                  document.exitFullscreen();
-                } else if (document.webkitExitFullscreen) {
-                  /* Safari */
-                  document.webkitExitFullscreen();
-                } else if (document.msExitFullscreen) {
-                  /* IE11 */
-                  document.msExitFullscreen();
+                  console.log('IS NOT FULL SCREEN');
+
+                  setIsFullscreen(true);
+                  localStorage.setItem('isFullScreen', true);
                 }
-                setIsFullscreen(!isFullscreen);
               }}
             >
               <img

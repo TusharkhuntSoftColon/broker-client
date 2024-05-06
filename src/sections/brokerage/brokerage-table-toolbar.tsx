@@ -348,6 +348,8 @@ export default function BrokerageTableToolbar({
   }, [tableData, value]);
 
   const handleAddBrokerageClick = () => {
+    console.log({ value });
+
     // Check if all form fields are filled
     if (
       value.date &&
@@ -368,6 +370,7 @@ export default function BrokerageTableToolbar({
             obj.symbol === value.symbol.value &&
             obj.template === value.template.value
         );
+        console.log({ shouldAdd });
 
         if (shouldAdd) {
           const newTableData = [

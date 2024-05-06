@@ -133,7 +133,6 @@ export default function ClientTableDashboard({
   const { socket, connect, disconnect, subscribeToMarket, joinUserRoom, marketWatch } = useSocket();
   const [socketData, setSocketData] = useState<any>([]);
   const theme = useTheme();
-  console.log({ updatedAccountData1 });
 
   useEffect(() => {
     if (socket) {
@@ -608,7 +607,6 @@ export default function ClientTableDashboard({
             [theme.breakpoints.down(1800)]: {
               mt: '-8px !important',
             },
-
             [theme.breakpoints.up(1600)]: {
               mt: '5px !important',
             },
