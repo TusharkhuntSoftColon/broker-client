@@ -1,7 +1,7 @@
 import { Box, Typography } from '@mui/material';
 
 interface SymbolPropertiesDetailProps {
-  data1: any;
+  data: any;
 }
 
 interface BasicStyleComponentToDisplayDetailProps {
@@ -53,72 +53,69 @@ const BasicStyleComponentToDisplayDetail = ({
   </Box>
 );
 
-const SymbolPropertiesDetailLayout = ({ data1 }: SymbolPropertiesDetailProps) => (
+const SymbolPropertiesDetailLayout = ({ data }: SymbolPropertiesDetailProps) => (
   //   console.log(data1);
   <Box>
-    <BasicStyleComponentToDisplayDetail
-      label="Currency"
-      value={data1?.symbolId?.currency ?? '--'}
-    />
-    <BasicStyleComponentToDisplayDetail label="Exchange" value={data1?.exchange?.name ?? '--'} />
+    <BasicStyleComponentToDisplayDetail label="Currency" value={data?.symbolId?.currency ?? '--'} />
+    <BasicStyleComponentToDisplayDetail label="Exchange" value={data?.exchange?.name ?? '--'} />
     <BasicStyleComponentToDisplayDetail
       label="Stop Level"
-      value={data1?.symbolId?.stopLevel ?? '--'}
+      value={data?.symbolId?.stopLevel ?? '--'}
     />
     <BasicStyleComponentToDisplayDetail
       label="Calculation"
-      value={data1?.symbolId?.calculation ?? '--'}
+      value={data?.symbolId?.calculation ?? '--'}
     />
     <BasicStyleComponentToDisplayDetail
       label="Calculation Value"
-      value={data1?.calculationValue ?? '--'}
+      value={data?.calculationValue ?? '--'}
     />
     <BasicStyleComponentToDisplayDetail
       label="Tick Size"
-      value={data1?.symbolId?.tickSize ?? '--'}
+      value={data?.symbolId?.tickSize ?? '--'}
     />
     <BasicStyleComponentToDisplayDetail
       label="Tick Value"
-      value={data1?.symbolId?.tickValue ?? '--'}
+      value={data?.symbolId?.tickValue ?? '--'}
     />
     <BasicStyleComponentToDisplayDetail
       label="Margin Type"
-      value={data1?.symbolId?.marginType ?? '--'}
+      value={data?.symbolId?.marginType ?? '--'}
     />
     <BasicStyleComponentToDisplayDetail
       label="Initial Margin"
-      value={data1?.symbolId?.initialMargin ?? '--'}
+      value={data?.symbolId?.initialMargin ?? '--'}
     />
     <BasicStyleComponentToDisplayDetail
       label="Min. Quantity Per Lot"
-      value={data1?.symbolId?.minQtyPerLot ?? '--'}
+      value={data?.symbolId?.minQtyPerLot ?? '--'}
     />
     <BasicStyleComponentToDisplayDetail
       label="Max. Quantity Per Lot"
-      value={data1?.symbolId?.maxQtyPerLot ?? '--'}
+      value={data?.symbolId?.maxQtyPerLot ?? '--'}
     />
     <BasicStyleComponentToDisplayDetail
       label="Max. Position"
-      value={data1?.symbolId?.maxPositionQtyPerLot ?? '--'}
+      value={data?.symbolId?.maxPositionQtyPerLot ?? '--'}
     />
     <BasicStyleComponentToDisplayDetail
       label="Order Types"
       value={
-        data1?.orderType.length >= 0 ? data1?.orderType?.map((data: any) => `${data}, `) : '--'
+        data?.orderType.length >= 0 ? data?.orderType?.map((data1: any) => `${data1}, `) : '--'
       }
     />
     <BasicStyleComponentToDisplayDetail
       label="Expiration"
-      value={data1?.expiryDate?.substring(0, 10) ?? '--'}
+      value={data?.expiryDate?.substring(0, 10) ?? '--'}
     />
     <BasicStyleComponentToDisplayDetail
       label="Status of Script"
-      value={data1?.statusOfScript ?? '--'}
+      value={data?.statusOfScript ?? '--'}
     />
     {/* <BasicStyleComponentToDisplayDetail label="Min. Position Holding Time" value="data1" /> */}
     <BasicStyleComponentToDisplayDetail
       label="isActive"
-      value={data1?.isActive?.toString() ?? '--'}
+      value={data?.isActive?.toString() ?? '--'}
     />
 
     <Box>
@@ -128,7 +125,7 @@ const SymbolPropertiesDetailLayout = ({ data1 }: SymbolPropertiesDetailProps) =>
 
       <hr />
       <Box>
-        {data1?.exchange?.tradeSessions?.map((day: any) => (
+        {data?.exchange?.tradeSessions?.map((day: any) => (
           <BasicStyleComponentToDisplayDetail
             label={day?.day}
             value={day?.isActive ? `${day?.startTime} : ${day?.endTime}` : '----'}
