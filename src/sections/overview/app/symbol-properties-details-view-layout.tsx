@@ -8,6 +8,7 @@ interface BasicStyleComponentToDisplayDetailProps {
   label: string;
   value: any;
 }
+
 const BasicStyleComponentToDisplayDetail = ({
   label,
   value,
@@ -56,6 +57,7 @@ const BasicStyleComponentToDisplayDetail = ({
 const SymbolPropertiesDetailLayout = ({ data }: SymbolPropertiesDetailProps) => (
   //   console.log(data1);
   <Box>
+    <BasicStyleComponentToDisplayDetail label="Name" value={data?.name ?? '--'} />
     <BasicStyleComponentToDisplayDetail label="Currency" value={data?.symbolId?.currency ?? '--'} />
     <BasicStyleComponentToDisplayDetail label="Exchange" value={data?.exchange?.name ?? '--'} />
     <BasicStyleComponentToDisplayDetail
@@ -113,10 +115,10 @@ const SymbolPropertiesDetailLayout = ({ data }: SymbolPropertiesDetailProps) => 
       value={data?.statusOfScript ?? '--'}
     />
     {/* <BasicStyleComponentToDisplayDetail label="Min. Position Holding Time" value="data1" /> */}
-    <BasicStyleComponentToDisplayDetail
+    {/* <BasicStyleComponentToDisplayDetail
       label="isActive"
       value={data?.isActive?.toString() ?? '--'}
-    />
+    /> */}
 
     <Box>
       <Typography fontWeight="semibold" fontSize="13px" mt=".7rem">
