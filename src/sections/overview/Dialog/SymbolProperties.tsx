@@ -9,17 +9,19 @@ import DialogContent from '@mui/material/DialogContent';
 
 import useAuth from 'src/hooks/useAuth';
 
+import SymbolPropertiesDetailLayout from '../app/symbol-properties-details-view-layout';
+
 // ----------------------------------------------------------------------
 
 type Props = {
   open: boolean;
   onClose: VoidFunction;
   row: any;
+  data: any;
 };
 
-export default function SymbolPropertiesDialog({ open, onClose, row }: Props) {
+export default function SymbolPropertiesDialog({ open, onClose, row, data }: Props) {
   const { role } = useAuth();
-
   // const getSymbolPropertiesByRole: any = (role1: any) => {
   //   switch (role1) {
   //     case 'ADMIN':
@@ -59,7 +61,9 @@ export default function SymbolPropertiesDialog({ open, onClose, row }: Props) {
     >
       <DialogTitle>Symbol Properties</DialogTitle>
 
-      <DialogContent>Hello</DialogContent>
+      <DialogContent>
+        <SymbolPropertiesDetailLayout data={data} />
+      </DialogContent>
 
       <DialogActions>
         <Button variant="outlined" onClick={onClose}>

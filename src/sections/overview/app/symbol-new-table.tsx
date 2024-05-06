@@ -41,6 +41,8 @@ import masterService from 'src/services/masterService';
 
 import useAuth from 'src/hooks/useAuth';
 import { useSocket } from 'src/context/SocketContext';
+import overviewService from 'src/services/overviewAppViewService';
+import { AxiosResponse } from 'axios';
 import SymbolPropertiesDialog from '../Dialog/SymbolProperties';
 // ----------------------------------------------------------------------
 
@@ -116,6 +118,8 @@ export default function SymbolTableDashboard() {
   const [importMonthData, setImportMonthData] = useState<any>([]);
   const [socketData, setSocketData] = useState<any>([]);
   const [isAdvancedMode, setIsAdvancedMode] = useState<boolean>(false);
+
+  const [symbolPropertiesDetail, setSymbolPropertiesDetail] = useState<any[]>();
 
   const { socket, connect, disconnect, subscribeToMarket, joinUserRoom, marketWatch } = useSocket();
 
@@ -204,31 +208,33 @@ export default function SymbolTableDashboard() {
     },
   });
 
-  // const getSymbolPropertiesByRole: any = (role1: any) => {
-  //   switch (role1) {
-  //     case 'ADMIN':
-  //       return overviewService.getSymbolPropertiesByAdmin();
-  //     case 'SUPER_MASTER':
-  //       return overviewService.getSymbolPropertiesBySuperMaster();
-  //     case 'MASTER':
-  //       return overviewService.getSymbolPropertiesByMaster();
-  //     default:
-  //       return overviewService.getSymbolPropertiesByMaster();
-  //   }
-  // };
-  // const { mutate: getSymbolProperty } = useMutation(getSymbolPropertiesByRole(role), {
-  //   onSuccess: (data) => {
-  //     console.log(data?.data?.rows);
-  //     // setSymbolProperties(data?.rows);
-  //   },
-  //   onError: (error) => {
-  //     console.log('error', error);
-  //   },
-  // });
+  const getSymbolPropertiesByRole: any = (role1: any) => {
+    switch (role1) {
+      case 'ADMIN':
+        return overviewService.getSymbolPropertiesByAdmin;
+      case 'SUPER_MASTER':
+        return overviewService.getSymbolPropertiesBySuperMaster;
+      case 'MASTER':
+        return overviewService.getSymbolPropertiesByMaster;
+      default:
+        return overviewService.getSymbolPropertiesByMaster;
+    }
+  };
 
-  // useEffect(() => {
-  //   getSymbolProperty();
-  // }, []);
+  const { mutate: getSymbolProperty } = useMutation(getSymbolPropertiesByRole(role), {
+    onSuccess: (data: AxiosResponse) => {
+      console.log(data.data?.data?.rows);
+      setSymbolPropertiesDetail(data?.data?.data?.rows);
+      // setSymbolProperties(data?.rows);
+    },
+    onError: (error) => {
+      console.log('error', error);
+    },
+  });
+
+  useEffect(() => {
+    getSymbolProperty();
+  }, []);
 
   useEffect(() => {
     const symbolTableDashboard: any[] = [];
@@ -550,7 +556,12 @@ export default function SymbolTableDashboard() {
                     />
                     <TableBody>
                       {rowData?.map((row: any, index: number) => (
-                        <SymbolNewRow key={row.id} row={row} isAdvancedMode={isAdvancedMode} />
+                        <SymbolNewRow
+                          key={row.id}
+                          row={row}
+                          symbolPropertiesDetail={symbolPropertiesDetail}
+                          isAdvancedMode={isAdvancedMode}
+                        />
                       ))}
                     </TableBody>
                   </Table>
@@ -585,12 +596,15 @@ export default function SymbolTableDashboard() {
 type SymbolNewRowProps = {
   row: any;
   isAdvancedMode?: boolean;
+  symbolPropertiesDetail?: any;
 };
 
-function SymbolNewRow({ row, isAdvancedMode }: SymbolNewRowProps) {
+function SymbolNewRow({ row, isAdvancedMode, symbolPropertiesDetail }: SymbolNewRowProps) {
   const popover = usePopover();
   const symbolProperties = useBoolean();
   const theme = useTheme();
+  const [selectedSymbolPropertiesDetail, setSelectedSymbolPropertiesDetail] = useState<any>();
+
   const handleBidData =
     row?.bid !== undefined && row?.oldBuyPrice !== undefined && row?.bid > row?.oldBuyPrice;
 
@@ -613,9 +627,21 @@ function SymbolNewRow({ row, isAdvancedMode }: SymbolNewRowProps) {
     popover.onClose();
   };
 
+  // console.log({ selectedSymbolPropertiesDetail });
   return (
     <>
-      <StyledTableRow sx={{ cursor: 'pointer' }} onDoubleClick={() => symbolProperties.onTrue()}>
+      <StyledTableRow
+        sx={{ cursor: 'pointer' }}
+        onDoubleClick={() => {
+          const details: any = symbolPropertiesDetail?.find(
+            (symbolDetail: any) => symbolDetail?._id === row?.id
+          );
+
+          console.log({ details });
+          setSelectedSymbolPropertiesDetail(details);
+          symbolProperties.onTrue();
+        }}
+      >
         <TableCell
           style={{
             border: '1px solid #dddddd',
@@ -836,6 +862,7 @@ function SymbolNewRow({ row, isAdvancedMode }: SymbolNewRowProps) {
       <SymbolPropertiesDialog
         open={symbolProperties.value}
         onClose={symbolProperties.onFalse}
+        data={selectedSymbolPropertiesDetail}
         row={row}
       />
 
