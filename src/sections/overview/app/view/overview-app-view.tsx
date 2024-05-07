@@ -132,7 +132,7 @@ const OverviewAppView = () => {
   // const getSymbolPropertiesByRole: any = (role1: any) => {
   //   switch (role1) {
   //     case 'ADMIN':
-  //       return overviewService.getSymbolPropertiesByAdmin();
+  //       return overviewService.b();
   //     case 'SUPER_MASTER':
   //       return overviewService.getSymbolPropertiesBySuperMaster();
   //     case 'MASTER':
@@ -290,10 +290,8 @@ const OverviewAppView = () => {
                     /* IE11 */
                     document.msExitFullscreen();
                   }
-                  const localFullScreen = localStorage.getItem('isFullScreen') === 'true';
-                  console.log({ localFullScreen });
-
-                  setIsFullscreen(localStorage.getItem('isFullScreen') === 'true');
+                  // Update local state and localStorage
+                  setIsFullscreen(false);
                   localStorage.setItem('isFullScreen', String(false));
                 } else {
                   // If browser is not in fullscreen mode, request fullscreen
@@ -306,10 +304,8 @@ const OverviewAppView = () => {
                     /* IE11 */
                     document.documentElement.msRequestFullscreen();
                   }
-                  const localFullScreen = localStorage.getItem('isFullScreen') === 'true';
-                  console.log({ localFullScreen });
-
-                  setIsFullscreen(localStorage.getItem('isFullScreen') === 'true');
+                  // Update local state and localStorage
+                  setIsFullscreen(true);
                   localStorage.setItem('isFullScreen', String(true));
                 }
               }}

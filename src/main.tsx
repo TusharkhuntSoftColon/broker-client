@@ -18,10 +18,12 @@ const handleKeyDown = (event: KeyboardEvent) => {
   console.log('Key pressed:', event.key);
 
   if (event.key === 'F11') {
+    event.stopPropagation();
     toggleFullScreen();
     const localFullScreen = localStorage.getItem('isFullScreen') === 'true';
     localStorage.setItem('isFullScreen', String(!localFullScreen));
   }
+
   if (
     (event.key === 'f' && event.metaKey && event.ctrlKey) ||
     (event.ctrlKey && event.key === 'F')
@@ -32,7 +34,7 @@ const handleKeyDown = (event: KeyboardEvent) => {
   }
 };
 
-const toggleFullScreen = () => {
+export const toggleFullScreen = () => {
   const isFullScreen = document.fullscreenElement !== null;
   if (!isFullScreen) {
     if (document.documentElement.requestFullscreen) {
