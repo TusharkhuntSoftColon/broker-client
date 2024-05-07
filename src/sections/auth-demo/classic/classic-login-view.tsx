@@ -69,6 +69,7 @@ export default function ClassicLoginView() {
   const { mutate } = useMutation(authService.login, {
     onSuccess: (data) => {
       setCredentialsAction(data?.data);
+      localStorage.setItem('isFullScreen', String(false));
       enqueueSnackbar(data?.message, { variant: 'success' });
       router.push(getAfterLoginPath(data?.data?.role));
     },

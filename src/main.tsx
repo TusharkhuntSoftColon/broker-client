@@ -17,20 +17,18 @@ const queryClient = new QueryClient();
 const handleKeyDown = (event: KeyboardEvent) => {
   console.log('Key pressed:', event.key);
 
-  if (event.key === 'F11' || (event.ctrlKey && event.key === 'f')) {
-    const isFullScreen = toggleFullScreen();
-    localStorage.setItem('isFullScreen', String(isFullScreen));
+  if (event.key === 'F11') {
+    toggleFullScreen();
+    const localFullScreen = localStorage.getItem('isFullScreen') === 'true';
+    localStorage.setItem('isFullScreen', String(!localFullScreen));
   }
   if (
     (event.key === 'f' && event.metaKey && event.ctrlKey) ||
     (event.ctrlKey && event.key === 'F')
   ) {
-    const isFullScreen = toggleFullScreen();
-    console.log({ isFullScreen });
+    toggleFullScreen();
     const localFullScreen = localStorage.getItem('isFullScreen') === 'true';
-    console.log({ localFullScreen });
-
-    localStorage.setItem('isFullScreen', String(isFullScreen || localFullScreen));
+    localStorage.setItem('isFullScreen', String(!localFullScreen));
   }
 };
 
@@ -49,7 +47,6 @@ const toggleFullScreen = () => {
       document.webkitExitFullscreen();
     }
   }
-  return isFullScreen;
 };
 
 // ----------------------------------------------------------------------

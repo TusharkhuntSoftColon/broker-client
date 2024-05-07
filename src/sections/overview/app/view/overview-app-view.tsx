@@ -269,7 +269,10 @@ const OverviewAppView = () => {
           );
         })}
         <Box sx={{ position: 'absolute', top: 0, right: 5 }}>
-          <Tooltip placement="top" title={isFullscreen ? 'Exit Full Screen' : 'Full Screen'}>
+          <Tooltip
+            placement="top"
+            title={document.fullscreenElement !== null ? 'Exit Full Screen' : 'Full Screen'}
+          >
             <LoadingButton
               onClick={(e) => {
                 if (
@@ -287,8 +290,11 @@ const OverviewAppView = () => {
                     /* IE11 */
                     document.msExitFullscreen();
                   }
-                  setIsFullscreen(false);
-                  localStorage.setItem('isFullScreen', false);
+                  const localFullScreen = localStorage.getItem('isFullScreen') === 'true';
+                  console.log({ localFullScreen });
+
+                  setIsFullscreen(localStorage.getItem('isFullScreen') === 'true');
+                  localStorage.setItem('isFullScreen', String(false));
                 } else {
                   // If browser is not in fullscreen mode, request fullscreen
                   if (document.documentElement.requestFullscreen) {
@@ -300,10 +306,11 @@ const OverviewAppView = () => {
                     /* IE11 */
                     document.documentElement.msRequestFullscreen();
                   }
-                  console.log('IS NOT FULL SCREEN');
+                  const localFullScreen = localStorage.getItem('isFullScreen') === 'true';
+                  console.log({ localFullScreen });
 
-                  setIsFullscreen(true);
-                  localStorage.setItem('isFullScreen', true);
+                  setIsFullscreen(localStorage.getItem('isFullScreen') === 'true');
+                  localStorage.setItem('isFullScreen', String(true));
                 }
               }}
             >
