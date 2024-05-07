@@ -147,8 +147,10 @@ export default function UserFinantials({ currentUser }: any) {
 
   const { mutate: getBalanceHistory } = useMutation(() => getBalanceHistoryByRole(role), {
     onSuccess: (data: any) => {
+      console.log({ data });
+
       setTableData(data?.data?.data?.balanceHistoryDetails);
-      setUserBalanceDetails(data?.data?.data?.balanceDetails?.user_balance);
+      setUserBalanceDetails(data?.data?.data?.BalancelDetail?.user_balance);
     },
     onError: (error: any) => {
       console.log({ error });

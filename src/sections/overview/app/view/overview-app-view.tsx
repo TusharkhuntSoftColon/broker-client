@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable arrow-body-style */
 
@@ -271,7 +272,8 @@ const OverviewAppView = () => {
         <Box sx={{ position: 'absolute', top: 0, right: 5 }}>
           <Tooltip
             placement="top"
-            title={document.fullscreenElement !== null ? 'Exit Full Screen' : 'Full Screen'}
+            // title={document.fullscreenElement !== null ? 'Exit Full Screen' : 'Full Screen'}
+            title="Toogle Full Screen"
           >
             <LoadingButton
               onClick={(e) => {

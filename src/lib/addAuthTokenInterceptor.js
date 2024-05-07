@@ -14,9 +14,6 @@ let isRefreshTokenUpdating = false;
 export default function addAuthTokenInterceptor(store) {
   client.interceptors.request.use((req) => {
     const { token } = store.getState().auth;
-
-    console.log({ token });
-
     if (!token) return req;
     req.headers.Authorization = `Bearer ${token}`;
     return req;
@@ -46,8 +43,6 @@ export default function addAuthTokenInterceptor(store) {
             const data = JSON.stringify({
               refresh_token: refreshToken,
             });
-
-            console.log({ data });
 
             const config = {
               method: 'put',

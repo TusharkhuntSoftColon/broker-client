@@ -84,26 +84,26 @@ function CustomTabPanel(props: TabPanelProps) {
   );
 }
 
-function a11yProps(index: number) {
-  return {
-    id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
-  };
-}
+// function a11yProps(index: number) {
+//   return {
+//     id: `simple-tab-${index}`,
+//     'aria-controls': `simple-tabpanel-${index}`,
+//   };
+// }
 
-const TABLE_HEAD = [
-  {
-    id: 'symbol',
-    label: 'Symbol',
-    align: 'left',
-    border: '1px solid #dddddd !important',
-  },
-  { id: 'bid', label: 'Bid', align: 'right', border: '1px solid #dddddd !important' },
-  { id: 'ask', label: 'Ask', align: 'right', border: '1px solid #dddddd !important' },
-  { id: 'dailyChange', label: 'Ask', align: 'right', border: '1px solid #dddddd !important' },
-  { id: 'high', label: 'High', align: 'right', border: '1px solid #dddddd !important' },
-  { id: 'low', label: 'Low', align: 'right', border: '1px solid #dddddd !important' },
-];
+// const TABLE_HEAD = [
+//   {
+//     id: 'symbol',
+//     label: 'Symbol',
+//     align: 'left',
+//     border: '1px solid #dddddd !important',
+//   },
+//   { id: 'bid', label: 'Bid', align: 'right', border: '1px solid #dddddd !important' },
+//   { id: 'ask', label: 'Ask', align: 'right', border: '1px solid #dddddd !important' },
+//   { id: 'dailyChange', label: 'Ask', align: 'right', border: '1px solid #dddddd !important' },
+//   { id: 'high', label: 'High', align: 'right', border: '1px solid #dddddd !important' },
+//   { id: 'low', label: 'Low', align: 'right', border: '1px solid #dddddd !important' },
+// ];
 
 export default function SymbolTableDashboard() {
   const socketSymbol = useBoolean();

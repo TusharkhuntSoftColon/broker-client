@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable no-lonely-if */
 import { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
@@ -7,7 +8,8 @@ import { Provider as StoreProvider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import App from './app';
+import App from 'src/app';
+
 import { store, persistor } from './store';
 import addAuthTokenInterceptor from './lib/addAuthTokenInterceptor';
 
@@ -15,8 +17,6 @@ import addAuthTokenInterceptor from './lib/addAuthTokenInterceptor';
 const queryClient = new QueryClient();
 
 const handleKeyDown = (event: KeyboardEvent) => {
-  console.log('Key pressed:', event.key);
-
   if (event.key === 'F11') {
     toggleFullScreen();
     const localFullScreen = localStorage.getItem('isFullScreen') === 'true';
@@ -32,7 +32,7 @@ const handleKeyDown = (event: KeyboardEvent) => {
   }
 };
 
-const toggleFullScreen = () => {
+export const toggleFullScreen = () => {
   const isFullScreen = document.fullscreenElement !== null;
   if (!isFullScreen) {
     if (document.documentElement.requestFullscreen) {
