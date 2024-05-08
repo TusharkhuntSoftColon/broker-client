@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable arrow-body-style */
 
@@ -132,7 +133,7 @@ const OverviewAppView = () => {
   // const getSymbolPropertiesByRole: any = (role1: any) => {
   //   switch (role1) {
   //     case 'ADMIN':
-  //       return overviewService.b();
+  //       return overviewService.getSymbolPropertiesByAdmin();
   //     case 'SUPER_MASTER':
   //       return overviewService.getSymbolPropertiesBySuperMaster();
   //     case 'MASTER':
@@ -271,7 +272,8 @@ const OverviewAppView = () => {
         <Box sx={{ position: 'absolute', top: 0, right: 5 }}>
           <Tooltip
             placement="top"
-            title={document.fullscreenElement !== null ? 'Exit Full Screen' : 'Full Screen'}
+            // title={document.fullscreenElement !== null ? 'Exit Full Screen' : 'Full Screen'}
+            title="Toogle Full Screen"
           >
             <LoadingButton
               onClick={(e) => {
@@ -290,8 +292,10 @@ const OverviewAppView = () => {
                     /* IE11 */
                     document.msExitFullscreen();
                   }
-                  // Update local state and localStorage
-                  setIsFullscreen(false);
+                  const localFullScreen = localStorage.getItem('isFullScreen') === 'true';
+                  console.log({ localFullScreen });
+
+                  setIsFullscreen(localStorage.getItem('isFullScreen') === 'true');
                   localStorage.setItem('isFullScreen', String(false));
                 } else {
                   // If browser is not in fullscreen mode, request fullscreen
@@ -304,8 +308,10 @@ const OverviewAppView = () => {
                     /* IE11 */
                     document.documentElement.msRequestFullscreen();
                   }
-                  // Update local state and localStorage
-                  setIsFullscreen(true);
+                  const localFullScreen = localStorage.getItem('isFullScreen') === 'true';
+                  console.log({ localFullScreen });
+
+                  setIsFullscreen(localStorage.getItem('isFullScreen') === 'true');
                   localStorage.setItem('isFullScreen', String(true));
                 }
               }}

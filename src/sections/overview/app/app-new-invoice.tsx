@@ -666,13 +666,15 @@ export default function AppNewInvoice({
                           ))}
                           {data?.label === 'Summary' && (
                             <StyledTableRow>
-                              <StyledTableCell sx={{ fontWeight: 'bold', fontSize: '13px' }}>
+                              <StyledTableCell
+                                sx={{ fontWeight: 'bold', padding: 1, fontSize: '13px' }}
+                              >
                                 Summary
                               </StyledTableCell>
                               <StyledTableCell
                                 sx={{
                                   textAlign: 'right',
-                                  padding: '5px',
+                                  padding: 1,
                                   fontSize: '13px',
                                   fontWeight: 'bold',
                                 }}
@@ -682,7 +684,7 @@ export default function AppNewInvoice({
                               <StyledTableCell
                                 sx={{
                                   textAlign: 'right',
-                                  padding: '5px',
+                                  padding: 1,
                                   fontSize: '13px',
                                   fontWeight: 'bold',
                                 }}
@@ -692,17 +694,15 @@ export default function AppNewInvoice({
                               <StyledTableCell
                                 sx={{
                                   textAlign: 'right',
-                                  padding: '5px',
+                                  padding: 1,
                                   fontSize: '13px',
                                   fontWeight: 'bold',
                                 }}
-                              >
-                                {totals?.totalBuyPrice}
-                              </StyledTableCell>
+                              />
                               <StyledTableCell
                                 sx={{
                                   textAlign: 'right',
-                                  padding: '5px',
+                                  padding: 1,
                                   fontSize: '13px',
                                   fontWeight: 'bold',
                                 }}
@@ -712,17 +712,15 @@ export default function AppNewInvoice({
                               <StyledTableCell
                                 sx={{
                                   textAlign: 'right',
-                                  padding: '5px',
+                                  padding: 1,
                                   fontSize: '13px',
                                   fontWeight: 'bold',
                                 }}
-                              >
-                                {totals?.totalSellPrice}
-                              </StyledTableCell>
+                              />
                               <StyledTableCell
                                 sx={{
                                   textAlign: 'right',
-                                  padding: '5px',
+                                  padding: 1,
                                   fontSize: '13px',
                                   fontWeight: 'bold',
                                 }}
@@ -732,7 +730,7 @@ export default function AppNewInvoice({
                               <StyledTableCell
                                 sx={{
                                   textAlign: 'right',
-                                  padding: '5px',
+                                  padding: 1,
                                   fontSize: '13px',
                                   fontWeight: 'bold',
                                 }}

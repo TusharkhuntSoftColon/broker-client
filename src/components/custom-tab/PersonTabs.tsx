@@ -1,4 +1,5 @@
 import { useSnackbar } from 'notistack';
+import { useSelector } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { useMutation } from '@tanstack/react-query';
 
@@ -11,6 +12,7 @@ import { useParams } from 'src/routes/hooks';
 
 import useAuth from 'src/hooks/useAuth';
 
+import { RootState } from 'src/store';
 import adminService from 'src/services/adminService';
 import masterService from 'src/services/masterService';
 import superMasterService from 'src/services/superMasterService';
@@ -63,6 +65,8 @@ export default function PersonTabsPanel() {
   const { enqueueSnackbar } = useSnackbar();
 
   const [personData, setPersonData] = useState([]);
+  const personList = useSelector((state: RootState) => state.admin.personList);
+
   const getAllPersonSByRole = (role1: any) => {
     switch (role1) {
       case 'ADMIN':
@@ -89,7 +93,7 @@ export default function PersonTabsPanel() {
     mutate();
   }, [id]);
 
-  const currentUser = personData?.find((user: any) => user._id === id);
+  const currentUser = personList?.find((user: any) => user._id === id);
   const [value, setValue] = useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
