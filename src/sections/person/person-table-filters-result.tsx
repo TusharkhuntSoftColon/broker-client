@@ -19,6 +19,11 @@ type Props = StackProps & {
   results: number;
 };
 
+interface LabelValue {
+  label: string;
+  value: string;
+}
+
 export default function UserTableFiltersResult({
   filters,
   onFilters,
@@ -30,9 +35,16 @@ export default function UserTableFiltersResult({
     onFilters('status', null);
   };
 
-  const handleRemoveExchange = (inputValue: string) => {
-    const newValue = filters.exchange.filter((item: any) => item !== inputValue);
-    onFilters('exchange', newValue);
+  // const handleRemoveExchange = (inputValue: string) => {
+  //   const newValue = filters.exchange.filter((item: any) => item !== inputValue);
+  //   onFilters('exchange', newValue);
+  // };
+
+  const handleRemoveExchange = (inputValue: LabelValue) => {
+    const updatedFirstExchange = filters.exchange.filter(
+      (item: LabelValue) => item?.value !== inputValue?.value
+    );
+    onFilters('exchange', updatedFirstExchange);
   };
 
   const handleRemoveDate = () => {
@@ -63,10 +75,10 @@ export default function UserTableFiltersResult({
 
         {!!filters.exchange.length && (
           <Block label="Exchange:">
-            {matchedNames.map((item: any) => (
+            {filters.exchange.map((item: any) => (
               <Chip
-                key={item}
-                label={item}
+                key={item?.value}
+                label={item?.label}
                 size="small"
                 onDelete={() => handleRemoveExchange(item)}
               />

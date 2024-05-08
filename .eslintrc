@@ -24,6 +24,7 @@
   },
   "rules": {
     "no-alert": 0,
+    "import/prefer-default-export": "off",
     "camelcase": 0,
     "no-console": 0,
     "no-unused-vars": 0,
@@ -39,7 +40,7 @@
     "no-promise-executor-return": 0,
     "react/require-default-props": 0,
     "react/jsx-props-no-spreading": 0,
-    "import/prefer-default-export": 0,
+    // "import/prefer-default-export": 0,
     "react/function-component-definition": 0,
     "@typescript-eslint/naming-convention": 0,
     "jsx-a11y/control-has-associated-label": 0,

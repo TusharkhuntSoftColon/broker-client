@@ -84,10 +84,35 @@ export default function PersonTableToolbar({
     },
     [onFilters]
   );
+
   const handleChangeExchange = (e: any, value: any) => {
-    const data = value.map((data: any) => data.value);
-    onFilters('exchange', data);
+    const seen = new Set();
+    const uniqueData: any = [];
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const obj of value) {
+      const key = `${obj.label}-${obj.value}`;
+
+      if (!seen.has(key)) {
+        seen.add(key);
+        uniqueData.push(obj);
+      } else {
+        uniqueData.splice(
+          uniqueData.findIndex((o: any) => o.label === obj.label && o.value === obj.value),
+          1
+        );
+      }
+    }
+
+    console.log({ uniqueData });
+    onFilters('exchange', uniqueData);
   };
+  // const handleChangeExchange = (e: any, value: any) => {
+  //   const data = value.map((data: any) => data.value);
+  //   onFilters('exchange', data);
+
+  //   console.log({ data });
+  // };
 
   const handleSelectedDate = () => {
     const date = [rangeCalendarPicker.startDate, rangeCalendarPicker.endDate];
@@ -104,6 +129,8 @@ export default function PersonTableToolbar({
       console.error(error);
     }
   });
+
+  console.log({ filters }, { roleOptions }, { onFilters });
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>
@@ -129,9 +156,9 @@ export default function PersonTableToolbar({
             multiple
             id="tags-filled"
             options={roleOptions}
-            freeSolo
+            // freeSolo
             disableCloseOnSelect
-            // value={filters.exchange}
+            value={filters?.exchange as any}
             onChange={(w, value) => handleChangeExchange(w, value)}
             renderTags={(value: readonly string[]) =>
               value.map((option: any, index: number) => option?.label).join(', ')
