@@ -90,11 +90,13 @@ export default function BrokerageTableToolbar({
   )[0];
 
   const defaultSymbol = Symbol.find((data: any) => data?.value === currentBrokerage?.symbol);
+
   const defaultBcm = brokerageCallMethod.find((data: any) => data?.value === currentBrokerage?.bcm);
 
   const defaultBco = brokerageCallOptions.find(
     (data: any) => data?.value === currentBrokerage?.bco
   );
+
   const defaultValues: any = {
     date: new Date(),
     template: {
@@ -145,6 +147,7 @@ export default function BrokerageTableToolbar({
   } = methods;
 
   const value: any = watch();
+
   const symbolOptionsArray = symbolList?.filter(
     (data: any) => data.exchange === value.exchangeCode?.value
   );
@@ -348,9 +351,15 @@ export default function BrokerageTableToolbar({
   }, [tableData, value]);
 
   const handleAddBrokerageClick = () => {
-    console.log({ value });
-
     // Check if all form fields are filled
+    if (value.symbol === null) {
+      setValue('symbol', { label: '', value: '' });
+    }
+
+    if (value.template === null) {
+      setValue('template', { label: '', value: '' });
+    }
+
     if (
       value.date &&
       value.template &&
