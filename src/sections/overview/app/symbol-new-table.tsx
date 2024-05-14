@@ -574,6 +574,7 @@ export default function SymbolTableDashboard() {
 
       <AddSymbolInDashboard
         open={addSymbolInDashboard.value}
+        getSymbolProperty={getSymbolProperty}
         onClose={addSymbolInDashboard.onFalse}
         assignedExchangesList={assignedExchanges}
         mutateSymbolData={mutate}
