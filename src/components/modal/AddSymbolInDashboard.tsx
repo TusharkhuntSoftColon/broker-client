@@ -39,6 +39,7 @@ interface AddSymbolInDashboardProps {
   open: boolean;
   onClose: () => void;
   mutateSymbolData: any;
+  getSymbolProperty: any;
   currentList: any;
   assignedExchangesList: any;
 }
@@ -57,6 +58,7 @@ interface formattedDataInterface {
 const AddSymbolInDashboard = ({
   open,
   onClose,
+  getSymbolProperty,
   mutateSymbolData,
   currentList,
   assignedExchangesList,
@@ -132,6 +134,7 @@ const AddSymbolInDashboard = ({
   const value = watch();
   const onSubmit = (data: any) => {
     updateImportMonthList(importMonthIds);
+    getSymbolProperty();
   };
 
   useEffect(() => {
