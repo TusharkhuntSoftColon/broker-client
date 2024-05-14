@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { lazy, Suspense } from 'react';
 import { Outlet } from 'react-router-dom';
 

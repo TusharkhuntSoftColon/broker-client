@@ -1,3 +1,4 @@
+/* eslint-disable import/no-cycle */
 import { Navigate, useRoutes } from 'react-router-dom';
 
 import { paths } from '../paths';

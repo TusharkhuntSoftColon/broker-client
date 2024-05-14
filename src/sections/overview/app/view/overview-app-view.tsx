@@ -10,6 +10,7 @@ import { Box, Grid, Tooltip, Typography } from '@mui/material';
 
 import useAuth from 'src/hooks/useAuth';
 
+import { toggleFullScreen } from 'src/main';
 import overviewService from 'src/services/overviewAppViewService';
 
 import AppNewInvoice from '../app-new-invoice';
@@ -277,43 +278,7 @@ const OverviewAppView = () => {
           >
             <LoadingButton
               onClick={(e) => {
-                if (
-                  document.fullscreenElement ||
-                  document.webkitFullscreenElement ||
-                  document.msFullscreenElement
-                ) {
-                  // If browser is in fullscreen mode, exit fullscreen
-                  if (document.exitFullscreen) {
-                    document.exitFullscreen();
-                  } else if (document.webkitExitFullscreen) {
-                    /* Safari */
-                    document.webkitExitFullscreen();
-                  } else if (document.msExitFullscreen) {
-                    /* IE11 */
-                    document.msExitFullscreen();
-                  }
-                  const localFullScreen = localStorage.getItem('isFullScreen') === 'true';
-                  console.log({ localFullScreen });
-
-                  setIsFullscreen(localStorage.getItem('isFullScreen') === 'true');
-                  localStorage.setItem('isFullScreen', String(false));
-                } else {
-                  // If browser is not in fullscreen mode, request fullscreen
-                  if (document.documentElement.requestFullscreen) {
-                    document.documentElement.requestFullscreen();
-                  } else if (document.documentElement.webkitRequestFullscreen) {
-                    /* Safari */
-                    document.documentElement.webkitRequestFullscreen();
-                  } else if (document.documentElement.msRequestFullscreen) {
-                    /* IE11 */
-                    document.documentElement.msRequestFullscreen();
-                  }
-                  const localFullScreen = localStorage.getItem('isFullScreen') === 'true';
-                  console.log({ localFullScreen });
-
-                  setIsFullscreen(localStorage.getItem('isFullScreen') === 'true');
-                  localStorage.setItem('isFullScreen', String(true));
-                }
+                toggleFullScreen();
               }}
             >
               <img

@@ -300,7 +300,6 @@ export default function PersonListView({ path }: { path: any }) {
   const { mutate: getPerson } = useMutation(adminService.getAllPersonById, {
     onSuccess: (data) => {
       setTableData(data?.data?.rows);
-
       dispatch(addPerson(data?.data?.rows));
     },
     onError: (error: any) => {

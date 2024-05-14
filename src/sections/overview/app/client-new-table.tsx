@@ -3,8 +3,11 @@
 /* eslint-disable no-else-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-plusplus */
+import { useSnackbar } from 'notistack';
+import { useDispatch } from 'react-redux';
 /* eslint-disable arrow-body-style */
 import React, { useState, useEffect } from 'react';
+import { useMutation } from '@tanstack/react-query';
 
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
@@ -25,6 +28,8 @@ import TableContainer from '@mui/material/TableContainer';
 import { paths } from 'src/routes/paths';
 import { useRouter } from 'src/routes/hooks';
 
+import { addPerson } from 'src/store/slices/admin';
+import adminService from 'src/services/adminService';
 import { newClientsOnlineTableData } from 'src/_mock';
 import { useSocket } from 'src/context/SocketContext';
 
@@ -200,6 +205,7 @@ export default function ClientTableDashboard({
   }, [socketData]);
 
   const calculateTotalsAndProfit = (socketData1: any, accountData1: any) => {
+    console.log({ accountData1 });
     const updatedAccountData = accountData1?.map((user: any) => {
       let totalProfit = 0;
       const updatedOrders = user.order?.map((order: any) => {
@@ -243,6 +249,8 @@ export default function ClientTableDashboard({
     const data = calculateTotalsAndProfit(socketData, accountData);
     setUpdatedAccountData1(data);
   }, [socketData, value, accountData]);
+
+  console.log({ updatedAccountData1 });
 
   const tabs = [
     {
@@ -672,12 +680,31 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
     popover.onClose();
     console.info('DELETE', row.id);
   };
+
+  const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const PositionTime = new Date(row?.timeOpen).toDateString();
+
+  const { mutate: getPerson } = useMutation(adminService.getAllPersonById, {
+    onSuccess: (data) => {
+      dispatch(addPerson(data?.data?.rows));
+    },
+    onError: (error: any) => {
+      enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+    },
+  });
+
+  const handleAccountDoubleClick = () => {
+    getPerson(row.createdBy);
+    console.log({ row });
+
+    router.push(paths.dashboard.person.edit(row?._id));
+  };
 
   return (
     <>
       {value === 0 && (
-        <StyledTableRow onDoubleClick={() => router.push(paths.dashboard.person.edit(row?._id))}>
+        <StyledTableRow onDoubleClick={() => handleAccountDoubleClick()}>
           <StyledTableCell
             sx={{ textAlign: 'left', fontSize: '13px', padding: '5px', borderLeft: 'none' }}
           >

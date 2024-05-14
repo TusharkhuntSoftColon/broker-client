@@ -1,7 +1,5 @@
-import { useSnackbar } from 'notistack';
+import { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useState, useEffect } from 'react';
-import { useMutation } from '@tanstack/react-query';
 
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
@@ -10,12 +8,7 @@ import Typography from '@mui/material/Typography';
 
 import { useParams } from 'src/routes/hooks';
 
-import useAuth from 'src/hooks/useAuth';
-
 import { RootState } from 'src/store';
-import adminService from 'src/services/adminService';
-import masterService from 'src/services/masterService';
-import superMasterService from 'src/services/superMasterService';
 
 import PersonSecurity from 'src/sections/person/security';
 import { PersonDetailsView } from 'src/sections/person/view';
@@ -58,40 +51,9 @@ function a11yProps(index: number) {
 
 export default function PersonTabsPanel() {
   const params = useParams();
-  const { role } = useAuth();
-
   const { id } = params;
 
-  const { enqueueSnackbar } = useSnackbar();
-
-  const [personData, setPersonData] = useState([]);
   const personList = useSelector((state: RootState) => state.admin.personList);
-
-  const getAllPersonSByRole = (role1: any) => {
-    switch (role1) {
-      case 'ADMIN':
-        return adminService.getAllPersons;
-      case 'SUPER_MASTER':
-        return superMasterService.getAllPersons;
-      case 'MASTER':
-        return masterService.getAllPersons;
-      default:
-        return masterService.getAllPersons;
-    }
-  };
-
-  const { mutate } = useMutation(getAllPersonSByRole(role), {
-    onSuccess: (data) => {
-      setPersonData(data?.data?.rows);
-    },
-    onError: (error: any) => {
-      enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
-    },
-  });
-
-  useEffect(() => {
-    mutate();
-  }, [id]);
 
   const currentUser = personList?.find((user: any) => user._id === id);
   const [value, setValue] = useState(0);
