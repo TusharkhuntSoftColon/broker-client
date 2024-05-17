@@ -371,6 +371,7 @@ const adminService = {
       throw error;
     }
   },
+
   getUserBalance: async (id?: string): Promise<any> => {
     try {
       const response: AxiosResponse<any> = await client.get(`${GET_USER_BALANCE_BY_ADMIN}/${id}`);
@@ -458,6 +459,8 @@ const adminService = {
       throw error;
     }
   },
+
+  // api for deleting user postions
 };
 
 export default adminService;

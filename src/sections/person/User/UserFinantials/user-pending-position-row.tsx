@@ -7,10 +7,22 @@ import TableCell from '@mui/material/TableCell';
 import { Button, IconButton, Popover, Typography } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import React, { useState } from 'react';
+import PendingPostionModalComponent from 'src/sections/overview/Dialog/PendingPositionModal';
+import { useBoolean } from 'src/hooks/use-boolean';
 
 // ----------------------------------------------------------------------
 
-export default function UserTradeTableRow({ row }: any) {
+interface UserPendingPostionTableRowProps {
+  row: any;
+  openModel: any;
+  setSelectedPendingOrder: any;
+}
+
+export default function UserPendingPostionTableRow({
+  row,
+  openModel,
+  setSelectedPendingOrder,
+}: UserPendingPostionTableRowProps) {
   // for popover of close position
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
@@ -23,6 +35,7 @@ export default function UserTradeTableRow({ row }: any) {
   };
 
   const open = Boolean(anchorEl);
+
   const id = open ? 'simple-popover' : undefined;
 
   const buyProfit =
@@ -33,7 +46,14 @@ export default function UserTradeTableRow({ row }: any) {
 
   return (
     <>
-      <TableRow hover sx={{ cursor: 'pointer' }}>
+      <TableRow
+        hover
+        sx={{ cursor: 'pointer' }}
+        onClick={() => {
+          setSelectedPendingOrder(row);
+          openModel();
+        }}
+      >
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{row?.importMonthName}</TableCell>
 
         <TableCell sx={{ whiteSpace: 'nowrap' }}>{row?.positionType}</TableCell>
@@ -42,7 +62,7 @@ export default function UserTradeTableRow({ row }: any) {
 
         <TableCell>{row?.positionType === 'BUY' ? row?.buyPrice : row?.sellPrice}</TableCell>
         <TableCell>{row?.livePrice}</TableCell>
-        <TableCell
+        {/* <TableCell
           sx={{
             color:
               row?.positionType === 'BUY' && buyProfit > 0
@@ -55,28 +75,7 @@ export default function UserTradeTableRow({ row }: any) {
           }}
         >
           {(row?.positionType === 'BUY' ? buyProfit : sellProfit).toFixed(2)}
-        </TableCell>
-
-        <TableCell>
-          <IconButton sx={{ border: '1px solid' }} onClick={handleClick}>
-            <Close />
-          </IconButton>
-          <Popover
-            id={id}
-            open={open}
-            anchorEl={anchorEl}
-            onClose={handleClose}
-            anchorOrigin={{
-              vertical: 'bottom',
-              horizontal: 'left',
-            }}
-          >
-            <Typography sx={{ p: 2 }}>Are you sure? You want to delete this postion !!</Typography>
-            <Button variant="contained" sx={{ m: 2 }}>
-              Delete
-            </Button>
-          </Popover>
-        </TableCell>
+        </TableCell> */}
       </TableRow>
     </>
   );

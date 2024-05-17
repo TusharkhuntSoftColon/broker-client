@@ -75,6 +75,7 @@ export const GET_BROKERAGE_LIST_FOR_USER_UPDATE_BY_SUPERMASTER =
 
 export const GET_USERS_BET_POSITIONS_BY_SUPER_MASTER = '/super-master/user-positions';
 export const GET_USER_BALANCE_BY_SUPER_MASTER = '/super-master/balance';
+export const GET_USER_PENDING_POSTION = '/admin/user-pending-order';
 
 export const CHANGE_USER_PASSWORD_BY_SUPER_MASTER = '/super-master/person-password-change';
 export const CHANGE_INVESTOR_PASSWORD_BY_SUPER_MASTER = '/super-master/investor-password-change';
