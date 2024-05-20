@@ -45,6 +45,7 @@ export const CHANGE_INVESTOR_PASSWORD_BY_ADMIN = '/admin/investor-password-chang
 export const GET_SYMBOL_PROPERTIES_BY_ADMIN = '/admin/symbol-properties';
 export const GET_NEW_PERSON_ID_BY_ADMIN = '/admin/generate-id';
 export const GET_LOGGED_PERSON_DETAILS_BY_ADMIN = '/admin/client-details';
+export const EXECUTE_PENDING_POSITIONS = '/admin/cancel-orders';
 
 // SUPER MASTER
 export const CREATE_MASTER_BY_SUPER_MASTER = '/super-master/master';
@@ -75,6 +76,7 @@ export const GET_BROKERAGE_LIST_FOR_USER_UPDATE_BY_SUPERMASTER =
 
 export const GET_USERS_BET_POSITIONS_BY_SUPER_MASTER = '/super-master/user-positions';
 export const GET_USER_BALANCE_BY_SUPER_MASTER = '/super-master/balance';
+export const GET_USER_PENDING_POSTION = '/admin/user-pending-order';
 
 export const CHANGE_USER_PASSWORD_BY_SUPER_MASTER = '/super-master/person-password-change';
 export const CHANGE_INVESTOR_PASSWORD_BY_SUPER_MASTER = '/super-master/investor-password-change';

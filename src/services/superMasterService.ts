@@ -23,6 +23,7 @@ import {
   GET_LOGGED_PERSON_DETAILS_BY_SUPER_MASTER,
   GET_ASSIGNED_EXCHANGE_LIST_FOR_SUPER_MASTER,
   GET_BROKERAGE_LIST_FOR_USER_UPDATE_BY_SUPERMASTER,
+  GET_USER_PENDING_POSTION,
 } from '../utils/urls';
 
 export interface adminType {
@@ -304,6 +305,17 @@ const superMasterService = {
       throw error;
     }
   },
+
+  getUserPendingPostion: async (id?: string): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(`${GET_USER_PENDING_POSTION}/${id}`);
+      return response.data;
+    } catch (error) {
+      console.error('Error in superMasterService.getUserPendingPostion:', error);
+      throw error;
+    }
+  },
+
   getUserBalance: async (id?: string): Promise<any> => {
     try {
       const response: AxiosResponse<any> = await client.get(

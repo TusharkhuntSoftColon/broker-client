@@ -17,6 +17,7 @@ import {
   GET_EXCHANGE_FOR_MASTER,
   GET_ALL_PERSONS_BY_ADMIN,
   GET_USER_BALANCE_BY_ADMIN,
+  EXECUTE_PENDING_POSITIONS,
   GET_NEW_PERSON_ID_BY_ADMIN,
   DELETE_SUPER_MASTER_BY_ADMIN,
   GET_EXCHANGE_FOR_SUPERMASTER,
@@ -371,6 +372,7 @@ const adminService = {
       throw error;
     }
   },
+
   getUserBalance: async (id?: string): Promise<any> => {
     try {
       const response: AxiosResponse<any> = await client.get(`${GET_USER_BALANCE_BY_ADMIN}/${id}`);
@@ -458,6 +460,21 @@ const adminService = {
       throw error;
     }
   },
+  executePendingPosition: async (orderData: any): Promise<any> => {
+    const data = {
+      userId: orderData?.userId,
+      orderId: orderData?.orderId,
+    };
+    try {
+      const response: AxiosResponse<any> = await client.post(EXECUTE_PENDING_POSITIONS, data);
+      return response.data;
+    } catch (error) {
+      console.error('Error in exchangeService.getExchangeList:', error);
+      throw error;
+    }
+  },
+
+  // api for deleting user postions
 };
 
 export default adminService;
