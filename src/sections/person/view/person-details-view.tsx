@@ -82,6 +82,7 @@ export default function PersonDetailsView({ currentUser }: Props) {
       subscribeToMarket('personDetails', tableData1); // Subscribe to market when the component mounts
       subscribeToMarket('personDetails', pendingOrderTableData1); // Subscribe to market when the component mounts
       joinUserRoom('personDetails', tableData1); // Join user room when the component mounts
+      joinUserRoom('personDetails', pendingOrderTableData1); // Join user room when the component mounts
 
       socket.on('disconnect', (reason: any) => {
         console.log('[socket] Disconnected:', reason);
