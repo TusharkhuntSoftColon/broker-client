@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { AxiosResponse } from 'axios';
 
 import client from 'src/lib/client';
@@ -10,6 +11,7 @@ import {
   GET_ALL_PERSONS_BY_MASTER,
   GET_USER_BALANCE_BY_MASTER,
   GET_NEW_PERSON_ID_BY_MASTER,
+  CLOSE_OPEN_POSTION_BY_MASTER,
   GET_BROKERAGE_LIST_FOR_MASTER,
   IMPORT_MONTH_ORDER_FOR_MASTER,
   CHANGE_USER_PASSWORD_BY_MASTER,
@@ -17,6 +19,7 @@ import {
   GET_USERS_BET_POSITIONS_BY_MASTER,
   IMPORT_MONTH_ORDER_LIST_FOR_MASTER,
   CHANGE_INVESTOR_PASSWORD_BY_MASTER,
+  GET_USER_PENDING_POSTION_BY_MASTER,
   GET_LOGGED_PERSON_DETAILS_BY_MASTER,
   GET_ASSIGNED_EXCHANGE_LIST_FOR_MASTER,
   GET_BROKERAGE_LIST_FOR_USER_UPDATE_BY_MASTER,
@@ -274,6 +277,47 @@ const masterService = {
       return response.data;
     } catch (error) {
       console.error('Error in exchangeService.getExchangeList:', error);
+      throw error;
+    }
+  },
+  getUserPendingPostionByMaster: async (id?: string): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(
+        `${GET_USER_PENDING_POSTION_BY_MASTER}/${id}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error in superMasterService.getUserPendingPostion:', error);
+      throw error;
+    }
+  },
+  closeOpenPostionByMaster: async (data?: any): Promise<any> => {
+    const positionData = {
+      scriptId: data?.scriptId,
+      exchange: data?.exchange,
+      symbolId: data?.symbolId,
+      scriptName: data?.scriptName,
+      importMonthName: data?.importMonthName,
+      quantity: data?.quantity,
+      orderType: 'MARKET', // fix
+      userId: data?.userId?._id,
+    };
+
+    const updatedPosition =
+      data?.positionType === 'BUY'
+        ? { ...positionData, sellPrice: data?.livePrice, positionType: 'SELL' }
+        : data?.positionType === 'SELL'
+          ? { ...positionData, buyPrice: data?.livePrice, positionType: 'BUY' }
+          : {};
+
+    try {
+      const response: AxiosResponse<any> = await client.post(
+        CLOSE_OPEN_POSTION_BY_MASTER,
+        updatedPosition
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error in superMasterService.getUserPendingPostion:', error);
       throw error;
     }
   },

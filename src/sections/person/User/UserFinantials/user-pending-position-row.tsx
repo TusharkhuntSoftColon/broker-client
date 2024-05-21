@@ -4,9 +4,10 @@
 
 import React, { useState } from 'react';
 
+import { IconButton } from '@mui/material';
+import { Close } from '@mui/icons-material';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-
 
 // ----------------------------------------------------------------------
 
@@ -74,6 +75,11 @@ export default function UserPendingPostionTableRow({
         >
           {(row?.positionType === 'BUY' ? buyProfit : sellProfit).toFixed(2)}
         </TableCell> */}
+        <TableCell>
+          <IconButton sx={{ border: '1px solid', color: 'red' }} onClick={handleClick}>
+            <Close sx={{ fontSize: '10px', color: 'red' }} />
+          </IconButton>
+        </TableCell>
       </TableRow>
     </>
   );

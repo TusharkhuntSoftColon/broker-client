@@ -1,10 +1,10 @@
+/* eslint-disable no-nested-ternary */
 import { AxiosResponse } from 'axios';
 
 import client from 'src/lib/client';
 
 import {
   GET_SYMBOL_SUPER_MASTER,
-  GET_USER_PENDING_POSTION,
   CREATE_USER_BY_SUPER_MASTER,
   DELETE_USER_BY_SUPER_MASTER,
   UPDATE_USER_BY_SUPER_MASTER,
@@ -14,6 +14,7 @@ import {
   GET_ALL_PERSONS_BY_SUPER_MASTER,
   GET_USER_BALANCE_BY_SUPER_MASTER,
   GET_NEW_PERSON_ID_BY_SUPER_MASTER,
+  CLOSE_OPEN_POSTION_BY_SUPER_MASTER,
   GET_BROKERAGE_LIST_FOR_SUPER_MASTER,
   IMPORT_MONTH_ORDER_FOR_SUPER_MASTER,
   CHANGE_USER_PASSWORD_BY_SUPER_MASTER,
@@ -21,6 +22,7 @@ import {
   GET_USERS_BET_POSITIONS_BY_SUPER_MASTER,
   IMPORT_MONTH_ORDER_LIST_FOR_SUPER_MASTER,
   CHANGE_INVESTOR_PASSWORD_BY_SUPER_MASTER,
+  GET_USER_PENDING_POSTION_BY_SUPER_MASTER,
   GET_LOGGED_PERSON_DETAILS_BY_SUPER_MASTER,
   GET_ASSIGNED_EXCHANGE_LIST_FOR_SUPER_MASTER,
   GET_BROKERAGE_LIST_FOR_USER_UPDATE_BY_SUPERMASTER,
@@ -306,9 +308,11 @@ const superMasterService = {
     }
   },
 
-  getUserPendingPostion: async (id?: string): Promise<any> => {
+  getUserPendingPostionBySuperMaster: async (id?: string): Promise<any> => {
     try {
-      const response: AxiosResponse<any> = await client.get(`${GET_USER_PENDING_POSTION}/${id}`);
+      const response: AxiosResponse<any> = await client.get(
+        `${GET_USER_PENDING_POSTION_BY_SUPER_MASTER}/${id}`
+      );
       return response.data;
     } catch (error) {
       console.error('Error in superMasterService.getUserPendingPostion:', error);
@@ -389,6 +393,36 @@ const superMasterService = {
       return response.data;
     } catch (error) {
       console.error('Error in exchangeService.getExchangeList:', error);
+      throw error;
+    }
+  },
+  closeOpenPostionBySuperMaster: async (data?: any): Promise<any> => {
+    const positionData = {
+      scriptId: data?.scriptId,
+      exchange: data?.exchange,
+      symbolId: data?.symbolId,
+      scriptName: data?.scriptName,
+      importMonthName: data?.importMonthName,
+      quantity: data?.quantity,
+      orderType: 'MARKET', // fix
+      userId: data?.userId?._id,
+    };
+
+    const updatedPosition =
+      data?.positionType === 'BUY'
+        ? { ...positionData, sellPrice: data?.livePrice, positionType: 'SELL' }
+        : data?.positionType === 'SELL'
+          ? { ...positionData, buyPrice: data?.livePrice, positionType: 'BUY' }
+          : {};
+
+    try {
+      const response: AxiosResponse<any> = await client.post(
+        CLOSE_OPEN_POSTION_BY_SUPER_MASTER,
+        updatedPosition
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error in superMasterService.getUserPendingPostion:', error);
       throw error;
     }
   },

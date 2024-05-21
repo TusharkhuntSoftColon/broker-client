@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import { AxiosResponse } from 'axios';
 
 import client from 'src/lib/client';
@@ -17,8 +18,8 @@ import {
   GET_EXCHANGE_FOR_MASTER,
   GET_ALL_PERSONS_BY_ADMIN,
   GET_USER_BALANCE_BY_ADMIN,
-  EXECUTE_PENDING_POSITIONS,
   GET_NEW_PERSON_ID_BY_ADMIN,
+  CLOSE_OPEN_POSTION_BY_ADMIN,
   DELETE_SUPER_MASTER_BY_ADMIN,
   GET_EXCHANGE_FOR_SUPERMASTER,
   IMPORT_MONTH_ORDER_FOR_ADMIN,
@@ -29,6 +30,8 @@ import {
   GET_USERS_BET_POSITIONS_BY_ADMIN,
   IMPORT_MONTH_ORDER_LIST_FOR_ADMIN,
   CHANGE_INVESTOR_PASSWORD_BY_ADMIN,
+  GET_USER_PENDING_POSTION_BY_ADMIN,
+  UPDATE_PENDING_POSITIONS_BY_ADMIN,
   GET_LOGGED_PERSON_DETAILS_BY_ADMIN,
   GET_ASSIGNED_EXCHANGE_LIST_FOR_ADMIN,
   GET_BROKERAGE_LIST_FOR_USER_UPDATE_BY_ADMIN,
@@ -460,16 +463,60 @@ const adminService = {
       throw error;
     }
   },
-  executePendingPosition: async (orderData: any): Promise<any> => {
+  updatePendingPosition: async (orderData: any): Promise<any> => {
     const data = {
       userId: orderData?.userId,
       orderId: orderData?.orderId,
     };
     try {
-      const response: AxiosResponse<any> = await client.post(EXECUTE_PENDING_POSITIONS, data);
+      const response: AxiosResponse<any> = await client.post(
+        UPDATE_PENDING_POSITIONS_BY_ADMIN,
+        data
+      );
       return response.data;
     } catch (error) {
       console.error('Error in exchangeService.getExchangeList:', error);
+      throw error;
+    }
+  },
+  getUserPendingPostionByAdmin: async (id?: string): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.get(
+        `${GET_USER_PENDING_POSTION_BY_ADMIN}/${id}`
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error in superMasterService.getUserPendingPostion:', error);
+      throw error;
+    }
+  },
+  closeOpenPostionByAdmin: async (data?: any): Promise<any> => {
+    const positionData = {
+      scriptId: data?.scriptId,
+      exchange: data?.exchange,
+      symbolId: data?.symbolId,
+      scriptName: data?.scriptName,
+      importMonthName: data?.importMonthName,
+      quantity: data?.quantity,
+      orderType: 'MARKET', // fix
+      userId: data?.userId?._id,
+    };
+
+    const updatedPosition =
+      data?.positionType === 'BUY'
+        ? { ...positionData, sellPrice: data?.livePrice, positionType: 'SELL' }
+        : data?.positionType === 'SELL'
+          ? { ...positionData, buyPrice: data?.livePrice, positionType: 'BUY' }
+          : {};
+
+    try {
+      const response: AxiosResponse<any> = await client.post(
+        CLOSE_OPEN_POSTION_BY_ADMIN,
+        updatedPosition
+      );
+      return response.data;
+    } catch (error) {
+      console.error('Error in superMasterService.getUserPendingPostion:', error);
       throw error;
     }
   },

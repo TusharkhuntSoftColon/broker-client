@@ -52,6 +52,7 @@ const PENDING_POSTION_TABLE_HEAD = [
   { id: 'volume', label: 'Volume' },
   { is: 'price', label: 'Price' },
   { is: 'livePrice', label: 'Live Price' },
+  { is: 'Close Position', label: 'Close Position' },
 
   // { is: 'Close Position', label: 'Close Position' },
   // { is: 'Update Position', label: 'Update Position' },
@@ -72,8 +73,6 @@ export default function PersonDetailsView({ currentUser }: Props) {
   const [pendingOrderTableData1, setPendingOrderTableData1] = useState<any>([]);
   const [userBalance, setUserBalance] = useState<any>({});
   const [socketData, setSocketData] = useState<any>([]);
-
-  console.log({ userBalance });
 
   const { socket, connect, disconnect, subscribeToMarket, joinUserRoom, marketWatch } = useSocket();
 
@@ -131,6 +130,31 @@ export default function PersonDetailsView({ currentUser }: Props) {
     }
   };
 
+  const getUsersPendingPositionByRole = (role1: any) => {
+    switch (role1) {
+      case 'ADMIN':
+        return adminService.getUserPendingPostionByAdmin;
+      case 'SUPER_MASTER':
+        return superMasterService.getUserPendingPostionBySuperMaster;
+      case 'MASTER':
+        return masterService.getUserPendingPostionByMaster;
+      default:
+        return masterService.getUserPendingPostionByMaster;
+    }
+  };
+  const closeOpenPositionByRole = (role1: any) => {
+    switch (role1) {
+      case 'ADMIN':
+        return adminService.closeOpenPostionByAdmin;
+      case 'SUPER_MASTER':
+        return superMasterService.closeOpenPostionBySuperMaster;
+      case 'MASTER':
+        return masterService.closeOpenPostionByMaster;
+      default:
+        return masterService.closeOpenPostionByMaster;
+    }
+  };
+
   const { mutate: getUserPosition } = useMutation(getUsersBetPositionByRole(role), {
     onSuccess: (data) => {
       setTableData1(data?.data?.rows);
@@ -143,7 +167,7 @@ export default function PersonDetailsView({ currentUser }: Props) {
     },
   });
 
-  const { mutate: getUserPendingPostion } = useMutation(superMasterService.getUserPendingPostion, {
+  const { mutate: getUserPendingPostion } = useMutation(getUsersPendingPositionByRole(role), {
     onSuccess: (data) => {
       setPendingOrderTableData1(data?.data?.rows);
     },
@@ -162,6 +186,18 @@ export default function PersonDetailsView({ currentUser }: Props) {
       if (isAxiosError(error)) {
         enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
       }
+      enqueueSnackbar(error?.message, { variant: 'error' });
+    },
+  });
+
+  const { mutate: closePosition } = useMutation(closeOpenPositionByRole(role), {
+    onSuccess: (data) => {
+      getUserPosition(currentUser?._id);
+    },
+    onError: (error: any) => {
+      // if (isAxiosError(error)) {
+      //   enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      // }
       enqueueSnackbar(error?.message, { variant: 'error' });
     },
   });
@@ -286,7 +322,7 @@ export default function PersonDetailsView({ currentUser }: Props) {
       </Box>
       {currentUser?.role === 'USER' && (
         <>
-          <Typography sx={{ fontSize: '18px', fontWeight: '600', py: '1rem' }}>
+          <Typography sx={{ fontSize: '18px', fontWeight: '600', pt: '1rem' }}>
             Open Positions
           </Typography>
           <Card sx={{ mt: 2 }}>
@@ -305,7 +341,7 @@ export default function PersonDetailsView({ currentUser }: Props) {
                   <TableBody>
                     {tableData1?.length >= 0 &&
                       tableData1?.map((row: any, index: any) => (
-                        <UserTradeTableRow key={row._id} row={row} />
+                        <UserTradeTableRow closePosition={closePosition} key={row._id} row={row} />
                       ))}
 
                     <TableNoData notFound={notFound} sx={{ py: 1 }} />
@@ -355,7 +391,7 @@ export default function PersonDetailsView({ currentUser }: Props) {
 
       {currentUser?.role === 'USER' && (
         <>
-          <Typography sx={{ fontSize: '18px', fontWeight: '600', py: '1rem' }}>
+          <Typography sx={{ fontSize: '18px', fontWeight: '600', pt: '1rem' }}>
             Pending Orders
           </Typography>
           <Card sx={{ mt: 2 }}>

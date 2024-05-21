@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable no-plusplus */
 
+import { useState } from 'react';
 import { useSnackbar } from 'notistack';
 import { useMutation } from '@tanstack/react-query';
 
@@ -34,18 +35,14 @@ export default function PendingPostionModalComponent({
 }: Props) {
   const { role } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
+  const [positionPrice, setPositionPrice] = useState<number | null>(null);
 
   const curretPrice = socketData?.find(
     (data: any) => data?.InstrumentIdentifier === row?.scriptName
   );
-  const { mutate: executePosition }: any = useMutation(adminService.executePendingPosition, {
+  const { mutate: executePosition }: any = useMutation(adminService.updatePendingPosition, {
     onSuccess: (data: any) => {
-      // enqueueSnackbar(data?.message, { variant: 'success' });
-      // router.push(paths.dashboard.person.edit(data?.data));
-      // dispatch(addUser([]));
       console.log({ data });
-
-      // setLoggedPersonData(data?.data);
     },
     onError: (error: any) => {
       // if (isAxiosError(error)) {
@@ -57,7 +54,7 @@ export default function PendingPostionModalComponent({
 
   const handleExecuteOrder = () => {
     onClose();
-    executePosition({ userId: currentUser?._id, orderId: row?._id });
+    executePosition({ userId: currentUser?._id, orderId: row?._id, price: positionPrice });
   };
 
   return (
@@ -84,6 +81,7 @@ export default function PendingPostionModalComponent({
             id="outlined-basic"
             label="Set New Price"
             variant="outlined"
+            onChange={(e) => setPositionPrice(Number(e.target.value))}
             sx={{ width: '100%' }}
           />
         </Box>

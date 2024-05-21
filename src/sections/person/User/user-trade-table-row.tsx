@@ -11,11 +11,12 @@ import TableCell from '@mui/material/TableCell';
 
 // ----------------------------------------------------------------------
 
-export default function UserTradeTableRow({ row }: any) {
+export default function UserTradeTableRow({ row, closePosition }: any) {
   // for popover of close position
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    closePosition(row);
     setAnchorEl(event.currentTarget);
   };
 
