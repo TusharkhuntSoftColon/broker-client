@@ -74,8 +74,6 @@ export default function PersonNewEditForm({
   const [exchangeData, setExchangeData] = useState<any>();
   const [loggedPersonData, setLoggedPersonData] = useState<any>([]);
 
-  console.log({ loggedPersonData });
-
   const leverageIndex = LEVERAGE_OPTIONS.findIndex(
     (option) => option.value === loggedPersonData?.leverageXY
   );
@@ -88,8 +86,6 @@ export default function PersonNewEditForm({
       value: ExchangeList[i]?._id,
     });
   }
-
-  console.log({ currentUser, Exchange });
 
   const defaultAllowedExchange = (index: number) => {
     if (!currentUser) return [];
@@ -298,8 +294,6 @@ export default function PersonNewEditForm({
       // enqueueSnackbar(data?.message, { variant: 'success' });
       // router.push(paths.dashboard.person.edit(data?.data));
       // dispatch(addUser([]));
-      console.log({ data });
-
       setLoggedPersonData(data?.data);
     },
     onError: (error: any) => {

@@ -46,7 +46,6 @@ export default function PendingPostionModalComponent({
   const { mutate: executePosition }: any = useMutation(adminService.updatePendingPosition, {
     onSuccess: (data: any) => {
       getUserPendingPostion(currentUser?._id);
-      console.log({ data });
     },
     onError: (error: any) => {
       // if (isAxiosError(error)) {

@@ -215,7 +215,6 @@ export default function BrokerageTableToolbar({
   // create USER
   const { mutate: createUser }: any = useMutation(createUserByRole(role), {
     onSuccess: (data: any) => {
-      console.log('CREATED WITH BROKERAGE');
       enqueueSnackbar(data?.message, { variant: 'success' });
       router.push(paths.dashboard.person.edit(data?.data));
       dispatch(addUser([]));
@@ -380,8 +379,6 @@ export default function BrokerageTableToolbar({
             obj.symbol === value.symbol.value &&
             obj.template === value.template.value
         );
-        console.log({ shouldAdd });
-
         if (shouldAdd) {
           const newTableData = [
             ...tableData,

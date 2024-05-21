@@ -103,8 +103,6 @@ export default function PersonTableToolbar({
         );
       }
     }
-
-    console.log({ uniqueData });
     onFilters('exchange', uniqueData);
   };
   // const handleChangeExchange = (e: any, value: any) => {
@@ -129,8 +127,6 @@ export default function PersonTableToolbar({
       console.error(error);
     }
   });
-
-  console.log({ filters }, { roleOptions }, { onFilters });
 
   return (
     <FormProvider methods={methods} onSubmit={onSubmit}>

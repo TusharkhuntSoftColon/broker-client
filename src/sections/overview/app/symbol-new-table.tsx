@@ -223,7 +223,6 @@ export default function SymbolTableDashboard() {
 
   const { mutate: getSymbolProperty } = useMutation(getSymbolPropertiesByRole(role), {
     onSuccess: (data: AxiosResponse) => {
-      console.log(data.data?.data?.rows);
       setSymbolPropertiesDetail(data?.data?.data?.rows);
       // setSymbolProperties(data?.rows);
     },
@@ -637,8 +636,6 @@ function SymbolNewRow({ row, isAdvancedMode, symbolPropertiesDetail }: SymbolNew
           const details: any = symbolPropertiesDetail?.find(
             (symbolDetail: any) => symbolDetail?._id === row?.id
           );
-
-          console.log({ details });
           setSelectedSymbolPropertiesDetail(details);
           symbolProperties.onTrue();
         }}

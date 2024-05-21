@@ -35,8 +35,6 @@ const AllowedExchangeComponent = ({
   loggedPersonData,
   handleRemoveExchange,
 }: AllowedExchangeComponentProps) => {
-  console.log({ allowedExchange, loggedPersonData });
-
   const filteredExchangeGroup = React.useMemo(() => {
     const selectedExchange = loggedPersonData?.exchangeList?.find(
       (data: any) => data.allowedExchange === allowedExchange

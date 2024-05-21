@@ -420,7 +420,7 @@ export default function PersonDetailsView({ currentUser }: Props) {
                         />
                       ))}
 
-                    <TableNoData notFound={notFound} sx={{ py: 1 }} />
+                    {/* <TableNoData notFound={notFound} sx={{ py: 1 }} /> */}
                   </TableBody>
                 </Table>
               </Scrollbar>

@@ -250,8 +250,6 @@ export default function ClientTableDashboard({
     setUpdatedAccountData1(data);
   }, [socketData, value, accountData]);
 
-  console.log({ updatedAccountData1 });
-
   const tabs = [
     {
       label: 'Accounts',
@@ -696,8 +694,6 @@ function ClientNewRow({ row, value }: ClientNewRowProps) {
 
   const handleAccountDoubleClick = () => {
     getPerson(row.createdBy);
-    console.log({ row });
-
     router.push(paths.dashboard.person.edit(row?._id));
   };
 

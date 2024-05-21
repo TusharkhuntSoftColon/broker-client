@@ -61,8 +61,6 @@ const OverviewAppView = () => {
   useEffect(() => {
     const listArray = ['Symbol', 'Users', 'Margin Call'];
     const count = listArray.filter((item) => selectedButtons.includes(item)).length;
-
-    console.log({ selectedButtons, listArray });
     setCurrentTableCount(count);
   }, [selectedButtons, currentTableCount]);
 
