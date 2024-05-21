@@ -388,8 +388,7 @@ export default function PersonDetailsView({ currentUser }: Props) {
           </Card>
         </>
       )}
-
-      {currentUser?.role === 'USER' && (
+      {pendingOrderTableData1?.length !== 0 && currentUser?.role === 'USER' && (
         <>
           <Typography sx={{ fontSize: '18px', fontWeight: '600', pt: '1rem' }}>
             Pending Orders
@@ -412,6 +411,8 @@ export default function PersonDetailsView({ currentUser }: Props) {
                       pendingOrderTableData1?.map((row: any, index: any) => (
                         <UserPendingPostionTableRow
                           key={row._id}
+                          currentUser={currentUser}
+                          getUserPendingPostionAPI={getUserPendingPostion}
                           openModel={PendingPostionModal.onTrue}
                           setSelectedPendingOrder={setSelectedPendingOrder}
                           row={row}
@@ -426,9 +427,11 @@ export default function PersonDetailsView({ currentUser }: Props) {
           </Card>
         </>
       )}
+
       <PendingPostionModalComponent
         row={selectedPendingOrder}
         currentUser={currentUser}
+        getUserPendingPostion={getUserPendingPostion}
         socketData={socketData}
         open={PendingPostionModal.value}
         onClose={PendingPostionModal.onFalse}

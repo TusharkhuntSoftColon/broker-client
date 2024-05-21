@@ -12,6 +12,7 @@ import TableCell from '@mui/material/TableCell';
 // ----------------------------------------------------------------------
 
 export default function UserTradeTableRow({ row, closePosition }: any) {
+  console.log({ row });
   // for popover of close position
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 

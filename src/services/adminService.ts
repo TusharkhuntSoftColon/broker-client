@@ -15,6 +15,7 @@ import {
   CREATE_MASTER_BY_ADMIN,
   DELETE_MASTER_BY_ADMIN,
   UPDATE_MASTER_BY_ADMIN,
+  DELETE_PENDING_POSTION,
   GET_EXCHANGE_FOR_MASTER,
   GET_ALL_PERSONS_BY_ADMIN,
   GET_USER_BALANCE_BY_ADMIN,
@@ -466,6 +467,7 @@ const adminService = {
   updatePendingPosition: async (orderData: any): Promise<any> => {
     const data = {
       userId: orderData?.userId,
+      price: orderData?.price,
       orderId: orderData?.orderId,
     };
     try {
@@ -521,6 +523,20 @@ const adminService = {
     }
   },
 
+  // api to delete open
+  deletePendingPostion: async (pendingPositionData: any): Promise<any> => {
+    try {
+      const response: AxiosResponse<any> = await client.post(DELETE_PENDING_POSTION, {
+        userId: pendingPositionData?.userId,
+        orderId: pendingPositionData?.orderId,
+      });
+      return response.data;
+    } catch (error) {
+      // You can log the error here for debugging purposes
+      console.error('Error in authService.deletePendingPostion:', error);
+      throw error; // Re-throw the error to be caught by the caller
+    }
+  },
   // api for deleting user postions
 };
 

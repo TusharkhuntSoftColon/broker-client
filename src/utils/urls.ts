@@ -6,6 +6,8 @@ export const CREATE_ADMIN = '/auth/admin';
 export const BUY_TRADE = '/trade/buy';
 
 // ADMIN
+export const DELETE_PENDING_POSTION = '/admin/cancel-orders';
+
 export const CREATE_SUPER_MASTER_BY_ADMIN = '/admin/super-master';
 export const CREATE_MASTER_BY_ADMIN = '/admin/master';
 export const CREATE_USER_BY_ADMIN = '/admin/user';

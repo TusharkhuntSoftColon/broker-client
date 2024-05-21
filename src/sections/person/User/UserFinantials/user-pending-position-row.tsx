@@ -3,29 +3,50 @@
 /* eslint-disable import/no-extraneous-dependencies */
 
 import React, { useState } from 'react';
+import { enqueueSnackbar } from 'notistack';
+import { useMutation } from '@tanstack/react-query';
 
 import { IconButton } from '@mui/material';
 import { Close } from '@mui/icons-material';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 
+import adminService from 'src/services/adminService';
+
 // ----------------------------------------------------------------------
 
 interface UserPendingPostionTableRowProps {
   row: any;
+  currentUser: any;
   openModel: any;
   setSelectedPendingOrder: any;
+  getUserPendingPostionAPI: any;
 }
 
 export default function UserPendingPostionTableRow({
   row,
   openModel,
   setSelectedPendingOrder,
+  currentUser,
+  getUserPendingPostionAPI,
 }: UserPendingPostionTableRowProps) {
   // for popover of close position
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
+  const { mutate: deletePendingPostion }: any = useMutation(adminService.deletePendingPostion, {
+    onSuccess: (data: any) => {
+      getUserPendingPostionAPI(currentUser?._id);
+    },
+    onError: (error: any) => {
+      // if (isAxiosError(error)) {
+      //   enqueueSnackbar(error?.response?.data?.message, { variant: 'error' });
+      // }
+      enqueueSnackbar(error?.message, { variant: 'error' });
+    },
+  });
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    deletePendingPostion({ userId: currentUser?._id, orderId: row?._id });
     setAnchorEl(event.currentTarget);
   };
 
@@ -50,17 +71,23 @@ export default function UserPendingPostionTableRow({
         sx={{ cursor: 'pointer' }}
         onClick={() => {
           setSelectedPendingOrder(row);
-          openModel();
+          // openModel();
         }}
       >
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row?.importMonthName}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }} onClick={() => openModel()}>
+          {row?.importMonthName}
+        </TableCell>
 
-        <TableCell sx={{ whiteSpace: 'nowrap' }}>{row?.positionType}</TableCell>
+        <TableCell sx={{ whiteSpace: 'nowrap' }} onClick={() => openModel()}>
+          {row?.positionType}
+        </TableCell>
 
-        <TableCell>{row?.quantity}</TableCell>
+        <TableCell onClick={() => openModel()}>{row?.quantity}</TableCell>
 
-        <TableCell>{row?.positionType === 'BUY' ? row?.buyPrice : row?.sellPrice}</TableCell>
-        <TableCell>{row?.livePrice}</TableCell>
+        <TableCell onClick={() => openModel()}>
+          {row?.positionType === 'BUY' ? row?.buyPrice : row?.sellPrice}
+        </TableCell>
+        <TableCell onClick={() => openModel()}>{row?.livePrice}</TableCell>
         {/* <TableCell
           sx={{
             color:

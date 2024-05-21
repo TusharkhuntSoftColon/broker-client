@@ -22,6 +22,7 @@ type Props = {
   open: boolean;
   onClose: VoidFunction;
   row: any;
+  getUserPendingPostion: any;
   socketData: any;
   currentUser: any;
 };
@@ -30,6 +31,7 @@ export default function PendingPostionModalComponent({
   open,
   onClose,
   row,
+  getUserPendingPostion,
   socketData,
   currentUser,
 }: Props) {
@@ -40,8 +42,10 @@ export default function PendingPostionModalComponent({
   const curretPrice = socketData?.find(
     (data: any) => data?.InstrumentIdentifier === row?.scriptName
   );
+
   const { mutate: executePosition }: any = useMutation(adminService.updatePendingPosition, {
     onSuccess: (data: any) => {
+      getUserPendingPostion(currentUser?._id);
       console.log({ data });
     },
     onError: (error: any) => {
@@ -81,6 +85,7 @@ export default function PendingPostionModalComponent({
             id="outlined-basic"
             label="Set New Price"
             variant="outlined"
+            value={positionPrice}
             onChange={(e) => setPositionPrice(Number(e.target.value))}
             sx={{ width: '100%' }}
           />
