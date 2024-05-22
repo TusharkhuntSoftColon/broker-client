@@ -35,6 +35,8 @@ export default function PendingPostionModalComponent({
   socketData,
   currentUser,
 }: Props) {
+  console.log({ row });
+
   const { role } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const [positionPrice, setPositionPrice] = useState<number | null>(null);
@@ -74,7 +76,9 @@ export default function PendingPostionModalComponent({
 
       <DialogContent>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-evenly' }}>
-          <Box sx={{ fontWeight: 700 }}>{`Bet Price :- ${row?.buyPrice}`}</Box>
+          <Box
+            sx={{ fontWeight: 700 }}
+          >{`Bet Price :- ${row?.positionType === 'BUY' ? row?.buyPrice : row?.sellPrice}`}</Box>
           <Box
             sx={{ fontWeight: 700 }}
           >{`Current Price :- ${row?.positionType === 'BUY' ? curretPrice?.SellPrice : curretPrice?.BuyPrice}`}</Box>
