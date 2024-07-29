@@ -18,6 +18,7 @@ import Label from 'src/components/label';
 import Iconify from 'src/components/iconify';
 import { usePopover } from 'src/components/custom-popover';
 import { ConfirmDialog } from 'src/components/custom-dialog';
+import PdfPopover from 'src/components/custom-popover/PdfPopover';
 
 import { IUserItem } from 'src/types/user';
 
@@ -44,13 +45,11 @@ export default function PersonTableRow({
   onGetPersonRow,
   index,
 }: Props) {
-  const { name, exchangeList, ID, status, role } = row;
-
+  const { name, exchangeList, ID, status, role, _id } = row;
   const confirm = useBoolean();
   const quickEdit = useBoolean();
   const popover = usePopover();
   const exchangeData = useSelector((data: any) => data?.admin?.exchangeList);
-
   return (
     <>
       <TableRow
@@ -103,7 +102,9 @@ export default function PersonTableRow({
           </Label>
         </TableCell>
 
-        <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap' }}>
+        <TableCell align="right" sx={{ px: 1, whiteSpace: 'nowrap', display: 'flex' }}>
+          <PdfPopover userId={_id} />
+
           <Tooltip title="Edit" placement="top" arrow>
             <IconButton
               color={quickEdit.value ? 'inherit' : 'default'}
@@ -129,6 +130,8 @@ export default function PersonTableRow({
             </IconButton>
           </Tooltip>
         </TableCell>
+
+        {/* <TableCell></TableCell> */}
       </TableRow>
 
       <ConfirmDialog

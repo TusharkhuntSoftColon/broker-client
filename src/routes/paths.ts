@@ -59,6 +59,9 @@ export const paths = {
       details: (id: string) => `${ROOTS.DASHBOARD}/brokerage/${id}`,
       edit: (id: string) => `${ROOTS.DASHBOARD}/brokerage/${id}/edit`,
     },
+    reportPdf: {
+      root: `${ROOTS.DASHBOARD}/report-pdf`,
+    },
   },
   superMaster: {
     root: `${ROOTS.SUPER_MASTER}`,

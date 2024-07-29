@@ -13,6 +13,7 @@ const useAuth = () => {
   const displayName = useSelector((state: RootState) => state.auth.displayName);
   const role = useSelector((state: RootState) => state.auth.role);
   const userRole = useSelector((state: RootState) => state.auth.role);
+  const _id = useSelector((state: RootState) => state.auth._id);
   const active = useSelector((state: RootState) => state.auth.active);
 
   const setCredentialsAction = (params: any) => {
@@ -33,6 +34,7 @@ const useAuth = () => {
     userId,
     setCredentialsAction,
     logoutAction,
+    _id,
   };
 };
 

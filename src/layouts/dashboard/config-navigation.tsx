@@ -2,6 +2,8 @@ import { useMemo } from 'react';
 
 import { paths } from 'src/routes/paths';
 
+import useAuth from 'src/hooks/useAuth';
+
 import { useTranslate } from 'src/locales';
 
 import SvgColor from 'src/components/svg-color';
@@ -37,19 +39,20 @@ const ICONS = {
   ecommerce: icon('ic_ecommerce'),
   analytics: icon('ic_analytics'),
   dashboard: icon('ic_dashboard'),
+  pdf: icon('ic_file'),
 };
 
 // ----------------------------------------------------------------------
 
 export function useNavData() {
   const { t } = useTranslate();
+  const { role } = useAuth();
 
-  const data = useMemo(
-    () => [
+  const data = useMemo(() => {
+    const items = [
       // OVERVIEW
       // ----------------------------------------------------------------------
       {
-        // subheader: t('overview'),
         items: [
           {
             title: t('dashboard'),
@@ -69,9 +72,22 @@ export function useNavData() {
           },
         ],
       },
-    ],
-    [t]
-  );
+    ];
+
+    // if (role === 'ADMIN') {
+    //   items.push({
+    //     items: [
+    //       {
+    //         title: 'Report Pdf',
+    //         path: paths.dashboard.reportPdf.root,
+    //         icon: ICONS.pdf,
+    //       },
+    //     ],
+    //   });
+    // }
+
+    return items;
+  }, [t, role]);
 
   return data;
 }

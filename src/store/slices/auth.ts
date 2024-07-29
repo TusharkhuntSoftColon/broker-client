@@ -12,10 +12,12 @@ interface AuthState {
   active: string | null;
   userName: string | null;
   displayName: string | null;
+  _id: string | null;
 }
 
 // Define the initial state using that type
 const initialState: AuthState = {
+  _id: null,
   token: null,
   refreshToken: null,
   role: null,
@@ -30,12 +32,13 @@ const authSlice = createSlice({
   reducers: {
     resetState: () => initialState,
     setCredentials: (state, action) => {
-      const { accessToken, role, refreshToken, userName, displayName } = action.payload;
+      const { accessToken, role, refreshToken, userName, displayName, id } = action.payload;
 
       state.token = accessToken;
       state.refreshToken = refreshToken;
       state.role = role;
       state.userName = userName;
+      state._id = id;
       state.displayName = displayName;
     },
     setRefreshToken: (state, action) => {

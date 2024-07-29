@@ -5,11 +5,11 @@
 /* eslint-disable consistent-return */
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-shadow */
-/* eslint-disable no-plusplus */
 import { isAxiosError } from 'axios';
 import isEqual from 'lodash/isEqual';
 import { useSnackbar } from 'notistack';
 import { isWithinInterval } from 'date-fns';
+/* eslint-disable no-plusplus */
 import { useMutation } from '@tanstack/react-query';
 import { useDispatch, useSelector } from 'react-redux';
 import { useState, useEffect, useCallback } from 'react';
@@ -65,7 +65,7 @@ const TABLE_HEAD = [
   { id: 'role', label: 'Role' },
   { id: 'exchange', label: 'Allowed Exchange' },
   { is: 'status', label: 'Status' },
-  { id: '', width: 88 },
+  { id: 'actions', width: 88, label: 'Actions' },
 ];
 
 const defaultFilters: IUserTableFilters = {
@@ -401,7 +401,6 @@ export default function PersonListView({ path }: { path: any }) {
                     )
                   }
                 />
-
                 <TableBody>
                   {dataFiltered
                     .slice(

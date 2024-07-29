@@ -57,6 +57,10 @@ export const dashboardRoutes = [
           { path: ':id/edit', element: <BrokerageEditPage /> },
         ],
       },
+      // {
+      //   path: 'report-pdf',
+      //   children: [{ element: <ReportPdfPage />, index: true }],
+      // },
     ],
   },
   {

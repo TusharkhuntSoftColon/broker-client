@@ -12,8 +12,6 @@ import DialogTitle from '@mui/material/DialogTitle';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 
-import useAuth from 'src/hooks/useAuth';
-
 import adminService from 'src/services/adminService';
 
 // ----------------------------------------------------------------------
@@ -37,7 +35,6 @@ export default function PendingPostionModalComponent({
 }: Props) {
   console.log({ row });
 
-  const { role } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
   const [positionPrice, setPositionPrice] = useState<number | null>(null);
 

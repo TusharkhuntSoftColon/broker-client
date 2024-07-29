@@ -186,7 +186,6 @@ export default function PersonTableToolbar({
               ),
             }}
           />
-
           <Stack spacing={1.5}>
             {/* <DatePicker format="dd/MM/yyyy" /> */}
             <Button
@@ -227,7 +226,6 @@ export default function PersonTableToolbar({
               handleSelectedDate={handleSelectedDate}
             />
           </Stack>
-
           <Stack spacing={2} sx={{ width: 0.5 }}>
             <RHFAutocomplete
               name="status"

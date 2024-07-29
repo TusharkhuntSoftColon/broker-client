@@ -4,10 +4,6 @@ import ScrollProgress from 'src/components/scroll-progress';
 
 // ----------------------------------------------------------------------
 
-type StyledPolygonProps = {
-  anchor?: 'top' | 'bottom';
-};
-
 // const StyledPolygon = styled('div')<StyledPolygonProps>(({ anchor = 'top', theme }) => ({
 //   left: 0,
 //   zIndex: 9,
