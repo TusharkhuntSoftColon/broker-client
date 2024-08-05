@@ -1,15 +1,15 @@
+import { PDFDownloadLink } from '@react-pdf/renderer';
+import { useMutation } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { useSnackbar } from 'notistack';
-import { useMutation } from '@tanstack/react-query';
-import { PDFDownloadLink } from '@react-pdf/renderer';
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemText from '@mui/material/ListItemText';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import MenuItem from '@mui/material/MenuItem';
 
 import pdfService from 'src/services/pdfService';
 
@@ -27,10 +27,10 @@ const PdfPopover = ({ userId }: { userId: string }) => {
   const { mutate, isLoading } = useMutation(
     async (pdfNumber: number) => {
       if (pdfNumber === 1) {
-        return pdfService.getFirstPdf();
+        return pdfService.getFirstPdf(userId);
       }
       if (pdfNumber === 2) {
-        return pdfService.getSecondPdf(userId);
+        return pdfService.getSecondPdf();
       }
       return null;
     },
@@ -68,7 +68,7 @@ const PdfPopover = ({ userId }: { userId: string }) => {
         setTimeout(() => {
           link.click();
           setIsDownloadReady(false);
-        }, 100);
+        }, 800);
       }
     }
   }, [isDownloadReady, pdfData]);
@@ -99,7 +99,7 @@ const PdfPopover = ({ userId }: { userId: string }) => {
               <ListItemButton
                 sx={{ width: '100%' }}
                 onClick={() => handleDownloadPdf(num)}
-                disabled={isLoading}
+                disabled={isLoading || num === 2}
               >
                 <ListItemText primary={`Get pdf ${num}`} />
               </ListItemButton>
