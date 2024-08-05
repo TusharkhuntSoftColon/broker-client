@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import { isAxiosError } from 'axios';
 import { useSnackbar } from 'notistack';
-import { useMutation } from '@tanstack/react-query';
+import { useState } from 'react';
 
 import { Box, Button, Container } from '@mui/material';
 
@@ -23,10 +23,10 @@ const PdfView = () => {
   const { mutate: fetchPdf, isLoading } = useMutation(
     async (pdfNumber: number) => {
       if (pdfNumber === 1) {
-        return pdfService.getFirstPdf();
+        return pdfService.getFirstPdf(_id);
       }
       if (pdfNumber === 2) {
-        return pdfService.getSecondPdf(_id);
+        return pdfService.getSecondPdf();
       }
       return null;
     },
